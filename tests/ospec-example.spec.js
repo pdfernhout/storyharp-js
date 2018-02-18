@@ -1,9 +1,9 @@
 const o = require("ospec")
 
 o("addition", function() {
-	o(1 + 1).equals(2)
+    o(1 + 1).equals(2)
 })
 
 o("subtraction", function() {
-	o(1 - 1).notEquals(2)
+    o(1 - 1).notEquals(2)
 })
