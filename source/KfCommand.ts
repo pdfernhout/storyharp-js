@@ -45,7 +45,6 @@ export class KfCommand {
 
     trackMouse(
         aTrackPhase: TrackPhase,
-        // anchorPoint was a var
         anchorPoint: TPoint, 
         previousPoint: TPoint, 
         nextPoint: TPoint,

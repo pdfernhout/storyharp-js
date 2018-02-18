@@ -93,7 +93,7 @@ class KfCommandList {
     mouseMove(point: TPoint): void {
         let mouseDidMove: boolean
         let nextMouseCommand: KfCommand | null
-        let pointMovedTo: TPoint
+        let pointMovedTo: TPoint = {x: 0, y: 0}
 
         nextMouseCommand = this.mouseCommand
         this.mouseCommand = null
@@ -108,7 +108,6 @@ class KfCommandList {
             }
             this.mouseCommand = nextMouseCommand.trackMouse(TrackPhase.trackMove, this.anchorPoint, this.previousPoint, pointMovedTo, mouseDidMove, this.rightButtonDown)
         }
-        // pointMovedTo gets passed as a var -- need to wrap it somehow
         this.previousPoint = pointMovedTo
     }
 
