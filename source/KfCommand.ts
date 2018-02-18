@@ -4,7 +4,7 @@ import { TPoint } from "./common"
 
 export enum TrackPhase { trackPress, trackMove, trackRelease }
 
-enum KfCommandChangeType { commandDone, commandUndone }
+export enum KfCommandChangeType { commandDone, commandUndone }
 
 export type TCommandEvent = (command: KfCommand, state: KfCommandChangeType) => void;
 

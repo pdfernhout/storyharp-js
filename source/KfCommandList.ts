@@ -7,7 +7,7 @@ type integer = number
 
 const kMinMouseMoveDistance = 2;
 
-class KfCommandList {
+export class KfCommandList {
     notifyProcedure: TCommandEvent
 	commandList: KfCommand[]
 	lastDoneCommandIndex: longint
@@ -172,9 +172,9 @@ class KfCommandList {
         let aCommand: KfCommand
         if (this.lastDoneCommandIndex < (this.commandList.length - 1)) {
             aCommand = this.command(this.lastDoneCommandIndex + 1)
-            aCommand.redoCommand
+            aCommand.redoCommand()
             this.lastDoneCommandIndex++
-            aCommand.doNotify
+            aCommand.doNotify()
         }
     }
 
