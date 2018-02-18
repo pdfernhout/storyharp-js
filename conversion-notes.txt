@@ -1,0 +1,53 @@
+begin TO {
+
+end; TO }
+
+:= TO =
+
+self. TO this.
+
+' TO "
+
+result = TO return
+EXCEPT may be using that as an intermediate variable...
+IN WHICH CASE "let result" and then at end "return result"
+
+{ } TO //
+BY REGEX: {(.*)} TO // $1
+
+FIX if ... then
+BY REGEX: if (.*) then TO if ($1)
+
+<> TO !==
+
+:= TO =
+
+nil TO null
+but may also be undefined...
+
+====
+class definition
+remove prefix on procedures and functions
+EXAMPLE REGEX procedure KfCommandList\.(.*); TO $1(): void
+
+procedures GET empty () added
+
+enums GET enum Type = { one, two, three }
+
+
+while do TO while {
+
+TList TO []
+list.count TO list.length
+
+and TO &&
+
+dec(X) TO X--
+
+case of class names may not be correct
+; TO , IN function parameters
+
+REGEX ;\n TO \n
+
+SEARCH for possible procedure calls without parens:
+\.[^(]

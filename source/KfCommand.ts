@@ -1,100 +1,71 @@
-unit Ucommand;
+// An undoable and redoable command
 
-interface
+import { TPoint } from "./common"
 
-uses Classes, WinTypes;
+export enum TrackPhase { trackPress, trackMove, trackRelease }
 
-type
-TrackPhase = (trackPress, trackMove, trackRelease);
+enum KfCommandChangeType { commandDone, commandUndone }
 
-KfCommand = class;
+export type TCommandEvent = (command: KfCommand, state: KfCommandChangeType) => void;
 
-KfCommandChangeType = (commandDone, commandUndone);
+export class KfCommand {
+    notifyProcedure: TCommandEvent
+    canUndo: boolean
+    done: boolean
+    commandChangesFile: boolean
 
-TCommandEvent = procedure(command: KfCommand; state: KfCommandChangeType) of object;
+    constructor () {
+        this.canUndo = true
+        this.done = false
 
-KfCommand = class(TObject)
-  public
-  notifyProcedure: TCommandEvent;
-  canUndo: boolean;
-  done: boolean;
-  commandChangesFile: boolean;
-  constructor create;
-  destructor destroy; override;
-  procedure doCommand; virtual;
-  procedure undoCommand; virtual;
-  procedure redoCommand; virtual;
-  function description: string; virtual;
-  function TrackMouse(aTrackPhase: TrackPhase; var anchorPoint, previousPoint, nextPoint: TPoint;
-  	mouseDidMove, rightButtonDown: boolean): KfCommand; virtual;
-  procedure doNotify;
-  end;
+        // default commandChangesFile to true, since most commands change file,
+        // if command does not change file, set to false after call to inherited create
+        this.commandChangesFile = true
+    }
 
-implementation
+    doCommand(): void {
+        this.done = true
+        // subclass should override and call inherited
+    }
 
-uses SysUtils;
+    undoCommand(): void {
+        this.done = false
+        // sublass should override and call inherited
+    }
 
-{KfCommand}
-constructor KfCommand.create;
-	begin
-  inherited create;
-  canUndo := true;
-  done := false;
-  { default commandChangesPlantFile to true, since most commands change file,
-    if command does not change file, set to false after call to inherited create }
-  commandChangesFile := true;
-  end;
+    redoCommand(): void {
+        this.doCommand()
+        // sublass may override and call inherited doCommand
+        // could call inherited redo, but then watch out that do will be done too!
+    }
 
-destructor KfCommand.destroy;
-	begin
-  {sublass could override}
-  inherited destroy;
-  end;
+    description(): string {
+        return "*command description*"
+    }
 
-procedure KfCommand.doCommand;
-	begin
-  self.done := true;
-  {subclass should override and call inherited}
-  end;
+    trackMouse(
+        aTrackPhase: TrackPhase,
+        // anchorPoint was a var
+        anchorPoint: TPoint, 
+        previousPoint: TPoint, 
+        nextPoint: TPoint,
+        mouseDidMove: boolean,
+        rightButtonDown: boolean
+    ): KfCommand {
+        // subclasses should override if needed
+        return this
+    }
 
-procedure KfCommand.undoCommand;
-	begin
-  self.done := false;
-  {sublass should override and call inherited}
-  end;
-
-procedure KfCommand.redoCommand;
-  begin
-  self.doCommand;
-  {sublass may override and call inherited doCommand}
-  {could call inherited redo, but then watch out that do will be done too!}
-  end;
-
-function KfCommand.description: string;
-  begin
-  result := '*command description*';
-  end;
-
-function KfCommand.TrackMouse(aTrackPhase: TrackPhase; var anchorPoint, previousPoint, nextPoint: TPoint;
-  	mouseDidMove, rightButtonDown: boolean): KfCommand;
-  begin
-  {sublasses should override if needed}
-  result := self;
-  end;
-
-// notify cannot be done within the do, undo, redo of command because
-// command list will not have finished updating itself
-
-procedure KfCommand.doNotify;
-  begin
-  // commandChangesFile and
-  if Assigned(notifyProcedure) then
-    begin
-    if self.done then
-    	self.notifyProcedure(self, commandDone)
-    else
-      self.notifyProcedure(self, commandUndone);
-    end;
-  end;
-
-end.
+    // notify cannot be done within the do, undo, redo of command because
+    // command list will not have finished updating itself
+    doNotify(): void {
+        // commandChangesFile and
+        if (this.notifyProcedure) {
+            if (this.done) {
+                this.notifyProcedure(this, KfCommandChangeType.commandDone)
+            } else {
+                this.notifyProcedure(this, KfCommandChangeType.commandUndone)
+            }
+        }
+    }
+}
