@@ -4,12 +4,13 @@
   "description": "StoryHarp CYOA Editor",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "ospec",
     "build": "tsc"
   },
   "author": "Paul D. Fernhout <pdfernhout@kurtz-fernhout.com>",
   "license": "AGPL-3.0-or-later",
   "devDependencies": {
+    "ospec": "^1.4.0",
     "typescript": "^2.7.2"
   }
 }
