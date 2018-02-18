@@ -13,5 +13,9 @@
     "eslint": "^4.18.0",
     "ospec": "^1.4.0",
     "typescript": "^2.7.2"
+  },
+  "dependencies": {
+    "mithril": "^1.1.6",
+    "tachyons": "^4.9.1"
   }
 }
