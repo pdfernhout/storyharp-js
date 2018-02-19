@@ -1,0 +1,38 @@
+<HTML>
+<HEAD>
+<TITLE> A StoryHarp Generated Java Applet </TITLE>
+</HEAD>
+<BODY>
+This is an example HTML file to call a StoryHarp player Java applet.
+<p>
+This applet will display the "Story.class" Java applet
+after the source for "Story.java" is generated from StoryHarp 
+and then compiled using a Java compiler to produce a file named "Story.class". If you do now have a "Story.class" file you will only see a gray box below.
+<p>
+For example, with a properly configured JDK100 or later from Sun, 
+from the command prompt you would use "javac Story.java" to produce "Story.class". 
+An IDE Java development system like Symantec Cafe 
+may require making a simple project first.
+<p> 
+Since the applets generated compile under JDK 1.0,
+they should run on a wide variety of browsers. 
+If you are an experienced Java developer, 
+and you are only supporting JDK 1.1 or later and the latest VMs,
+you may wish to change the TextArea to do its own word wrapping by 
+setting it to not have a horizontal scroll bar 
+(using the constructor option)
+after which you can remove the word wrapping code 
+and use a non-proportional font.
+<p>
+If you wish to rename the file "Story.class" 
+you will also have to rename the Java source file "Story.java", 
+change the class name from "Story" to the name of the file in the Java source,
+recompile the source, 
+and finally change the file name referenced by this HTML page.
+<p>
+
+<APPLET CODE="Story.class" WIDTH=400 HEIGHT=400></APPLET>
+
+</BODY>
+
+</HTML>

@@ -1,0 +1,23 @@
+; session file version 1.0
+============ Variables for world =================
+GarTrek.wld
+============ Focus ===============================
+grue pit
+introduction
+============ Variables ===========================
+inventory
+visited old man
+take the elevator to the seventh floor
+<book: mentioned>
+<book>
+<book: read>
+<socket wrench>
+maintenance robot
+maintenance robot examined
+maintenance panel open
+<cheese>
+examined the fireplace
+talked to the old man
+grue pit
+grue pit started
+grue pit 2

@@ -1,0 +1,105 @@
+; world file version 1.0
+====================
+Context
+Command
+Reply
+Move
+Requirements
+Changes
+map positions
+====================
+start
+start
+This is an demonstration of StoryHarp pretending to be a Tele-App client.
+one
+
+
+274,122|274,122|274,122
+====================
+one
+have you ever served in the military?
+No, but my brother is in the Marines.
+two
+
+
+274,122|274,122|274,122
+====================
+two
+are you a pilot?
+Yes, I fly ultralights.
+three
+
+
+274,122|274,122|274,122
+====================
+three
+do you fly any other airplanes?
+No, just ultralights.
+four
+
+
+274,122|274,122|274,122
+====================
+four
+how often do you fly your ultralight?
+About once a week, sometimes twice a week,
+five
+
+
+274,122|274,122|274,122
+====================
+five
+do you fly over rough terrain?
+No, just usually around some corn fields.
+six
+
+
+274,122|274,122|274,122
+====================
+six
+let's move on to the next question.
+OK
+seven
+
+
+274,122|274,122|274,122
+====================
+seven
+has your driver's license ever been suspended?
+No. Has yours?
+eight
+
+
+274,122|274,122|274,122
+====================
+eight
+let's keep the interview focused on you, shall we?
+Just kidding!
+nine
+
+
+274,122|274,122|274,122
+====================
+nine
+since this is a demo, that completes the interview.
+OK, Thanks for interviewing me.
+ten
+
+
+274,122|274,122|274,122
+====================
+ten
+you're welcome
+OK. Bye.
+eleven
+
+
+274,122|274,122|274,122
+====================
+eleven
+finsihed
+That's it for the demo.
+
+
+
+274,122|274,122|0,0
