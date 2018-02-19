@@ -5,6 +5,7 @@ import { KfCommand } from "../dist/KfCommand.js"
 import { KfCommandList } from "../dist/KfCommandList.js"
 
 const commandList = new KfCommandList()
+commandList.undoLimit = 10
 
 const items = []
 
@@ -31,20 +32,32 @@ class CommandAddItem extends KfCommand {
 }
 
 function viewMain() {
-    return m("div", "KfCommandList test", 
-        m("div.ba", items.map((item) => m("div", "Item: " + item))),
+    return m("div.ma1",
+        m("div.mb2", "KfCommandList test"),
+        m("div.mb2", 
+            m("button", { onclick: () => {
+                const newValueString = prompt("New undo limit?", commandList.undoLimit)
+                if (!newValueString) return
+                const newValue = parseInt(newValueString)
+                commandList.setNewUndoLimit(newValue)
+            }}, "Undo limit: " + commandList.undoLimit), 
+            m("button.ml2", {
+                onclick: () => commandList.clear()
+            }, "Clear Undo List")   
+        ),
         m("button.ml2", { onclick: () => {
             const command = new CommandAddItem()
             commandList.doCommand(command)
         } }, "Add Item"),
-        m("button.ml2", {
+        m("button.ml2.w5", {
             disabled: !commandList.isUndoEnabled(),
             onclick: () => commandList.undoLast()
         }, "Undo " + commandList.undoDescription()),
-        m("button.ml2", { 
+        m("button.ml2.w5", { 
             disabled: !commandList.isRedoEnabled(),
             onclick: () => commandList.redoLast()
-        }, "Redo " + commandList.redoDescription())
+        }, "Redo " + commandList.redoDescription()),   
+        m("div.ba.ma2", m("div", "ITEMS:"), items.map((item) => m("div", "Item: " + item)))
     )
 }
 
