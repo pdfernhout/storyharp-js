@@ -1,0 +1,142 @@
+object RegistrationForm: TRegistrationForm
+  ActiveControl = UserNameEdit
+  BorderStyle = bsDialog
+  Caption = 'Registration'
+  ClientHeight = 439
+  ClientWidth = 561
+  Font.Height = -13
+  Font.Name = 'MS Sans Serif'
+  OnActivate = FormActivate
+  PixelsPerInch = 100
+  Position = poScreenCenter
+  TextHeight = 16
+  HorzScrollBar.Page = 560
+  VertScrollBar.Page = 438
+  Left = 492
+  Height = 439
+  Top = 209
+  Width = 561
+  object Label1: TLabel
+    Caption = 'User name'
+    Color = clNone
+    ParentColor = False
+    Left = 48
+    Height = 17
+    Top = 268
+    Width = 81
+  end
+  object Label2: TLabel
+    Caption = 'Registration code'
+    Color = clNone
+    ParentColor = False
+    Left = 12
+    Height = 17
+    Top = 304
+    Width = 127
+  end
+  object DateInstalledLabel: TLabel
+    Caption = 'DateInstalledLabel'
+    Color = clNone
+    ParentColor = False
+    Visible = False
+    Left = 20
+    Height = 17
+    Top = 232
+    Width = 134
+  end
+  object DaysSinceInstallationLabel: TLabel
+    Caption = 'DaysSinceInstallationLabel'
+    Color = clNone
+    ParentColor = False
+    Visible = False
+    Left = 220
+    Height = 17
+    Top = 232
+    Width = 193
+  end
+  object UserNameEdit: TEdit
+    OnKeyPress = UserNameEditKeyPress
+    TabOrder = 0
+    Left = 124
+    Height = 24
+    Top = 264
+    Width = 217
+  end
+  object RegistrationCodeEdit: TEdit
+    OnKeyPress = RegistrationCodeEditKeyPress
+    TabOrder = 1
+    Left = 124
+    Height = 24
+    Top = 300
+    Width = 217
+  end
+  object OKButton: TButton
+    BorderSpacing.InnerBorder = 2
+    Caption = 'Register'
+    OnClick = OKButtonClick
+    TabOrder = 2
+    Left = 408
+    Height = 25
+    Top = 308
+    Width = 109
+  end
+  object CancelButton: TButton
+    BorderSpacing.InnerBorder = 2
+    Caption = 'Cancel'
+    OnClick = CancelButtonClick
+    TabOrder = 3
+    Left = 412
+    Height = 25
+    Top = 228
+    Width = 103
+  end
+  object DisplayMemo: TMemo
+    Lines.Strings = (
+      'This fully functional evaluation copy may be used for evaluation purposes only.'
+      'If you use this software for purposes other than evaluation, '
+      'you are legally required to register it. '
+      'As a special exception, if you use a copy of this program '
+      'only to play stories created by others, (such as using the /P command line '
+      'option), you do not need to register that copy.'
+      'Under no circumstances are you licensed to distribute output created '
+      'by an unregistered copy of this program.'
+      'This is a summary only. See the accompanying license.txt file for exact details.'
+    )
+    ReadOnly = True
+    TabOrder = 4
+    Left = 16
+    Height = 205
+    Top = 12
+    Width = 485
+  end
+  object EnableEditorButton: TButton
+    BorderSpacing.InnerBorder = 2
+    Caption = 'Enable editor'
+    OnClick = EnableEditorButtonClick
+    TabOrder = 5
+    Left = 408
+    Height = 25
+    Top = 276
+    Width = 107
+  end
+  object OnlineRegistrationButton: TButton
+    BorderSpacing.InnerBorder = 2
+    Caption = 'Pay now online'
+    OnClick = OnlineRegistrationButtonClick
+    TabOrder = 6
+    Left = 408
+    Height = 25
+    Top = 336
+    Width = 109
+  end
+  object AbortButton: TButton
+    BorderSpacing.InnerBorder = 2
+    Caption = 'Abort'
+    Enabled = False
+    TabOrder = 7
+    Left = 324
+    Height = 25
+    Top = 336
+    Width = 75
+  end
+end

@@ -1,0 +1,1106 @@
+object RuleEditorForm: TRuleEditorForm
+  ActiveControl = ContextEdit
+  Caption = 'StoryHarp World Editor'
+  ClientHeight = 571
+  ClientWidth = 528
+  Font.Height = -11
+  Font.Name = 'Arial'
+  KeyPreview = True
+  Menu = MainMenu1
+  OnActivate = FormActivate
+  OnCreate = FormCreate
+  OnDeactivate = FormDeactivate
+  OnKeyDown = FormKeyDown
+  OnResize = FormResize
+  OnShow = FormShow
+  PixelsPerInch = 100
+  Position = poScreenCenter
+  ShowHint = True
+  TextHeight = 14
+  HorzScrollBar.Page = 527
+  VertScrollBar.Page = 570
+  Left = 677
+  Height = 601
+  Top = 196
+  Width = 528
+  object SplitterEdit: TSplitter
+    Align = alBottom
+    Cursor = crVSplit
+    Height = 592
+    MinSize = 1
+    Width = 528
+    OnMoved = SplitterEditMoved
+    ResizeAnchor = akBottom
+    Cursor = crVSplit
+    Height = 592
+    Top = -21
+    Width = 528
+  end
+  object PanelEditor: TPanel
+    Align = alBottom
+    BevelOuter = bvNone
+    ClientHeight = 223
+    ClientWidth = 528
+    TabOrder = 0
+    Height = 223
+    Top = -233
+    Width = 528
+    object SplitterRequirementsChanges: TSplitter
+      Align = alBottom
+      Cursor = crVSplit
+      Height = 592
+      MinSize = 60
+      Width = 528
+      OnMoved = SplitterRequirementsChangesMoved
+      ResizeAnchor = akBottom
+      Cursor = crVSplit
+      Height = 592
+      Top = -369
+      Width = 528
+    end
+    object PanelRequirementsChanges: TPanel
+      Align = alBottom
+      BevelOuter = bvNone
+      ClientHeight = 79
+      ClientWidth = 528
+      TabOrder = 1
+      OnResize = PanelRequirementsChangesResize
+      Height = 79
+      Top = -263
+      Width = 528
+      object RequirementsSpeedButton: TSpeedButton
+        AllowAllUp = True
+        Caption = 'Requirements'
+        Glyph.Data = {
+          9C0100002F2A2058504D202A2F0A7374617469632063686172202A6772617068
+          69635B5D203D207B0A22313620313620332031222C0A222E2063204E6F6E6522
+          2C0A222C20632023303030303030222C0A222D20632023303030304646222C0A
+          222E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E222C0A222E2E2E2E2E2E2E2E2E2E2E
+          2E2C2C2C2C222C0A222E2E2E2E2E2E2E2E2E2E2C2C2D2D2D2D222C0A222E2E2E
+          2E2E2E2E2E2C2C2D2D2D2D2D2D222C0A222E2E2E2E2E2E2C2C2D2D2D2D2D2D2D
+          2D222C0A222E2E2E2E2C2C2D2D2D2D2D2D2D2D2D2D222C0A222E2E2C2C2D2D2D
+          2D2D2D2D2D2D2D2D2D222C0A222C2C2D2D2D2D2D2D2D2D2D2D2D2D2D2D222C0A
+          222C2C2D2D2D2D2D2D2D2D2D2D2D2D2D2D222C0A222E2E2C2C2D2D2D2D2D2D2D
+          2D2D2D2D2D222C0A222E2E2E2E2C2C2D2D2D2D2D2D2D2D2D2D222C0A222E2E2E
+          2E2E2E2C2C2D2D2D2D2D2D2D2D222C0A222E2E2E2E2E2E2E2E2C2C2D2D2D2D2D
+          2D222C0A222E2E2E2E2E2E2E2E2E2E2C2C2D2D2D2D222C0A222E2E2E2E2E2E2E
+          2E2E2E2E2E2C2C2C2C222C0A222E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E227D0A
+        }
+        Margin = 4
+        NumGlyphs = 0
+        OnClick = SpeedButtonClick
+        ShowHint = True
+        ParentShowHint = False
+        Left = 13
+        Height = 24
+        Hint = 'Browse all rules with the selected requirement'
+        Top = 8
+        Width = 100
+        Tag = 4
+      end
+      object ChangesSpeedButton: TSpeedButton
+        AllowAllUp = True
+        Caption = 'Changes'
+        Glyph.Data = {
+          9C0100002F2A2058504D202A2F0A7374617469632063686172202A6772617068
+          69635B5D203D207B0A22313620313620332031222C0A222E2063204E6F6E6522
+          2C0A222C20632023303030303030222C0A222D20632023303046464646222C0A
+          222E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E222C0A222C2C2C2C2E2E2E2E2E2E2E
+          2E2E2E2E2E222C0A222D2D2D2D2C2C2E2E2E2E2E2E2E2E2E2E222C0A222D2D2D
+          2D2D2D2C2C2E2E2E2E2E2E2E2E222C0A222D2D2D2D2D2D2D2D2C2C2E2E2E2E2E
+          2E222C0A222D2D2D2D2D2D2D2D2D2D2C2C2E2E2E2E222C0A222D2D2D2D2D2D2D
+          2D2D2D2D2D2C2C2E2E222C0A222D2D2D2D2D2D2D2D2D2D2D2D2D2D2C2C222C0A
+          222D2D2D2D2D2D2D2D2D2D2D2D2D2D2C2C222C0A222D2D2D2D2D2D2D2D2D2D2D
+          2D2C2C2E2E222C0A222D2D2D2D2D2D2D2D2D2D2C2C2E2E2E2E222C0A222D2D2D
+          2D2D2D2D2D2C2C2E2E2E2E2E2E222C0A222D2D2D2D2D2D2C2C2E2E2E2E2E2E2E
+          2E222C0A222D2D2D2D2C2C2E2E2E2E2E2E2E2E2E2E222C0A222C2C2C2C2E2E2E
+          2E2E2E2E2E2E2E2E2E222C0A222E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E227D0A
+        }
+        Margin = 4
+        NumGlyphs = 0
+        OnClick = SpeedButtonClick
+        ShowHint = True
+        ParentShowHint = False
+        Left = 36
+        Height = 24
+        Hint = 'Browse all rules with the selected change'
+        Top = 49
+        Width = 77
+        Tag = 5
+      end
+      object RequirementsListBox: TListBox
+        ExtendedSelect = False
+        ItemHeight = 14
+        OnDblClick = ListBoxDblClick
+        OnEnter = EditEnterCommit
+        OnExit = ListBoxExit
+        OnKeyUp = ListBoxKeyUp
+        OnMouseUp = ListBoxMouseUp
+        PopupMenu = EditPopupMenu
+        TabOrder = 0
+        TopIndex = -1
+        Left = 117
+        Height = 33
+        Top = 4
+        Width = 329
+      end
+      object ChangesListBox: TListBox
+        ExtendedSelect = False
+        ItemHeight = 14
+        OnDblClick = ListBoxDblClick
+        OnEnter = EditEnterCommit
+        OnExit = ListBoxExit
+        OnKeyUp = ListBoxKeyUp
+        OnMouseUp = ListBoxMouseUp
+        PopupMenu = EditPopupMenu
+        TabOrder = 1
+        TopIndex = -1
+        Left = 117
+        Height = 36
+        Top = 44
+        Width = 329
+      end
+      object RequirementsEdit: TEdit
+        OnExit = ListBoxEditExit
+        OnKeyPress = ListBoxEditKeyPress
+        PopupMenu = EditPopupMenu
+        TabOrder = 2
+        Visible = False
+        Left = 128
+        Height = 20
+        Top = 157
+        Width = 221
+      end
+      object ChangesEdit: TEdit
+        OnExit = ListBoxEditExit
+        OnKeyPress = ListBoxEditKeyPress
+        PopupMenu = EditPopupMenu
+        TabOrder = 3
+        Visible = False
+        Left = 128
+        Height = 20
+        Top = 93
+        Width = 185
+      end
+    end
+    object PanelRest: TPanel
+      Align = alClient
+      BevelOuter = bvNone
+      ClientHeight = 1
+      ClientWidth = 528
+      TabOrder = 0
+      OnResize = PanelRestResize
+      Height = 1
+      Top = -131
+      Width = 528
+      object Label5: TLabel
+        Caption = 'Reply'
+        Color = clNone
+        ParentColor = False
+        Left = 86
+        Height = 17
+        Top = 64
+        Width = 42
+      end
+      object CommandSpeedButton: TSpeedButton
+        AllowAllUp = True
+        Caption = 'Command'
+        Glyph.Data = {
+          8D0100002F2A2058504D202A2F0A7374617469632063686172202A6772617068
+          69635B5D203D207B0A22313620313620322031222C0A222E2063204E6F6E6522
+          2C0A222C20632023464630303030222C0A222E2E2E2E2E2E2E2E2E2E2E2E2E2E
+          2E2E222C0A222E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E222C0A222E2E2E2E2E2E
+          2E2E2E2E2E2E2E2E2E2E222C0A222E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E222C
+          0A222E2E2E2C2C2C2C2C2C2C2C2C2C2E2E2E222C0A222E2E2C2C2C2C2C2C2C2C
+          2C2C2C2C2E2E222C0A222E2C2C2C2E2E2E2E2E2E2E2E2C2C2C2E222C0A222E2C
+          2C2E2E2E2E2E2E2E2E2E2E2C2C2E222C0A222E2C2C2E2E2E2E2E2E2E2E2E2E2C
+          2C2E222C0A222E2C2C2C2E2E2E2E2E2E2E2E2C2C2C2E222C0A222E2E2C2C2C2C
+          2C2C2C2C2C2C2C2C2E2E222C0A222E2E2E2C2C2C2C2C2C2C2C2C2C2E2E2E222C
+          0A222E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E222C0A222E2E2E2E2E2E2E2E2E2E
+          2E2E2E2E2E2E222C0A222E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E222C0A222E2E
+          2E2E2E2E2E2E2E2E2E2E2E2E2E2E227D0A
+        }
+        Margin = 4
+        NumGlyphs = 0
+        OnClick = SpeedButtonClick
+        ShowHint = True
+        ParentShowHint = False
+        Left = 28
+        Height = 24
+        Hint = 'Browse all rules with this command'
+        Top = 32
+        Width = 85
+        Tag = 1
+      end
+      object MoveSpeedButton: TSpeedButton
+        AllowAllUp = True
+        Caption = 'Move'
+        Glyph.Data = {
+          9C0100002F2A2058504D202A2F0A7374617469632063686172202A6772617068
+          69635B5D203D207B0A22313620313620332031222C0A222E2063204E6F6E6522
+          2C0A222C20632023303030303030222C0A222D20632023303046463030222C0A
+          222E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E222C0A222C2C2C2C2C2C2C2C2C2C2E
+          2E2E2E2E2E222C0A222D2D2D2D2D2D2D2D2D2D2C2E2E2E2E2E222C0A222D2D2D
+          2D2D2D2D2D2D2D2D2C2C2E2E2E222C0A222D2D2D2D2D2D2D2D2D2D2D2D2D2C2E
+          2E222C0A222D2D2D2D2D2D2D2D2D2D2D2D2D2C2E2E222C0A222D2D2D2D2D2D2D
+          2D2D2D2D2D2D2D2C2E222C0A222D2D2D2D2D2D2D2D2D2D2D2D2D2D2C2E222C0A
+          222D2D2D2D2D2D2D2D2D2D2D2D2D2D2C2E222C0A222D2D2D2D2D2D2D2D2D2D2D
+          2D2D2D2C2E222C0A222D2D2D2D2D2D2D2D2D2D2D2D2D2C2E2E222C0A222D2D2D
+          2D2D2D2D2D2D2D2D2D2D2C2E2E222C0A222D2D2D2D2D2D2D2D2D2D2D2C2C2E2E
+          2E222C0A222D2D2D2D2D2D2D2D2D2D2C2E2E2E2E2E222C0A222C2C2C2C2C2C2C
+          2C2C2C2E2E2E2E2E2E222C0A222E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E227D0A
+        }
+        Margin = 4
+        NumGlyphs = 0
+        OnClick = SpeedButtonClick
+        ShowHint = True
+        ParentShowHint = False
+        Left = 49
+        Height = 24
+        Hint = 'Browse all rules with this move'
+        Top = 104
+        Width = 64
+        Tag = 3
+      end
+      object ContextSpeedButton: TSpeedButton
+        AllowAllUp = True
+        Caption = 'Context'
+        Glyph.Data = {
+          9C0100002F2A2058504D202A2F0A7374617469632063686172202A6772617068
+          69635B5D203D207B0A22313620313620332031222C0A222E2063204E6F6E6522
+          2C0A222C20632023303030303030222C0A222D20632023303038343030222C0A
+          222E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E222C0A222E2E2E2E2E2E2C2C2C2C2C
+          2C2C2C2C2C222C0A222E2E2E2E2E2C2D2D2D2D2D2D2D2D2D2D222C0A222E2E2E
+          2C2C2D2D2D2D2D2D2D2D2D2D2D222C0A222E2E2C2D2D2D2D2D2D2D2D2D2D2D2D
+          2D222C0A222E2E2C2D2D2D2D2D2D2D2D2D2D2D2D2D222C0A222E2C2D2D2D2D2D
+          2D2D2D2D2D2D2D2D2D222C0A222E2C2D2D2D2D2D2D2D2D2D2D2D2D2D2D222C0A
+          222E2C2D2D2D2D2D2D2D2D2D2D2D2D2D2D222C0A222E2C2D2D2D2D2D2D2D2D2D
+          2D2D2D2D2D222C0A222E2E2C2D2D2D2D2D2D2D2D2D2D2D2D2D222C0A222E2E2C
+          2D2D2D2D2D2D2D2D2D2D2D2D2D222C0A222E2E2E2C2C2D2D2D2D2D2D2D2D2D2D
+          2D222C0A222E2E2E2E2E2C2D2D2D2D2D2D2D2D2D2D222C0A222E2E2E2E2E2E2C
+          2C2C2C2C2C2C2C2C2C222C0A222E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E227D0A
+        }
+        Margin = 4
+        NumGlyphs = 0
+        OnClick = SpeedButtonClick
+        ShowHint = True
+        ParentShowHint = False
+        Left = 40
+        Height = 24
+        Hint = 'Browse all rules with this context'
+        Top = 4
+        Width = 73
+      end
+      object RuleNumberLabel: TLabel
+        Caption = '#1234'
+        Color = clNone
+        ParentColor = False
+        ParentShowHint = False
+        ShowHint = True
+        Left = 2
+        Height = 17
+        Hint = 'The index of the edited rule in the table'
+        Top = 5
+        Width = 46
+      end
+      object replyPicture: TImage
+        AutoSize = True
+        OnMouseUp = replyPictureMouseUp
+        Transparent = True
+        Left = 67
+        Height = 16
+        Hint = 'Test saying the reply'
+        Top = 64
+        Width = 16
+      end
+      object ContextEdit: TEdit
+        OnEnter = EditEnterCommit
+        PopupMenu = EditPopupMenu
+        TabOrder = 0
+        Left = 117
+        Height = 22
+        Top = 6
+        Width = 329
+      end
+      object CommandEdit: TEdit
+        OnEnter = EditEnterCommit
+        PopupMenu = EditPopupMenu
+        TabOrder = 1
+        Left = 117
+        Height = 22
+        Top = 34
+        Width = 329
+      end
+      object ReplyMemo: TMemo
+        OnEnter = EditEnterCommit
+        OnMouseUp = ReplyMemoMouseUp
+        PopupMenu = EditPopupMenu
+        ScrollBars = ssVertical
+        TabOrder = 2
+        Left = 117
+        Height = 41
+        Top = 60
+        Width = 329
+      end
+      object MoveEdit: TEdit
+        OnEnter = EditEnterCommit
+        PopupMenu = EditPopupMenu
+        TabOrder = 3
+        Left = 117
+        Height = 22
+        Top = 106
+        Width = 329
+      end
+    end
+  end
+  object PanelTop: TPanel
+    Align = alClient
+    ClientHeight = 1
+    ClientWidth = 528
+    TabOrder = 1
+    Height = 1
+    Top = -116
+    Width = 528
+    object ListPages: TPageControl
+      ActivePage = TabSheetMap
+      Align = alClient
+      TabIndex = 1
+      TabOrder = 0
+      TabPosition = tpBottom
+      OnChange = ListPagesChange
+      Left = 1
+      Height = 1
+      Top = -17
+      Width = 526
+      object TabSheetTable: TTabSheet
+        Caption = ' Table'
+        ClientHeight = 1
+        ClientWidth = 522
+        Left = 2
+        Height = 1
+        Top = 2
+        Width = 522
+        object RuleGrid: TDrawGrid
+          Align = alClient
+          ColCount = 6
+          DefaultRowHeight = 16
+          FixedColor = clBtnFace
+          FixedCols = 0
+          GridLineWidth = 0
+          Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goColSizing, goRowSelect]
+          RowCount = 2
+          ScrollBars = ssAutoBoth
+          TabOrder = 0
+          VisibleColCount = 4
+          VisibleRowCount = 1
+          OnDrawCell = RuleGridDrawCell
+          OnMouseDown = RuleGridMouseDown
+          OnMouseUp = RuleGridMouseUp
+          Height = 1
+          Width = 522
+          ColWidths = (
+            87
+            78
+            261
+            106
+            146
+            165
+          )
+        end
+      end
+      object TabSheetMap: TTabSheet
+        Caption = '  Map'
+        ClientHeight = 1
+        ClientWidth = 522
+        Left = 2
+        Height = 1
+        Top = 2
+        Width = 522
+        object PanelMap: TPanel
+          Align = alClient
+          BevelOuter = bvNone
+          ClientHeight = 1
+          ClientWidth = 522
+          FullRepaint = False
+          TabOrder = 0
+          OnResize = PanelMapResize
+          Height = 1
+          Width = 522
+          object MapImage: TImage
+            OnMouseDown = MapImageMouseDown
+            OnMouseMove = MapImageMouseMove
+            OnMouseUp = MapImageMouseUp
+            PopupMenu = MapPopupMenu
+            Transparent = True
+            Height = 245
+            Width = 549
+          end
+          object MapScrollBarHorizontal: TScrollBar
+            SmallChange = 10
+            TabOrder = 0
+            OnChange = MapScrollBarHorizontalChange
+            Height = 15
+            Top = 249
+            Width = 553
+          end
+          object MapScrollBarVertical: TScrollBar
+            Kind = sbVertical
+            SmallChange = 10
+            TabOrder = 1
+            OnChange = MapScrollBarVerticalChange
+            Left = 557
+            Height = 16
+            Width = 15
+          end
+        end
+      end
+      object TabSheetBrowse: TTabSheet
+        Caption = 'Browser'
+        ClientHeight = 1
+        ClientWidth = 522
+        Left = 2
+        Height = 1
+        Top = 2
+        Width = 522
+        object PanelLists: TPanel
+          Align = alClient
+          BevelOuter = bvNone
+          Caption = 'PanelLists'
+          ClientHeight = 1
+          ClientWidth = 522
+          TabOrder = 0
+          OnResize = PanelListsResize
+          Height = 1
+          Width = 522
+          object SplitterLists: TSplitter
+            Color = clBtnFace
+            Height = 1
+            MinSize = 80
+            ParentColor = False
+            Width = 3
+            Cursor = crHSplit
+            Left = 253
+            Height = 1
+            Width = 3
+          end
+          object PanelFirstList: TPanel
+            Align = alLeft
+            BevelOuter = bvNone
+            ClientHeight = 1
+            ClientWidth = 253
+            TabOrder = 0
+            OnResize = PanelFirstListResize
+            Height = 1
+            Width = 253
+            object firstListBoxImage: TImage
+              AutoSize = True
+              OnClick = firstListBoxImageClick
+              Transparent = True
+              Left = 4
+              Height = 16
+              Top = 2
+              Width = 16
+            end
+            object firstListBoxLabel: TLabel
+              Caption = 'Contexts'
+              Color = clNone
+              ParentColor = False
+              Left = 24
+              Height = 17
+              Top = 2
+              Width = 66
+            end
+            object FirstListBox: TListBox
+              ItemHeight = 16
+              OnDrawItem = FirstListBoxDrawItem
+              OnMouseDown = FirstListBoxMouseDown
+              Sorted = True
+              Style = lbOwnerDrawFixed
+              TabOrder = 0
+              TopIndex = -1
+              Left = 4
+              Height = 245
+              Top = 20
+              Width = 245
+            end
+          end
+          object PanelSecondList: TPanel
+            Align = alClient
+            BevelOuter = bvNone
+            ClientHeight = 1
+            ClientWidth = 266
+            TabOrder = 1
+            OnResize = PanelSecondListResize
+            Left = 256
+            Height = 1
+            Width = 266
+            object SecondListBoxImage: TImage
+              AutoSize = True
+              Transparent = True
+              Left = 4
+              Height = 16
+              Top = 2
+              Width = 16
+            end
+            object SecondListBoxLabel: TLabel
+              Caption = 'Commands'
+              Color = clNone
+              ParentColor = False
+              Left = 22
+              Height = 17
+              Top = 2
+              Width = 85
+            end
+            object SecondListBox: TListBox
+              ItemHeight = 16
+              OnDrawItem = SecondListBoxDrawItem
+              OnMouseDown = SecondListBoxMouseDown
+              Sorted = True
+              Style = lbOwnerDrawFixed
+              TabOrder = 0
+              TopIndex = -1
+              Left = 4
+              Height = 245
+              Top = 20
+              Width = 313
+            end
+          end
+        end
+      end
+    end
+    object PanelButtonBar: TPanel
+      Align = alBottom
+      BevelInner = bvRaised
+      BevelOuter = bvLowered
+      ClientHeight = 34
+      ClientWidth = 526
+      TabOrder = 1
+      Left = 1
+      Height = 34
+      Top = -34
+      Width = 526
+      object NewRuleButton: TSpeedButton
+        Caption = 'New'
+        Glyph.Data = {
+          BA0100002F2A2058504D202A2F0A7374617469632063686172202A6772617068
+          69635B5D203D207B0A22313620313620352031222C0A222E2063204E6F6E6522
+          2C0A222C20632023464646463030222C0A222D20632023303030303030222C0A
+          222A20632023374637463746222C0A226120632023424642464246222C0A222E
+          2E2E2E2E2E2E2C2E2E2E2E2E2E2E2E222C0A222E2E2E2E2E2E2E2C2E2E2E2E2E
+          2E2E2E222C0A222E2E2C2E2E2C2C2C2C2C2E2E2C2E2E2E222C0A222E2E2E2C2C
+          2C2C2C2C2C2C2C2E2E2E2E222C0A222E2E2E2C2C2C2D2D2D2C2C2C2E2E2E2E22
+          2C0A222E2E2C2C2C2D2E2C2E2D2C2C2C2E2E2E222C0A222E2E2C2C2D2E2C2E2C
+          2E2D2C2C2E2E2E222C0A222C2C2C2C2D2C2E2A2E2C2D2C2C2C2C2E222C0A222E
+          2E2C2C2D2E2C2A2C2E2D2C2C2E2E2E222C0A222E2E2C2C2C2D2E2A2E2D2C2C2C
+          2E2E2E222C0A222E2E2E2C2C2C2D2E2D2C2C2C2E2E2E2E222C0A222E2E2E2C2C
+          2C2D2C2D2C2C2C2E2E2E2E222C0A222E2E2C2E2E2C2D2D2D2C2E2E2C2E2E2E22
+          2C0A222E2E2E2E2E2E2D612D2E2E2E2E2E2E2E222C0A222E2E2E2E2E2E2D2D2D
+          2E2E2E2E2E2E2E222C0A222E2E2E2E2E2E2E2D2E2E2E2E2E2E2E2E227D0A
+        }
+        NumGlyphs = 0
+        OnClick = NewRuleButtonClick
+        ShowHint = True
+        ParentShowHint = False
+        Left = 5
+        Height = 25
+        Hint = 'Make a new rule'
+        Top = 5
+        Width = 61
+      end
+      object DuplicateRuleButton: TSpeedButton
+        Caption = 'Duplicate'
+        Glyph.Data = {
+          9C0100002F2A2058504D202A2F0A7374617469632063686172202A6772617068
+          69635B5D203D207B0A22313620313620332031222C0A222E2063204E6F6E6522
+          2C0A222C20632023303030303030222C0A222D20632023464646463030222C0A
+          222E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E222C0A222E2E2E2E2E2E2E2E2E2E2E
+          2E2E2E2E2E222C0A222E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E222C0A222E2E2E
+          2E2E2E2C2C2E2E2E2E2E2E2E2E222C0A222E2E2E2E2E2E2C2D2C2C2E2E2E2E2E
+          2E222C0A222E2E2E2E2E2E2C2D2D2D2C2C2E2E2E2E222C0A222C2C2C2C2C2C2C
+          2D2D2D2D2D2C2C2E2E222C0A222C2D2D2D2D2D2D2D2D2D2D2D2D2D2C2C222C0A
+          222C2C2C2C2C2C2C2D2D2D2D2D2C2C2E2E222C0A222E2E2E2E2E2E2C2D2D2D2C
+          2C2E2E2E2E222C0A222E2E2E2E2E2E2C2D2C2C2E2E2E2E2E2E222C0A222E2E2E
+          2E2E2E2C2C2E2E2E2E2E2E2E2E222C0A222E2E2E2E2E2E2E2E2E2E2E2E2E2E2E
+          2E222C0A222E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E222C0A222E2E2E2E2E2E2E
+          2E2E2E2E2E2E2E2E2E222C0A222E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E227D0A
+        }
+        NumGlyphs = 0
+        OnClick = DuplicateRuleButtonClick
+        ShowHint = True
+        ParentShowHint = False
+        Left = 68
+        Height = 25
+        Hint = 'Duplicate the rule showing in the rule editor panel'
+        Top = 5
+        Width = 89
+      end
+      object DeleteRuleButton: TSpeedButton
+        Caption = 'Delete'
+        Glyph.Data = {
+          9C0100002F2A2058504D202A2F0A7374617469632063686172202A6772617068
+          69635B5D203D207B0A22313620313620332031222C0A222E2063204E6F6E6522
+          2C0A222C20632023303030303030222C0A222D20632023464646463030222C0A
+          222E2E2E2E2E2E2C2C2C2C2E2E2E2E2E2E222C0A222E2E2E2E2C2C2D2D2D2D2C
+          2C2E2E2E2E222C0A222E2E2E2C2D2D2D2D2D2D2D2D2C2E2E2E222C0A222E2E2C
+          2D2D2D2C2C2C2C2C2D2D2C2E2E222C0A222E2C2D2D2D2C2E2E2E2C2D2D2D2D2C
+          2E222C0A222E2C2D2D2C2E2E2E2C2D2D2D2C2D2C2E222C0A222C2D2D2C2E2E2E
+          2C2D2D2D2C2C2D2D2C222C0A222C2D2D2C2E2E2C2D2D2D2C2E2C2D2D2C222C0A
+          222C2D2D2C2E2C2D2D2D2C2E2E2C2D2D2C222C0A222C2D2D2C2C2D2D2D2C2E2E
+          2E2C2D2D2C222C0A222E2C2D2C2D2D2D2C2E2E2E2C2D2D2C2E222C0A222E2C2D
+          2D2D2D2C2E2E2E2C2D2D2D2C2E222C0A222E2E2C2D2D2C2C2C2C2C2D2D2D2C2E
+          2E222C0A222E2E2E2C2D2D2D2D2D2D2D2D2C2E2E2E222C0A222E2E2E2E2C2C2D
+          2D2D2D2C2C2E2E2E2E222C0A222E2E2E2E2E2E2C2C2C2C2E2E2E2E2E2E227D0A
+        }
+        NumGlyphs = 0
+        OnClick = DeleteRuleButtonClick
+        ShowHint = True
+        ParentShowHint = False
+        Left = 159
+        Height = 25
+        Hint = 'Delete all selected rules'
+        Top = 5
+        Width = 73
+      end
+      object MoveUpButton: TSpeedButton
+        Caption = 'Raise'
+        Glyph.Data = {
+          9C0100002F2A2058504D202A2F0A7374617469632063686172202A6772617068
+          69635B5D203D207B0A22313620313620332031222C0A222E2063204E6F6E6522
+          2C0A222C20632023303030303030222C0A222D20632023464646463030222C0A
+          222E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E222C0A222E2E2E2E2E2E2E2E2E2E2E
+          2E2E2E2E2E222C0A222E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E222C0A222E2E2E
+          2E2E2E2E2C2E2E2E2E2E2E2E2E222C0A222E2E2E2E2E2E2C2D2C2E2E2E2E2E2E
+          2E222C0A222E2E2E2E2E2C2D2D2D2C2E2E2E2E2E2E222C0A222E2E2E2E2C2D2D
+          2C2D2D2C2E2E2E2E2E222C0A222E2E2E2C2D2D2C2E2C2D2D2C2E2E2E2E222C0A
+          222E2E2C2D2D2C2E2E2E2C2D2D2C2E2E2E222C0A222E2C2D2D2C2E2E2E2E2E2C
+          2D2D2C2E2E222C0A222C2D2D2C2E2E2E2E2E2E2E2C2D2D2C2E222C0A222C2D2C
+          2E2E2E2E2E2E2E2E2E2C2D2C2E222C0A222C2C2E2E2E2E2E2E2E2E2E2E2E2C2C
+          2E222C0A222E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E222C0A222E2E2E2E2E2E2E
+          2E2E2E2E2E2E2E2E2E222C0A222E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E227D0A
+        }
+        NumGlyphs = 0
+        OnClick = MoveUpButtonClick
+        ShowHint = True
+        ParentShowHint = False
+        Left = 238
+        Height = 25
+        Hint = 'Raise all selected rules'
+        Top = 5
+        Width = 69
+      end
+      object MoveDownButton: TSpeedButton
+        Caption = 'Lower'
+        Glyph.Data = {
+          9C0100002F2A2058504D202A2F0A7374617469632063686172202A6772617068
+          69635B5D203D207B0A22313620313620332031222C0A222E2063204E6F6E6522
+          2C0A222C20632023303030303030222C0A222D20632023464646463030222C0A
+          222E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E222C0A222E2E2E2E2E2E2E2E2E2E2E
+          2E2E2E2E2E222C0A222E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E222C0A222C2C2E
+          2E2E2E2E2E2E2E2E2E2E2C2C2E222C0A222C2D2C2E2E2E2E2E2E2E2E2E2C2D2C
+          2E222C0A222C2D2D2C2E2E2E2E2E2E2E2C2D2D2C2E222C0A222E2C2D2D2C2E2E
+          2E2E2E2C2D2D2C2E2E222C0A222E2E2C2D2D2C2E2E2E2C2D2D2C2E2E2E222C0A
+          222E2E2E2C2D2D2C2E2C2D2D2C2E2E2E2E222C0A222E2E2E2E2C2D2D2C2D2D2C
+          2E2E2E2E2E222C0A222E2E2E2E2E2C2D2D2D2C2E2E2E2E2E2E222C0A222E2E2E
+          2E2E2E2C2D2C2E2E2E2E2E2E2E222C0A222E2E2E2E2E2E2E2C2E2E2E2E2E2E2E
+          2E222C0A222E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E222C0A222E2E2E2E2E2E2E
+          2E2E2E2E2E2E2E2E2E222C0A222E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E227D0A
+        }
+        NumGlyphs = 0
+        OnClick = MoveDownButtonClick
+        ShowHint = True
+        ParentShowHint = False
+        Left = 310
+        Height = 25
+        Hint = 'Lower all selected rules'
+        Top = 5
+        Width = 73
+      end
+      object insertSound: TSpeedButton
+        Caption = 'Sound'
+        Glyph.Data = {
+          BA0200002F2A2058504D202A2F0A7374617469632063686172202A6772617068
+          69635B5D203D207B0A22333220313620352031222C0A222E2063204E6F6E6522
+          2C0A222C20632023303030303030222C0A222D20632023464646463030222C0A
+          222A20632023383438343834222C0A226120632023464646464646222C0A222E
+          2E2E2E2E2E2C2C2C2E2E2E2E2D2E2E2E2E2E2E2E2E2A2A2A2E2E2E2E2A2E2E22
+          2C0A222E2E2E2E2E2C2D2C2D2C2E2E2D2E2E2E2E2E2E2E2E2A2E2A612A2E2E2A
+          2E612E222C0A222E2E2E2E2C2D2C2D2D2C2E2E2E2E2E2D2E2E2E2E2A2E612A61
+          2A612E2E612E2A222C0A222E2E2E2C2D2D2C2D2D2D2C2E2E2E2D2E2E2E2E2A2E
+          612A2E612E2A2E2E2E2A2E222C0A222E2E2E2C2D2D2C2D2D2D2C2E2E2D2E2E2E
+          2E2E2A612E2A612E2E2A612E2A2E61222C0A222E2C2C2D2D2D2C2C2D2D2C2E2D
+          2E2E2E2E2A2A2E612E2A2A2E2E2A612A2E612E222C0A222C2D2C2D2D2D2C2D2C
+          2D2C2E2E2E2E2E2A2E2A612E2E2A612A2E2A612E612E2E222C0A222C2D2C2D2D
+          2D2C2D2C2D2C2E2D2D2D2D2A612A612E2E2A612A612A612A2A2A2A222C0A222C
+          2A2C2D2D2D2C2D2C2D2C2E2E2E2E2E2A612A612E2E2A612A612A612E61616122
+          2C0A222E2C2C2A2D2D2C2C2D2D2C2E2D2E2E2E2E2A2A612E2E2A2A2E612A612A
+          2E2E2E222C0A222E2E2E2C2D2D2C2D2D2D2C2E2E2D2E2E2E2E612A2E2E2A6161
+          2E2A612E2A2E2E222C0A222E2E2E2C2A2D2C2A2D2D2C2E2E2E2D2E2E2E2E2A61
+          2E2A612E2E2A612E2E2A2E222C0A222E2E2E2E2C2A2C2A2D2C2E2E2E2E2E2D2E
+          2E2E2E2A2E2E2A2E2A2E612E2E2E2A222C0A222E2E2E2E2E2C2C2C2A2C2E2E2D
+          2E2E2E2E2E2E2E2E2A2E2A612A612E2A2E2E2E222C0A222E2E2E2E2E2E2C2C2C
+          2E2E2E2E2D2E2E2E2E2E2E2E2E2A2A2A2E612E2E2A2E2E222C0A222E2E2E2E2E
+          2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E6161612E2E2E2E612E227D0A
+        }
+        NumGlyphs = 2
+        OnClick = insertSoundClick
+        ShowHint = True
+        ParentShowHint = False
+        Left = 392
+        Height = 25
+        Hint = 'Insert a sound into a reply'
+        Top = 5
+        Width = 73
+      end
+      object InsertMusicButton: TSpeedButton
+        Caption = 'Music'
+        Glyph.Data = {
+          9C0100002F2A2058504D202A2F0A7374617469632063686172202A6772617068
+          69635B5D203D207B0A22313620313620332031222C0A222E2063204E6F6E6522
+          2C0A222C20632023303030303030222C0A222D20632023464646463030222C0A
+          222E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E222C0A222E2E2E2E2E2E2E2E2E2E2E
+          2E2E2E2E2E222C0A222E2E2E2E2C2C2C2C2E2E2E2E2E2E2E2E222C0A222E2E2E
+          2E2C2D2D2D2C2E2C2C2C2C2E2E222C0A222E2E2E2E2C2D2C2C2C2E2C2D2D2D2C
+          2E222C0A222E2E2E2E2C2D2C2E2C2E2C2D2C2C2C2E222C0A222E2E2E2E2C2D2C
+          2E2E2E2C2D2C2E2C2E222C0A222E2E2E2E2C2D2C2E2E2E2C2D2C2E2E2E222C0A
+          222E2E2E2C2C2D2C2E2E2E2C2D2C2E2E2E222C0A222E2E2C2D2D2D2C2E2E2E2C
+          2D2C2E2E2E222C0A222E2E2C2D2D2C2E2E2E2C2C2D2C2E2E2E222C0A222E2E2E
+          2C2C2E2E2E2C2D2D2D2C2E2E2E222C0A222E2E2E2E2E2E2E2E2C2D2D2C2E2E2E
+          2E222C0A222E2E2E2E2E2E2E2E2E2C2C2E2E2E2E2E222C0A222E2E2E2E2E2E2E
+          2E2E2E2E2E2E2E2E2E222C0A222E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E227D0A
+        }
+        NumGlyphs = 0
+        OnClick = InsertMusicButtonClick
+        ShowHint = True
+        ParentShowHint = False
+        Left = 468
+        Height = 25
+        Hint = 'Insert music into a reply'
+        Top = 5
+        Width = 73
+      end
+    end
+  end
+  object WaveFileOpenDialog: TOpenDialog
+    Title = 'Open existing file'
+    Filter = 'Wave files|*.wav'
+    FilterIndex = 0
+    Title = 'Open existing file'
+    left = 508
+    top = 220
+  end
+  object ImageList: TImageList
+    left = 508
+    top = 258
+  end
+  object MainMenu1: TMainMenu
+    left = 472
+    top = 222
+    object MenuFile: TMenuItem
+      Caption = '&World'
+      OnClick = MenuEditClick
+      object MenuFileNewWorld: TMenuItem
+        Caption = '&New'
+        OnClick = MenuFileNewWorldClick
+      end
+      object MenuFileOpenWorld: TMenuItem
+        Caption = '&Open...'
+        OnClick = MenuFileOpenWorldClick
+      end
+      object N7: TMenuItem
+        Caption = '-'
+      end
+      object MenuFileSaveWorld: TMenuItem
+        Caption = '&Save'
+        ShortCut = 16467
+        OnClick = MenuFileSaveWorldClick
+      end
+      object MenuFileSaveWorldAs: TMenuItem
+        Caption = 'Save &As...'
+        OnClick = MenuFileSaveWorldAsClick
+      end
+      object N4: TMenuItem
+        Caption = '-'
+      end
+      object MenuWorldSwitchToPlayer: TMenuItem
+        Caption = 'Switch to &Player...'
+        OnClick = MenuWorldSwitchToPlayerClick
+      end
+      object N8: TMenuItem
+        Caption = '-'
+      end
+      object MenuFileExit: TMenuItem
+        Caption = 'E&xit'
+        OnClick = MenuFileExitClick
+      end
+    end
+    object MenuEdit: TMenuItem
+      Caption = '&Edit'
+      OnClick = MenuEditClick
+      object MenuEditUndo: TMenuItem
+        Caption = '&Undo'
+        Enabled = False
+        ShortCut = 16474
+        OnClick = MenuEditUndoClick
+      end
+      object MenuEditRedo: TMenuItem
+        Caption = '&Redo'
+        Enabled = False
+        ShortCut = 24666
+        OnClick = MenuEditRedoClick
+      end
+      object N1: TMenuItem
+        Caption = '-'
+      end
+      object MenuEditCut: TMenuItem
+        Caption = 'Cu&t                 Ctrl+X'
+        OnClick = MenuEditCutClick
+      end
+      object MenuEditCopy: TMenuItem
+        Caption = '&Copy              Ctrl+C'
+        OnClick = MenuEditCopyClick
+      end
+      object MenuEditPaste: TMenuItem
+        Caption = '&Paste             Ctrl+V'
+        OnClick = MenuEditPasteClick
+      end
+      object N12: TMenuItem
+        Caption = '-'
+      end
+      object MenuEditInsertSound: TMenuItem
+        Caption = 'Insert &Sound...'
+        ShortCut = 16457
+        OnClick = MenuEditInsertSoundClick
+      end
+      object MenuEditInsertMusic: TMenuItem
+        Caption = 'Insert &Music...'
+        ShortCut = 16461
+        OnClick = MenuEditInsertMusicClick
+      end
+      object MenuEditInsertPicture: TMenuItem
+        Caption = 'Insert P&icture...'
+        OnClick = MenuEditInsertPictureClick
+      end
+      object N13: TMenuItem
+        Caption = '-'
+      end
+      object MenuEditPreferences: TMenuItem
+        Caption = '&Editor Preferences...'
+        OnClick = MenuEditPreferencesClick
+      end
+    end
+    object MenuRule: TMenuItem
+      Caption = '&Rule'
+      object MenuRuleNew: TMenuItem
+        Caption = '&New Rule'
+        ShortCut = 16462
+        OnClick = MenuRuleNewClick
+      end
+      object MenuRuleDuplicate: TMenuItem
+        Caption = '&Duplicate'
+        ShortCut = 16452
+        OnClick = MenuRuleDuplicateClick
+      end
+      object MenuRuleDelete: TMenuItem
+        Caption = 'D&elete'
+        OnClick = MenuRuleDeleteClick
+      end
+      object N3: TMenuItem
+        Caption = '-'
+      end
+      object MenuRuleRaise: TMenuItem
+        Caption = '&Raise'
+        ShortCut = 16466
+        OnClick = MenuRuleRaiseClick
+      end
+      object MenuRuleLower: TMenuItem
+        Caption = '&Lower'
+        ShortCut = 16460
+        OnClick = MenuRuleLowerClick
+      end
+      object N11: TMenuItem
+        Caption = '-'
+      end
+      object MenuFileMergeWithWorld: TMenuItem
+        Caption = '&Import From...'
+        OnClick = MenuFileMergeWithWorldClick
+      end
+      object MenuFileExport: TMenuItem
+        Caption = 'E&xport Selected To...'
+        OnClick = MenuFileExportClick
+      end
+      object N5: TMenuItem
+        Caption = '-'
+      end
+      object MenuRuleTestReply: TMenuItem
+        Caption = '&Test Reply'
+        ShortCut = 16468
+        OnClick = MenuRuleTestReplyClick
+      end
+    end
+    object MenuMaps: TMenuItem
+      Caption = '&Options'
+      object MenuDisplayShowButtonBar: TMenuItem
+        Caption = 'Show &Button Bar'
+        Checked = True
+        OnClick = MenuDisplayShowButtonBarClick
+      end
+      object MenuOptionsShowRuleEditor: TMenuItem
+        Caption = 'Show Rule &Editor'
+        Checked = True
+        ShortCut = 16453
+        OnClick = MenuOptionsShowRuleEditorClick
+      end
+      object MenuMapsShowCommands: TMenuItem
+        Caption = '&Show Commands in Map'
+        Checked = True
+        OnClick = MenuMapsShowCommandsClick
+      end
+      object N10: TMenuItem
+        Caption = '-'
+      end
+      object MenuBrowseByContext: TMenuItem
+        Caption = 'Browse by &Context'
+        RadioItem = True
+        OnClick = SpeedButtonClick
+      end
+      object MenuBrowseByCommand: TMenuItem
+        Caption = 'Browse by C&ommand'
+        RadioItem = True
+        OnClick = SpeedButtonClick
+        Tag = 1
+      end
+      object MenuBrowseByMove: TMenuItem
+        Caption = 'Browse by &Move'
+        RadioItem = True
+        OnClick = SpeedButtonClick
+        Tag = 3
+      end
+      object MenuBrowseByRequirements: TMenuItem
+        Caption = 'Browse by &Requirements'
+        RadioItem = True
+        OnClick = SpeedButtonClick
+        Tag = 4
+      end
+      object MenuBrowseByChanges: TMenuItem
+        Caption = 'Browse by C&hanges'
+        RadioItem = True
+        OnClick = SpeedButtonClick
+        Tag = 5
+      end
+    end
+    object Wizards1: TMenuItem
+      Caption = '&Tools'
+      object MenuToolsSearch: TMenuItem
+        Caption = '&Find...'
+        ShortCut = 16454
+        OnClick = MenuToolsSearchClick
+      end
+      object N2: TMenuItem
+        Caption = '-'
+      end
+      object MenuMapsQuickContexts: TMenuItem
+        Caption = 'New &Contexts Wizard...'
+        OnClick = MenuMapsQuickContextsClick
+      end
+      object MenuMapLinkWizard: TMenuItem
+        Caption = 'New &Moves Wizard...'
+        ShortCut = 16471
+        OnClick = MenuMapLinkWizardClick
+      end
+      object MenuMapQuickCommands: TMenuItem
+        Caption = 'New C&ommands Wizard...'
+        OnClick = MenuMapQuickCommandsClick
+      end
+      object N9: TMenuItem
+        Caption = '-'
+      end
+      object MenuToolsGenerateJava: TMenuItem
+        Caption = 'Generate Java...'
+        OnClick = MenuToolsGenerateJavaClick
+      end
+      object N14: TMenuItem
+        Caption = '-'
+      end
+      object MenuEditLogFile: TMenuItem
+        Caption = '&Log File...'
+        OnClick = MenuEditLogFileClick
+      end
+    end
+    object MenuHelp: TMenuItem
+      Caption = '&Help'
+      object MenuHelpContents: TMenuItem
+        Caption = '&Help Topics'
+        OnClick = MenuHelpContentsClick
+      end
+      object MenuHelpBasicConcepts: TMenuItem
+        Caption = 'Basic &Concepts'
+        OnClick = MenuHelpBasicConceptsClick
+      end
+      object MenuHelpTutorial: TMenuItem
+        Caption = 'Authoring &Tutorial'
+        OnClick = MenuHelpTutorialClick
+      end
+      object MenuHelpEditingWorlds: TMenuItem
+        Caption = 'Editing &Worlds'
+        OnClick = MenuHelpEditingWorldsClick
+      end
+      object N6: TMenuItem
+        Caption = '-'
+      end
+      object MenuHelpRegister: TMenuItem
+        Caption = '&Register...'
+        OnClick = MenuHelpRegisterClick
+      end
+      object AfterRegisterMenuSeparator: TMenuItem
+        Caption = '-'
+      end
+      object MenuHelpAbout: TMenuItem
+        Caption = '&About...'
+        OnClick = MenuHelpAboutClick
+      end
+    end
+  end
+  object FontDialog: TFontDialog
+    Title = 'Select a font'
+    Font.Height = -13
+    Font.Name = 'Arial'
+    Title = 'Select a font'
+    left = 472
+    top = 260
+  end
+  object EditPopupMenu: TPopupMenu
+    left = 516
+    top = 307
+    object PopupCut: TMenuItem
+      Caption = 'Cu&t'
+      ShortCut = 16472
+      OnClick = MenuEditCutClick
+    end
+    object PopupCopy: TMenuItem
+      Caption = '&Copy'
+      ShortCut = 16451
+      OnClick = MenuEditCopyClick
+    end
+    object PopupPaste: TMenuItem
+      Caption = '&Paste'
+      ShortCut = 16470
+      OnClick = MenuEditPasteClick
+    end
+  end
+  object MapPopupMenu: TPopupMenu
+    left = 532
+    top = 167
+    object PopupNewContext: TMenuItem
+      Caption = 'New &Context'
+      OnClick = PopupNewContextClick
+    end
+    object PopupNewCommand: TMenuItem
+      Caption = 'New C&ommand'
+      OnClick = PopupNewCommandClick
+    end
+    object PopupNewLink: TMenuItem
+      Caption = 'New &Move'
+      OnClick = PopupNewLinkClick
+    end
+  end
+end

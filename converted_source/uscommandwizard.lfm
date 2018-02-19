@@ -1,0 +1,743 @@
+object CommandWizardForm: TCommandWizardForm
+  ActiveControl = ContextBox
+  BorderStyle = bsDialog
+  Caption = 'New Commands Wizard'
+  ClientHeight = 240
+  ClientWidth = 320
+  Font.Height = -11
+  Font.Name = 'Arial'
+  OnActivate = FormActivate
+  OnCloseQuery = FormCloseQuery
+  PixelsPerInch = 100
+  Position = poScreenCenter
+  TextHeight = 14
+  HorzScrollBar.Page = 319
+  VertScrollBar.Page = 239
+  Left = 370
+  Height = 240
+  Top = 308
+  Width = 320
+  object notebook: TNotebook
+    Align = alTop
+    OnPageChanged = notebookPageChanged
+    PageIndex = 0
+    Height = 341
+    Width = 320
+    object page1: TPage
+      Caption = 'Introduction'
+      ClientWidth = 316
+      ClientHeight = 307
+      Left = 2
+      Height = 307
+      Top = 32
+      Width = 316
+      object Label1: TLabel
+        Caption = 'This wizard will help you quickly create a set of new rules based on one context and a list of commands you enter.'
+        Color = clNone
+        ParentColor = False
+        WordWrap = True
+        Left = 24
+        Height = 37
+        Top = 52
+        Width = 411
+      end
+      object Label2: TLabel
+        Caption = 'You can also link your new commands in a sequence so that only one command is available at any time. This is done by generating requirements and changes.'
+        Color = clNone
+        ParentColor = False
+        WordWrap = True
+        Left = 24
+        Height = 57
+        Top = 183
+        Width = 402
+      end
+      object Image1: TImage
+        AutoSize = True
+        Picture.Data = {
+          07544269746D6170FA0400002F2A2058504D202A2F0A73746174696320636861
+          72202A677261706869635B5D203D207B0A22333220333220352031222C0A222E
+          20632023433643364336222C0A222C20632023464646463030222C0A222D2063
+          2023303046464646222C0A222A2063204E6F6E65222C0A226120632023303030
+          303834222C0A222E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2C2C2E2E2E2E2E2E2E
+          2E2E2E2E2E2E2E222C0A222E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2C2C2E2E2E
+          2E2E2E2E2E2E2E2E2E2E2E222C0A222E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2C
+          2C2E2E2E2E2E2E2E2E2E2E2E2E2E2E222C0A222E2E2E2E2E2E2E2E2E2E2E2E2E
+          2E2E2E2C2C2E2E2E2E2E2E2E2E2E2E2E2E2E2E222C0A222E2E2E2E2E2E2E2E2C
+          2C2E2E2E2E2E2E2C2C2E2E2E2E2E2E2C2C2E2E2E2E2E2E222C0A222E2E2E2E2E
+          2E2E2E2C2C2C2E2E2E2E2E2C2C2E2E2E2E2E2C2C2C2E2E2E2E2E2E222C0A222E
+          2E2E2E2E2E2E2E2E2C2C2E2E2E2E2E2C2C2E2E2E2E2C2C2C2E2E2E2E2E2E2E22
+          2C0A222E2E2E2E2E2E2E2E2E2E2C2C2E2E2E2E2C2C2E2E2E2E2C2C2E2E2E2E2E
+          2E2E2E222C0A222E2E2E2E2E2E2E2E2E2E2C2C2C2E2E2E2C2C2E2E2E2C2C2E2E
+          2E2E2E2E2E2E2E222C0A222E2E2E2E2E2E2E2E2E2E2E2C2C2C2E2E2C2C2E2E2C
+          2C2C2E2E2E2E2E2E2E2E2E222C0A222E2E2E2E2E2E2E2E2E2E2E2E2C2C2E2E2E
+          2E2E2C2C2C2E2E2E2E2C2C2C2C2E2E222C0A222E2E2E2C2C2C2C2C2C2C2C2E2E
+          2E2E2E2E2E2E2C2C2E2E2E2C2C2C2C2C2C2E2E222C0A222E2E2E2C2C2C2C2C2C
+          2C2C2E2E2D2D2E2E2E2E2E2E2C2C2C2C2C2C2E2E2E2E2E222C0A222E2E2E2E2E
+          2E2E2E2E2E2E2E2D2D2D2A2E2E2E2E2E2C2C2C2C2E2E2E2E2E2E2E222C0A222E
+          2E2E2E2E2E2E2E2E2E2E2D2D2D2A2A2A2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E22
+          2C0A222E2E2E2E2E2E2E2E2E2E2D2D2D2A2A2A2A2A2E2E2E2E2C2C2C2C2C2C2C
+          2C2E2E222C0A222E2E2E2E2E2E2E2E2E2D2D2D2A2A2A2A2A2A2A2E2E2E2C2C2C
+          2C2C2C2C2C2E2E222C0A222E2E2E2E2E2E2E2E2D2D2D2A2A2A2A2A2A61612E2E
+          2E2E2E2E2E2E2E2E2E2E2E222C0A222E2E2E2E2E2E2E2D2D2D2A2A2A2A2A2A61
+          61612E2E2C2C2C2E2E2E2E2E2E2E2E222C0A222E2E2E2E2E2E2D2D2D2A2A2A2A
+          2A2A6161612E2E2E2C2C2C2C2E2E2E2E2E2E2E222C0A222E2E2E2E2E2D2D2D2A
+          2A2A2A2A2A6161612E2E2E2C2C2E2C2C2C2C2E2E2E2E2E222C0A222E2E2E2E2D
+          2D2D2A2A2A2A2A2A6161612E2E2E2E2C2C2E2E2C2C2C2C2E2E2E2E222C0A222E
+          2E2E2D2D2D2A2A2A2A2A2A6161612E2E2E2E2E2E2C2C2E2E2E2C2C2C2C2E2E22
+          2C0A222E2E2D2D2D2A2A2A2A2A2A6161612E2E2E2C2C2E2E2C2C2E2E2E2E2C2C
+          2C2E2E222C0A222E2D2D2D2A2A2A2A2A2A6161612E2E2E2E2C2C2E2E2E2C2C2E
+          2E2E2E2E2E2E2E222C0A222D2D2D2A2A2A2A2A2A6161612E2E2E2E2E2C2C2E2E
+          2E2C2C2E2E2E2E2E2E2E2E222C0A222D2D2A2A2A2A2A2A6161612E2E2E2E2E2E
+          2C2C2E2E2E2E2C2C2E2E2E2E2E2E2E222C0A222D2A2A2A2A2A2A6161612E2E2E
+          2E2E2E2E2C2C2E2E2E2E2C2C2E2E2E2E2E2E2E222C0A222A2A2A2A2A2A616161
+          2E2E2E2E2E2E2E2E2C2C2E2E2E2E2E2E2E2E2E2E2E2E2E222C0A222A2A2A2A2A
+          6161612E2E2E2E2E2E2E2E2E2C2C2E2E2E2E2E2E2E2E2E2E2E2E2E222C0A222A
+          2A2A2A6161612E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E22
+          2C0A222A2A2A6161612E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E
+          2E2E2E227D0A
+        }
+        Transparent = True
+        Left = 24
+        Height = 32
+        Top = 12
+        Width = 32
+      end
+      object Label7: TLabel
+        Caption = 'Welcome to the New Commands Wizard!'
+        Color = clNone
+        Font.Height = -13
+        Font.Name = 'Arial'
+        Font.Style = [fsBold]
+        ParentColor = False
+        Left = 64
+        Height = 12
+        Top = 20
+        Width = 246
+      end
+      object Label17: TLabel
+        Caption = 'Click the Next button to begin.'
+        Color = clNone
+        Font.Height = -11
+        Font.Name = 'Arial'
+        Font.Style = [fsBold]
+        ParentColor = False
+        WordWrap = True
+        Left = 24
+        Height = 21
+        Top = 297
+        Width = 145
+      end
+      object Label26: TLabel
+        Caption = 'You can click Cancel at any time to close the wizard without making any new rules.'
+        Color = clNone
+        ParentColor = False
+        Left = 24
+        Height = 17
+        Top = 315
+        Width = 600
+      end
+      object Label3: TLabel
+        Caption = 'You can add extra requirements or changes later using the editor.'
+        Color = clNone
+        ParentColor = False
+        Left = 24
+        Height = 17
+        Top = 266
+        Width = 474
+      end
+      object commandStartPageImage: TImage
+        AutoSize = True
+        Transparent = True
+        Left = 48
+        Height = 16
+        Top = 81
+        Width = 16
+      end
+      object Label5: TLabel
+        Caption = 'A command is what you say to the computer.'
+        Color = clNone
+        ParentColor = False
+        Left = 69
+        Height = 17
+        Top = 82
+        Width = 330
+      end
+      object contextStartPageImage: TImage
+        AutoSize = True
+        Transparent = True
+        Left = 48
+        Height = 16
+        Top = 105
+        Width = 16
+      end
+      object Label6: TLabel
+        Caption = 'A context is the single most important requirement for the use of a command, usually a physical location.'
+        Color = clNone
+        ParentColor = False
+        WordWrap = True
+        Left = 69
+        Height = 57
+        Top = 105
+        Width = 284
+      end
+      object replyStartPageImage: TImage
+        AutoSize = True
+        Transparent = True
+        Left = 48
+        Height = 16
+        Top = 156
+        Width = 16
+      end
+      object Label10: TLabel
+        Caption = 'A reply is what the computer says after you say a command.'
+        Color = clNone
+        ParentColor = False
+        Left = 69
+        Height = 17
+        Top = 157
+        Width = 440
+      end
+      object Label19: TLabel
+        Caption = 'You can enter a reply for each command.'
+        Color = clNone
+        ParentColor = False
+        Left = 24
+        Height = 17
+        Top = 138
+        Width = 301
+      end
+      object requirementsStartPageImage: TImage
+        AutoSize = True
+        Transparent = True
+        Left = 48
+        Height = 16
+        Top = 215
+        Width = 16
+      end
+      object changesStartPageImage: TImage
+        AutoSize = True
+        Transparent = True
+        Left = 48
+        Height = 16
+        Top = 245
+        Width = 16
+      end
+      object Label24: TLabel
+        Caption = 'A requirement is variable state necessary for a command to be available. Variables can be true or false.'
+        Color = clNone
+        ParentColor = False
+        WordWrap = True
+        Left = 72
+        Height = 57
+        Top = 216
+        Width = 298
+      end
+      object Label25: TLabel
+        Caption = 'A change is a new variable state resulting from a command.'
+        Color = clNone
+        ParentColor = False
+        Left = 72
+        Height = 17
+        Top = 246
+        Width = 434
+      end
+    end
+    object page2: TPage
+      Caption = 'Context'
+      ClientWidth = 316
+      ClientHeight = 307
+      Left = 2
+      Height = 307
+      Top = 32
+      Width = 316
+      object Image3: TImage
+        AutoSize = True
+        Picture.Data = {
+          07544269746D61701B0100002F2A2058504D202A2F0A73746174696320636861
+          72202A677261706869635B5D203D207B0A223820313620332031222C0A222E20
+          63204E6F6E65222C0A222C20632023433643364336222C0A222D206320233030
+          38343030222C0A222E2C2C2C2C2C2C2C222C0A222E2E2C2C2C2C2C2C222C0A22
+          2E2D2E2C2C2C2C2C222C0A222E2D2D2E2C2C2C2C222C0A222E2D2D2D2E2C2C2C
+          222C0A222E2D2D2D2D2E2C2C222C0A222E2D2D2D2D2D2E2C222C0A222E2D2D2D
+          2D2D2D2E222C0A222E2D2D2D2D2D2D2E222C0A222E2D2D2D2D2D2E2C222C0A22
+          2E2D2D2D2D2E2C2C222C0A222E2D2D2D2E2C2C2C222C0A222E2D2D2E2C2C2C2C
+          222C0A222E2D2E2C2C2C2C2C222C0A222E2E2C2C2C2C2C2C222C0A222E2C2C2C
+          2C2C2C2C227D0A
+        }
+        Transparent = True
+        Left = 12
+        Height = 16
+        Top = 12
+        Width = 8
+      end
+      object Label8: TLabel
+        Caption = 'Choose the context you want your new commands to use.'
+        Color = clNone
+        ParentColor = False
+        Left = 24
+        Height = 17
+        Top = 12
+        Width = 424
+      end
+      object Label11: TLabel
+        Caption = 'You can also choose a context by selecting it in the Map view before you open the wizard.'
+        Color = clNone
+        ParentColor = False
+        WordWrap = True
+        Left = 56
+        Height = 37
+        Top = 301
+        Width = 327
+      end
+      object contextListImage: TImage
+        AutoSize = True
+        Transparent = True
+        Left = 36
+        Height = 16
+        Top = 36
+        Width = 16
+      end
+      object ContextBox: TListBox
+        ItemHeight = 14
+        TabOrder = 0
+        TopIndex = -1
+        Left = 56
+        Height = 262
+        Top = 35
+        Width = 421
+      end
+    end
+    object page3: TPage
+      Caption = 'Commands'
+      ClientWidth = 316
+      ClientHeight = 307
+      Left = 2
+      Height = 307
+      Top = 32
+      Width = 316
+      object Image2: TImage
+        AutoSize = True
+        Picture.Data = {
+          07544269746D61701B0100002F2A2058504D202A2F0A73746174696320636861
+          72202A677261706869635B5D203D207B0A223820313620332031222C0A222E20
+          63204E6F6E65222C0A222C20632023433643364336222C0A222D206320233030
+          38343030222C0A222E2C2C2C2C2C2C2C222C0A222E2E2C2C2C2C2C2C222C0A22
+          2E2D2E2C2C2C2C2C222C0A222E2D2D2E2C2C2C2C222C0A222E2D2D2D2E2C2C2C
+          222C0A222E2D2D2D2D2E2C2C222C0A222E2D2D2D2D2D2E2C222C0A222E2D2D2D
+          2D2D2D2E222C0A222E2D2D2D2D2D2D2E222C0A222E2D2D2D2D2D2E2C222C0A22
+          2E2D2D2D2D2E2C2C222C0A222E2D2D2D2E2C2C2C222C0A222E2D2D2E2C2C2C2C
+          222C0A222E2D2E2C2C2C2C2C222C0A222E2E2C2C2C2C2C2C222C0A222E2C2C2C
+          2C2C2C2C227D0A
+        }
+        Transparent = True
+        Left = 12
+        Height = 16
+        Top = 28
+        Width = 8
+      end
+      object Label9: TLabel
+        Caption = 'Command | Reply'
+        Color = clNone
+        Font.Color = clBlue
+        Font.Height = -11
+        Font.Name = 'Arial'
+        ParentColor = False
+        Left = 8
+        Height = 12
+        Top = 88
+        Width = 90
+      end
+      object Label12: TLabel
+        Caption = ' When you are finished entering commands, click Next.'
+        Color = clNone
+        ParentColor = False
+        Left = 24
+        Height = 17
+        Top = 320
+        Width = 397
+      end
+      object Label4: TLabel
+        Caption = 'Enter or paste the commands you want to create in the area below, separating each command from its reply by a pipe bar. For example, "open the door | You open the rusty door."'
+        Color = clNone
+        ParentColor = False
+        WordWrap = True
+        Left = 24
+        Height = 57
+        Top = 29
+        Width = 445
+      end
+      object Label14: TLabel
+        Caption = 'Descriptions are optional. It''s okay to wrap entries on more than one line. Use carriage returns to separate entries.'
+        Color = clNone
+        ParentColor = False
+        WordWrap = True
+        Left = 24
+        Height = 57
+        Top = 57
+        Width = 312
+      end
+      object newCommandsForContextLabel: TLabel
+        Caption = 'New commands for: context'
+        Color = clNone
+        Font.Color = clBlue
+        Font.Height = -11
+        Font.Name = 'Arial'
+        ParentColor = False
+        Left = 12
+        Height = 12
+        Top = 8
+        Width = 137
+      end
+      object NewCommandsMemo: TMemo
+        TabOrder = 0
+        Left = 8
+        Height = 209
+        Top = 108
+        Width = 477
+      end
+    end
+    object page4: TPage
+      Caption = 'Sequence'
+      ClientWidth = 316
+      ClientHeight = 307
+      Left = 2
+      Height = 307
+      Top = 32
+      Width = 316
+      object PrefixLabel: TLabel
+        Caption = ' What prefix do you want to use for the requirements that create the sequence?'
+        Color = clNone
+        ParentColor = False
+        Left = 24
+        Height = 17
+        Top = 120
+        Width = 578
+      end
+      object Image4: TImage
+        AutoSize = True
+        Picture.Data = {
+          07544269746D61701B0100002F2A2058504D202A2F0A73746174696320636861
+          72202A677261706869635B5D203D207B0A223820313620332031222C0A222E20
+          63204E6F6E65222C0A222C20632023433643364336222C0A222D206320233030
+          38343030222C0A222E2C2C2C2C2C2C2C222C0A222E2E2C2C2C2C2C2C222C0A22
+          2E2D2E2C2C2C2C2C222C0A222E2D2D2E2C2C2C2C222C0A222E2D2D2D2E2C2C2C
+          222C0A222E2D2D2D2D2E2C2C222C0A222E2D2D2D2D2D2E2C222C0A222E2D2D2D
+          2D2D2D2E222C0A222E2D2D2D2D2D2D2E222C0A222E2D2D2D2D2D2E2C222C0A22
+          2E2D2D2D2D2E2C2C222C0A222E2D2D2D2E2C2C2C222C0A222E2D2D2E2C2C2C2C
+          222C0A222E2D2E2C2C2C2C2C222C0A222E2E2C2C2C2C2C2C222C0A222E2C2C2C
+          2C2C2C2C227D0A
+        }
+        Transparent = True
+        Left = 12
+        Height = 16
+        Top = 12
+        Width = 8
+      end
+      object Label13: TLabel
+        Caption = 'Do you want to link your new commands in sequence, so that each becomes available only after the previous one is said?'
+        Color = clNone
+        ParentColor = False
+        WordWrap = True
+        Left = 24
+        Height = 57
+        Top = 12
+        Width = 420
+      end
+      object prefixArrow: TImage
+        AutoSize = True
+        Picture.Data = {
+          07544269746D61701B0100002F2A2058504D202A2F0A73746174696320636861
+          72202A677261706869635B5D203D207B0A223820313620332031222C0A222E20
+          63204E6F6E65222C0A222C20632023433643364336222C0A222D206320233030
+          38343030222C0A222E2C2C2C2C2C2C2C222C0A222E2E2C2C2C2C2C2C222C0A22
+          2E2D2E2C2C2C2C2C222C0A222E2D2D2E2C2C2C2C222C0A222E2D2D2D2E2C2C2C
+          222C0A222E2D2D2D2D2E2C2C222C0A222E2D2D2D2D2D2E2C222C0A222E2D2D2D
+          2D2D2D2E222C0A222E2D2D2D2D2D2D2E222C0A222E2D2D2D2D2D2E2C222C0A22
+          2E2D2D2D2D2E2C2C222C0A222E2D2D2D2E2C2C2C222C0A222E2D2D2E2C2C2C2C
+          222C0A222E2D2E2C2C2C2C2C222C0A222E2E2C2C2C2C2C2C222C0A222E2C2C2C
+          2C2C2C2C227D0A
+        }
+        Transparent = True
+        Left = 12
+        Height = 16
+        Top = 119
+        Width = 8
+      end
+      object prefixNote: TLabel
+        Caption = 'Examples are: "talking to sailor", "in boarding house". By default the prefix is the same as the context.'
+        Color = clNone
+        ParentColor = False
+        WordWrap = True
+        Left = 56
+        Height = 57
+        Top = 167
+        Width = 251
+      end
+      object Label15: TLabel
+        Caption = 'Sequences are useful when the user has to do several things in a certain order, such as steps in an assembly process or parts of a conversation.'
+        Color = clNone
+        ParentColor = False
+        WordWrap = True
+        Left = 56
+        Height = 57
+        Top = 67
+        Width = 352
+      end
+      object Label27: TLabel
+        Caption = 'Creating sequences is an advanced topic; see the help system for details.'
+        Color = clNone
+        ParentColor = False
+        Left = 56
+        Height = 17
+        Top = 94
+        Width = 532
+      end
+      object GenerateSequence: TCheckBox
+        Caption = 'Yes, link the commands in a sequence.'
+        Checked = True
+        OnClick = GenerateSequenceClick
+        State = cbChecked
+        TabOrder = 0
+        Left = 56
+        Height = 28
+        Top = 46
+        Width = 307
+      end
+      object PrefixEdit: TEdit
+        TabOrder = 1
+        Left = 56
+        Height = 22
+        Top = 141
+        Width = 333
+      end
+      object sequenceEndPanel: TPanel
+        BevelOuter = bvNone
+        ClientHeight = 97
+        ClientWidth = 490
+        TabOrder = 2
+        Height = 97
+        Top = 199
+        Width = 490
+        object endSequenceLabel: TLabel
+          Caption = ' When the last command has been said,'
+          Color = clNone
+          ParentColor = False
+          Left = 24
+          Height = 17
+          Top = 10
+          Width = 293
+        end
+        object sequenceEndArrow: TImage
+          AutoSize = True
+          Picture.Data = {
+            07544269746D61701B0100002F2A2058504D202A2F0A73746174696320636861
+            72202A677261706869635B5D203D207B0A223820313620332031222C0A222E20
+            63204E6F6E65222C0A222C20632023433643364336222C0A222D206320233030
+            38343030222C0A222E2C2C2C2C2C2C2C222C0A222E2E2C2C2C2C2C2C222C0A22
+            2E2D2E2C2C2C2C2C222C0A222E2D2D2E2C2C2C2C222C0A222E2D2D2D2E2C2C2C
+            222C0A222E2D2D2D2D2E2C2C222C0A222E2D2D2D2D2D2E2C222C0A222E2D2D2D
+            2D2D2D2E222C0A222E2D2D2D2D2D2D2E222C0A222E2D2D2D2D2D2E2C222C0A22
+            2E2D2D2D2D2E2C2C222C0A222E2D2D2D2E2C2C2C222C0A222E2D2D2E2C2C2C2C
+            222C0A222E2D2E2C2C2C2C2C222C0A222E2E2C2C2C2C2C2C222C0A222E2C2C2C
+            2C2C2C2C227D0A
+          }
+          Transparent = True
+          Left = 12
+          Height = 16
+          Top = 11
+          Width = 8
+        end
+        object endSequenceLoopToFirst: TRadioButton
+          Caption = 'loop to the first command in the sequence'
+          Checked = True
+          State = cbChecked
+          TabOrder = 0
+          Left = 56
+          Height = 28
+          Top = 30
+          Width = 329
+        end
+        object endSequenceRemoveTheLastCommand: TRadioButton
+          Caption = 'remove the last command'
+          TabOrder = 1
+          Left = 56
+          Height = 28
+          Top = 70
+          Width = 213
+        end
+        object endSequenceLeaveLastCommand: TRadioButton
+          Caption = 'leave the last command available'
+          TabOrder = 2
+          Left = 56
+          Height = 28
+          Top = 52
+          Width = 264
+        end
+      end
+    end
+    object page5: TPage
+      Caption = 'Conclusion'
+      ClientWidth = 316
+      ClientHeight = 307
+      Left = 2
+      Height = 307
+      Top = 32
+      Width = 316
+      object Label18: TLabel
+        Caption = 'Congratulations!'
+        Color = clNone
+        Font.Height = -13
+        Font.Name = 'Arial'
+        Font.Style = [fsBold]
+        ParentColor = False
+        Left = 66
+        Height = 12
+        Top = 24
+        Width = 113
+      end
+      object Label16: TLabel
+        Caption = 'You have completed the information the wizard needs to generate a new set of rules based on the commands you have entered.'
+        Color = clNone
+        ParentColor = False
+        WordWrap = True
+        Left = 24
+        Height = 57
+        Top = 58
+        Width = 367
+      end
+      object Label20: TLabel
+        Caption = 'Click Back to review your choices. Click Cancel to close the wizard without making any new rules.'
+        Color = clNone
+        ParentColor = False
+        WordWrap = True
+        Left = 24
+        Height = 37
+        Top = 295
+        Width = 358
+      end
+      object Image8: TImage
+        AutoSize = True
+        Picture.Data = {
+          07544269746D6170EB0400002F2A2058504D202A2F0A73746174696320636861
+          72202A677261706869635B5D203D207B0A22333220333220342031222C0A222E
+          2063204E6F6E65222C0A222C20632023303030304646222C0A222D2063202346
+          4646463030222C0A222A20632023303030303030222C0A222E2E2E2E2E2E2E2E
+          2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E222C0A222E2E2E2E
+          2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E222C0A22
+          2C2C2C2C2C2C2C2C2C2C2C2C2C2C2C2C2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E
+          222C0A222C2D2D2D2D2D2D2D2D2D2D2D2D2D2D2C2E2E2E2E2E2E2E2E2E2E2E2E
+          2E2E2E2E222C0A222C2D2D2D2D2D2D2D2D2D2D2D2D2D2D2C2E2E2E2E2E2E2E2E
+          2E2E2E2E2E2E2E2E222C0A222C2D2D2D2D2D2D2D2D2D2D2D2D2D2D2C2E2E2E2E
+          2E2E2E2E2E2E2E2E2E2E2E2E222C0A222C2D2D2D2D2D2D2D2D2D2D2D2D2D2D2C
+          2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E222C0A222C2C2C2C2C2C2C2C2C2C2C2C
+          2C2C2C2C2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E222C0A222E2E2E2E2E2E2E2E
+          2A2A2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E222C0A222E2E2E2E
+          2E2E2E2E2E2E2A2A2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E222C0A22
+          2E2E2E2E2E2E2E2E2E2E2E2E2A2A2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E
+          222C0A222E2E2E2E2E2E2E2E2E2E2E2E2E2E2A2A2A2E2E2E2E2E2E2E2E2E2E2E
+          2E2E2E2E222C0A222E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2A2A2E2E2E2E2E
+          2E2E2E2E2E2E2E2E222C0A222E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2A
+          2A2E2E2E2E2E2E2E2E2E2E2E222C0A222E2E2E2E2E2E2E2E2E2E2E2E2E2C2C2C
+          2C2C2C2C2C2C2C2C2C2C2C2C2C2C2C2E222C0A222E2E2E2E2E2E2E2E2E2E2E2E
+          2E2C2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2C2E222C0A222E2E2E2E2E2E2E2E
+          2E2E2E2E2E2C2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2C2E222C0A222E2E2E2E
+          2E2E2E2E2E2E2E2E2E2C2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2C2E222C0A22
+          2E2E2E2E2E2E2E2E2E2E2E2A2A2C2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2C2E
+          222C0A222E2E2E2E2E2E2E2E2E2A2A2E2E2C2C2C2C2C2C2C2C2C2C2C2C2C2C2C
+          2C2C2C2E222C0A222E2E2E2E2E2E2E2A2A2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E
+          2E2E2E2E2E2E2E2E222C0A222E2E2E2E2E2A2A2E2E2E2E2E2E2E2E2E2E2E2E2E
+          2E2E2E2E2E2E2E2E2E2E2E2E222C0A222E2E2E2A2A2E2E2E2E2E2E2E2E2E2E2E
+          2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E222C0A222C2C2C2C2C2C2C2C2C2C2C2C
+          2C2C2C2C2C2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E222C0A222C2D2D2D2D2D2D2D
+          2D2D2D2D2D2D2D2D2C2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E222C0A222C2D2D2D
+          2D2D2D2D2D2D2D2D2D2D2D2D2C2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E222C0A22
+          2C2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2C2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E
+          222C0A222C2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2C2E2E2E2E2E2E2E2E2E2E2E
+          2E2E2E2E222C0A222C2C2C2C2C2C2C2C2C2C2C2C2C2C2C2C2C2E2E2E2E2E2E2E
+          2E2E2E2E2E2E2E2E222C0A222E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E
+          2E2E2E2E2E2E2E2E2E2E2E2E222C0A222E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E
+          2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E222C0A222E2E2E2E2E2E2E2E2E2E2E2E
+          2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E227D0A
+        }
+        Transparent = True
+        Left = 24
+        Height = 32
+        Top = 16
+        Width = 32
+      end
+      object Label21: TLabel
+        Caption = 'The command and reply texts you entered here will also be saved in the log file (even if you cancel using the wizard).'
+        Color = clNone
+        ParentColor = False
+        WordWrap = True
+        Left = 24
+        Height = 57
+        Top = 96
+        Width = 381
+      end
+      object Label22: TLabel
+        Caption = 'Click Finish to create the new rules and close the wizard.'
+        Color = clNone
+        Font.Height = -11
+        Font.Name = 'Arial'
+        Font.Style = [fsBold]
+        ParentColor = False
+        WordWrap = True
+        Left = 24
+        Height = 21
+        Top = 239
+        Width = 301
+      end
+      object Label23: TLabel
+        Caption = 'After you finish the wizard, you can choose Undo from the Edit menu to remove your new rules.'
+        Color = clNone
+        ParentColor = False
+        WordWrap = True
+        Left = 24
+        Height = 57
+        Top = 263
+        Width = 334
+      end
+    end
+  end
+  object helpButton: TButton
+    BorderSpacing.InnerBorder = 2
+    Caption = '&Help'
+    OnClick = helpButtonClick
+    TabOrder = 1
+    Left = 6
+    Height = 21
+    Top = 346
+    Width = 70
+  end
+  object goBack: TButton
+    BorderSpacing.InnerBorder = 2
+    Caption = '<< &Back'
+    OnClick = goBackClick
+    TabOrder = 2
+    Left = 229
+    Height = 21
+    Top = 346
+    Width = 70
+  end
+  object goNext: TButton
+    BorderSpacing.InnerBorder = 2
+    Caption = '&Next >>'
+    OnClick = goNextClick
+    TabOrder = 3
+    Left = 305
+    Height = 21
+    Top = 346
+    Width = 70
+  end
+  object cancel: TButton
+    BorderSpacing.InnerBorder = 2
+    Caption = '&Cancel'
+    OnClick = cancelClick
+    TabOrder = 4
+    Left = 416
+    Height = 21
+    Top = 346
+    Width = 70
+  end
+end

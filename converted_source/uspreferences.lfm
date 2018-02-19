@@ -1,0 +1,247 @@
+object PreferencesForm: TPreferencesForm
+  Left = 174
+  Top = 399
+  BorderStyle = bsDialog
+  Caption = 'Editor Preferences'
+  ClientHeight = 323
+  ClientWidth = 363
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Arial'
+  Font.Style = []
+  Position = poScreenCenter
+  OnActivate = FormActivate
+  PixelsPerInch = 96
+  TextHeight = 13
+  object helpButton: TSpeedButton
+    Left = 299
+    Top = 63
+    Width = 60
+    Height = 21
+    Caption = '&Help'
+    OnClick = helpButtonClick
+  end
+  object Close: TButton
+    Left = 299
+    Top = 4
+    Width = 60
+    Height = 21
+    Caption = 'OK'
+    Default = True
+    ModalResult = 1
+    TabOrder = 0
+  end
+  object cancel: TButton
+    Left = 299
+    Top = 27
+    Width = 60
+    Height = 21
+    Cancel = True
+    Caption = 'Cancel'
+    ModalResult = 2
+    TabOrder = 1
+  end
+  object Panel1: TPanel
+    Left = 4
+    Top = 4
+    Width = 289
+    Height = 313
+    BevelInner = bvRaised
+    BevelOuter = bvLowered
+    TabOrder = 2
+    object Label1: TLabel
+      Left = 12
+      Top = 52
+      Width = 42
+      Height = 13
+      Caption = '&Map font'
+      FocusControl = changeMapFont
+    end
+    object Label3: TLabel
+      Left = 12
+      Top = 185
+      Width = 132
+      Height = 13
+      Caption = 'Te&xt color for selected items'
+      FocusControl = changeTextColor
+    end
+    object Label2: TLabel
+      Left = 12
+      Top = 141
+      Width = 169
+      Height = 13
+      Caption = 'Background &color for selected items'
+      FocusControl = changeBackgroundColor
+    end
+    object Label4: TLabel
+      Left = 12
+      Top = 8
+      Width = 48
+      Height = 13
+      Caption = '&Table font'
+      FocusControl = changeTableFont
+    end
+    object Label5: TLabel
+      Left = 12
+      Top = 96
+      Width = 59
+      Height = 13
+      Caption = '&Browser font'
+      FocusControl = changeBrowserFont
+    end
+    object Label6: TLabel
+      Left = 12
+      Top = 229
+      Width = 150
+      Height = 13
+      Caption = 'Text color for c&ommands in map'
+      FocusControl = ChangeMapCommandsColor
+    end
+    object tableFontNameEdit: TEdit
+      Left = 32
+      Top = 24
+      Width = 169
+      Height = 21
+      Color = clBtnFace
+      ReadOnly = True
+      TabOrder = 0
+    end
+    object changeTableFont: TButton
+      Left = 208
+      Top = 24
+      Width = 69
+      Height = 21
+      Caption = 'Change...'
+      TabOrder = 1
+      OnClick = changeTableFontClick
+    end
+    object backgroundColorPanel: TPanel
+      Left = 32
+      Top = 157
+      Width = 53
+      Height = 21
+      BevelInner = bvLowered
+      BevelOuter = bvLowered
+      Color = clYellow
+      TabOrder = 2
+    end
+    object textColorPanel: TPanel
+      Left = 32
+      Top = 201
+      Width = 53
+      Height = 21
+      BevelInner = bvLowered
+      BevelOuter = bvLowered
+      Color = clBlack
+      TabOrder = 3
+    end
+    object showMapCommands: TCheckBox
+      Left = 12
+      Top = 272
+      Width = 201
+      Height = 17
+      Caption = 'Show map &commands with prefix ">"'
+      TabOrder = 4
+      OnClick = showMapCommandsClick
+    end
+    object changeBackgroundColor: TButton
+      Left = 92
+      Top = 158
+      Width = 69
+      Height = 21
+      Caption = 'Change...'
+      TabOrder = 5
+      OnClick = changeBackgroundColorClick
+    end
+    object changeTextColor: TButton
+      Left = 92
+      Top = 202
+      Width = 69
+      Height = 21
+      Caption = 'Change...'
+      TabOrder = 6
+      OnClick = changeTextColorClick
+    end
+    object mapFontNameEdit: TEdit
+      Left = 32
+      Top = 68
+      Width = 169
+      Height = 21
+      Color = clBtnFace
+      ReadOnly = True
+      TabOrder = 7
+    end
+    object changeMapFont: TButton
+      Left = 208
+      Top = 68
+      Width = 69
+      Height = 21
+      Caption = 'Change...'
+      TabOrder = 8
+      OnClick = changeMapFontClick
+    end
+    object browserFontNameEdit: TEdit
+      Left = 32
+      Top = 112
+      Width = 169
+      Height = 21
+      Color = clBtnFace
+      ReadOnly = True
+      TabOrder = 9
+    end
+    object changeBrowserFont: TButton
+      Left = 208
+      Top = 112
+      Width = 69
+      Height = 21
+      Caption = 'Change...'
+      TabOrder = 10
+      OnClick = changeBrowserFontClick
+    end
+    object mapCommandsColorPanel: TPanel
+      Left = 32
+      Top = 245
+      Width = 53
+      Height = 21
+      BevelInner = bvLowered
+      BevelOuter = bvLowered
+      Color = clBlue
+      TabOrder = 11
+    end
+    object ChangeMapCommandsColor: TButton
+      Left = 92
+      Top = 246
+      Width = 69
+      Height = 21
+      Caption = 'Change...'
+      TabOrder = 12
+      OnClick = ChangeMapCommandsColorClick
+    end
+    object symbolButtons: TCheckBox
+      Left = 12
+      Top = 292
+      Width = 233
+      Height = 17
+      Caption = 'Use &symbols instead of pictures on buttons'
+      TabOrder = 13
+      OnClick = symbolButtonsClick
+    end
+  end
+  object ColorDialog: TColorDialog
+    Left = 308
+    Top = 104
+  end
+  object FontDialog: TFontDialog
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Arial'
+    Font.Style = []
+    MinFontSize = 0
+    MaxFontSize = 0
+    Options = [fdForceFontExist]
+    Left = 308
+    Top = 136
+  end
+end

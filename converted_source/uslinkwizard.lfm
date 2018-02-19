@@ -1,0 +1,626 @@
+object LinkWizardForm: TLinkWizardForm
+  Left = 341
+  Top = 317
+  BorderStyle = bsDialog
+  Caption = 'New Moves Wizard'
+  ClientHeight = 299
+  ClientWidth = 492
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Arial'
+  Font.Style = []
+  Position = poScreenCenter
+  OnActivate = FormActivate
+  OnCloseQuery = FormCloseQuery
+  PixelsPerInch = 96
+  TextHeight = 14
+  object notebook: TNotebook
+    Left = 0
+    Top = 0
+    Width = 492
+    Height = 273
+    Align = alTop
+    OnPageChanged = notebookPageChanged
+    object page1: TPage
+      Left = 0
+      Top = 0
+      Caption = 'Introduction'
+      object Label10: TLabel
+        Left = 24
+        Top = 58
+        Width = 367
+        Height = 28
+        Caption = 'This wizard will help you quickly link up two contexts by creating rules with commands to move between them.'
+        WordWrap = True
+      end
+      object Image1: TImage
+        Left = 24
+        Top = 12
+        Width = 32
+        Height = 32
+        AutoSize = True
+        Picture.Data = {
+          07544269746D617076020000424D760200000000000076000000280000002000
+          0000200000000100040000000000000200000000000000000000100000001000
+          0000000000000000800000800000008080008000000080008000808000008080
+          8000C0C0C0000000FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFF
+          FF00CCC44488888888888888888888888888CCCC444888888888888888888888
+          8888CCCCC444888888888BB8888888888888CCCCCC44488888888BB888888888
+          8888ECCCCCC4448888888BB8888BB8888888EECCCCCC444888888BB8888BB888
+          8888EEECCCCCC44488888BB888BB888888888EEECCCCCC4448888BB888BB8888
+          888888EEECCCCCC444888BB88BB8888BBB88888EEECCCCCC444888888BB888BB
+          BB888888EEECCCCCC4448888BB88BBBB888888888EEECCCCCC444888BB8BBBB8
+          8888888888EEECCCCCC444888BBBB88888888888888EEECCCCCC44488BBB8888
+          888888888888EEECCCCCC448888888888888888888888EEECCCCCCC888BBBBBB
+          BB888888888888EEECCCCC8888BBBBBBBB8888888888888EEECCC88888888888
+          8888888888888888EEEC88888BBBB8888888888BBBBBBBB88EE888888BBBBBB8
+          8888888BBBBBBBB88888888BB888BBBBBB88888888888888BB88888BBB8888BB
+          BB8888888888888BBB88BB88BBB8888888888888888888BBB888BB888BB88888
+          88888888888888BB8888BB8888BB88888888888888888BB88888BB8888BBB888
+          888888888888BBB88888BB88888BBB88888888888888BB888888BB888888BB88
+          88888888888888888888BB888888888888888888888888888888BB8888888888
+          88888888888888888888BB888888888888888888888888888888BB8888888888
+          8888
+        }
+      end
+      object Label4: TLabel
+        Left = 64
+        Top = 20
+        Width = 229
+        Height = 16
+        Caption = 'Welcome to the New Moves Wizard!'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -13
+        Font.Name = 'Arial'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object Label17: TLabel
+        Left = 24
+        Top = 232
+        Width = 165
+        Height = 14
+        Caption = 'Click the Next button to begin.'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Arial'
+        Font.Style = [fsBold]
+        ParentFont = False
+        WordWrap = True
+      end
+      object Label26: TLabel
+        Left = 24
+        Top = 250
+        Width = 403
+        Height = 14
+        Caption = 'You can click Cancel at any time to close the wizard without making any new rules.'
+      end
+      object commandStartPageImage: TImage
+        Left = 48
+        Top = 94
+        Width = 16
+        Height = 16
+        AutoSize = True
+        Transparent = True
+      end
+      object Label2: TLabel
+        Left = 69
+        Top = 95
+        Width = 219
+        Height = 14
+        Caption = 'A command is what you say to the computer.'
+      end
+      object contextStartPageImage: TImage
+        Left = 48
+        Top = 125
+        Width = 16
+        Height = 16
+        AutoSize = True
+        Transparent = True
+      end
+      object Label5: TLabel
+        Left = 69
+        Top = 125
+        Width = 321
+        Height = 28
+        Caption = 'A context is the single most important requirement for the use of a command, usually a physical location.'
+        WordWrap = True
+      end
+      object replyStartPageImage: TImage
+        Left = 48
+        Top = 189
+        Width = 16
+        Height = 16
+        AutoSize = True
+        Transparent = True
+      end
+      object Label6: TLabel
+        Left = 69
+        Top = 190
+        Width = 296
+        Height = 14
+        Caption = 'A reply is what the computer says after you say a command.'
+      end
+      object Label7: TLabel
+        Left = 24
+        Top = 168
+        Width = 201
+        Height = 14
+        Caption = 'You can enter a reply for each command.'
+      end
+    end
+    object page2: TPage
+      Left = 0
+      Top = 0
+      Caption = 'Contexts'
+      object Label11: TLabel
+        Left = 24
+        Top = 12
+        Width = 318
+        Height = 14
+        Caption = 'Choose two contexts to move between. The order doesn''t matter.'
+      end
+      object Image3: TImage
+        Left = 12
+        Top = 12
+        Width = 8
+        Height = 16
+        AutoSize = True
+        Picture.Data = {
+          07544269746D6170B6000000424DB60000000000000076000000280000000800
+          0000100000000100040000000000400000000000000000000000100000001000
+          000000000000000080000080000000808000800000008000800080800000C0C0
+          C000808080000000FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFF
+          FF00A7777777AA777777A2A77777A22A7777A222A777A2222A77A22222A7A222
+          222AA222222AA22222A7A2222A77A222A777A22A7777A2A77777AA777777A777
+          7777
+        }
+      end
+      object Image2: TImage
+        Left = 255
+        Top = 111
+        Width = 32
+        Height = 16
+        AutoSize = True
+        Picture.Data = {
+          07544269746D617076010000424D760100000000000076000000280000002000
+          0000100000000100040000000000000100000000000000000000100000001000
+          0000000000000000800000800000008080008000000080008000808000008080
+          8000C0C0C0000000FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFF
+          FF00FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+          FFFFFFFFFFFCFFFFFFFFFFFFFFFFCFFFFFFFFFFFFFCCFFFFFFFFFFFFFFFFCCFF
+          FFFFFFFFFCCFFFFFFFFFFFFFFFFFFCCFFFFFFFFFCCFFFFFFFFFFFFFFFFFFFFCC
+          FFFFFFFCCFFFFFFFFFFFFFFFFFFFFFFCCFFFFFCCCCCCCCCCCCCCCCCCCCCCCCCC
+          CCFFFCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCFFFCCCCCCCCCCCCCCCCCCCCCCCCCC
+          CCFFFFFCCFFFFFFFFFFFFFFFFFFFFFFCCFFFFFFFCCFFFFFFFFFFFFFFFFFFFFCC
+          FFFFFFFFFCCFFFFFFFFFFFFFFFFFFCCFFFFFFFFFFFCCFFFFFFFFFFFFFFFFCCFF
+          FFFFFFFFFFFCFFFFFFFFFFFFFFFFCFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+          FFFF
+        }
+        Transparent = True
+      end
+      object Label9: TLabel
+        Left = 56
+        Top = 237
+        Width = 342
+        Height = 28
+        Caption = 'You can also choose these two contexts by selecting them in the Map (Shift-click to select the second context) before you open the wizard.'
+        WordWrap = True
+      end
+      object firstContextImage: TImage
+        Left = 36
+        Top = 36
+        Width = 16
+        Height = 16
+        AutoSize = True
+        Transparent = True
+      end
+      object secondContextImage: TImage
+        Left = 280
+        Top = 40
+        Width = 16
+        Height = 16
+        AutoSize = True
+        Transparent = True
+      end
+      object FirstContextBox: TListBox
+        Left = 56
+        Top = 36
+        Width = 184
+        Height = 193
+        ItemHeight = 14
+        TabOrder = 0
+      end
+      object SecondContextBox: TListBox
+        Left = 300
+        Top = 40
+        Width = 184
+        Height = 193
+        ItemHeight = 14
+        TabOrder = 1
+      end
+    end
+    object page3: TPage
+      Left = 0
+      Top = 0
+      Caption = 'Forward'
+      object ForwardLabel: TLabel
+        Left = 56
+        Top = 33
+        Width = 68
+        Height = 14
+        Caption = 'ForwardLabel'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlue
+        Font.Height = -11
+        Font.Name = 'Arial'
+        Font.Style = []
+        ParentFont = False
+      end
+      object Label13: TLabel
+        Left = 24
+        Top = 12
+        Width = 245
+        Height = 14
+        Caption = ' What command should the user say to move from:'
+      end
+      object forwardReplyLabel: TLabel
+        Left = 24
+        Top = 144
+        Width = 354
+        Height = 14
+        Caption = ' What should the computer reply after the user says the move command?'
+      end
+      object forwardReplyNote: TLabel
+        Left = 56
+        Top = 229
+        Width = 357
+        Height = 28
+        Caption = 'Leave this blank to get a default reply of "You" plus the command phrase. For example, for "go east" the default would be "You go east".'
+        WordWrap = True
+      end
+      object Image4: TImage
+        Left = 12
+        Top = 12
+        Width = 8
+        Height = 16
+        AutoSize = True
+        Picture.Data = {
+          07544269746D6170B6000000424DB60000000000000076000000280000000800
+          0000100000000100040000000000400000000000000000000000100000001000
+          000000000000000080000080000000808000800000008000800080800000C0C0
+          C000808080000000FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFF
+          FF00A7777777AA777777A2A77777A22A7777A222A777A2222A77A22222A7A222
+          222AA222222AA22222A7A2222A77A222A777A22A7777A2A77777AA777777A777
+          7777
+        }
+      end
+      object forwardReplyArrow: TImage
+        Left = 12
+        Top = 144
+        Width = 8
+        Height = 16
+        AutoSize = True
+        Picture.Data = {
+          07544269746D6170B6000000424DB60000000000000076000000280000000800
+          0000100000000100040000000000400000000000000000000000100000001000
+          000000000000000080000080000000808000800000008000800080800000C0C0
+          C000808080000000FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFF
+          FF00A7777777AA777777A2A77777A22A7777A222A777A2222A77A22222A7A222
+          222AA222222AA22222A7A2222A77A222A777A22A7777A2A77777AA777777A777
+          7777
+        }
+      end
+      object Label8: TLabel
+        Left = 56
+        Top = 81
+        Width = 297
+        Height = 42
+        Caption = 'Leave this blank if you don''t want to move this way. Examples are "move forward", "go east", "leap up", "enter the building", and "activate the transporter". '
+        WordWrap = True
+      end
+      object forwardCommandImage: TImage
+        Left = 56
+        Top = 56
+        Width = 16
+        Height = 16
+        AutoSize = True
+        Transparent = True
+      end
+      object forwardReplyImage: TImage
+        Left = 56
+        Top = 165
+        Width = 16
+        Height = 16
+        AutoSize = True
+        Transparent = True
+      end
+      object ForwardEdit: TEdit
+        Left = 76
+        Top = 53
+        Width = 402
+        Height = 22
+        TabOrder = 0
+        OnChange = ForwardEditChange
+      end
+      object ForwardMemo: TMemo
+        Left = 76
+        Top = 165
+        Width = 402
+        Height = 60
+        TabOrder = 1
+      end
+    end
+    object page4: TPage
+      Left = 0
+      Top = 0
+      Caption = 'Backward'
+      object BackwardLabel: TLabel
+        Tag = 52
+        Left = 56
+        Top = 33
+        Width = 76
+        Height = 14
+        Caption = 'BackwardLabel'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlue
+        Font.Height = -11
+        Font.Name = 'Arial'
+        Font.Style = []
+        ParentFont = False
+      end
+      object Label12: TLabel
+        Left = 24
+        Top = 12
+        Width = 245
+        Height = 14
+        Caption = ' What command should the user say to move from:'
+      end
+      object backwardReplyLabel: TLabel
+        Left = 24
+        Top = 144
+        Width = 354
+        Height = 14
+        Caption = ' What should the computer reply after the user says the move command?'
+      end
+      object Image6: TImage
+        Left = 12
+        Top = 12
+        Width = 8
+        Height = 16
+        AutoSize = True
+        Picture.Data = {
+          07544269746D6170B6000000424DB60000000000000076000000280000000800
+          0000100000000100040000000000400000000000000000000000100000001000
+          000000000000000080000080000000808000800000008000800080800000C0C0
+          C000808080000000FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFF
+          FF00A7777777AA777777A2A77777A22A7777A222A777A2222A77A22222A7A222
+          222AA222222AA22222A7A2222A77A222A777A22A7777A2A77777AA777777A777
+          7777
+        }
+      end
+      object backwardReplyArrow: TImage
+        Left = 12
+        Top = 144
+        Width = 8
+        Height = 16
+        AutoSize = True
+        Picture.Data = {
+          07544269746D6170B6000000424DB60000000000000076000000280000000800
+          0000100000000100040000000000400000000000000000000000100000001000
+          000000000000000080000080000000808000800000008000800080800000C0C0
+          C000808080000000FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFF
+          FF00A7777777AA777777A2A77777A22A7777A222A777A2222A77A22222A7A222
+          222AA222222AA22222A7A2222A77A222A777A22A7777A2A77777AA777777A777
+          7777
+        }
+      end
+      object Label1: TLabel
+        Left = 56
+        Top = 81
+        Width = 297
+        Height = 42
+        Caption = 'Leave this blank if you don''t want to move this way. Examples are "move forward", "go east", "leap up", "enter the building", and "activate the transporter". '
+        WordWrap = True
+      end
+      object backwardReplyNote: TLabel
+        Left = 56
+        Top = 229
+        Width = 357
+        Height = 28
+        Caption = 'Leave this blank to get a default reply of "You" plus the command phrase. For example, for "go east" the default would be "You go east".'
+        WordWrap = True
+      end
+      object backwardCommandImage: TImage
+        Left = 56
+        Top = 56
+        Width = 16
+        Height = 16
+        AutoSize = True
+        Transparent = True
+      end
+      object backwardReplyImage: TImage
+        Left = 56
+        Top = 165
+        Width = 16
+        Height = 16
+        AutoSize = True
+        Transparent = True
+      end
+      object BackwardEdit: TEdit
+        Left = 76
+        Top = 53
+        Width = 402
+        Height = 22
+        TabOrder = 0
+        OnChange = BackwardEditChange
+      end
+      object BackwardMemo: TMemo
+        Left = 76
+        Top = 165
+        Width = 402
+        Height = 60
+        TabOrder = 1
+      end
+    end
+    object page5: TPage
+      Left = 0
+      Top = 0
+      Caption = 'Conclusion'
+      object Label18: TLabel
+        Left = 66
+        Top = 24
+        Width = 104
+        Height = 16
+        Caption = 'Congratulations!'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -13
+        Font.Name = 'Arial'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object Label14: TLabel
+        Left = 24
+        Top = 58
+        Width = 369
+        Height = 28
+        Caption = 'You have completed the information the wizard needs to generate two new rules to link the two contexts you have chosen.'
+        WordWrap = True
+      end
+      object Label19: TLabel
+        Left = 24
+        Top = 235
+        Width = 366
+        Height = 28
+        Caption = 'Click Back to review your choices. Click Cancel to close the wizard without making any new rules.'
+        WordWrap = True
+      end
+      object Label3: TLabel
+        Left = 24
+        Top = 187
+        Width = 315
+        Height = 14
+        Caption = 'Click Finish to create the new rules and close the wizard.'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Arial'
+        Font.Style = [fsBold]
+        ParentFont = False
+        WordWrap = True
+      end
+      object Image8: TImage
+        Left = 24
+        Top = 12
+        Width = 32
+        Height = 32
+        AutoSize = True
+        Picture.Data = {
+          07544269746D617076020000424D760200000000000076000000280000002000
+          0000200000000100040000000000000200000000000000000000100000001000
+          0000000000000000800000800000008080008000000080008000808000008080
+          8000C0C0C0000000FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFF
+          FF00888888888888888888888888888888888888888888888888888888888888
+          888888888888888888888888888888888888CCCCCCCCCCCCCCCCC88888888888
+          8888CBBBBBBBBBBBBBBBC888888888888888CBBBBBBBBBBBBBBBC88888888888
+          8888CBBBBBBBBBBBBBBBC888888888888888CBBBBBBBBBBBBBBBC88888888888
+          8888CCCCCCCCCCCCCCCCC8888888888888888880088888888888888888888888
+          8888888880088888888888888888888888888888888008888888888888888888
+          88888888888880088CCCCCCCCCCCCCCCCCC88888888888800CBBBBBBBBBBBBBB
+          BBC88888888888888CBBBBBBBBBBBBBBBBC88888888888888CBBBBBBBBBBBBBB
+          BBC88888888888888CBBBBBBBBBBBBBBBBC88888888888888CCCCCCCCCCCCCCC
+          CCC8888888888888888888800888888888888888888888888888800888888888
+          8888888888888888880008888888888888888888888888880088888888888888
+          8888888888888800888888888888888888888888888800888888888888888888
+          8888CCCCCCCCCCCCCCCC8888888888888888CBBBBBBBBBBBBBBC888888888888
+          8888CBBBBBBBBBBBBBBC8888888888888888CBBBBBBBBBBBBBBC888888888888
+          8888CBBBBBBBBBBBBBBC8888888888888888CCCCCCCCCCCCCCCC888888888888
+          8888888888888888888888888888888888888888888888888888888888888888
+          8888
+        }
+      end
+      object Label15: TLabel
+        Left = 24
+        Top = 136
+        Width = 311
+        Height = 28
+        Caption = 'The reply texts you entered here will also be saved in the log file (even if you cancel using the wizard).'
+        WordWrap = True
+      end
+      object Label16: TLabel
+        Left = 24
+        Top = 204
+        Width = 337
+        Height = 28
+        Caption = 'After you finish the wizard, you can choose Undo from the Edit menu to remove your new rules.'
+        WordWrap = True
+      end
+      object forwardSummary: TLabel
+        Left = 52
+        Top = 94
+        Width = 207
+        Height = 14
+        Caption = 'nether regions -> go to elevator -> elevator'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlue
+        Font.Height = -11
+        Font.Name = 'Arial'
+        Font.Style = []
+        ParentFont = False
+      end
+      object backwardSummary: TLabel
+        Left = 52
+        Top = 110
+        Width = 238
+        Height = 14
+        Caption = 'elevator -> go to nether regions -> nether regions'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlue
+        Font.Height = -11
+        Font.Name = 'Arial'
+        Font.Style = []
+        ParentFont = False
+      end
+    end
+  end
+  object helpButton: TButton
+    Left = 6
+    Top = 276
+    Width = 70
+    Height = 21
+    Caption = '&Help'
+    TabOrder = 1
+    OnClick = helpButtonClick
+  end
+  object goBack: TButton
+    Left = 229
+    Top = 276
+    Width = 70
+    Height = 21
+    Caption = '<< &Back'
+    TabOrder = 2
+    OnClick = goBackClick
+  end
+  object goNext: TButton
+    Left = 305
+    Top = 276
+    Width = 70
+    Height = 21
+    Caption = '&Next >>'
+    TabOrder = 3
+    OnClick = goNextClick
+  end
+  object cancel: TButton
+    Left = 413
+    Top = 276
+    Width = 70
+    Height = 21
+    Caption = '&Cancel'
+    TabOrder = 4
+    OnClick = cancelClick
+  end
+end
