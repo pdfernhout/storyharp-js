@@ -190,7 +190,7 @@ export function viewRuleEditorForm() {
                     // Top: "-131",
                     // Width: "528",
                 },
-                m("span.Label5.TLabel",
+                m("div.Label5.TLabel",
                     {
                         // Color: "clNone",
                         // ParentColor: "False",
@@ -254,7 +254,7 @@ export function viewRuleEditorForm() {
                     },
                     "Context",
                 ),
-                m("span.RuleNumberLabel.TLabel",
+                m("div.RuleNumberLabel.TLabel",
                     {
                         // Color: "clNone",
                         // ParentColor: "False",
@@ -495,7 +495,7 @@ export function viewRuleEditorForm() {
                                     // Width: "16",
                                 },
                             ),
-                            m("span.firstListBoxLabel.TLabel",
+                            m("div.firstListBoxLabel.TLabel",
                                 {
                                     // Color: "clNone",
                                     // ParentColor: "False",
@@ -544,7 +544,7 @@ export function viewRuleEditorForm() {
                                     // Width: "16",
                                 },
                             ),
-                            m("span.SecondListBoxLabel.TLabel",
+                            m("div.SecondListBoxLabel.TLabel",
                                 {
                                     // Color: "clNone",
                                     // ParentColor: "False",

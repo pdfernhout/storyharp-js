@@ -39,7 +39,7 @@ export function viewLinkWizardForm() {
                     // Top: "0",
                 },
                 "Introduction",
-                m("span.Label10.TLabel",
+                m("div.Label10.TLabel",
                     {
                         // Left: "24",
                         // Top: "58",
@@ -59,7 +59,7 @@ export function viewLinkWizardForm() {
                         // Picture.Data: "07544269746D617076020000424D760200000000000076000000280000002000000020000000010004000000000000020000000000000000000010000000100000000000000000008000008000000080800080000000800080008080000080808000C0C0C0000000FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00CCC44488888888888888888888888888CCCC4448888888888888888888888888CCCCC444888888888BB8888888888888CCCCCC44488888888BB8888888888888ECCCCCC4448888888BB8888BB8888888EECCCCCC444888888BB8888BB8888888EEECCCCCC44488888BB888BB888888888EEECCCCCC4448888BB888BB8888888888EEECCCCCC444888BB88BB8888BBB88888EEECCCCCC444888888BB888BBBB888888EEECCCCCC4448888BB88BBBB888888888EEECCCCCC444888BB8BBBB88888888888EEECCCCCC444888BBBB88888888888888EEECCCCCC44488BBB8888888888888888EEECCCCCC448888888888888888888888EEECCCCCCC888BBBBBBBB888888888888EEECCCCC8888BBBBBBBB8888888888888EEECCC888888888888888888888888888EEEC88888BBBB8888888888BBBBBBBB88EE888888BBBBBB88888888BBBBBBBB88888888BB888BBBBBB88888888888888BB88888BBB8888BBBB8888888888888BBB88BB88BBB8888888888888888888BBB888BB888BB8888888888888888888BB8888BB8888BB88888888888888888BB88888BB8888BBB888888888888888BBB88888BB88888BBB88888888888888BB888888BB888888BB8888888888888888888888BB888888888888888888888888888888BB888888888888888888888888888888BB888888888888888888888888888888BB88888888888888",
                     },
                 ),
-                m("span.Label4.TLabel",
+                m("div.Label4.TLabel",
                     {
                         // Left: "64",
                         // Top: "20",
@@ -74,7 +74,7 @@ export function viewLinkWizardForm() {
                     },
                     "Welcome to the New Moves Wizard!",
                 ),
-                m("span.Label17.TLabel",
+                m("div.Label17.TLabel",
                     {
                         // Left: "24",
                         // Top: "232",
@@ -90,7 +90,7 @@ export function viewLinkWizardForm() {
                     },
                     "Click the Next button to begin.",
                 ),
-                m("span.Label26.TLabel",
+                m("div.Label26.TLabel",
                     {
                         // Left: "24",
                         // Top: "250",
@@ -109,7 +109,7 @@ export function viewLinkWizardForm() {
                         // Transparent: "True",
                     },
                 ),
-                m("span.Label2.TLabel",
+                m("div.Label2.TLabel",
                     {
                         // Left: "69",
                         // Top: "95",
@@ -128,7 +128,7 @@ export function viewLinkWizardForm() {
                         // Transparent: "True",
                     },
                 ),
-                m("span.Label5.TLabel",
+                m("div.Label5.TLabel",
                     {
                         // Left: "69",
                         // Top: "125",
@@ -148,7 +148,7 @@ export function viewLinkWizardForm() {
                         // Transparent: "True",
                     },
                 ),
-                m("span.Label6.TLabel",
+                m("div.Label6.TLabel",
                     {
                         // Left: "69",
                         // Top: "190",
@@ -157,7 +157,7 @@ export function viewLinkWizardForm() {
                     },
                     "A reply is what the computer says after you say a command.",
                 ),
-                m("span.Label7.TLabel",
+                m("div.Label7.TLabel",
                     {
                         // Left: "24",
                         // Top: "168",
@@ -173,7 +173,7 @@ export function viewLinkWizardForm() {
                     // Top: "0",
                 },
                 "Contexts",
-                m("span.Label11.TLabel",
+                m("div.Label11.TLabel",
                     {
                         // Left: "24",
                         // Top: "12",
@@ -203,7 +203,7 @@ export function viewLinkWizardForm() {
                         // Transparent: "True",
                     },
                 ),
-                m("span.Label9.TLabel",
+                m("div.Label9.TLabel",
                     {
                         // Left: "56",
                         // Top: "237",
@@ -260,7 +260,7 @@ export function viewLinkWizardForm() {
                     // Top: "0",
                 },
                 "Forward",
-                m("span.ForwardLabel.TLabel",
+                m("div.ForwardLabel.TLabel",
                     {
                         // Left: "56",
                         // Top: "33",
@@ -275,7 +275,7 @@ export function viewLinkWizardForm() {
                     },
                     "ForwardLabel",
                 ),
-                m("span.Label13.TLabel",
+                m("div.Label13.TLabel",
                     {
                         // Left: "24",
                         // Top: "12",
@@ -284,7 +284,7 @@ export function viewLinkWizardForm() {
                     },
                     " What command should the user say to move from:",
                 ),
-                m("span.forwardReplyLabel.TLabel",
+                m("div.forwardReplyLabel.TLabel",
                     {
                         // Left: "24",
                         // Top: "144",
@@ -293,7 +293,7 @@ export function viewLinkWizardForm() {
                     },
                     " What should the computer reply after the user says the move command?",
                 ),
-                m("span.forwardReplyNote.TLabel",
+                m("div.forwardReplyNote.TLabel",
                     {
                         // Left: "56",
                         // Top: "229",
@@ -323,7 +323,7 @@ export function viewLinkWizardForm() {
                         // Picture.Data: "07544269746D6170B6000000424DB600000000000000760000002800000008000000100000000100040000000000400000000000000000000000100000001000000000000000000080000080000000808000800000008000800080800000C0C0C000808080000000FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00A7777777AA777777A2A77777A22A7777A222A777A2222A77A22222A7A222222AA222222AA22222A7A2222A77A222A777A22A7777A2A77777AA777777A7777777",
                     },
                 ),
-                m("span.Label8.TLabel",
+                m("div.Label8.TLabel",
                     {
                         // Left: "56",
                         // Top: "81",
@@ -379,7 +379,7 @@ export function viewLinkWizardForm() {
                     // Top: "0",
                 },
                 "Backward",
-                m("span.BackwardLabel.TLabel",
+                m("div.BackwardLabel.TLabel",
                     {
                         // Tag: "52",
                         // Left: "56",
@@ -395,7 +395,7 @@ export function viewLinkWizardForm() {
                     },
                     "BackwardLabel",
                 ),
-                m("span.Label12.TLabel",
+                m("div.Label12.TLabel",
                     {
                         // Left: "24",
                         // Top: "12",
@@ -404,7 +404,7 @@ export function viewLinkWizardForm() {
                     },
                     " What command should the user say to move from:",
                 ),
-                m("span.backwardReplyLabel.TLabel",
+                m("div.backwardReplyLabel.TLabel",
                     {
                         // Left: "24",
                         // Top: "144",
@@ -433,7 +433,7 @@ export function viewLinkWizardForm() {
                         // Picture.Data: "07544269746D6170B6000000424DB600000000000000760000002800000008000000100000000100040000000000400000000000000000000000100000001000000000000000000080000080000000808000800000008000800080800000C0C0C000808080000000FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00A7777777AA777777A2A77777A22A7777A222A777A2222A77A22222A7A222222AA222222AA22222A7A2222A77A222A777A22A7777A2A77777AA777777A7777777",
                     },
                 ),
-                m("span.Label1.TLabel",
+                m("div.Label1.TLabel",
                     {
                         // Left: "56",
                         // Top: "81",
@@ -443,7 +443,7 @@ export function viewLinkWizardForm() {
                     },
                     "Leave this blank if you don't want to move this way. Examples are \"move forward\", \"go east\", \"leap up\", \"enter the building\", and \"activate the transporter\". ",
                 ),
-                m("span.backwardReplyNote.TLabel",
+                m("div.backwardReplyNote.TLabel",
                     {
                         // Left: "56",
                         // Top: "229",
@@ -499,7 +499,7 @@ export function viewLinkWizardForm() {
                     // Top: "0",
                 },
                 "Conclusion",
-                m("span.Label18.TLabel",
+                m("div.Label18.TLabel",
                     {
                         // Left: "66",
                         // Top: "24",
@@ -514,7 +514,7 @@ export function viewLinkWizardForm() {
                     },
                     "Congratulations!",
                 ),
-                m("span.Label14.TLabel",
+                m("div.Label14.TLabel",
                     {
                         // Left: "24",
                         // Top: "58",
@@ -524,7 +524,7 @@ export function viewLinkWizardForm() {
                     },
                     "You have completed the information the wizard needs to generate two new rules to link the two contexts you have chosen.",
                 ),
-                m("span.Label19.TLabel",
+                m("div.Label19.TLabel",
                     {
                         // Left: "24",
                         // Top: "235",
@@ -534,7 +534,7 @@ export function viewLinkWizardForm() {
                     },
                     "Click Back to review your choices. Click Cancel to close the wizard without making any new rules.",
                 ),
-                m("span.Label3.TLabel",
+                m("div.Label3.TLabel",
                     {
                         // Left: "24",
                         // Top: "187",
@@ -560,7 +560,7 @@ export function viewLinkWizardForm() {
                         // Picture.Data: "07544269746D617076020000424D760200000000000076000000280000002000000020000000010004000000000000020000000000000000000010000000100000000000000000008000008000000080800080000000800080008080000080808000C0C0C0000000FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888CCCCCCCCCCCCCCCCC888888888888888CBBBBBBBBBBBBBBBC888888888888888CBBBBBBBBBBBBBBBC888888888888888CBBBBBBBBBBBBBBBC888888888888888CBBBBBBBBBBBBBBBC888888888888888CCCCCCCCCCCCCCCCC8888888888888888880088888888888888888888888888888888008888888888888888888888888888888800888888888888888888888888888888880088CCCCCCCCCCCCCCCCCC88888888888800CBBBBBBBBBBBBBBBBC88888888888888CBBBBBBBBBBBBBBBBC88888888888888CBBBBBBBBBBBBBBBBC88888888888888CBBBBBBBBBBBBBBBBC88888888888888CCCCCCCCCCCCCCCCCC8888888888888888888800888888888888888888888888888800888888888888888888888888888000888888888888888888888888888008888888888888888888888888888008888888888888888888888888888008888888888888888888888CCCCCCCCCCCCCCCC8888888888888888CBBBBBBBBBBBBBBC8888888888888888CBBBBBBBBBBBBBBC8888888888888888CBBBBBBBBBBBBBBC8888888888888888CBBBBBBBBBBBBBBC8888888888888888CCCCCCCCCCCCCCCC88888888888888888888888888888888888888888888888888888888888888888888888888888888",
                     },
                 ),
-                m("span.Label15.TLabel",
+                m("div.Label15.TLabel",
                     {
                         // Left: "24",
                         // Top: "136",
@@ -570,7 +570,7 @@ export function viewLinkWizardForm() {
                     },
                     "The reply texts you entered here will also be saved in the log file (even if you cancel using the wizard).",
                 ),
-                m("span.Label16.TLabel",
+                m("div.Label16.TLabel",
                     {
                         // Left: "24",
                         // Top: "204",
@@ -580,7 +580,7 @@ export function viewLinkWizardForm() {
                     },
                     "After you finish the wizard, you can choose Undo from the Edit menu to remove your new rules.",
                 ),
-                m("span.forwardSummary.TLabel",
+                m("div.forwardSummary.TLabel",
                     {
                         // Left: "52",
                         // Top: "94",
@@ -595,7 +595,7 @@ export function viewLinkWizardForm() {
                     },
                     "nether regions -> go to elevator -> elevator",
                 ),
-                m("span.backwardSummary.TLabel",
+                m("div.backwardSummary.TLabel",
                     {
                         // Left: "52",
                         // Top: "110",

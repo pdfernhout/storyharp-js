@@ -33,7 +33,7 @@ export function viewExtraMediaDirectoryForm() {
             },
             caption("&Help"),
         ),
-        m("span.Label1.TLabel",
+        m("div.Label1.TLabel",
             {
                 // Left: "8",
                 // Top: "8",
@@ -42,7 +42,7 @@ export function viewExtraMediaDirectoryForm() {
             },
             "To find a sound or music file, I will look in these places.",
         ),
-        m("span.Label2.TLabel",
+        m("div.Label2.TLabel",
             {
                 // Left: "27",
                 // Top: "30",
@@ -51,7 +51,7 @@ export function viewExtraMediaDirectoryForm() {
             },
             "First, in the directory the open world is in, which is",
         ),
-        m("span.Label3.TLabel",
+        m("div.Label3.TLabel",
             {
                 // Left: "27",
                 // Top: "75",
@@ -60,7 +60,7 @@ export function viewExtraMediaDirectoryForm() {
             },
             "Second, in the Extra Sound and Music Directory you specify here:",
         ),
-        m("span.Label4.TLabel",
+        m("div.Label4.TLabel",
             {
                 // Left: "27",
                 // Top: "121",
@@ -69,7 +69,7 @@ export function viewExtraMediaDirectoryForm() {
             },
             "Third, in the directory where the program is, which is",
         ),
-        m("span.Label5.TLabel",
+        m("div.Label5.TLabel",
             {
                 // Left: "27",
                 // Top: "172",
@@ -78,7 +78,7 @@ export function viewExtraMediaDirectoryForm() {
             },
             "And finally in your Windows media directory, which is",
         ),
-        m("span.Label6.TLabel",
+        m("div.Label6.TLabel",
             {
                 // Left: "8",
                 // Top: "220",

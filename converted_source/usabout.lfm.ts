@@ -34,7 +34,7 @@ export function viewAboutForm() {
                 // Transparent: "True",
             },
         ),
-        m("span.Label1.TLabel",
+        m("div.Label1.TLabel",
             {
                 // Left: "92",
                 // Top: "26",
@@ -43,7 +43,7 @@ export function viewAboutForm() {
             },
             "Audioventure Authoring System",
         ),
-        m("span.Label2.TLabel",
+        m("div.Label2.TLabel",
             {
                 // Left: "4",
                 // Top: "138",
@@ -52,7 +52,7 @@ export function viewAboutForm() {
             },
             "Copyright 1998 Paul D. Fernhout and Cynthia F. Kurtz",
         ),
-        m("span.Label3.TLabel",
+        m("div.Label3.TLabel",
             {
                 // Left: "4",
                 // Top: "154",
@@ -61,7 +61,7 @@ export function viewAboutForm() {
             },
             "All Rights Reserved",
         ),
-        m("span.Label4.TLabel",
+        m("div.Label4.TLabel",
             {
                 // Left: "92",
                 // Top: "106",
@@ -70,7 +70,7 @@ export function viewAboutForm() {
             },
             "http://www.kurtz-fernhout.com",
         ),
-        m("span.versionLabel.TLabel",
+        m("div.versionLabel.TLabel",
             {
                 // Left: "92",
                 // Top: "42",
@@ -79,7 +79,7 @@ export function viewAboutForm() {
             },
             "Version 1.31",
         ),
-        m("span.Label6.TLabel",
+        m("div.Label6.TLabel",
             {
                 // Left: "92",
                 // Top: "90",
@@ -88,7 +88,7 @@ export function viewAboutForm() {
             },
             "By Kurtz-Fernhout Software",
         ),
-        m("span.Label7.TLabel",
+        m("div.Label7.TLabel",
             {
                 // Left: "92",
                 // Top: "4",
@@ -103,7 +103,7 @@ export function viewAboutForm() {
             },
             "StoryHarp",
         ),
-        m("span.Label8.TLabel",
+        m("div.Label8.TLabel",
             {
                 // Left: "171",
                 // Top: "0",
@@ -112,7 +112,7 @@ export function viewAboutForm() {
             },
             "TM",
         ),
-        m("span.registeredToLabel.TLabel",
+        m("div.registeredToLabel.TLabel",
             {
                 // Left: "92",
                 // Top: "64",

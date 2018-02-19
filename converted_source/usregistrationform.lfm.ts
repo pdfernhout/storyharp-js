@@ -25,7 +25,7 @@ export function viewRegistrationForm() {
         // Top: "209",
         // Width: "561",
         },
-        m("span.Label1.TLabel",
+        m("div.Label1.TLabel",
             {
                 // Color: "clNone",
                 // ParentColor: "False",
@@ -36,7 +36,7 @@ export function viewRegistrationForm() {
             },
             "User name",
         ),
-        m("span.Label2.TLabel",
+        m("div.Label2.TLabel",
             {
                 // Color: "clNone",
                 // ParentColor: "False",
@@ -47,7 +47,7 @@ export function viewRegistrationForm() {
             },
             "Registration code",
         ),
-        m("span.DateInstalledLabel.TLabel",
+        m("div.DateInstalledLabel.TLabel",
             {
                 // Color: "clNone",
                 // ParentColor: "False",
@@ -59,7 +59,7 @@ export function viewRegistrationForm() {
             },
             "DateInstalledLabel",
         ),
-        m("span.DaysSinceInstallationLabel.TLabel",
+        m("div.DaysSinceInstallationLabel.TLabel",
             {
                 // Color: "clNone",
                 // ParentColor: "False",

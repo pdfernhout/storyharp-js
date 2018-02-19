@@ -26,7 +26,7 @@ export function viewUnregisteredAboutForm() {
         // Top: "170",
         // Width: "320",
         },
-        m("span.noDistributeLabel.TLabel",
+        m("div.noDistributeLabel.TLabel",
             {
                 // Color: "clNone",
                 // Font.Color: "clNavy",
@@ -41,7 +41,7 @@ export function viewUnregisteredAboutForm() {
             },
             "Under no circumstances are you licensed to distribute any output or data files created using an unregistered copy of StoryHarp.",
         ),
-        m("span.timeWarningLabel.TLabel",
+        m("div.timeWarningLabel.TLabel",
             {
                 // Color: "clNone",
                 // Font.Height: "-11",
@@ -55,7 +55,7 @@ export function viewUnregisteredAboutForm() {
             },
             "If you have been using StoryHarp (other than in player-only mode) for 24 hours or more (in total), you are legally required to register it.",
         ),
-        m("span.Label1.TLabel",
+        m("div.Label1.TLabel",
             {
                 // Color: "clNone",
                 // ParentColor: "False",
@@ -78,7 +78,7 @@ export function viewUnregisteredAboutForm() {
                 // Width: "80",
             },
         ),
-        m("span.Label2.TLabel",
+        m("div.Label2.TLabel",
             {
                 // Color: "clNone",
                 // ParentColor: "False",
@@ -89,7 +89,7 @@ export function viewUnregisteredAboutForm() {
             },
             "Audioventure Authoring System",
         ),
-        m("span.Label3.TLabel",
+        m("div.Label3.TLabel",
             {
                 // Color: "clNone",
                 // ParentColor: "False",
@@ -100,7 +100,7 @@ export function viewUnregisteredAboutForm() {
             },
             "Copyright 1998 Paul D. Fernhout and Cynthia F. Kurtz",
         ),
-        m("span.Label4.TLabel",
+        m("div.Label4.TLabel",
             {
                 // Color: "clNone",
                 // ParentColor: "False",
@@ -111,7 +111,7 @@ export function viewUnregisteredAboutForm() {
             },
             "All Rights Reserved",
         ),
-        m("span.Label5.TLabel",
+        m("div.Label5.TLabel",
             {
                 // Color: "clNone",
                 // ParentColor: "False",
@@ -122,7 +122,7 @@ export function viewUnregisteredAboutForm() {
             },
             "http://www.kurtz-fernhout.com",
         ),
-        m("span.versionLabel.TLabel",
+        m("div.versionLabel.TLabel",
             {
                 // Color: "clNone",
                 // ParentColor: "False",
@@ -133,7 +133,7 @@ export function viewUnregisteredAboutForm() {
             },
             "Version 1.3",
         ),
-        m("span.Label7.TLabel",
+        m("div.Label7.TLabel",
             {
                 // Color: "clNone",
                 // ParentColor: "False",
@@ -144,7 +144,7 @@ export function viewUnregisteredAboutForm() {
             },
             "By Kurtz-Fernhout Software",
         ),
-        m("span.Label8.TLabel",
+        m("div.Label8.TLabel",
             {
                 // Color: "clNone",
                 // Font.Height: "-16",
@@ -158,7 +158,7 @@ export function viewUnregisteredAboutForm() {
             },
             "StoryHarp",
         ),
-        m("span.Label9.TLabel",
+        m("div.Label9.TLabel",
             {
                 // Color: "clNone",
                 // ParentColor: "False",
@@ -168,7 +168,7 @@ export function viewUnregisteredAboutForm() {
             },
             "TM",
         ),
-        m("span.registeredToLabel.TLabel",
+        m("div.registeredToLabel.TLabel",
             {
                 // Color: "clNone",
                 // Font.Color: "clBlue",
@@ -229,7 +229,7 @@ export function viewUnregisteredAboutForm() {
                 // Top: "173",
                 // Width: "316",
             },
-            m("span.hoursLabel.TLabel",
+            m("div.hoursLabel.TLabel",
                 {
                     onclick: hoursLabelClick,
                     // Color: "clNone",

@@ -82,7 +82,7 @@ export function viewPictureForm() {
                     // Width: "25",
                 },
             ),
-            m("span.numbersLabel.TLabel",
+            m("div.numbersLabel.TLabel",
                 {
                     // Color: "clNone",
                     // ParentColor: "False",

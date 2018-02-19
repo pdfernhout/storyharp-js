@@ -44,7 +44,7 @@ export function viewCommandWizardForm() {
                     // Width: "316",
                 },
                 "Introduction",
-                m("span.Label1.TLabel",
+                m("div.Label1.TLabel",
                     {
                         // Color: "clNone",
                         // ParentColor: "False",
@@ -56,7 +56,7 @@ export function viewCommandWizardForm() {
                     },
                     "This wizard will help you quickly create a set of new rules based on one context and a list of commands you enter.",
                 ),
-                m("span.Label2.TLabel",
+                m("div.Label2.TLabel",
                     {
                         // Color: "clNone",
                         // ParentColor: "False",
@@ -79,7 +79,7 @@ export function viewCommandWizardForm() {
                         // Width: "32",
                     },
                 ),
-                m("span.Label7.TLabel",
+                m("div.Label7.TLabel",
                     {
                         // Color: "clNone",
                         // Font.Height: "-13",
@@ -93,7 +93,7 @@ export function viewCommandWizardForm() {
                     },
                     "Welcome to the New Commands Wizard!",
                 ),
-                m("span.Label17.TLabel",
+                m("div.Label17.TLabel",
                     {
                         // Color: "clNone",
                         // Font.Height: "-11",
@@ -108,7 +108,7 @@ export function viewCommandWizardForm() {
                     },
                     "Click the Next button to begin.",
                 ),
-                m("span.Label26.TLabel",
+                m("div.Label26.TLabel",
                     {
                         // Color: "clNone",
                         // ParentColor: "False",
@@ -119,7 +119,7 @@ export function viewCommandWizardForm() {
                     },
                     "You can click Cancel at any time to close the wizard without making any new rules.",
                 ),
-                m("span.Label3.TLabel",
+                m("div.Label3.TLabel",
                     {
                         // Color: "clNone",
                         // ParentColor: "False",
@@ -140,7 +140,7 @@ export function viewCommandWizardForm() {
                         // Width: "16",
                     },
                 ),
-                m("span.Label5.TLabel",
+                m("div.Label5.TLabel",
                     {
                         // Color: "clNone",
                         // ParentColor: "False",
@@ -161,7 +161,7 @@ export function viewCommandWizardForm() {
                         // Width: "16",
                     },
                 ),
-                m("span.Label6.TLabel",
+                m("div.Label6.TLabel",
                     {
                         // Color: "clNone",
                         // ParentColor: "False",
@@ -183,7 +183,7 @@ export function viewCommandWizardForm() {
                         // Width: "16",
                     },
                 ),
-                m("span.Label10.TLabel",
+                m("div.Label10.TLabel",
                     {
                         // Color: "clNone",
                         // ParentColor: "False",
@@ -194,7 +194,7 @@ export function viewCommandWizardForm() {
                     },
                     "A reply is what the computer says after you say a command.",
                 ),
-                m("span.Label19.TLabel",
+                m("div.Label19.TLabel",
                     {
                         // Color: "clNone",
                         // ParentColor: "False",
@@ -225,7 +225,7 @@ export function viewCommandWizardForm() {
                         // Width: "16",
                     },
                 ),
-                m("span.Label24.TLabel",
+                m("div.Label24.TLabel",
                     {
                         // Color: "clNone",
                         // ParentColor: "False",
@@ -237,7 +237,7 @@ export function viewCommandWizardForm() {
                     },
                     "A requirement is variable state necessary for a command to be available. Variables can be true or false.",
                 ),
-                m("span.Label25.TLabel",
+                m("div.Label25.TLabel",
                     {
                         // Color: "clNone",
                         // ParentColor: "False",
@@ -270,7 +270,7 @@ export function viewCommandWizardForm() {
                         // Width: "8",
                     },
                 ),
-                m("span.Label8.TLabel",
+                m("div.Label8.TLabel",
                     {
                         // Color: "clNone",
                         // ParentColor: "False",
@@ -281,7 +281,7 @@ export function viewCommandWizardForm() {
                     },
                     "Choose the context you want your new commands to use.",
                 ),
-                m("span.Label11.TLabel",
+                m("div.Label11.TLabel",
                     {
                         // Color: "clNone",
                         // ParentColor: "False",
@@ -336,7 +336,7 @@ export function viewCommandWizardForm() {
                         // Width: "8",
                     },
                 ),
-                m("span.Label9.TLabel",
+                m("div.Label9.TLabel",
                     {
                         // Color: "clNone",
                         // Font.Color: "clBlue",
@@ -350,7 +350,7 @@ export function viewCommandWizardForm() {
                     },
                     "Command | Reply",
                 ),
-                m("span.Label12.TLabel",
+                m("div.Label12.TLabel",
                     {
                         // Color: "clNone",
                         // ParentColor: "False",
@@ -361,7 +361,7 @@ export function viewCommandWizardForm() {
                     },
                     " When you are finished entering commands, click Next.",
                 ),
-                m("span.Label4.TLabel",
+                m("div.Label4.TLabel",
                     {
                         // Color: "clNone",
                         // ParentColor: "False",
@@ -373,7 +373,7 @@ export function viewCommandWizardForm() {
                     },
                     "Enter or paste the commands you want to create in the area below, separating each command from its reply by a pipe bar. For example, \"open the door | You open the rusty door.\"",
                 ),
-                m("span.Label14.TLabel",
+                m("div.Label14.TLabel",
                     {
                         // Color: "clNone",
                         // ParentColor: "False",
@@ -385,7 +385,7 @@ export function viewCommandWizardForm() {
                     },
                     "Descriptions are optional. It's okay to wrap entries on more than one line. Use carriage returns to separate entries.",
                 ),
-                m("span.newCommandsForContextLabel.TLabel",
+                m("div.newCommandsForContextLabel.TLabel",
                     {
                         // Color: "clNone",
                         // Font.Color: "clBlue",
@@ -419,7 +419,7 @@ export function viewCommandWizardForm() {
                     // Width: "316",
                 },
                 "Sequence",
-                m("span.PrefixLabel.TLabel",
+                m("div.PrefixLabel.TLabel",
                     {
                         // Color: "clNone",
                         // ParentColor: "False",
@@ -441,7 +441,7 @@ export function viewCommandWizardForm() {
                         // Width: "8",
                     },
                 ),
-                m("span.Label13.TLabel",
+                m("div.Label13.TLabel",
                     {
                         // Color: "clNone",
                         // ParentColor: "False",
@@ -464,7 +464,7 @@ export function viewCommandWizardForm() {
                         // Width: "8",
                     },
                 ),
-                m("span.prefixNote.TLabel",
+                m("div.prefixNote.TLabel",
                     {
                         // Color: "clNone",
                         // ParentColor: "False",
@@ -476,7 +476,7 @@ export function viewCommandWizardForm() {
                     },
                     "Examples are: \"talking to sailor\", \"in boarding house\". By default the prefix is the same as the context.",
                 ),
-                m("span.Label15.TLabel",
+                m("div.Label15.TLabel",
                     {
                         // Color: "clNone",
                         // ParentColor: "False",
@@ -488,7 +488,7 @@ export function viewCommandWizardForm() {
                     },
                     "Sequences are useful when the user has to do several things in a certain order, such as steps in an assembly process or parts of a conversation.",
                 ),
-                m("span.Label27.TLabel",
+                m("div.Label27.TLabel",
                     {
                         // Color: "clNone",
                         // ParentColor: "False",
@@ -531,7 +531,7 @@ export function viewCommandWizardForm() {
                         // Top: "199",
                         // Width: "490",
                     },
-                    m("span.endSequenceLabel.TLabel",
+                    m("div.endSequenceLabel.TLabel",
                         {
                             // Color: "clNone",
                             // ParentColor: "False",
@@ -597,7 +597,7 @@ export function viewCommandWizardForm() {
                     // Width: "316",
                 },
                 "Conclusion",
-                m("span.Label18.TLabel",
+                m("div.Label18.TLabel",
                     {
                         // Color: "clNone",
                         // Font.Height: "-13",
@@ -611,7 +611,7 @@ export function viewCommandWizardForm() {
                     },
                     "Congratulations!",
                 ),
-                m("span.Label16.TLabel",
+                m("div.Label16.TLabel",
                     {
                         // Color: "clNone",
                         // ParentColor: "False",
@@ -623,7 +623,7 @@ export function viewCommandWizardForm() {
                     },
                     "You have completed the information the wizard needs to generate a new set of rules based on the commands you have entered.",
                 ),
-                m("span.Label20.TLabel",
+                m("div.Label20.TLabel",
                     {
                         // Color: "clNone",
                         // ParentColor: "False",
@@ -646,7 +646,7 @@ export function viewCommandWizardForm() {
                         // Width: "32",
                     },
                 ),
-                m("span.Label21.TLabel",
+                m("div.Label21.TLabel",
                     {
                         // Color: "clNone",
                         // ParentColor: "False",
@@ -658,7 +658,7 @@ export function viewCommandWizardForm() {
                     },
                     "The command and reply texts you entered here will also be saved in the log file (even if you cancel using the wizard).",
                 ),
-                m("span.Label22.TLabel",
+                m("div.Label22.TLabel",
                     {
                         // Color: "clNone",
                         // Font.Height: "-11",
@@ -673,7 +673,7 @@ export function viewCommandWizardForm() {
                     },
                     "Click Finish to create the new rules and close the wizard.",
                 ),
-                m("span.Label23.TLabel",
+                m("div.Label23.TLabel",
                     {
                         // Color: "clNone",
                         // ParentColor: "False",

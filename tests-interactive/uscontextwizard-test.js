@@ -98,7 +98,7 @@ export function viewContextWizardForm() {
                     // Width: "316",
                 },
                 "Start",
-                m("span.Label1.TLabel",
+                m("div.Label1.TLabel",
                     {
                         // Color: "clNone",
                         // Font.Height: "-13",
@@ -112,7 +112,7 @@ export function viewContextWizardForm() {
                     },
                     "Welcome to the New Contexts Wizard!",
                 ),
-                m("span.Label2.TLabel",
+                m("div.Label2.TLabel",
                     {
                         // Color: "clNone",
                         // ParentColor: "False",
@@ -124,7 +124,7 @@ export function viewContextWizardForm() {
                     },
                     "This wizard will help you quickly create a set of new rules based on contexts you enter.",
                 ),
-                m("span.Label3.TLabel",
+                m("div.Label3.TLabel",
                     {
                         // Color: "clNone",
                         // Font.Height: "-11",
@@ -139,7 +139,7 @@ export function viewContextWizardForm() {
                     },
                     "Click the Next button to begin.",
                 ),
-                m("span.Label7.TLabel",
+                m("div.Label7.TLabel",
                     {
                         // Color: "clNone",
                         // ParentColor: "False",
@@ -151,7 +151,7 @@ export function viewContextWizardForm() {
                     },
                     "You can enter a descriptive reply for each new context you enter here. The descriptive replies will be accessed with a common command such as \"look\".",
                 ),
-                m("span.Label9.TLabel",
+                m("div.Label9.TLabel",
                     {
                         // Color: "clNone",
                         // ParentColor: "False",
@@ -173,7 +173,7 @@ export function viewContextWizardForm() {
                         // Width: "32",
                     },
                 ),
-                m("span.Label10.TLabel",
+                m("div.Label10.TLabel",
                     {
                         // Color: "clNone",
                         // ParentColor: "False",
@@ -184,7 +184,7 @@ export function viewContextWizardForm() {
                     },
                     "A command is what you say to the computer.",
                 ),
-                m("span.Label26.TLabel",
+                m("div.Label26.TLabel",
                     {
                         // Color: "clNone",
                         // ParentColor: "False",
@@ -195,7 +195,7 @@ export function viewContextWizardForm() {
                     },
                     "You can click Cancel at any time to close the wizard without making any new rules.",
                 ),
-                m("span.Label8.TLabel",
+                m("div.Label8.TLabel",
                     {
                         // Color: "clNone",
                         // ParentColor: "False",
@@ -248,7 +248,7 @@ export function viewContextWizardForm() {
                     // Width: "316",
                 },
                 "EnterContexts",
-                m("span.Label5.TLabel",
+                m("div.Label5.TLabel",
                     {
                         // Color: "clNone",
                         // ParentColor: "False",
@@ -260,7 +260,7 @@ export function viewContextWizardForm() {
                     },
                     "Enter or paste the contexts you want to create in the area below, separating each context from its descriptive reply by a pipe bar. For example, \"house | You are in a house\".",
                 ),
-                m("span.Label6.TLabel",
+                m("div.Label6.TLabel",
                     {
                         // Color: "clNone",
                         // ParentColor: "False",
@@ -271,7 +271,7 @@ export function viewContextWizardForm() {
                     },
                     " When you are finished entering contexts, click Next.",
                 ),
-                m("span.Label21.TLabel",
+                m("div.Label21.TLabel",
                     {
                         // Color: "clNone",
                         // ParentColor: "False",
@@ -283,7 +283,7 @@ export function viewContextWizardForm() {
                     },
                     "Descriptions are optional. It's okay to wrap entries on more than one line. Use carriage returns to separate entries.",
                 ),
-                m("span.Label22.TLabel",
+                m("div.Label22.TLabel",
                     {
                         // Color: "clNone",
                         // Font.Color: "clBlue",
@@ -329,7 +329,7 @@ export function viewContextWizardForm() {
                     // Width: "316",
                 },
                 "GenerateDescriptions",
-                m("span.DescribeLabel.TLabel",
+                m("div.DescribeLabel.TLabel",
                     {
                         // Color: "clNone",
                         // Font.Height: "-11",
@@ -342,7 +342,7 @@ export function viewContextWizardForm() {
                     },
                     " What command should the user to say to access these descriptive replies?",
                 ),
-                m("span.DescribeLabelExtra.TLabel",
+                m("div.DescribeLabelExtra.TLabel",
                     {
                         // Color: "clNone",
                         // ParentColor: "False",
@@ -353,7 +353,7 @@ export function viewContextWizardForm() {
                     },
                     "Some generic examples are:",
                 ),
-                m("span.Label4.TLabel",
+                m("div.Label4.TLabel",
                     {
                         // Color: "clNone",
                         // ParentColor: "False",
@@ -386,7 +386,7 @@ export function viewContextWizardForm() {
                         // Width: "16",
                     },
                 ),
-                m("span.Label15.TLabel",
+                m("div.Label15.TLabel",
                     {
                         // Color: "clNone",
                         // ParentColor: "False",
@@ -397,7 +397,7 @@ export function viewContextWizardForm() {
                     },
                     "\"look\", \"listen\", \"smell\", \"feel\", \"taste\", and \"sense\".",
                 ),
-                m("span.Label16.TLabel",
+                m("div.Label16.TLabel",
                     {
                         // Color: "clNone",
                         // ParentColor: "False",
@@ -430,7 +430,7 @@ export function viewContextWizardForm() {
                     // Width: "316",
                 },
                 "Finish",
-                m("span.Label13.TLabel",
+                m("div.Label13.TLabel",
                     {
                         // Color: "clNone",
                         // ParentColor: "False",
@@ -442,7 +442,7 @@ export function viewContextWizardForm() {
                     },
                     "You have completed the information the wizard needs to generate a new set of rules based on your the contexts and descriptions you have entered.",
                 ),
-                m("span.Label14.TLabel",
+                m("div.Label14.TLabel",
                     {
                         // Color: "clNone",
                         // Font.Height: "-11",
@@ -457,7 +457,7 @@ export function viewContextWizardForm() {
                     },
                     "Click Finish to create the new rules and close the wizard.",
                 ),
-                m("span.Label18.TLabel",
+                m("div.Label18.TLabel",
                     {
                         // Color: "clNone",
                         // Font.Height: "-13",
@@ -471,7 +471,7 @@ export function viewContextWizardForm() {
                     },
                     "Congratulations!",
                 ),
-                m("span.Label19.TLabel",
+                m("div.Label19.TLabel",
                     {
                         // Color: "clNone",
                         // ParentColor: "False",
@@ -494,7 +494,7 @@ export function viewContextWizardForm() {
                         // Width: "32",
                     },
                 ),
-                m("span.Label11.TLabel",
+                m("div.Label11.TLabel",
                     {
                         // Color: "clNone",
                         // ParentColor: "False",
@@ -506,7 +506,7 @@ export function viewContextWizardForm() {
                     },
                     "After you finish the wizard, you can choose Undo from the Edit menu to remove your new rules.",
                 ),
-                m("span.Label12.TLabel",
+                m("div.Label12.TLabel",
                     {
                         // Color: "clNone",
                         // ParentColor: "False",

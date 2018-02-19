@@ -67,7 +67,7 @@ export function viewPreferencesForm() {
                 // BevelOuter: "bvLowered",
                 // TabOrder: "2",
             },
-            m("span.Label1.TLabel",
+            m("div.Label1.TLabel",
                 {
                     // Left: "12",
                     // Top: "52",
@@ -77,7 +77,7 @@ export function viewPreferencesForm() {
                 },
                 caption("&Map font"),
             ),
-            m("span.Label3.TLabel",
+            m("div.Label3.TLabel",
                 {
                     // Left: "12",
                     // Top: "185",
@@ -87,7 +87,7 @@ export function viewPreferencesForm() {
                 },
                 caption("Te&xt color for selected items"),
             ),
-            m("span.Label2.TLabel",
+            m("div.Label2.TLabel",
                 {
                     // Left: "12",
                     // Top: "141",
@@ -97,7 +97,7 @@ export function viewPreferencesForm() {
                 },
                 caption("Background &color for selected items"),
             ),
-            m("span.Label4.TLabel",
+            m("div.Label4.TLabel",
                 {
                     // Left: "12",
                     // Top: "8",
@@ -107,7 +107,7 @@ export function viewPreferencesForm() {
                 },
                 caption("&Table font"),
             ),
-            m("span.Label5.TLabel",
+            m("div.Label5.TLabel",
                 {
                     // Left: "12",
                     // Top: "96",
@@ -117,7 +117,7 @@ export function viewPreferencesForm() {
                 },
                 caption("&Browser font"),
             ),
-            m("span.Label6.TLabel",
+            m("div.Label6.TLabel",
                 {
                     // Left: "12",
                     // Top: "229",
