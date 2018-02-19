@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "tsc -p tsconfig-test.json && ./node_modules/ospec/bin/ospec",
-    "test-interactive": "tsc && xdg-open http://localhost:8080/tests-interactive/ && http-server",
+    "test-interactive": "tsc && echo \"browse to: http://localhost:8080/tests-interactive/\" && http-server",
     "build": "tsc"
   },
   "author": "Paul D. Fernhout <pdfernhout@kurtz-fernhout.com>",
