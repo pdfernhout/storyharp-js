@@ -53,7 +53,7 @@ export class KfCommandList {
         // see if too many commands are stored and if so, scroll them
         this.freeCommandsAboveLimit(this.undoLimit - 1)
         // now do this command
-        if (!newCommand.notifyProcedure) {
+        if (!newCommand.notifyProcedure && this.notifyProcedure) {
             newCommand.notifyProcedure = this.notifyProcedure.bind(this)
         }
         newCommand.doCommand() // may fail in which case won't add
@@ -81,8 +81,8 @@ export class KfCommandList {
             this.anchorPoint = point
             this.previousPoint = point
             nextMouseCommand = newCommand
-            if (!newCommand.notifyProcedure) {
-                newCommand.notifyProcedure = this.notifyProcedure
+            if (!newCommand.notifyProcedure && this.notifyProcedure) {
+                newCommand.notifyProcedure = this.notifyProcedure.bind(this)
             }
             this.mouseCommand = nextMouseCommand.trackMouse(TrackPhase.trackPress, this.anchorPoint, this.previousPoint, point, false, this.rightButtonDown)
             result = (this.mouseCommand !== null)
