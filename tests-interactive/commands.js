@@ -4,8 +4,10 @@ import "../node_modules/mithril/mithril.js"
 import { KfCommand } from "../dist/KfCommand.js"
 import { KfCommandList } from "../dist/KfCommandList.js"
 
-m.render(document.body, "Hello world")
+function viewMain() {
+    return m("div", "HELLO WORLD 3", 
+        m("button.ml2", { onclick: () => alert("hello") }, "Click me")
+    )
+}
 
-console.log("KfCommandList", KfCommandList)
-
-console.log("KfCommand", KfCommand)
+m.mount(document.body, { view: viewMain })
