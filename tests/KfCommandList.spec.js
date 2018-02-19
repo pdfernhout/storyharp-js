@@ -1,7 +1,7 @@
 const o = require("ospec")
 
-const { KfCommand, KfCommandChangeType } = require("../dist/KfCommand")
-const KfCommandList = require("../dist/KfCommandList").KfCommandList
+const { KfCommand, KfCommandChangeType } = require("../dist-test/KfCommand")
+const KfCommandList = require("../dist-test/KfCommandList").KfCommandList
 
 o.spec("KfCommandList", () => {
 

@@ -4,7 +4,7 @@
   "description": "StoryHarp CYOA Editor",
   "main": "index.js",
   "scripts": {
-    "test": "./node_modules/ospec/bin/ospec",
+    "test": "tsc -p tsconfig-test.json && ./node_modules/ospec/bin/ospec",
     "build": "tsc"
   },
   "author": "Paul D. Fernhout <pdfernhout@kurtz-fernhout.com>",
