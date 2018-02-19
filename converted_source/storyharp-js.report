@@ -1,0 +1,266 @@
+
+=========== MISSING UNITS =================
+agentobjects_tlb
+buttons
+classes
+clipbrd
+comctrls
+controls
+dialogs
+extctrls
+filectrl
+forms
+graphics
+grids
+httpprot
+inifiles
+math
+menus
+messages
+mmsystem
+mplayer
+olectrls
+printers
+registry
+shellapi
+stdctrls
+sysutils
+windows
+winprocs
+wintypes
+
+=========== RESOLVED WITH EXPRESSIONS [32] =================
+R2  [2]
+canvas  [2]
+drawRect  [2]
+fileInfo  [1]
+generator  [4]
+listBox.Canvas  [1]
+newRect  [1]
+openDialog  [1]
+rectangle  [1]
+result  [1]
+rule  [1]
+saveDialog  [2]
+self.FirstContextBox  [1]
+self.FocusComboBox  [1]
+self.OpenDialog  [1]
+self.PictureImage  [2]
+self.PictureScrollBox  [1]
+self.RuleGrid.Canvas  [2]
+self.SecondContextBox  [1]
+self.VariablesListBox.Canvas  [1]
+self.controlsPanel  [1]
+self.firstListBoxLabel  [1]
+self.mapSelectionRect  [1]
+self.notebook  [6]
+self.options  [4]
+textPoint  [2]
+topLeft  [1]
+uschangelog.ChangeLogForm  [1]
+usdomain.domain.options  [2]
+uspictureform.PictureForm  [1]
+usruleeditorform.RuleEditorForm  [1]
+variable  [1]
+
+=========== UNRESOLVED WITH EXPRESSIONS [6] =================
+Rect  [3]
+Sender  [4]
+TheMessage  [1]
+UNRESOLVED.PMinMaxInfo(MSG.lparam).PDF_FIX_POINTER_ACCESS  [3]
+iniFile  [2]
+self.TranscriptEdit.SelAttributes  [1]
+
+=========== UNRESOLVED TYPES =============
+000001 Append
+000001 Beep
+000001 CBN_EDITUPDATE
+000001 CF_TEXT
+000001 ClipBoard
+000001 Date
+000001 DateToStr
+000001 DecodeDate
+000001 DecodeTime
+000001 Delete
+000001 DiskFree
+000001 FileGetAttr
+000001 FindFirst
+000001 FindNext
+000001 GetDC
+000001 GetTempFileName
+000001 GetTempPath
+000001 GetWindowsDirectory
+000001 GlobalLock
+000001 GlobalMemoryStatus
+000001 GlobalUnlock
+000001 HELP_QUIT
+000001 IAgentCtlUserInput
+000001 IDispatch
+000001 IntToHex
+000001 LRESULT
+000001 Maxint
+000001 Msg
+000001 PatternBitCount
+000001 Randomize
+000001 RegisterComponents
+000001 ReleaseDC
+000001 Rename
+000001 SetTextAlign
+000001 ShellExecute
+000001 StrPas
+000001 SysUtils
+000001 TComponentName
+000001 TGraphicsBevelCut
+000001 TPrintDialog
+000001 TWMEraseBkgnd
+000001 TWMKey
+000001 WM_CHAR
+000001 WM_LBUTTONUP
+000001 Windows_R2_BLACK
+000001 Windows_R2_COPYPEN
+000001 Windows_R2_MASKNOTPEN
+000001 Windows_R2_MASKPEN
+000001 Windows_R2_MASKPENNOT
+000001 Windows_R2_MERGENOTPEN
+000001 Windows_R2_MERGEPEN
+000001 Windows_R2_MERGEPENNOT
+000001 Windows_R2_NOP
+000001 Windows_R2_NOT
+000001 Windows_R2_NOTCOPYPEN
+000001 Windows_R2_NOTMASKPEN
+000001 Windows_R2_NOTMERGEPEN
+000001 Windows_R2_NOTXORPEN
+000001 Windows_R2_WHITE
+000001 Windows_R2_XORPEN
+000001 bottom
+000001 bvNone
+000001 clBtnFace
+000001 clBtnText
+000001 clHighlight
+000001 clHighlightText
+000001 copyFile
+000001 delete
+000001 drawText
+000001 fileClose
+000001 fileCreate
+000001 fileGetAttr
+000001 getWindowsDirectory
+000001 mpPlaying
+000001 now
+000001 nvSuccessful
+000001 power
+000001 randomize
+000001 right
+000001 strPas
+000002 Bottom
+000002 Dispatch
+000002 DragAcceptFiles
+000002 DragFinish
+000002 DragQueryFile
+000002 EM_SCROLLCARET
+000002 GetDeviceCaps
+000002 HELP_FINDER
+000002 Left
+000002 MaxBitRec
+000002 Pos
+000002 Right
+000002 StrPLCopy
+000002 Top
+000002 VER_PLATFORM_WIN32_NT
+000002 VER_PLATFORM_WIN32_WINDOWS
+000002 Win32BuildNumber
+000002 Win32CSDVersion
+000002 ansistring
+000002 clWindowText
+000002 faDirectory
+000002 faReadOnly
+000002 releaseDC
+000002 strPCopy
+000003 AnsiCompareText
+000003 DrawText
+000003 FPCanvas_bsBDiagonal
+000003 FPCanvas_bsClear
+000003 FPCanvas_bsCross
+000003 FPCanvas_bsDiagCross
+000003 FPCanvas_bsFDiagonal
+000003 FPCanvas_bsHorizontal
+000003 FPCanvas_bsSolid
+000003 FPCanvas_bsVertical
+000003 FPCanvas_pmBlack
+000003 FPCanvas_pmCopy
+000003 FPCanvas_pmMask
+000003 FPCanvas_pmMaskNotPen
+000003 FPCanvas_pmMaskPenNot
+000003 FPCanvas_pmMerge
+000003 FPCanvas_pmMergeNotPen
+000003 FPCanvas_pmMergePenNot
+000003 FPCanvas_pmNop
+000003 FPCanvas_pmNot
+000003 FPCanvas_pmNotCopy
+000003 FPCanvas_pmNotMask
+000003 FPCanvas_pmNotMerge
+000003 FPCanvas_pmNotXor
+000003 FPCanvas_pmWhite
+000003 FPCanvas_pmXor
+000003 FPCanvas_psClear
+000003 FPCanvas_psDash
+000003 FPCanvas_psDashDot
+000003 FPCanvas_psDashDotDot
+000003 FPCanvas_psDot
+000003 FPCanvas_psSolid
+000003 Format
+000003 HWND
+000003 Now
+000003 PMinMaxInfo
+000003 ParamCount
+000003 THandle
+000003 Tmessage
+000003 Win32MajorVersion
+000003 Win32MinorVersion
+000003 Win32Platform
+000003 directoryExists
+000004 TWMQueryEndSession
+000004 eof
+000004 realizePalette
+000004 selectPalette
+000005 Clipboard
+000005 HWnd
+000005 SetLength
+000005 TFindDialog
+000005 TMessage
+000005 fsBold
+000006 InflateRect
+000006 TWMDropFiles
+000006 ptMinTrackSize
+000006 random
+000007 GetCurrentDir
+000007 MAX_PATH
+000007 THttpCli
+000007 TStatusBar
+000008 SysUtils.TSearchRec
+000009 HCURSOR
+000009 HInstance
+000009 LoadCursor
+000009 TFontStyles
+000010 TMemoryStatus
+000010 TObject
+000012 TIniFile
+000013 TPageControl
+000014 TDateTime
+000015 ParamStr
+000015 TMediaPlayer
+000016 HPALETTE
+000019 Pointer
+000019 TAgent
+000021 TTabSheet
+000021 copy
+000023 HDC
+000026 Copy
+000026 readln
+000046 readString
+000048 writeString
+000057 pos
+000058 TCustomApplication
+000062 TRichEdit
+000076 TMenuItem
+000090 TextFile
