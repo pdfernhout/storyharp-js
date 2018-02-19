@@ -5,7 +5,7 @@ import "../node_modules/mithril/mithril.js"
 /* global m */
 
 function caption(text) {
-    return text
+    return text.replace("&", "")
 }
 
 function hexToBase64(hexString) {
@@ -15,6 +15,8 @@ function hexToBase64(hexString) {
         return String.fromCharCode(parseInt(a, 16))
     }).join(""))
 }
+
+let wizardPage = 1
 
 m.mount(document.body, { view: viewContextWizardForm })
 
@@ -40,7 +42,7 @@ export function viewContextWizardForm() {
         // Top: "193",
         // Width: "320",
         },
-        m("button.goBack.TButton",
+        m("button.goBack",
             {
                 onclick: goBackClick,
                 // BorderSpacing.InnerBorder: "2",
@@ -52,39 +54,24 @@ export function viewContextWizardForm() {
             },
             caption("<< &Back")
         ),
-        m("button.goNext.TButton",
+        m("button.goNext.ml2",
             {
                 onclick: goNextClick,
                 // BorderSpacing.InnerBorder: "2",
-                // TabOrder: "1",
-                // Left: "305",
-                // Height: "21",
-                // Top: "344",
-                // Width: "70",
             },
-            caption("&Next >>")
+            wizardPage === 4 ? "Finish" : caption("&Next >>")
         ),
-        m("button.cancel.TButton",
+        m("button.cancel.ml2",
             {
                 onclick: cancelClick,
                 // BorderSpacing.InnerBorder: "2",
-                // TabOrder: "2",
-                // Left: "414",
-                // Height: "21",
-                // Top: "344",
-                // Width: "70",
             },
             caption("&Cancel")
         ),
-        m("button.helpButton.TButton",
+        m("button.helpButton.ml2",
             {
                 onclick: helpButtonClick,
                 // BorderSpacing.InnerBorder: "2",
-                // TabOrder: "3",
-                // Left: "6",
-                // Height: "21",
-                // Top: "344",
-                // Width: "70",
             },
             caption("&Help")
         ),
@@ -96,7 +83,7 @@ export function viewContextWizardForm() {
                 // Height: "341",
                 // Width: "320",
             },
-            m("TPage.page1.TPage",
+            wizardPage !== 1 ? [] : m("TPage.page1.TPage",
                 {
                     // ClientWidth: "316",
                     // ClientHeight: "307",
@@ -105,7 +92,7 @@ export function viewContextWizardForm() {
                     // Top: "32",
                     // Width: "316",
                 },
-                "Start",
+                m("h1", "Start"),
                 m("div.Label1.TLabel",
                     {
                         // Color: "clNone",
@@ -248,7 +235,7 @@ export function viewContextWizardForm() {
                     }
                 )
             ),
-            m("TPage.page2.TPage",
+            wizardPage !== 2 ? [] : m("TPage.page2.TPage",
                 {
                     // ClientWidth: "316",
                     // ClientHeight: "307",
@@ -257,7 +244,7 @@ export function viewContextWizardForm() {
                     // Top: "32",
                     // Width: "316",
                 },
-                "EnterContexts",
+                m("h1", "Enter Contexts"),
                 m("div.Label5.TLabel",
                     {
                         // Color: "clNone",
@@ -329,7 +316,7 @@ export function viewContextWizardForm() {
                     }
                 )
             ),
-            m("TPage.page3.TPage",
+            wizardPage !== 3 ? [] : m("TPage.page3.TPage",
                 {
                     // ClientWidth: "316",
                     // ClientHeight: "307",
@@ -338,7 +325,7 @@ export function viewContextWizardForm() {
                     // Top: "32",
                     // Width: "316",
                 },
-                "GenerateDescriptions",
+                m("h1", "Generate Descriptions"),
                 m("div.DescribeLabel.TLabel",
                     {
                         // Color: "clNone",
@@ -362,6 +349,17 @@ export function viewContextWizardForm() {
                         // Width: "207",
                     },
                     "Some generic examples are:"
+                ),
+                m("div.Label15.TLabel",
+                    {
+                        // Color: "clNone",
+                        // ParentColor: "False",
+                        // Left: "80",
+                        // Height: "17",
+                        // Top: "93",
+                        // Width: "362",
+                    },
+                    "\"look\", \"listen\", \"smell\", \"feel\", \"taste\", and \"sense\"."
                 ),
                 m("div.Label4.TLabel",
                     {
@@ -396,17 +394,6 @@ export function viewContextWizardForm() {
                         // Width: "16",
                     }
                 ),
-                m("div.Label15.TLabel",
-                    {
-                        // Color: "clNone",
-                        // ParentColor: "False",
-                        // Left: "80",
-                        // Height: "17",
-                        // Top: "93",
-                        // Width: "362",
-                    },
-                    "\"look\", \"listen\", \"smell\", \"feel\", \"taste\", and \"sense\"."
-                ),
                 m("div.Label16.TLabel",
                     {
                         // Color: "clNone",
@@ -430,7 +417,7 @@ export function viewContextWizardForm() {
                     }
                 )
             ),
-            m("TPage.page4.TPage",
+            wizardPage !== 4 ? [] : m("TPage.page4.TPage",
                 {
                     // ClientWidth: "316",
                     // ClientHeight: "307",
@@ -439,7 +426,7 @@ export function viewContextWizardForm() {
                     // Top: "32",
                     // Width: "316",
                 },
-                "Finish",
+                m("h1", "Finish"),
                 m("div.Label13.TLabel",
                     {
                         // Color: "clNone",
@@ -535,8 +522,13 @@ export function viewContextWizardForm() {
 
 function cancelClick() { console.log("cancelClick") }
 
-function goBackClick() { console.log("goBackClick") }
+function goBackClick() { wizardPage = Math.max(1, wizardPage - 1) }
 
-function goNextClick() { console.log("goNextClick") }
+function goNextClick() { 
+    if (wizardPage === 4) {
+        alert("Finished!!!")
+    }
+    wizardPage = Math.min(4, wizardPage + 1)
+}
 
 function helpButtonClick() { console.log("helpButtonClick") }
