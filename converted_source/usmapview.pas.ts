@@ -20,8 +20,7 @@ const arrowwidth = 4
 
 
 //needs to have rectangle with center of 0,0 and origin adjusted to that coordinate system
-// Returns type: TPoint
-function AdjustedIntersectionPointForLineAndRectangle(origin: TPoint, rect: TRect) {
+function AdjustedIntersectionPointForLineAndRectangle(origin: TPoint, rect: TRect): TPoint {
     let result = new TPoint()
     let slope: double
     
@@ -82,8 +81,7 @@ function AdjustedIntersectionPointForLineAndRectangle(origin: TPoint, rect: TRec
     return result
 }
 
-// Returns type: TPoint
-function IntersectionPointForLineAndRectangle(origin: TPoint, destRect: TRect) {
+function IntersectionPointForLineAndRectangle(origin: TPoint, destRect: TRect): TPoint {
     let result = new TPoint()
     let center: TPoint
     let adjustedRect: TRect
@@ -399,7 +397,7 @@ export class TSMapView {
         }
     }
     
-    drawCommandOrContext(canvas: TCanvas, text: String, bounds: TRect, position: TPoint, selected: boolean, focused: boolean, isCommand: boolean): void {
+    drawCommandOrContext(canvas: TCanvas, text: string, bounds: TRect, position: TPoint, selected: boolean, focused: boolean, isCommand: boolean): void {
         let drawRect: TRect
         let textPoint: TPoint
         

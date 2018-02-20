@@ -53,7 +53,7 @@ export class TSToggleVariableCommand {
         KfCommand.prototype.undoCommand.call(this)
     }
     
-    description(): String {
+    description(): string {
         let result = ""
         if (this.newState === usworld.TSVariableState.kPresent) {
             result = "toggle \"" + this.variable.phrase + "\" to true"
@@ -125,7 +125,7 @@ export class TSMoveFocusCommand {
         TSAbstractMoveFocusCommand.prototype.undoCommand.call(this)
     }
     
-    description(): String {
+    description(): string {
         let result = ""
         result = "move focus to " + this.newFocus.phrase
         return result
@@ -134,17 +134,17 @@ export class TSMoveFocusCommand {
 }
 
 export class TSDoCommandPhrase {
-    commandPhrase: String = ""
+    commandPhrase: string = ""
     changedVariables: TList = new TList()
-    oldLastSaidTextWithMacros: String = ""
-    newLastSaidTextWithMacros: String = ""
+    oldLastSaidTextWithMacros: string = ""
+    newLastSaidTextWithMacros: string = ""
     oldFirstCommandDoneForLastCommandPhrase: int = 0
     newFirstCommandDoneForLastCommandPhrase: int = 0
     TSDoCommandPhrase.prototype = new TSAbstractMoveFocusCommand()
     TSDoCommandPhrase.prototype.constructor = TSDoCommandPhrase
     
     // ----------------------------- TSDoCommandPhrase -------------------------------
-    createWithCommandPhrase(commandPhrase: String): void {
+    createWithCommandPhrase(commandPhrase: string): void {
         let i: int
         let rule: TSRule
         
@@ -211,7 +211,7 @@ export class TSDoCommandPhrase {
     
     undoCommand(): void {
         let i: int
-        let undoPhrase: String
+        let undoPhrase: string
         
         usconsoleform.ConsoleForm.addLineToTranscript("> undo", delphi_compatability.clRed)
         //  undoPhrase := 'It is as if "' + commandPhrase + '" had never been said.';
@@ -235,7 +235,7 @@ export class TSDoCommandPhrase {
     
     redoCommand(): void {
         let i: int
-        let redoPhrase: String
+        let redoPhrase: string
         
         usconsoleform.ConsoleForm.addLineToTranscript("> redo", delphi_compatability.clRed)
         redoPhrase = "(You decide to say \"" + this.commandPhrase + "\" anyway)"
@@ -257,7 +257,7 @@ export class TSDoCommandPhrase {
         TSAbstractMoveFocusCommand.prototype.doCommand.call(this)
     }
     
-    description(): String {
+    description(): string {
         let result = ""
         result = "command: " + this.commandPhrase
         return result

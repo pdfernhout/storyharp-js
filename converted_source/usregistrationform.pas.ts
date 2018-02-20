@@ -12,8 +12,7 @@ let RegistrationForm: TRegistrationForm
 
 //* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 // Encode the data to be sent to the CGI                                     
-// Returns type: String
-function Encode(msg: String) {
+function Encode(msg: string): string {
     let result = ""
     let I: int
     
@@ -109,7 +108,7 @@ export class TRegistrationForm {
     OnlineRegistrationButtonClick(Sender: TObject): void {
         let DataIn: TMemoryStream
         let DataOut: TMemoryStream
-        let Buf: String
+        let Buf: string
         
         if (trim(this.UserNameEdit.Text) === "") {
             ShowMessage("You must enter your name first")

@@ -10,13 +10,13 @@ const QuickFillComboBox = QuickFillComboBox || {}
 // pdf added
 // pdf added
 // PDF PORT changed from "register" as there was a name conflict with grammar; won't be called anyway
-function RegisterIt() {
+function RegisterIt(): void {
     UNRESOLVED.RegisterComponents("Speech", {TQuickFillComboBox, })
 }
 
 
 export class TQuickFillComboBox {
-    lastMatch: String = ""
+    lastMatch: string = ""
     FMustBeInList: boolean = false
     FEntryRequired: boolean = false
     TQuickFillComboBox.prototype = new TCustomComboBox()
@@ -31,11 +31,11 @@ export class TQuickFillComboBox {
         i = 0
     }
     
-    findMatch(match: String): int {
+    findMatch(match: string): int {
         let result = 0
         let i: int
         let j: int
-        let test: String
+        let test: string
         let matches: boolean
         
         result = -1
@@ -64,7 +64,7 @@ export class TQuickFillComboBox {
     
     quickFillComboBoxKeyPress(Key: byte): void {
         let index: int
-        let startText: String
+        let startText: string
         let atEnd: boolean
         
         if (this.Text === "") {

@@ -55,7 +55,7 @@ export class TAboutForm {
         }
     }
     
-    showNameString(aName: String): void {
+    showNameString(aName: string): void {
         if (aName === "") {
             this.registeredToLabel.Caption = ""
         } else if (usdomain.domain.playerOnly) {

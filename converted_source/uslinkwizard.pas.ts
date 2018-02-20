@@ -154,8 +154,8 @@ export class TLinkWizardForm {
     }
     
     goNextClick(Sender: TObject): void {
-        let first: String
-        let second: String
+        let first: string
+        let second: string
         
         first = trim(this.firstContext())
         second = trim(this.secondContext())
@@ -217,7 +217,7 @@ export class TLinkWizardForm {
         this.ModalResult = mrCancel
     }
     
-    makeLink(firstContext: String, secondContext: String, command: String, reply: String): TSRule {
+    makeLink(firstContext: string, secondContext: string, command: string, reply: string): TSRule {
         let result = new TSRule()
         let dx: int
         let dy: int
@@ -257,7 +257,7 @@ export class TLinkWizardForm {
         return result
     }
     
-    firstContext(): String {
+    firstContext(): string {
         let result = ""
         result = ""
         if (this.FirstContextBox.ItemIndex >= 0) {
@@ -266,7 +266,7 @@ export class TLinkWizardForm {
         return result
     }
     
-    secondContext(): String {
+    secondContext(): string {
         let result = ""
         result = ""
         if (this.SecondContextBox.ItemIndex >= 0) {

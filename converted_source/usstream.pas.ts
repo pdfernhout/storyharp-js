@@ -5,10 +5,9 @@ import delphi_compatability
 
 const usstream = usstream || {}
 
-// Returns type: boolean
-function skipToProfileSection(fileStream: TextFile, section: String) {
+function skipToProfileSection(fileStream: TextFile, section: string): boolean {
     let result = false
-    let inputLine: String
+    let inputLine: string
     let stream: KfStringStream
     
     stream = KfStringStream.create
@@ -32,21 +31,21 @@ function skipToProfileSection(fileStream: TextFile, section: String) {
 
 
 export class KfStringStream {
-    source: String = ""
-    remainder: String = ""
-    separator: String = ""
+    source: string = ""
+    remainder: string = ""
+    separator: string = ""
     
-    createFromString(aString: String): void {
+    createFromString(aString: string): void {
         this.create
         this.onStringSeparator(aString, " ")
     }
     
-    onString(aString: String): void {
+    onString(aString: string): void {
         this.source = aString
         this.remainder = aString
     }
     
-    onStringSeparator(aString: String, aSeparator: String): void {
+    onStringSeparator(aString: string, aSeparator: string): void {
         this.source = aString
         this.remainder = aString
         this.separator = aSeparator
@@ -62,7 +61,7 @@ export class KfStringStream {
         }
     }
     
-    nextToken(): String {
+    nextToken(): string {
         let result = ""
         let location: long
         
@@ -80,7 +79,7 @@ export class KfStringStream {
     
     nextInteger(): long {
         let result = 0
-        let token: String
+        let token: string
         
         token = this.nextToken()
         result = StrToIntDef(token, 0)
@@ -89,7 +88,7 @@ export class KfStringStream {
     
     nextSingle(): float {
         let result = 0.0
-        let token: String
+        let token: string
         
         result = 0.0
         token = this.nextToken()
@@ -109,7 +108,7 @@ export class KfStringStream {
     }
     
     //return true if next few characters match string
-    match(aString: String): boolean {
+    match(aString: string): boolean {
         let result = false
         result = (UNRESOLVED.pos(aString, this.remainder) === 1)
         return result

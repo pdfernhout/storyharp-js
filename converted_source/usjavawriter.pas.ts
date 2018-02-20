@@ -11,11 +11,11 @@ const usjavawriter = usjavawriter || {}
 export class TSJavaWriter {
     javaFile: TextFile = new TextFile()
     
-    java(line: String): void {
+    java(line: string): void {
         writeln(this.javaFile, line)
     }
     
-    logicalStatementForRule(rule: TSRule): String {
+    logicalStatementForRule(rule: TSRule): string {
         let result = ""
         let i: int
         let wrapper: TSDesiredStateVariableWrapper
@@ -32,11 +32,11 @@ export class TSJavaWriter {
         return result
     }
     
-    writeChangesForRule(rule: TSRule): String {
+    writeChangesForRule(rule: TSRule): string {
         let result = ""
         let i: int
         let wrapper: TSDesiredStateVariableWrapper
-        let varies: String
+        let varies: string
         
         for (i = 0; i <= rule.changes.Count - 1; i++) {
             wrapper = usworld.TSDesiredStateVariableWrapper(rule.changes.Items[i])
@@ -54,7 +54,7 @@ export class TSJavaWriter {
         return result
     }
     
-    specialHandlingForReply(reply: String): String {
+    specialHandlingForReply(reply: string): string {
         let result = ""
         let i: int
         
@@ -71,7 +71,7 @@ export class TSJavaWriter {
     writeStoryFunctions(): void {
         let firstRule: TSRule
         let rule: TSRule
-        let varies: String
+        let varies: string
         let i: int
         
         firstRule = usworld.TSRule(usdomain.domain.world.rules[0])
@@ -140,9 +140,9 @@ export class TSJavaWriter {
         this.java("  }")
     }
     
-    writeJavaProgram(filename: String): void {
+    writeJavaProgram(filename: string): void {
         let javaTemplate: TextFile
-        let line: String
+        let line: string
         
         if ((usdomain.domain.world.rules.Count < 1) || (usdomain.domain.world.variables.Count < 1)) {
             ShowMessage("Some rules and contexts must be defined first")

@@ -48,7 +48,7 @@ export class TRegistrationForm {
     }
     
     registerMeClick(Sender: TObject): void {
-        let cr: String
+        let cr: string
         
         if (uregistersupport.RegistrationMatch(this.registrationNameEdit.Text, this.registrationCodeEdit.Text)) {
             this.registerMe.Hide()

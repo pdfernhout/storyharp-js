@@ -51,7 +51,7 @@ export class KfCommand {
         //could call inherited redo, but then watch out that do will be done too!
     }
     
-    description(): String {
+    description(): string {
         let result = ""
         result = "*command description*"
         return result
@@ -241,7 +241,7 @@ export class KfCommandList {
         return result
     }
     
-    undoDescription(): String {
+    undoDescription(): string {
         let result = ""
         if (this.lastDoneCommandIndex >= 0) {
             result = this.command(this.lastDoneCommandIndex).description()
@@ -251,7 +251,7 @@ export class KfCommandList {
         return result
     }
     
-    redoDescription(): String {
+    redoDescription(): string {
         let result = ""
         if (this.lastDoneCommandIndex < (this.commandList.Count - 1)) {
             result = this.command(this.lastDoneCommandIndex + 1).description()

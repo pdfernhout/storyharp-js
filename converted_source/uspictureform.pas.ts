@@ -12,8 +12,7 @@ let PictureForm: TPictureForm
 
 
 //$R *.DFM
-// Returns type: int
-function localIntMin(a: int, b: int) {
+function localIntMin(a: int, b: int): int {
     let result = 0
     result = a
     if (b < a) {
@@ -22,8 +21,7 @@ function localIntMin(a: int, b: int) {
     return result
 }
 
-// Returns type: int
-function localIntMax(a: int, b: int) {
+function localIntMax(a: int, b: int): int {
     let result = 0
     result = a
     if (b > a) {
@@ -72,7 +70,7 @@ export class TPictureForm {
         this.Caption = "StoryHarp Pictures - " + ExtractFileName(usdomain.domain.worldFileName)
     }
     
-    addPictureFromFile(aFileName: String, reply: String): void {
+    addPictureFromFile(aFileName: string, reply: string): void {
         if (!usdomain.domain.options.showPictures) {
             return
         }
@@ -90,7 +88,7 @@ export class TPictureForm {
     }
     
     loadSelectedPicture(): void {
-        let fileName: String
+        let fileName: string
         
         fileName = this.pictureNames.Strings[this.selectedPictureIndex]
         try {

@@ -17,12 +17,12 @@ interface RegisterStruct {
 const codeArraySize = 9
 
 
-function WriteCodeFile(userName: String, code: String, fileNameMaybeLeadingPipe: String) {
+function WriteCodeFile(userName: string, code: string, fileNameMaybeLeadingPipe: string): void {
     let success: int
     let CodeFile: TextFile
-    let tempFileName: String
-    let tempFilePath: String
-    let fileName: String
+    let tempFileName: string
+    let tempFilePath: string
+    let fileName: string
     let warningIfExists: boolean
     
     warningIfExists = true
@@ -74,8 +74,7 @@ function WriteCodeFile(userName: String, code: String, fileNameMaybeLeadingPipe:
     UNRESOLVED.Rename(CodeFile, fileName)
 }
 
-// Returns type: int
-function nextRandom(generator: RegisterStruct) {
+function nextRandom(generator: RegisterStruct): int {
     let result = 0
     let newValue: int
     
@@ -90,7 +89,7 @@ function nextRandom(generator: RegisterStruct) {
 }
 
 // only used to calculate initial seeds
-function WarmUp(generator: RegisterStruct) {
+function WarmUp(generator: RegisterStruct): void {
     let i: int
     
     for (i = 0; i <= 897; i++) {
@@ -99,7 +98,7 @@ function WarmUp(generator: RegisterStruct) {
     }
 }
 
-function ResetGenerator(generator: RegisterStruct) {
+function ResetGenerator(generator: RegisterStruct): void {
     // SH   37903 61164  59082  16777
     generator.s1 = 37903
     generator.s2 = 61164
@@ -108,18 +107,17 @@ function ResetGenerator(generator: RegisterStruct) {
 }
 
 // Maybe PS ??? 234    34432    4356   7
-// Returns type: String
-function generate(name: String) {
+function generate(name: string): string {
     let result = ""
     let i: int
     let j: int
     let n: int
     let nmod: int
     let letter: char
-    let reorganizedName: String
-    let remainingLetters: String
-    let nameWithOnlyChars: String
-    let lowerCaseName: String
+    let reorganizedName: string
+    let remainingLetters: string
+    let nameWithOnlyChars: string
+    let lowerCaseName: string
     let codeArray: int[] /* (codeArraySize - 1) + 1 */
     let generator: RegisterStruct
     
@@ -168,10 +166,10 @@ function generate(name: String) {
     return result
 }
 
-function GenerateFromCommandLine() {
-    let userName: String
-    let fileName: String
-    let code: String
+function GenerateFromCommandLine(): void {
+    let userName: string
+    let fileName: string
+    let code: string
     
     if (UNRESOLVED.ParamCount !== 2) {
         ShowMessage("Useage: " + ExtractFileName(delphi_compatability.Application.ExeName) + " \"user name\"  \"file name\"" + chr(13) + chr(13) + "The key code generator " + ExtractFileName(delphi_compatability.Application.ExeName) + " expects two arguments." + chr(13) + "The first is the user name, and the second is the name of a text file to store the code in." + chr(13) + "Arguments that can have embedded spaces like the user name" + chr(13) + "must be surrounded by double quotes." + chr(13) + chr(13) + "Example: " + ExtractFileName(delphi_compatability.Application.ExeName) + " \"Joe User\"  \"C:\temp\dir with spaces\regfile.txt\"" + chr(13) + chr(13) + "Contact us at http://www.kurtz-fernhout.com for details" + chr(13) + chr(13) + "This program operates under the expectation the output file does not exist." + chr(13) + "If for some reason the output file exists when the program is started" + chr(13) + "a warning dialog will pop-up requiring OK or Cancel to be pressed." + chr(13) + "(unless you have disabled that warning as explained on that dialog)." + chr(13) + chr(13) + "This program is Copyright 1998 Paul D. Fernhout and Cynthia F. Kurtz" + chr(13) + "This key generator is confidential intellectual property of the authors" + chr(13) + "and is intended only for use only by the Nelson Ford and his staff" + chr(13) + "at the Public Software Library (PsL) for generation of keys " + chr(13) + "for StoryHarp users who have paid a registration fee.")
@@ -183,10 +181,9 @@ function GenerateFromCommandLine() {
     WriteCodeFile(userName, code, fileName)
 }
 
-// Returns type: boolean
-function RegistrationMatch(name: String, code: String) {
+function RegistrationMatch(name: string, code: string): boolean {
     let result = false
-    let collapsedCode: String
+    let collapsedCode: string
     let i: int
     
     collapsedCode = ""

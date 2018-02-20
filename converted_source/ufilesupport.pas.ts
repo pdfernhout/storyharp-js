@@ -10,14 +10,14 @@ const ufilesupport = ufilesupport || {}
 // var
 let iniFileChanged: boolean
 let plantFileChanged: boolean
-let gVersionName: String
+let gVersionName: string
 
 
 // record
 interface SaveFileNamesStructure {
-    tempFile: String
-    newFile: String
-    backupFile: String
+    tempFile: string
+    newFile: string
+    backupFile: string
     writingWasSuccessful: boolean
 }
 
@@ -46,15 +46,14 @@ const kOtherExtNotOK = false
 
 
 // unfinished - maybe unneeded
-function startWaitMessage(waitMessage: String) {
+function startWaitMessage(waitMessage: string): void {
 }
 
-function stopWaitMessage() {
+function stopWaitMessage(): void {
 }
 
 // conversion
-// Returns type: String
-function boolToStr(value: boolean) {
+function boolToStr(value: boolean): string {
     let result = ""
     if (value) {
         result = "true"
@@ -64,8 +63,7 @@ function boolToStr(value: boolean) {
     return result
 }
 
-// Returns type: boolean
-function strToBool(booleanString: String) {
+function strToBool(booleanString: string): boolean {
     let result = false
     result = false
     if (booleanString === "") {
@@ -79,15 +77,13 @@ function strToBool(booleanString: String) {
     return result
 }
 
-// Returns type: String
-function rectToString(aRect: TRect) {
+function rectToString(aRect: TRect): string {
     let result = ""
     result = IntToStr(aRect.Left) + " " + IntToStr(aRect.Top) + " " + IntToStr(aRect.Right) + " " + IntToStr(aRect.Bottom)
     return result
 }
 
-// Returns type: TRect
-function stringToRect(aString: String) {
+function stringToRect(aString: string): TRect {
     let result = new TRect()
     let stream: KfStringStream
     
@@ -105,15 +101,13 @@ function stringToRect(aString: String) {
     return result
 }
 
-// Returns type: String
-function pointToString(aPoint: TPoint) {
+function pointToString(aPoint: TPoint): string {
     let result = ""
     result = IntToStr(aPoint.X) + "  " + IntToStr(aPoint.Y)
     return result
 }
 
-// Returns type: TPoint
-function stringToPoint(aString: String) {
+function stringToPoint(aString: string): TPoint {
     let result = new TPoint()
     let stream: KfStringStream
     
@@ -131,8 +125,7 @@ function stringToPoint(aString: String) {
 
 // file i/o 
 // ---------------------------------------------------------------------------- file i/o 
-// Returns type: String
-function makeFileNameFrom(aString: String) {
+function makeFileNameFrom(aString: string): string {
     let result = ""
     let done: boolean
     let spacePos: short
@@ -149,8 +142,7 @@ function makeFileNameFrom(aString: String) {
     return result
 }
 
-// Returns type: String
-function nameStringForFileType(fileType: short) {
+function nameStringForFileType(fileType: short): string {
     let result = ""
     switch (fileType) {
         case kFileTypeAny:
@@ -198,8 +190,7 @@ function nameStringForFileType(fileType: short) {
     return result
 }
 
-// Returns type: String
-function extensionForFileType(fileType: short) {
+function extensionForFileType(fileType: short): string {
     let result = ""
     result = ""
     switch (fileType) {
@@ -248,10 +239,9 @@ function extensionForFileType(fileType: short) {
     return result
 }
 
-// Returns type: String
-function filterStringForFileType(fileType: short) {
+function filterStringForFileType(fileType: short): string {
     let result = ""
-    let extension: String
+    let extension: string
     
     extension = extensionForFileType(fileType)
     if (fileType === kFileTypeAny) {
@@ -262,12 +252,11 @@ function filterStringForFileType(fileType: short) {
     return result
 }
 
-// Returns type: String
-function getFileOpenInfo(fileType: short, suggestedFile: String, aTitle: String, allowOtherExtensions: boolean) {
+function getFileOpenInfo(fileType: short, suggestedFile: string, aTitle: string, allowOtherExtensions: boolean): string {
     let result = ""
-    let fullSuggestedFileName: String
+    let fullSuggestedFileName: string
     let openDialog: TOpenDialog
-    let nameString: String
+    let nameString: string
     
     result = ""
     openDialog = delphi_compatability.TOpenDialog().Create(delphi_compatability.Application)
@@ -307,10 +296,9 @@ function getFileOpenInfo(fileType: short, suggestedFile: String, aTitle: String,
     return result
 }
 
-// Returns type: boolean
-function fileNameIsOkayForSaving(suggestedFile: String) {
+function fileNameIsOkayForSaving(suggestedFile: string): boolean {
     let result = false
-    let fullSuggestedFileName: String
+    let fullSuggestedFileName: string
     
     result = false
     if (len(suggestedFile) === 0) {
@@ -332,15 +320,14 @@ function fileNameIsOkayForSaving(suggestedFile: String) {
     return result
 }
 
-// Returns type: boolean
-function getFileSaveInfo(fileType: short, askForFileName: boolean, suggestedFile: String, fileInfo: SaveFileNamesStructure) {
+function getFileSaveInfo(fileType: short, askForFileName: boolean, suggestedFile: string, fileInfo: SaveFileNamesStructure): boolean {
     let result = false
     let saveDialog: TSaveDialog
-    let tryBackupName: String
-    let tryTempName: String
-    let fullSuggestedFileName: String
-    let prompt: String
-    let extension: String
+    let tryBackupName: string
+    let tryTempName: string
+    let fullSuggestedFileName: string
+    let prompt: string
+    let extension: string
     let index: short
     let tempFileHandle: long
     
@@ -435,18 +422,17 @@ function getFileSaveInfo(fileType: short, askForFileName: boolean, suggestedFile
     return result
 }
 
-function startFileSave(fileInfo: SaveFileNamesStructure) {
+function startFileSave(fileInfo: SaveFileNamesStructure): void {
     ucursor.cursor_startWait()
     startWaitMessage("Saving " + ExtractFileName(fileInfo.newFile) + "...")
 }
 
-// Returns type: boolean
-function cleanUpAfterFileSave(fileInfo: SaveFileNamesStructure) {
+function cleanUpAfterFileSave(fileInfo: SaveFileNamesStructure): boolean {
     let result = false
     let useBackup: boolean
     let renamingFailed: boolean
     let deletingFailed: boolean
-    let prompt: String
+    let prompt: string
     
     result = false
     ucursor.cursor_stopWait()

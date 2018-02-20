@@ -15,11 +15,11 @@ const usdomain = usdomain || {}
 // files
 // record
 interface DomainOptionsStructure {
-    extraMediaDirectory: String
-    logFileName: String
-    agentCharacterFileName: String
-    mostRecentSession: String
-    mostRecentWorld: String
+    extraMediaDirectory: string
+    logFileName: string
+    agentCharacterFileName: string
+    mostRecentSession: string
+    mostRecentWorld: string
     playerSpeak: boolean
     playerPlaySounds: boolean
     playerPlayMusic: boolean
@@ -31,16 +31,16 @@ interface DomainOptionsStructure {
     showVariables: boolean
     updateEditorAfterCommandDone: boolean
     playerFontSize: short
-    playerFontName: String
+    playerFontName: string
     suppressAgentNotPresentWarning: boolean
     selectedItemColor: TColor
     selectedTextColor: TColor
     commandTextColorInMap: TColor
     showCommandsInMap: boolean
     showCommandPrefixInMap: boolean
-    tableFontName: String
-    mapFontName: String
-    browserFontName: String
+    tableFontName: string
+    mapFontName: string
+    browserFontName: string
     tableFontSize: short
     mapFontSize: short
     browserFontSize: short
@@ -93,8 +93,7 @@ const kWorldExtension = "wld"
 const kSessionExtension = "ses"
 
 
-// Returns type: float
-function min(a: float, b: float) {
+function min(a: float, b: float): float {
     let result = 0.0
     if ((a < b)) {
         result = a
@@ -104,8 +103,7 @@ function min(a: float, b: float) {
     return result
 }
 
-// Returns type: float
-function max(a: float, b: float) {
+function max(a: float, b: float): float {
     let result = 0.0
     if ((a > b)) {
         result = a
@@ -115,8 +113,7 @@ function max(a: float, b: float) {
     return result
 }
 
-// Returns type: String
-function hexEncode(aString: String) {
+function hexEncode(aString: string): string {
     let result = ""
     let i: int
     let letter: char
@@ -131,8 +128,7 @@ function hexEncode(aString: String) {
     return result
 }
 
-// Returns type: String
-function hexUnencode(encodedString: String) {
+function hexUnencode(encodedString: string): string {
     let result = ""
     let i: int
     let letter: char
@@ -161,20 +157,20 @@ export class TSDomain {
     world: TWorld = new TWorld()
     sessionCommandList: TSCommandList = new TSCommandList()
     worldCommandList: TSCommandList = new TSCommandList()
-    sessionFileName: String = ""
-    worldFileName: String = ""
+    sessionFileName: string = ""
+    worldFileName: string = ""
     sessionChangeCount: int = 0
     worldChangeCount: int = 0
     isWorldFileLoaded: boolean = false
     mapView: TSMapView = new TSMapView()
     changeLock: int = 0
     options: DomainOptionsStructure = new DomainOptionsStructure()
-    iniFileName: String = ""
-    sessionOrWorldStartupFileName: String = ""
+    iniFileName: string = ""
+    sessionOrWorldStartupFileName: string = ""
     playerOnly: boolean = false
     useIniFile: boolean = false
-    registrationName: String = ""
-    registrationCode: String = ""
+    registrationName: string = ""
+    registrationCode: string = ""
     registered: boolean = false
     startTimeThisSession: TDateTime = new TDateTime()
     accumulatedUnregisteredTime: TDateTime = new TDateTime()
@@ -299,7 +295,7 @@ export class TSDomain {
     }
     
     storeProfileInformation(): void {
-        let section: String
+        let section: string
         let iniFile: TIniFile
         let saveNumber: float
         
@@ -378,9 +374,9 @@ export class TSDomain {
     }
     
     getProfileInformation(): void {
-        let section: String
+        let section: string
         let iniFile: TIniFile
-        let timeString: String
+        let timeString: string
         let readNumber: float
         
         iniFile = UNRESOLVED.TIniFile.create(this.iniFileName)
@@ -506,7 +502,7 @@ export class TSDomain {
         this.options.pictureWindowRect = Rect(200, 200, 200, 200)
     }
     
-    windowsDirectory(): String {
+    windowsDirectory(): string {
         let result = ""
         let cString: char[] /* 255 + 1 */
         
@@ -516,7 +512,7 @@ export class TSDomain {
         return result
     }
     
-    loadIni(section: String, theField: String, theDefault: String): String {
+    loadIni(section: string, theField: string, theDefault: string): string {
         let result = ""
         let iniFile: TIniFile
         
@@ -563,7 +559,7 @@ export class TSDomain {
         this.world.newSession()
     }
     
-    loadSession(fileName: String): void {
+    loadSession(fileName: string): void {
         this.sessionCommandList.clear()
         this.sessionFileName = fileName
         this.sessionChangeCount = 0
@@ -573,7 +569,7 @@ export class TSDomain {
         }
     }
     
-    saveSession(fileName: String): void {
+    saveSession(fileName: string): void {
         this.world.saveSessionToFile(fileName, ExtractFileName(this.worldFileName))
         this.options.mostRecentWorld = this.worldFileName
     }
@@ -584,7 +580,7 @@ export class TSDomain {
         return result
     }
     
-    loadWorld(fileName: String): void {
+    loadWorld(fileName: string): void {
         this.sessionCommandList.clear()
         this.sessionFileName = kUnsavedSessionFileName + "." + kSessionExtension
         this.sessionChangeCount = 0
@@ -603,13 +599,13 @@ export class TSDomain {
         }
     }
     
-    mergeWorld(fileName: String): void {
+    mergeWorld(fileName: string): void {
         // don't clear things
         this.world.loadWorldFromFile(fileName)
         this.worldChangeCount += 1
     }
     
-    saveWorld(fileName: String): void {
+    saveWorld(fileName: string): void {
         this.world.saveWorldToFile(fileName, usworld.kSaveAllRules)
     }
     

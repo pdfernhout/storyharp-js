@@ -27,8 +27,7 @@ const kIconSize = 16
 
 
 //$R *.DFM
-// Returns type: int
-function localIntMin(a: int, b: int) {
+function localIntMin(a: int, b: int): int {
     let result = 0
     result = a
     if (b < a) {
@@ -37,8 +36,7 @@ function localIntMin(a: int, b: int) {
     return result
 }
 
-// Returns type: int
-function localIntMax(a: int, b: int) {
+function localIntMax(a: int, b: int): int {
     let result = 0
     result = a
     if (b > a) {
@@ -47,17 +45,17 @@ function localIntMax(a: int, b: int) {
     return result
 }
 
-function drawRectangle(canvas: TCanvas, rectangle: TRect) {
+function drawRectangle(canvas: TCanvas, rectangle: TRect): void {
     canvas.Brush.Style = delphi_compatability.TFPBrushStyle.bsClear
     canvas.Pen.Color = delphi_compatability.clGray
     canvas.Rectangle(rectangle.Left, rectangle.Top, rectangle.Right + 1, rectangle.Bottom + 1)
 }
 
-function drawGraphicCentered(graphic: TGraphic, canvas: TCanvas, rectangle: TRect) {
+function drawGraphicCentered(graphic: TGraphic, canvas: TCanvas, rectangle: TRect): void {
     canvas.Draw(rectangle.Left + (rectangle.Right - rectangle.Left) / 2 - graphic.Width / 2, rectangle.Top + (rectangle.Bottom - rectangle.Top) / 2 - graphic.Height / 2, graphic)
 }
 
-function carveOffRect(bigRect: TRect, littleRect: TRect, width: int, fromRight: boolean) {
+function carveOffRect(bigRect: TRect, littleRect: TRect, width: int, fromRight: boolean): void {
     raise "method carveOffRect had assigned to var parameter littleRect not added to return -- fixup manually"
     littleRect = bigRect
     if (fromRight) {
@@ -247,7 +245,7 @@ export class TConsoleForm {
     }
     
     VisibleCommandsListClick(Sender: TObject): void {
-        let theCommand: String
+        let theCommand: string
         
         if (this.VisibleCommandsList.ItemIndex < 0) {
             return
@@ -304,7 +302,7 @@ export class TConsoleForm {
         uspictureform.PictureForm.clearPictures()
     }
     
-    addLineToTranscript(text: String, newColor: TColor): void {
+    addLineToTranscript(text: string, newColor: TColor): void {
         this.TranscriptEdit.selStart = len(this.TranscriptEdit.Text)
         //FIX unresolved WITH expression: self.TranscriptEdit.SelAttributes
         this.Color = newColor
@@ -419,7 +417,7 @@ export class TConsoleForm {
         }
     }
     
-    reportMode(status: String): void {
+    reportMode(status: string): void {
         this.StatusBar.Panels[0].Text = status
         this.StatusBar.refresh
     }
@@ -480,7 +478,7 @@ export class TConsoleForm {
     
     // ---------------------- FILE MENU -------------------------
     MenuFileOpenSessionClick(Sender: TObject): void {
-        let fileNameWithPath: String
+        let fileNameWithPath: string
         
         if (!this.askForSaveSessionAndProceed()) {
             return
@@ -497,7 +495,7 @@ export class TConsoleForm {
     }
     
     MenuFileOpenWorldClick(Sender: TObject): void {
-        let fileNameWithPath: String
+        let fileNameWithPath: string
         
         if (!this.askForSaveSessionAndProceed()) {
             return
@@ -536,8 +534,8 @@ export class TConsoleForm {
         }
     }
     
-    openSessionOrWorldFile(fileNameWithPath: String): void {
-        let extension: String
+    openSessionOrWorldFile(fileNameWithPath: string): void {
+        let extension: string
         
         extension = ExtractFileExt(fileNameWithPath)
         if (uppercase(extension) === "." + uppercase(usdomain.kWorldExtension)) {
@@ -705,7 +703,7 @@ export class TConsoleForm {
     }
     
     MenuEditCopyClick(Sender: TObject): void {
-        let clip: String
+        let clip: string
         
         clip = this.TranscriptEdit.selText
         UNRESOLVED.Clipboard.setTextBuf(clip)
@@ -891,7 +889,7 @@ export class TConsoleForm {
     updateVariables(): void {
         let i: int
         let variable: TSVariable
-        let oldTop: String
+        let oldTop: string
         let oldTopIndex: int
         
         oldTop = ""
@@ -939,7 +937,7 @@ export class TConsoleForm {
         let stateRect: TRect
         let stringRect: TRect
         let variable: TSVariable
-        let displayString: String
+        let displayString: string
         
         if (delphi_compatability.Application.terminated) {
             return
@@ -1178,7 +1176,7 @@ export class TConsoleForm {
     }
     
     MenuSettingsCharacterClick(Sender: TObject): void {
-        let fileNameWithPath: String
+        let fileNameWithPath: string
         
         fileNameWithPath = ufilesupport.getFileOpenInfo(ufilesupport.kFileTypeAgentCharacter, usdomain.kDefaultAgentCharacterFileName, "Choose a Microsoft Agent character file", ufilesupport.kOtherExtNotOK)
         if (fileNameWithPath === "") {

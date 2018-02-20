@@ -10,7 +10,7 @@ const uschangelog = uschangelog || {}
 let ChangeLogForm: TChangeLogForm
 
 
-function makeBackupCopy(fileFrom: String, fileTo: String) {
+function makeBackupCopy(fileFrom: string, fileTo: string): void {
     let fileFromCString: char[] /* 255 + 1 */
     let fileToCString: char[] /* 255 + 1 */
     
@@ -53,7 +53,7 @@ export class TChangeLogForm {
         }
     }
     
-    addToLog(change: String): void {
+    addToLog(change: string): void {
         let LogFile: TextFile
         
         if (trim(change) === "") {
@@ -149,7 +149,7 @@ export class TChangeLogForm {
     }
     
     clearLogFileClick(Sender: TObject): void {
-        let backupLogFileName: String
+        let backupLogFileName: string
         
         if (MessageDialog("Are you sure you want to clear the log file?" + chr(13) + "This is not undoable, but a backup file will be made.", mtConfirmation, {mbYes, mbNo, }, 0) === delphi_compatability.IDNO) {
             return
@@ -160,7 +160,7 @@ export class TChangeLogForm {
     }
     
     changeLogFileClick(Sender: TObject): void {
-        let backupLogFileName: String
+        let backupLogFileName: string
         
         this.OpenDialog.Title = "Choose or type in a new log file name"
         this.OpenDialog.FileName = usdomain.domain.options.logFileName
@@ -244,7 +244,7 @@ export class TChangeLogForm {
     }
     
     GetOSInfo(): void {
-        let Platform: String
+        let Platform: string
         let BuildNumber: int
         
         switch (UNRESOLVED.Win32Platform) {

@@ -82,7 +82,7 @@ export class TCommandWizardForm {
     Label25: TLabel = new TLabel()
     Label27: TLabel = new TLabel()
     newCommandsForContextLabel: TLabel = new TLabel()
-    lastFloodedContextPrefix: String = ""
+    lastFloodedContextPrefix: string = ""
     generated: boolean = false
     TCommandWizardForm.prototype = new TForm()
     TCommandWizardForm.prototype.constructor = TCommandWizardForm
@@ -184,20 +184,20 @@ export class TCommandWizardForm {
     
     generateRules(): void {
         let stream: TStringStream
-        let line: String
-        let previousContext: String
-        let commandPhrase: String
-        let commandResponse: String
-        let character: String
+        let line: string
+        let previousContext: string
+        let commandPhrase: string
+        let commandResponse: string
+        let character: string
         let pipeRead: boolean
         let newRule: TSRule
         let position: TPoint
         let index: int
         let newRulesCommand: TSNewRulesCommand
-        let context: String
-        let requirements: String
-        let changes: String
-        let prefix: String
+        let context: string
+        let requirements: string
+        let changes: string
+        let prefix: string
         
         uschangelog.ChangeLogForm.addToLog(this.NewCommandsMemo.Text)
         position = usruleeditorform.RuleEditorForm.goodPosition()

@@ -22,22 +22,22 @@ let waitState: int
 
 
 //$R CURSOR32
-function cursor_initializeWait() {
+function cursor_initializeWait(): void {
     waitState = 0
 }
 
-function cursor_startWait() {
+function cursor_startWait(): void {
     waitState += 1
     delphi_compatability.Screen.Cursor = delphi_compatability.crHourGlass
 }
 
-function cursor_startWaitIfNotWaiting() {
+function cursor_startWaitIfNotWaiting(): void {
     if (waitState === 0) {
         cursor_startWait()
     }
 }
 
-function cursor_stopWait() {
+function cursor_stopWait(): void {
     if (waitState > 0) {
         waitState -= 1
         if (waitState === 0) {
@@ -48,7 +48,7 @@ function cursor_stopWait() {
 
 //Note:	You don't need to call the WinAPI function DestroyCursor when you are finished using the custom
 //cursor; Delphi does this automatically. 
-function cursor_loadCustomCursors() {
+function cursor_loadCustomCursors(): void {
     delphi_compatability.Screen.Cursors[crMagMinus] = UNRESOLVED.LoadCursor(UNRESOLVED.HInstance, "MAGMINUS")
     delphi_compatability.Screen.Cursors[crMagPlus] = UNRESOLVED.LoadCursor(UNRESOLVED.HInstance, "MAGPLUS")
     delphi_compatability.Screen.Cursors[crScroll] = UNRESOLVED.LoadCursor(UNRESOLVED.HInstance, "SCROLL")

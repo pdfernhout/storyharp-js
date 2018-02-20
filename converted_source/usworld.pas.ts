@@ -29,8 +29,7 @@ const kRuleChanges = 5
 const kLastRuleField = 5
 
 
-// Returns type: String
-function findCompleteWorldFileName(worldFileNameRead: String) {
+function findCompleteWorldFileName(worldFileNameRead: string): string {
     let result = ""
     if (!FileExists(worldFileNameRead)) {
         result = ufilesupport.getFileOpenInfo(ufilesupport.kFileTypeWorld, worldFileNameRead, "Search for world file: " + worldFileNameRead, ufilesupport.kOtherExtNotOK)
@@ -40,7 +39,7 @@ function findCompleteWorldFileName(worldFileNameRead: String) {
     return result
 }
 
-function swapIntegers(a: int, b: int) {
+function swapIntegers(a: int, b: int): void {
     let temp: int
     
     temp = a
@@ -57,15 +56,15 @@ export class TSDraggableObject {
     
     // need to be sequence from zero
     //////////////////// TObjectWithPosition ///////////////////////
-    displayName(): String {
+    displayName(): string {
         let result = ""
         result = "Error - override needed"
         return result
     }
     
-    setPosition(value: String): void {
-        let firstNumber: String
-        let secondNumber: String
+    setPosition(value: string): void {
+        let firstNumber: string
+        let secondNumber: string
         
         firstNumber = UNRESOLVED.Copy(value, 1, UNRESOLVED.pos(",", value) - 1)
         secondNumber = UNRESOLVED.Copy(value, len(firstNumber) + 2, len(value))
@@ -126,7 +125,7 @@ export class TSDragRecord {
 
 export class TSVariable {
     world: TWorld = new TWorld()
-    phrase: String = ""
+    phrase: string = ""
     state: TSVariableState = new TSVariableState()
     contextUseages: int = 0
     requirementsUseages: int = 0
@@ -139,13 +138,13 @@ export class TSVariable {
     
     // for java creation
     //////////////////// TSVariable ///////////////////////
-    displayName(): String {
+    displayName(): string {
         let result = ""
         result = this.phrase
         return result
     }
     
-    setPhrase(aPhrase: String): void {
+    setPhrase(aPhrase: string): void {
         this.phrase = aPhrase
     }
     
@@ -209,7 +208,7 @@ export class TSDesiredStateVariableWrapper {
     desiredState: TSVariableState = new TSVariableState()
     
     /////////////////////////// TSDesiredStateVariableWrapperleader /////////////////////////////////////
-    leader(): String {
+    leader(): string {
         let result = ""
         if (this.desiredState === TSVariableState.kAbsent) {
             result = "~"
@@ -219,7 +218,7 @@ export class TSDesiredStateVariableWrapper {
         return result
     }
     
-    displayLeader(): String {
+    displayLeader(): string {
         let result = ""
         if (this.desiredState === TSVariableState.kAbsent) {
             result = "~"
@@ -237,7 +236,7 @@ export class TSDesiredStateVariableWrapper {
         }
     }
     
-    displayString(): String {
+    displayString(): string {
         let result = ""
         result = this.displayLeader() + this.variable.phrase
         return result
@@ -273,18 +272,18 @@ export class TSRule {
     context: TSVariable = new TSVariable()
     requirements: TList = new TList()
     command: TSVariable = new TSVariable()
-    reply: String = ""
+    reply: string = ""
     move: TSVariable = new TSVariable()
     changes: TList = new TList()
     available: boolean = false
-    requirementsString: String = ""
-    changesString: String = ""
+    requirementsString: string = ""
+    changesString: string = ""
     useagesRemoved: boolean = false
     TSRule.prototype = new TSDraggableObject()
     TSRule.prototype.constructor = TSRule
     
     //////////////////// TSRule ////////////////////////
-    displayName(): String {
+    displayName(): string {
         let result = ""
         result = ""
         if (usdomain.domain.options.showCommandPrefixInMap) {
@@ -373,7 +372,7 @@ export class TSRule {
         TSDraggableObject.prototype.destroy.call(this)
     }
     
-    setContext(aString: String): void {
+    setContext(aString: string): void {
         if (this.context !== null) {
             this.context.contextUseages -= 1
         }
@@ -381,7 +380,7 @@ export class TSRule {
         this.context.contextUseages += 1
     }
     
-    setRequirements(aString: String): void {
+    setRequirements(aString: string): void {
         let i: int
         
         this.requirementsString = aString
@@ -400,7 +399,7 @@ export class TSRule {
         }
     }
     
-    setCommand(aString: String): void {
+    setCommand(aString: string): void {
         if (this.command !== null) {
             this.command.commandUseages -= 1
         }
@@ -408,9 +407,9 @@ export class TSRule {
         this.command.commandUseages += 1
     }
     
-    setReply(aString: String): void {
+    setReply(aString: string): void {
         let i: int
-        let safeString: String
+        let safeString: string
         
         safeString = aString
         for (i = 1; i <= len(safeString); i++) {
@@ -424,7 +423,7 @@ export class TSRule {
         this.reply = safeString
     }
     
-    setMove(aString: String): void {
+    setMove(aString: string): void {
         if (this.move !== null) {
             this.move.moveUseages -= 1
         }
@@ -432,7 +431,7 @@ export class TSRule {
         this.move.moveUseages += 1
     }
     
-    setChanges(aString: String): void {
+    setChanges(aString: string): void {
         let i: int
         
         this.changesString = aString
@@ -451,10 +450,10 @@ export class TSRule {
         }
     }
     
-    compile(aString: String, list: TList): void {
-        let phrase: String
+    compile(aString: string, list: TList): void {
+        let phrase: string
         let position: int
-        let remaining: String
+        let remaining: string
         let variable: TSVariable
         let desiredState: TSVariableState
         let wrapper: TSDesiredStateVariableWrapper
@@ -494,11 +493,11 @@ export class TSRule {
         }
     }
     
-    decompile(list: TList): String {
+    decompile(list: TList): string {
         let result = ""
         let i: int
         let wrapper: TSDesiredStateVariableWrapper
-        let item: String
+        let item: string
         
         result = ""
         for (i = 0; i <= list.Count - 1; i++) {
@@ -514,13 +513,13 @@ export class TSRule {
         return result
     }
     
-    decompileRequirements(): String {
+    decompileRequirements(): string {
         let result = ""
         result = this.decompile(this.requirements)
         return result
     }
     
-    decompileChanges(): String {
+    decompileChanges(): string {
         let result = ""
         result = this.decompile(this.changes)
         return result
@@ -550,7 +549,7 @@ export class TSRule {
         this.available = true
     }
     
-    recordReplyMoveChanges(changedVariablesList: TList, totalReply: String, contextToFocusTo: TSVariable): void {
+    recordReplyMoveChanges(changedVariablesList: TList, totalReply: string, contextToFocusTo: TSVariable): void {
         raise "method recordReplyMoveChanges had assigned to var parameter contextToFocusTo not added to return -- fixup manually"
         let i: int
         let desiredStateWrapper: TSDesiredStateVariableWrapper
@@ -573,7 +572,7 @@ export class TSRule {
         return totalReply
     }
     
-    setTextForField(col: int, text: String): void {
+    setTextForField(col: int, text: string): void {
         switch (col) {
             case kRuleContext:
                 this.setContext(text)
@@ -595,7 +594,7 @@ export class TSRule {
                 break
     }
     
-    getTextForField(col: int): String {
+    getTextForField(col: int): string {
         let result = ""
         switch (col) {
             case kRuleContext:
@@ -619,7 +618,7 @@ export class TSRule {
         return result
     }
     
-    headerForField(col: int): String {
+    headerForField(col: int): string {
         let result = ""
         switch (col) {
             case kRuleContext:
@@ -733,11 +732,11 @@ export class TSRule {
         return result
     }
     
-    setPosition(value: String): void {
-        let firstPart: String
-        let secondPart: String
-        let thirdPart: String
-        let rest: String
+    setPosition(value: string): void {
+        let firstPart: string
+        let secondPart: string
+        let thirdPart: string
+        let rest: string
         
         firstPart = UNRESOLVED.Copy(value, 1, UNRESOLVED.pos("|", value) - 1)
         rest = UNRESOLVED.Copy(value, len(firstPart) + 2, len(value))
@@ -793,7 +792,7 @@ export class TWorld {
     focus: TSVariable = new TSVariable()
     previousFocus: TSVariable = new TSVariable()
     firstCommandDoneForLastCommandPhrase: int = 0
-    lastVariableCreated: String = ""
+    lastVariableCreated: string = ""
     
     //////////////////// TWorld ///////////////////////////
     Create(): void {
@@ -860,7 +859,7 @@ export class TWorld {
         return result
     }
     
-    findVariable(aString: String): TSVariable {
+    findVariable(aString: string): TSVariable {
         let result = new TSVariable()
         let i: int
         
@@ -884,7 +883,7 @@ export class TWorld {
         return result
     }
     
-    findOrCreateVariable(aString: String, madeByMacro: boolean): TSVariable {
+    findOrCreateVariable(aString: string, madeByMacro: boolean): TSVariable {
         let result = new TSVariable()
         result = this.findVariable(trim(aString))
         if (result !== null) {
@@ -921,13 +920,13 @@ export class TWorld {
         this.previousFocus = null
     }
     
-    loadWorldFromFile(name: String): boolean {
+    loadWorldFromFile(name: string): boolean {
         let result = false
         let WorldFile: TextFile
-        let value: String
+        let value: string
         let rule: TSRule
         let count: int
-        let header: String
+        let header: string
         
         result = false
         usconsoleform.ConsoleForm.reportMode("Loading")
@@ -993,7 +992,7 @@ export class TWorld {
         return result
     }
     
-    saveWorldToFile(name: String, saveOnlySelectedRules: boolean): void {
+    saveWorldToFile(name: string, saveOnlySelectedRules: boolean): void {
         let i: int
         let WorldFile: TextFile
         let rule: TSRule
@@ -1036,16 +1035,16 @@ export class TWorld {
         this.setInitialFocus()
     }
     
-    loadSessionFromFile(name: String, worldFileName: String): boolean {
+    loadSessionFromFile(name: string, worldFileName: string): boolean {
         let result = false
         let SessionFile: TextFile
         let variable: TSVariable
-        let header: String
-        let worldFileNameRead: String
-        let variableNameRead: String
-        let focusNameRead: String
-        let previousFocusNameRead: String
-        let completeWorldFileName: String
+        let header: string
+        let worldFileNameRead: string
+        let variableNameRead: string
+        let focusNameRead: string
+        let previousFocusNameRead: string
+        let completeWorldFileName: string
         
         result = false
         AssignFile(SessionFile, name)
@@ -1099,7 +1098,7 @@ export class TWorld {
         return result
     }
     
-    saveSessionToFile(name: String, worldFileName: String): void {
+    saveSessionToFile(name: string, worldFileName: string): void {
         let i: int
         let SessionFile: TextFile
         let variable: TSVariable

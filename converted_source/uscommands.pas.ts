@@ -35,13 +35,13 @@ const uscommands = uscommands || {}
 export class TSRuleFieldChange {
     rule: TSRule = new TSRule()
     field: int = 0
-    oldValue: String = ""
-    newValue: String = ""
+    oldValue: string = ""
+    newValue: string = ""
     TSRuleFieldChange.prototype = new KfCommand()
     TSRuleFieldChange.prototype.constructor = TSRuleFieldChange
     
     // TSRuleFieldChange ------------------------------------------
-    createWithRule(rule: TSRule, field: int, newValue: String): void {
+    createWithRule(rule: TSRule, field: int, newValue: string): void {
         this.create()
         this.rule = rule
         this.field = field
@@ -98,7 +98,7 @@ export class TSRuleFieldChange {
         KfCommand.prototype.doCommand.call(this)
     }
     
-    description(): String {
+    description(): string {
         let result = ""
         //  result := 'rule ' + IntToStr(domain.world.rules.indexOf(rule) + 1) + ' change of ' + TSRule.headerForField(field);
         result = "Change " + usworld.TSRule.headerForField(this.field) + " For Rule " + IntToStr(usdomain.domain.world.rules.IndexOf(this.rule) + 1)
@@ -109,7 +109,7 @@ export class TSRuleFieldChange {
 
 export class TSNewRulesCommand {
     rules: TList = new TList()
-    creator: String = ""
+    creator: string = ""
     TSNewRulesCommand.prototype = new KfCommand()
     TSNewRulesCommand.prototype.constructor = TSNewRulesCommand
     
@@ -178,7 +178,7 @@ export class TSNewRulesCommand {
         //  RuleEditorForm.editRule(rules[rules.count - 1]);
     }
     
-    description(): String {
+    description(): string {
         let result = ""
         if (this.rules.Count > 1) {
             result = "new rules"
@@ -286,7 +286,7 @@ export class TSDeleteRulesCommand {
         usruleeditorform.RuleEditorForm.updateForRuleChange()
     }
     
-    description(): String {
+    description(): string {
         let result = ""
         if (this.ruleWrappers.Count > 1) {
             result = "delete rules"
@@ -302,7 +302,7 @@ export class TSDeleteRulesCommand {
 
 export class TSMoveRulesCommand {
     ruleWrappers: TList = new TList()
-    action: String = ""
+    action: string = ""
     TSMoveRulesCommand.prototype = new KfCommand()
     TSMoveRulesCommand.prototype.constructor = TSMoveRulesCommand
     
@@ -390,7 +390,7 @@ export class TSMoveRulesCommand {
         usruleeditorform.RuleEditorForm.updateRuleNumberLabel()
     }
     
-    description(): String {
+    description(): string {
         let result = ""
         if (this.ruleWrappers.Count > 1) {
             result = "rules"
@@ -473,7 +473,7 @@ export class TSMapDragCommand {
         KfCommand.prototype.doCommand.call(this)
     }
     
-    description(): String {
+    description(): string {
         let result = ""
         if (this.dragRecords.Count > 1) {
             result = "Drag nodes"
@@ -558,14 +558,14 @@ export class TSCommandList {
         return result
     }
     
-    doCommandPhrase(commandPhrase: String): TSDoCommandPhrase {
+    doCommandPhrase(commandPhrase: string): TSDoCommandPhrase {
         let result = new TSDoCommandPhrase()
         result = usvariablecommands.TSDoCommandPhrase().createWithCommandPhrase(commandPhrase)
         this.doCommand(result)
         return result
     }
     
-    ruleFieldChange(rule: TSRule, field: int, newValue: String): TSRuleFieldChange {
+    ruleFieldChange(rule: TSRule, field: int, newValue: string): TSRuleFieldChange {
         let result = new TSRuleFieldChange()
         let newContextOrMove: TSVariable
         

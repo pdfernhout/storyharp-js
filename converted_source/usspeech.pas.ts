@@ -36,8 +36,7 @@ const firstRiddleAnswer = "say an answer for a riddle"
 const agentName = "StoryHarp"
 
 
-// Returns type: String
-function joinSentences(firstSentence: String, secondSentence: String) {
+function joinSentences(firstSentence: string, secondSentence: string): string {
     let result = ""
     result = trim(firstSentence)
     if ((trim(secondSentence)) !== "") {
@@ -49,8 +48,7 @@ function joinSentences(firstSentence: String, secondSentence: String) {
     return result
 }
 
-// Returns type: String
-function findFileInDirectoryRecursive(fileName: String, searchDir: String) {
+function findFileInDirectoryRecursive(fileName: string, searchDir: string): string {
     let result = ""
     let searchRec: SysUtils.TSearchRec
     
@@ -72,10 +70,9 @@ function findFileInDirectoryRecursive(fileName: String, searchDir: String) {
     return result
 }
 
-// Returns type: String
-function getWindowsMediaDirectory() {
+function getWindowsMediaDirectory(): string {
     let result = ""
-    let windowsDirectory: String
+    let windowsDirectory: string
     
     result = ""
     UNRESOLVED.SetLength(windowsDirectory, UNRESOLVED.MAX_PATH + 3)
@@ -88,12 +85,11 @@ function getWindowsMediaDirectory() {
     return result
 }
 
-// Returns type: String
-function findFileRecursivelyInMediaDirectories(fileName: String, extraMediaDirectory: String) {
+function findFileRecursivelyInMediaDirectories(fileName: string, extraMediaDirectory: string): string {
     let result = ""
-    let worldFileDirectory: String
-    let exeDirectory: String
-    let windowsMediaDirectory: String
+    let worldFileDirectory: string
+    let exeDirectory: string
+    let windowsMediaDirectory: string
     
     // search in world file directory -- new sounds probably are where world is
     worldFileDirectory = ExtractFilePath(usdomain.domain.worldFileName)
@@ -134,7 +130,7 @@ function findFileRecursivelyInMediaDirectories(fileName: String, extraMediaDirec
 
 export class TSSpeechSystem {
     commandsListenedFor: TStringList = new TStringList()
-    lastSaidTextWithMacros: String = ""
+    lastSaidTextWithMacros: string = ""
     riddleIndex: int = 0
     usingSpeech: boolean = false
     agent: TAgent = new TAgent()
@@ -224,7 +220,7 @@ export class TSSpeechSystem {
         }
     }
     
-    loadAgentCharacter(fileName: String): void {
+    loadAgentCharacter(fileName: string): void {
         if ((!FileExists(fileName)) && (UNRESOLVED.pos(":", fileName) <= 0)) {
             fileName = ExtractFilePath(delphi_compatability.Application.exeName) + fileName
         }
@@ -279,7 +275,7 @@ export class TSSpeechSystem {
     }
     
     AgentCommand(Sender: TObject, UserInput: IDispatch): void {
-        let commandString: String
+        let commandString: string
         
         commandString = UNRESOLVED.IAgentCtlUserInput(UserInput).Voice
         if (commandString !== "") {
@@ -291,9 +287,9 @@ export class TSSpeechSystem {
         }
     }
     
-    doCommand(utterance: String): void {
-        let commandPhrase: String
-        let commandPhraseModified: String
+    doCommand(utterance: string): void {
+        let commandPhrase: string
+        let commandPhraseModified: string
         
         //command: TSDoCommandPhrase;
         this.haltSpeechAndSound()
@@ -354,8 +350,8 @@ export class TSSpeechSystem {
     }
     
     sayOptions(): void {
-        let thingsToSay: String
-        let thing: String
+        let thingsToSay: string
+        let thing: string
         let i: int
         
         this.riddleIndex = 1
@@ -387,11 +383,11 @@ export class TSSpeechSystem {
         this.speakText("You can say: " + thingsToSay + ".")
     }
     
-    stripMacros(aString: String): String {
+    stripMacros(aString: string): string {
         let result = ""
-        let remaining: String
-        let macro: String
-        let toSay: String
+        let remaining: string
+        let macro: string
+        let toSay: string
         let startPosition: int
         let endPosition: int
         let wholeLength: int
@@ -421,10 +417,10 @@ export class TSSpeechSystem {
         return result
     }
     
-    sayTextWithMacros(aString: String): void {
-        let remaining: String
-        let macro: String
-        let toSay: String
+    sayTextWithMacros(aString: string): void {
+        let remaining: string
+        let macro: string
+        let toSay: string
         let startPosition: int
         let endPosition: int
         let wholeLength: int
@@ -477,7 +473,7 @@ export class TSSpeechSystem {
         }
     }
     
-    speakText(somethingToSay: String): void {
+    speakText(somethingToSay: string): void {
         if (!this.usingSpeech) {
             return
         }
@@ -512,9 +508,9 @@ export class TSSpeechSystem {
         this.agent.Characters[agentName].StopAll("Play")
     }
     
-    speakSound(soundDesignation: String): void {
-        let soundFile: String
-        let soundFileWithPath: String
+    speakSound(soundDesignation: string): void {
+        let soundFile: string
+        let soundFileWithPath: string
         let music: boolean
         let musiconce: boolean
         
@@ -602,9 +598,9 @@ export class TSSpeechSystem {
         }
     }
     
-    showPicture(pictureName: String, reply: String): void {
-        let pictureFile: String
-        let pictureFileWithPath: String
+    showPicture(pictureName: string, reply: string): void {
+        let pictureFile: string
+        let pictureFileWithPath: string
         
         pictureFile = UNRESOLVED.Copy(pictureName, len("picture ") + 1, len(pictureName))
         pictureFile = trim(pictureFile)
@@ -633,7 +629,7 @@ export class TSSpeechSystem {
         this.agent.Characters[agentName].Commands.RemoveAll
     }
     
-    hideRiddleAnswerForCommand(aString: String): String {
+    hideRiddleAnswerForCommand(aString: string): string {
         let result = ""
         if (UNRESOLVED.Pos("$", aString) === 1) {
             if (this.riddleIndex === 1) {
@@ -650,7 +646,7 @@ export class TSSpeechSystem {
         return result
     }
     
-    listenForPhraseCaptionCommand(listenFor: String, commandCaption: String, command: String): void {
+    listenForPhraseCaptionCommand(listenFor: string, commandCaption: string, command: string): void {
         if ((listenFor === "") || (command === "") || (commandCaption === "")) {
             return
         }
@@ -660,9 +656,9 @@ export class TSSpeechSystem {
         this.commandsListenedFor.Add(command)
     }
     
-    listenForCommand(aString: String): void {
-        let listenFor: String
-        let commandCaption: String
+    listenForCommand(aString: string): void {
+        let listenFor: string
+        let commandCaption: string
         
         if ((this.commandsListenedFor.IndexOf(aString) === -1)) {
             commandCaption = this.hideRiddleAnswerForCommand(aString)
@@ -679,7 +675,7 @@ export class TSSpeechSystem {
     listenForAvailableCommands(): void {
         let rule: TSRule
         let i: int
-        let command: String
+        let command: string
         
         this.clearVoiceCommands()
         this.commandsListenedFor.Clear()

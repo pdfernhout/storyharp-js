@@ -45,8 +45,7 @@ const kSplitterHeight = 3
 
 //$R *.DFM
 // ----------------------------------------------------------- @Local functions
-// Returns type: int
-function localIntMin(a: int, b: int) {
+function localIntMin(a: int, b: int): int {
     let result = 0
     result = a
     if (b < a) {
@@ -55,8 +54,7 @@ function localIntMin(a: int, b: int) {
     return result
 }
 
-// Returns type: int
-function localIntMax(a: int, b: int) {
+function localIntMax(a: int, b: int): int {
     let result = 0
     result = a
     if (b > a) {
@@ -65,7 +63,7 @@ function localIntMax(a: int, b: int) {
     return result
 }
 
-function setCanvasColorsForSelection(canvas: TCanvas, selected: boolean, focused: boolean, isCommandInMap: boolean) {
+function setCanvasColorsForSelection(canvas: TCanvas, selected: boolean, focused: boolean, isCommandInMap: boolean): void {
     canvas.Brush.Color = delphi_compatability.clWindow
     canvas.Font.Color = UNRESOLVED.clWindowText
     canvas.Font.Style = {}
@@ -404,7 +402,7 @@ export class TRuleEditorForm {
     }
     
     MenuFileOpenWorldClick(Sender: TObject): void {
-        let fileNameWithPath: String
+        let fileNameWithPath: string
         
         this.commitChangesToRule()
         if (!this.askForSaveWorldAndProceed()) {
@@ -464,7 +462,7 @@ export class TRuleEditorForm {
     }
     
     //kludge for popup edits...
-    openWorldFile(fileNameWithPath: String): void {
+    openWorldFile(fileNameWithPath: string): void {
         try {
             ufilesupport.startWaitMessage("Opening " + ExtractFileName(fileNameWithPath))
             usdomain.domain.loadWorld(fileNameWithPath)
@@ -565,7 +563,7 @@ export class TRuleEditorForm {
     }
     
     MenuFileMergeWithWorldClick(Sender: TObject): void {
-        let fileNameWithPath: String
+        let fileNameWithPath: string
         let oldRuleCount: int
         let oldVariablesCount: int
         let i: int
@@ -652,7 +650,7 @@ export class TRuleEditorForm {
     }
     
     MenuEditCutClick(Sender: TObject): void {
-        let clip: String
+        let clip: string
         let key: byte
         let Shift: TShiftState
         
@@ -696,7 +694,7 @@ export class TRuleEditorForm {
     }
     
     MenuEditCopyClick(Sender: TObject): void {
-        let clip: String
+        let clip: string
         
         if (this.rule === null) {
             // should not commit rule because may be in floating edit
@@ -734,7 +732,7 @@ export class TRuleEditorForm {
     MenuEditPasteClick(Sender: TObject): void {
         let MyHandle: THandle
         let TextPtr: "UNFINISHED_FIX_THIS_PCHAR_INIT"
-        let clip: String
+        let clip: string
         let edit: TEdit
         
         if (this.rule === null) {
@@ -1186,7 +1184,7 @@ export class TRuleEditorForm {
         this.commitChangesToRule()
     }
     
-    listBoxNewStatement(listBox: TListBox, newStatement: String): void {
+    listBoxNewStatement(listBox: TListBox, newStatement: string): void {
         if (listBox === this.RequirementsListBox) {
             this.rule.setRequirements(newStatement)
             this.fillListBox(listBox, this.rule.requirements)
@@ -1199,7 +1197,7 @@ export class TRuleEditorForm {
     }
     
     ListBoxDragDrop(Sender: TObject, Source: TObject, X: int, Y: int): void {
-        let theText: String
+        let theText: string
         let listBox: TListBox
         
         listBox = Sender
@@ -1552,7 +1550,7 @@ export class TRuleEditorForm {
         let cString: char[] /* 256 + 1 */
         let selected: boolean
         let focused: boolean
-        let ruleString: String
+        let ruleString: string
         let rule: TSRule
         
         rule = null
@@ -1781,7 +1779,7 @@ export class TRuleEditorForm {
         this.adjustScrollBars()
     }
     
-    lastChoiceText(): String {
+    lastChoiceText(): string {
         let result = ""
         result = ""
         if (this.lastChoice === null) {
@@ -1861,7 +1859,7 @@ export class TRuleEditorForm {
         let displayOptions: TSVariableDisplayOptions
         let i: int
         let multipleSelect: boolean
-        let showString: String
+        let showString: string
         let textSize: TPoint
         let centerPosition: TPoint
         
@@ -1990,13 +1988,13 @@ export class TRuleEditorForm {
         //    
     }
     
-    searchForAndSelectRule(aText: String, ignoreCase: boolean, goDown: boolean): void {
+    searchForAndSelectRule(aText: string, ignoreCase: boolean, goDown: boolean): void {
         let row: int
         let count: int
         let rule: TSRule
         let ruleIndex: int
         let match: boolean
-        let matchText: String
+        let matchText: string
         
         count = 1
         ruleIndex = usdomain.domain.world.rules.IndexOf(this.rule)
@@ -2173,7 +2171,7 @@ export class TRuleEditorForm {
         let variable: TSVariable
         let rule: TSRule
         let displayFieldType: int
-        let selectedItemString: String
+        let selectedItemString: string
         
         this.SecondListBox.Clear()
         if (this.organizeByField === usworld.kRuleCommand) {
@@ -2232,7 +2230,7 @@ export class TRuleEditorForm {
         let focused: boolean
         let rule: TSRule
         let displayFieldType: int
-        let displayString: String
+        let displayString: string
         
         if ((index < 0) || (index > this.SecondListBox.Items.Count - 1)) {
             return
@@ -2249,7 +2247,7 @@ export class TRuleEditorForm {
         this.drawBrowserListBoxItem(this.SecondListBox, displayString, index, Rect, selected, focused)
     }
     
-    drawBrowserListBoxItem(Control: TWinControl, displayString: String, index: int, Rect: TRect, selected: boolean, focused: boolean): void {
+    drawBrowserListBoxItem(Control: TWinControl, displayString: string, index: int, Rect: TRect, selected: boolean, focused: boolean): void {
         let listBox: TListBox
         
         if (delphi_compatability.Application.terminated) {
@@ -2404,7 +2402,7 @@ export class TRuleEditorForm {
         }
     }
     
-    logicalStatementForListBox(listBox: TListBox): String {
+    logicalStatementForListBox(listBox: TListBox): string {
         let result = ""
         let i: int
         
@@ -2635,8 +2633,8 @@ export class TRuleEditorForm {
     }
     
     MenuEditInsertSoundClick(Sender: TObject): void {
-        let fileNameWithPath: String
-        let shortFileName: String
+        let fileNameWithPath: string
+        let shortFileName: string
         
         this.commitChangesToRule()
         if (this.ActiveControl !== this.ReplyMemo) {
@@ -2663,8 +2661,8 @@ export class TRuleEditorForm {
     }
     
     MenuEditInsertMusicClick(Sender: TObject): void {
-        let fileNameWithPath: String
-        let shortFileName: String
+        let fileNameWithPath: string
+        let shortFileName: string
         
         this.commitChangesToRule()
         if (this.ActiveControl !== this.ReplyMemo) {
@@ -2683,8 +2681,8 @@ export class TRuleEditorForm {
     }
     
     MenuEditInsertPictureClick(Sender: TObject): void {
-        let fileNameWithPath: String
-        let shortFileName: String
+        let fileNameWithPath: string
+        let shortFileName: string
         
         this.commitChangesToRule()
         if (this.ActiveControl !== this.ReplyMemo) {

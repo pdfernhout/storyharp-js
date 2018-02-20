@@ -29,13 +29,13 @@ export class TModelChange {
 export class TRuleFieldChange {
     rule: TSRule = new TSRule()
     fieldType: int = 0
-    oldText: String = ""
-    newText: String = ""
+    oldText: string = ""
+    newText: string = ""
     TRuleFieldChange.prototype = new TModelChange()
     TRuleFieldChange.prototype.constructor = TRuleFieldChange
     
     //////////////////////////////// TRuleFieldChange ////////////////////////////////////
-    createWithRuleFieldTypeOldTextNewText(rule: TSRule, fieldType: int, newText: String): void {
+    createWithRuleFieldTypeOldTextNewText(rule: TSRule, fieldType: int, newText: string): void {
         this.create
         this.rule = rule
         this.fieldType = fieldType

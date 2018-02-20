@@ -123,11 +123,11 @@ export class TContextWizardForm {
     
     generateRules(): void {
         let stream: TStringStream
-        let line: String
-        let previousContext: String
-        let contextName: String
-        let contextDescription: String
-        let character: String
+        let line: string
+        let previousContext: string
+        let contextName: string
+        let contextDescription: string
+        let character: string
         let pipeRead: boolean
         let newRule: TSRule
         let position: TPoint

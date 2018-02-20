@@ -12,12 +12,12 @@ const usfocuscommands = usfocuscommands || {}
 
 // record
 interface TSelectionInformation {
-    text: String
+    text: string
     selStart: int
     selLength: int
 }
 
-function RecordSelectionInformation(selectionInformation: TSelectionInformation, control: TControl) {
+function RecordSelectionInformation(selectionInformation: TSelectionInformation, control: TControl): void {
     if (control instanceof delphi_compatability.TCustomEdit) {
         selectionInformation.text = (control).Text
         selectionInformation.selStart = (control).selStart
@@ -32,7 +32,7 @@ function RecordSelectionInformation(selectionInformation: TSelectionInformation,
     }
 }
 
-function RestoreSelectionInformation(selectionInformation: TSelectionInformation, control: TControl) {
+function RestoreSelectionInformation(selectionInformation: TSelectionInformation, control: TControl): void {
     if (control instanceof delphi_compatability.TCustomEdit) {
         (control).Text = selectionInformation.text
         (control).selStart = selectionInformation.selStart
@@ -228,7 +228,7 @@ export class TFocusShiftCommand {
         usdomain.domain.endUpdate()
     }
     
-    description(): String {
+    description(): string {
         let result = ""
         result = "editor focus shift"
         return result
