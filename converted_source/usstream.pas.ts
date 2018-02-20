@@ -3,8 +3,6 @@
 from conversion_common import *
 import delphi_compatability
 
-const usstream = usstream || {}
-
 function skipToProfileSection(fileStream: TextFile, section: string): boolean {
     let result = false
     let inputLine: string

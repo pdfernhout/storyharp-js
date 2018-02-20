@@ -5,8 +5,6 @@ import usruleeditorform
 import usworld
 import delphi_compatability
 
-const usmodelchanges = usmodelchanges || {}
-
 
 export class TModelChange {
     

@@ -5,8 +5,6 @@ import usstream
 import ucursor
 import delphi_compatability
 
-const ufilesupport = ufilesupport || {}
-
 // var
 let iniFileChanged: boolean
 let plantFileChanged: boolean
@@ -14,7 +12,7 @@ let gVersionName: string
 
 
 // record
-interface SaveFileNamesStructure {
+export interface SaveFileNamesStructure {
     tempFile: string
     newFile: string
     backupFile: string
@@ -111,7 +109,7 @@ function stringToPoint(aString: string): TPoint {
     let result = new TPoint()
     let stream: KfStringStream
     
-    result = Point(0, 0)
+    result = point(0, 0)
     stream = usstream.KfStringStream.create
     try {
         stream.onStringSeparator(aString, " ")

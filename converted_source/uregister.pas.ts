@@ -6,8 +6,6 @@ import ufilesupport
 import usdomain
 import delphi_compatability
 
-const uregister = uregister || {}
-
 // var
 let RegistrationForm: TRegistrationForm
 

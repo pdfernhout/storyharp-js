@@ -22,8 +22,6 @@ import usdomain
 import quickfillcombobox
 import delphi_compatability
 
-const usruleeditorform = usruleeditorform || {}
-
 // var
 let RuleEditorForm: TRuleEditorForm
 

@@ -5,8 +5,6 @@ import usworld
 import usdomain
 import delphi_compatability
 
-const usjavawriter = usjavawriter || {}
-
 
 export class TSJavaWriter {
     javaFile: TextFile = new TextFile()

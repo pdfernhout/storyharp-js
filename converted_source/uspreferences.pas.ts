@@ -4,8 +4,6 @@ from conversion_common import *
 import usdomain
 import delphi_compatability
 
-const USPreferences = USPreferences || {}
-
 // var
 let PreferencesForm: TPreferencesForm
 

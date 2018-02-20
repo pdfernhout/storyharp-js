@@ -10,11 +10,9 @@ import uscommands
 import usworld
 import delphi_compatability
 
-const usdomain = usdomain || {}
-
 // files
 // record
-interface DomainOptionsStructure {
+export interface DomainOptionsStructure {
     extraMediaDirectory: string
     logFileName: string
     agentCharacterFileName: string

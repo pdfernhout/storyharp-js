@@ -4,8 +4,6 @@ from conversion_common import *
 import usconsoleform
 import delphi_compatability
 
-const usregistrationform = usregistrationform || {}
-
 // var
 let RegistrationForm: TRegistrationForm
 

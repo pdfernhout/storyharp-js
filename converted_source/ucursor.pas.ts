@@ -3,8 +3,6 @@
 from conversion_common import *
 import delphi_compatability
 
-const ucursor = ucursor || {}
-
 // const
 const crMagMinus = 1
 const crMagPlus = 2

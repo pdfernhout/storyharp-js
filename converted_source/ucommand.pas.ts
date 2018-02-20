@@ -3,8 +3,7 @@
 from conversion_common import *
 import delphi_compatability
 
-const Ucommand = Ucommand || {}
-
+export type TCommandEvent = (command: KfCommand, state: KfCommandChangeType) => void
 export enum TrackPhase { trackPress, trackMove, trackRelease }
 
 export enum KfCommandChangeType { commandDone, commandUndone }

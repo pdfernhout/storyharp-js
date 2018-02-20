@@ -5,8 +5,6 @@ import ucursor
 import usdomain
 import delphi_compatability
 
-const uspictureform = uspictureform || {}
-
 // var
 let PictureForm: TPictureForm
 

@@ -16,8 +16,6 @@ import usspeech
 import usworld
 import delphi_compatability
 
-const usconsoleform = usconsoleform || {}
-
 // var
 let ConsoleForm: TConsoleForm
 

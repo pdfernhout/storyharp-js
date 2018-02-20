@@ -8,8 +8,6 @@ import uregister
 import usdomain
 import delphi_compatability
 
-const uabout = uabout || {}
-
 // var
 let UnregisteredAboutForm: TUnregisteredAboutForm
 

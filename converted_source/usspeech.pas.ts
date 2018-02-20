@@ -10,8 +10,6 @@ import usconsoleform
 import usworld
 import delphi_compatability
 
-const USSpeech = USSpeech || {}
-
 // const
 const commandListCommand = "options"
 

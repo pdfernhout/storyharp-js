@@ -5,8 +5,6 @@ import ufilesupport
 import usdomain
 import delphi_compatability
 
-const usabout = usabout || {}
-
 // var
 let AboutForm: TAboutForm
 

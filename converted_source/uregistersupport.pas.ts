@@ -3,10 +3,8 @@
 from conversion_common import *
 import delphi_compatability
 
-const uregistersupport = uregistersupport || {}
-
 // record
-interface RegisterStruct {
+export interface RegisterStruct {
     s1: int
     s2: int
     s3: int

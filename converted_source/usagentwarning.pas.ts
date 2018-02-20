@@ -4,8 +4,6 @@ from conversion_common import *
 import usdomain
 import delphi_compatability
 
-const usagentwarning = usagentwarning || {}
-
 
 export class TAgentWarningForm {
     Label1: TLabel = new TLabel()

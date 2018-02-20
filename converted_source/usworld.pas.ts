@@ -9,8 +9,6 @@ import usconsoleform
 import usmain
 import delphi_compatability
 
-const usworld = usworld || {}
-
 // const
 const kSaveAllRules = false
 const kSaveOnlySelectedRules = true

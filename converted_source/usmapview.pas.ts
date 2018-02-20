@@ -7,8 +7,6 @@ import ucommand
 import usworld
 import delphi_compatability
 
-const usmapview = usmapview || {}
-
 // const
 const kDrawCommand = true
 const kDrawContext = false

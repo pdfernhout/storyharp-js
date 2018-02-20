@@ -12,8 +12,6 @@ import usworld
 import ucommand
 import delphi_compatability
 
-const uscommands = uscommands || {}
-
 
 //TEditChangeCommand = class(KfCommand)
 //  	entryField: TObject;

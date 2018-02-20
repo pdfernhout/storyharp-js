@@ -5,8 +5,6 @@ import usspeech
 import usdomain
 import delphi_compatability
 
-const usmediadirform = usmediadirform || {}
-
 // var
 let ExtraMediaDirectoryForm: TExtraMediaDirectoryForm
 

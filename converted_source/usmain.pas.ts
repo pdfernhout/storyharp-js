@@ -3,8 +3,6 @@
 from conversion_common import *
 import delphi_compatability
 
-const usmain = usmain || {}
-
 // var
 let Form1: TForm1
 

@@ -3,8 +3,6 @@
 from conversion_common import *
 import delphi_compatability
 
-const QuickFillComboBox = QuickFillComboBox || {}
-
 //Must be published before Items
 // pdf added
 // pdf added

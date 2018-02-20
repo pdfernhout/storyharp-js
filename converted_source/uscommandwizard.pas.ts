@@ -9,8 +9,6 @@ import usworld
 import usdomain
 import delphi_compatability
 
-const uscommandwizard = uscommandwizard || {}
-
 // var
 let CommandWizardForm: TCommandWizardForm
 

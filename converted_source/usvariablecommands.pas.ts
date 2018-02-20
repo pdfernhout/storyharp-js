@@ -8,8 +8,6 @@ import usworld
 import ucommand
 import delphi_compatability
 
-const usvariablecommands = usvariablecommands || {}
-
 
 export class TSToggleVariableCommand {
     variable: TSVariable = new TSVariable()

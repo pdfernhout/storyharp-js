@@ -8,10 +8,8 @@ import usworld
 import ucommand
 import delphi_compatability
 
-const usfocuscommands = usfocuscommands || {}
-
 // record
-interface TSelectionInformation {
+export interface TSelectionInformation {
     text: string
     selStart: int
     selLength: int

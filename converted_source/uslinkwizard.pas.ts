@@ -9,8 +9,6 @@ import usdomain
 import usworld
 import delphi_compatability
 
-const uslinkwizard = uslinkwizard || {}
-
 // var
 let LinkWizardForm: TLinkWizardForm
 

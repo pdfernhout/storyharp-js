@@ -4,8 +4,6 @@ from conversion_common import *
 import usdomain
 import delphi_compatability
 
-const uschangelog = uschangelog || {}
-
 // var
 let ChangeLogForm: TChangeLogForm
 
