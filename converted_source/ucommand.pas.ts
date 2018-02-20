@@ -172,18 +172,18 @@ export class KfCommandList {
         result = false
         if (this.mouseCommand !== null) {
             //check if need to clear mouse command
-            this.mouseUp(Point)
+            this.mouseUp(point)
         }
         this.mouseCommand = null
         if (newCommand !== null) {
             //save mouse command and start it
-            this.anchorPoint = Point
-            this.previousPoint = Point
+            this.anchorPoint = point
+            this.previousPoint = point
             nextMouseCommand = newCommand
             if (!delphi_compatability.Assigned(newCommand.notifyProcedure)) {
                 newCommand.notifyProcedure = this.notifyProcedure
             }
-            this.mouseCommand = nextMouseCommand.TrackMouse(TrackPhase.trackPress, this.anchorPoint, this.previousPoint, Point, false, this.rightButtonDown)
+            this.mouseCommand = nextMouseCommand.TrackMouse(TrackPhase.trackPress, this.anchorPoint, this.previousPoint, point, false, this.rightButtonDown)
             result = (this.mouseCommand !== null)
         }
         return result
@@ -197,9 +197,9 @@ export class KfCommandList {
         nextMouseCommand = this.mouseCommand
         this.mouseCommand = null
         if (nextMouseCommand !== null) {
-            mouseDidMove = (abs(this.previousPoint.X - Point.x) > kMinMouseMoveDistance) || (abs(this.previousPoint.Y - Point.y) > kMinMouseMoveDistance)
+            mouseDidMove = (abs(this.previousPoint.X - point.x) > kMinMouseMoveDistance) || (abs(this.previousPoint.Y - point.y) > kMinMouseMoveDistance)
             if (mouseDidMove) {
-                pointMovedTo = Point
+                pointMovedTo = point
             } else {
                 pointMovedTo = this.previousPoint
             }
@@ -216,13 +216,13 @@ export class KfCommandList {
         nextMouseCommand = this.mouseCommand
         this.mouseCommand = null
         if (nextMouseCommand !== null) {
-            mouseDidMove = (abs(Point.x - this.anchorPoint.X) > kMinMouseMoveDistance) || (abs(Point.y - this.anchorPoint.Y) > kMinMouseMoveDistance)
+            mouseDidMove = (abs(point.x - this.anchorPoint.X) > kMinMouseMoveDistance) || (abs(point.y - this.anchorPoint.Y) > kMinMouseMoveDistance)
             if (mouseDidMove) {
-                pointMovedTo = Point
+                pointMovedTo = point
             } else {
                 pointMovedTo = this.anchorPoint
             }
-            nextMouseCommand = nextMouseCommand.TrackMouse(TrackPhase.trackRelease, this.anchorPoint, this.previousPoint, Point, mouseDidMove, this.rightButtonDown)
+            nextMouseCommand = nextMouseCommand.TrackMouse(TrackPhase.trackRelease, this.anchorPoint, this.previousPoint, point, mouseDidMove, this.rightButtonDown)
             if (nextMouseCommand !== null) {
                 this.doCommand(nextMouseCommand)
             }
