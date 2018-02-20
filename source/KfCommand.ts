@@ -6,7 +6,7 @@ export enum TrackPhase { trackPress, trackMove, trackRelease }
 
 export enum KfCommandChangeType { commandDone, commandUndone }
 
-export type TCommandEvent = (command: KfCommand, state: KfCommandChangeType) => void;
+export type TCommandEvent = (command: KfCommand, state: KfCommandChangeType) => void
 
 export class KfCommand {
     notifyProcedure: TCommandEvent
