@@ -7,10 +7,10 @@ import { caption } from "common"
 export function viewForm1() {
     return m("Form1.TForm1",
         {
-        // Left: "270",
         // Top: "263",
-        // Width: "1088",
+        // Left: "270",
         // Height: "750",
+        // Width: "1088",
         // Caption: "Form1",
         // Font.Charset: "DEFAULT_CHARSET",
         // Font.Color: "clWindowText",
