@@ -2,19 +2,12 @@
 
 import { int, TPoint, TRect, StrToInt, compareTextIgnoreCase, ShowMessage } from "./common"
 
-// TODO: temp - REMOVE!!!
-const usdomain: any;
-const usruleeditorform: any
-const usconsoleform: any
-/*
-from conversion_common import *
-import usdomain
-import uscommands
-import ufilesupport
-import usruleeditorform
-import usconsoleform
-import usmain
-import delphi_compatability
+/* External dependencies that need to be defined in app:
+  // These can be set at World creation
+  TWorld instance reportModeCallback
+  TWorld instance goodPositionCallback
+  // showCommandPrefixInMap needs to track the UI changes
+  TSRule.showCommandPrefixInMap
 */
 
 const kSaveAllRules = false
@@ -33,7 +26,7 @@ const kRuleRequirements = 4
 const kRuleChanges = 5
 const kLastRuleField = 5
 
-/* TODO
+/* TODO: FIX: this is used by loadSessionFromFile and needs to be rethought
 function findCompleteWorldFileName(worldFileNameRead: string): string {
     let result = ""
     if (!FileExists(worldFileNameRead)) {
@@ -236,6 +229,8 @@ export class TSChangedVariableWrapper {
 }
 
 export class TSRule extends TSDraggableObject {
+    // TODO FIX: Needs to track: usdomain.domain.options.showCommandPrefixInMap
+    static showCommandPrefixInMap: boolean = false;
     world: TWorld
     context: TSVariable
     requirements: TSDesiredStateVariableWrapper[] = []
@@ -250,8 +245,7 @@ export class TSRule extends TSDraggableObject {
  
     displayName(): string {
         let result = ""
-        result = ""
-        if (usdomain.domain.options.showCommandPrefixInMap) {
+        if (TSRule.showCommandPrefixInMap) {
             result = result + "> "
         }
         result = result + this.command.phrase
@@ -666,6 +660,11 @@ export class TSIndexChangeRuleWrapper {
 }
 
 export class TWorld {
+    // TODO: reportModeCallback needs to be set by user
+    reportModeCallback = console.log
+    // TODO: goodPosition needs to be set by user
+    goodPositionCallback = function() { return new TPoint(0, 0) }
+
     emptyEntry: TSVariable = new TSVariable()
     variables: TSVariable[] = []
     rules: TSRule[] = []
@@ -711,9 +710,7 @@ export class TWorld {
         result.context = this.emptyEntry
         result.command = this.emptyEntry
         result.move = this.emptyEntry
-        if (usruleeditorform.RuleEditorForm) {
-            result.position = usruleeditorform.RuleEditorForm.goodPosition()
-        }
+        result.position = this.goodPositionCallback()
         this.rules.push(result)
         return result
     }
@@ -745,9 +742,7 @@ export class TWorld {
         result.setPhrase(aString.trim())
         // directly set for now - otherwise circular error on startup...
         result.state = TSVariableState.kAbsent
-        if (usruleeditorform.RuleEditorForm) {
-            result.position = usruleeditorform.RuleEditorForm.goodPosition()
-        }
+        result.position = this.goodPositionCallback()
         this.variables.push(result)
         this.lastVariableCreated = aString
         return result
@@ -786,7 +781,7 @@ export class TWorld {
             return !lines.length
         }
         
-        usconsoleform.ConsoleForm.reportMode("Loading")
+        this.reportModeCallback("Loading")
         try {
             // done by caller to allow merges
             // this.resetVariablesAndRules()
@@ -840,7 +835,7 @@ export class TWorld {
                 count = count + 1
             }
         } finally {
-            usconsoleform.ConsoleForm.reportMode("Running")
+            this.reportModeCallback("Running")
         }
         return true
     }
@@ -853,7 +848,7 @@ export class TWorld {
             lines.push(sections.join(""))
         }
 
-        usconsoleform.ConsoleForm.reportMode("Saving")
+        this.reportModeCallback("Saving")
         try {
             // 1.0 had all lower case
             // 1.3 supports mixed case
@@ -878,7 +873,7 @@ export class TWorld {
                 writeln(rule.position.X, ",", rule.position.Y, "|", rule.context.position.X, ",", rule.context.position.Y, "|", rule.move.position.X, ",", rule.move.position.Y)
             }
         } finally {
-            usconsoleform.ConsoleForm.reportMode("Running")
+            this.reportModeCallback("Running")
         }
 
         return lines.join("/n") + "/n"
