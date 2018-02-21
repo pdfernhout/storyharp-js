@@ -53,6 +53,20 @@ o.spec("usworld", () => {
             const loadedSession = world.loadSessionFromFile("GarTrek.wld", GarTrekSessionContents)
             o(loadedSession).equals(true)
             o(world.focus.phrase).equals("<sphinx>")
+        })
+
+        o("saying phrase in GarTrek", () => {
+            // can't easily do this without commands
+            const world = new usworld.TWorld()
+            world.reportModeCallback = function() {}
+            world.loadWorldFromFileContents(GarTrekWorldContents)
+            world.loadSessionFromFile("GarTrek.wld", GarTrekSessionContents)
+            o(world.focus.phrase).equals("<sphinx>")
+            // Manually activate a rule -- normally a command would do this
+            const rule = world.rules.find(rule => rule.command.phrase === "$answer herring")
+            const result = rule.recordReplyMoveChanges([], "")
+            o(result.contextToFocusTo.phrase).equals("nether regions")
+            o(result.totalReply.startsWith("The Sphinx says: ")).equals(true)
         })  
     })
 })
