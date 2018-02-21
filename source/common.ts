@@ -27,6 +27,24 @@ export class TRect {
         this.Right = Math.round(Right)
         this.Bottom = Math.round(Bottom)
     }
+
+    /*
+    width(): int {
+        return this.Right - this.Left
+    }
+
+    height(): int {
+        return this.Bottom - this.Top()
+    }
+    */
+
+    intersects(otherRect: TRect): boolean {
+        // Wondering if this should use <= ?
+        return this.Left < otherRect.Right 
+            && this.Right > otherRect.Left 
+            && this.Top < otherRect.Bottom
+            && this.Bottom > otherRect.Top
+    }
 }
 
 export function arrayRemove(theArray: Array<any>, item: any) {
@@ -38,4 +56,12 @@ export function arrayRemove(theArray: Array<any>, item: any) {
 
 export function StrToInt(value: string): int {
     return parseInt(value)
+}
+
+export function compareTextIgnoreCase(a: string, b: string): boolean {
+    return a.toUpperCase() === b.toUpperCase()
+}
+
+export function ShowMessage(message: string) {
+    alert(message)
 }

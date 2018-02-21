@@ -1,10 +1,11 @@
 // unit usworld
 
-import { int, TPoint, TRect, StrToInt } from "./common"
+import { int, TPoint, TRect, StrToInt, compareTextIgnoreCase, ShowMessage } from "./common"
 
 // TODO: temp - REMOVE!!!
 const usdomain: any;
-
+const usruleeditorform: any
+const usconsoleform: any
 /*
 from conversion_common import *
 import usdomain
@@ -504,7 +505,7 @@ export class TSRule extends TSDraggableObject {
         return result
     }
     
-    headerForField(col: int): string {
+    static headerForField(col: int): string {
         let result = ""
         switch (col) {
             case kRuleContext:
@@ -668,8 +669,8 @@ export class TWorld {
     emptyEntry: TSVariable = new TSVariable()
     variables: TSVariable[] = []
     rules: TSRule[] = []
-    focus: TSVariable
-    previousFocus: TSVariable
+    focus: TSVariable | null = null
+    previousFocus: TSVariable | null = null
     firstCommandDoneForLastCommandPhrase: int = 0
     lastVariableCreated: string = ""
     
@@ -704,66 +705,58 @@ export class TWorld {
     */
     
     newRule(): TSRule {
-        let result = new TSRule()
-        result = TSRule().create()
+        // TODO: Maybe make a constructor for TSRule?
+        const result: TSRule = new TSRule()
         result.world = this
         result.context = this.emptyEntry
         result.command = this.emptyEntry
         result.move = this.emptyEntry
-        if (usruleeditorform.RuleEditorForm !== null) {
+        if (usruleeditorform.RuleEditorForm) {
             result.position = usruleeditorform.RuleEditorForm.goodPosition()
         }
-        this.rules.Add(result)
+        this.rules.push(result)
         return result
     }
     
-    findVariable(aString: string): TSVariable {
-        let result = new TSVariable()
-        let i: int
-        
-        result = null
+    findVariable(aString: string): TSVariable | null {
         if (aString === "") {
-            result = this.emptyEntry
-            return result
+            return this.emptyEntry
         }
-        if (this.variables.Count > 0) {
-            for (i = 0; i <= this.variables.Count - 1; i++) {
-                if (UNRESOLVED.AnsiCompareText(TSVariable(this.variables.Items[i]).phrase, aString) === 0) {
-                    result = TSVariable(this.variables.Items[i])
-                    if (TSVariable(this.variables.Items[i]).phrase !== aString) {
-                        // take on the case of the last choice if not the same
-                        TSVariable(this.variables.Items[i]).setPhrase(aString)
-                    }
-                    return result
+        for (let i = 0; i < this.variables.length; i++) {
+            if (compareTextIgnoreCase(this.variables[i].phrase, aString)) {
+                const result: TSVariable = this.variables[i]
+                if (result.phrase !== aString) {
+                    // take on the case of the last choice if not the same
+                    result.setPhrase(aString)
                 }
+                return result
             }
         }
-        return result
+        return null
     }
     
     findOrCreateVariable(aString: string, madeByMacro: boolean): TSVariable {
-        let result = new TSVariable()
-        result = this.findVariable(trim(aString))
-        if (result !== null) {
-            return result
+        const match = this.findVariable(aString.trim())
+        if (match !== null) {
+            return match
         }
-        result = TSVariable.create
+        const result = new TSVariable()
         result.world = this
-        result.setPhrase(trim(aString))
+        result.setPhrase(aString.trim())
         // directly set for now - otherwise circular error on startup...
         result.state = TSVariableState.kAbsent
-        if (usruleeditorform.RuleEditorForm !== null) {
+        if (usruleeditorform.RuleEditorForm) {
             result.position = usruleeditorform.RuleEditorForm.goodPosition()
         }
-        this.variables.Add(result)
+        this.variables.push(result)
         this.lastVariableCreated = aString
         return result
     }
     
     setInitialFocus(): void {
-        if (this.rules.Count > 0) {
-            this.focus = TSRule(this.rules[0]).context
-            this.previousFocus = TSRule(this.rules[0]).context
+        if (this.rules.length > 0) {
+            this.focus = this.rules[0].context
+            this.previousFocus = this.rules[0].context
             this.focus.state = TSVariableState.kPresent
             this.updateAvailable()
         } else {
@@ -778,114 +771,117 @@ export class TWorld {
         this.previousFocus = null
     }
     
-    loadWorldFromFile(name: string): boolean {
-        let result = false
-        let WorldFile: TextFile
-        let value: string
-        let rule: TSRule
-        let count: int
-        let header: string
+    /* TODO: IMPLEMENT: loadWorldFromFile(name: string) using file */
+
+    loadWorldFromFileContents(contents: string): boolean {
+
+        // Emulate file reader
+        const lines = contents.split(/\r?\n/)
+        function readln(): string {
+            const result = lines.shift()
+            if (result !== undefined) return result
+            throw "Unexpected EOF loading World file"
+        }
+        function eof() {
+            return !lines.length
+        }
         
-        result = false
         usconsoleform.ConsoleForm.reportMode("Loading")
-        AssignFile(WorldFile, name)
-        Reset(WorldFile)
         try {
             // done by caller to allow merges
-            //self.resetVariablesAndRules;
-            count = 0
+            // this.resetVariablesAndRules()
+            let count = 0
             // unfinished - need better error checking
-            UNRESOLVED.readln(WorldFile, header)
+            const header = readln()
             if ((header !== "; world file version 1.0") && (header !== "; StoryHarp world file version 1.3")) {
                 ShowMessage("File header for world file is not correct")
-                return result
+                return false
             }
-            while (!UNRESOLVED.eof(WorldFile)) {
-                UNRESOLVED.readln(WorldFile, value)
+            while (!eof()) {
+                let value = readln()
                 if ((value !== "") && (value[1] === ";")) {
                     continue
                 }
                 if (value !== "====================") {
-                    return result
+                    return false
                 }
                 if (count === 0) {
                     // context
-                    UNRESOLVED.readln(WorldFile, value)
+                    value = readln()
                     // command
-                    UNRESOLVED.readln(WorldFile, value)
+                    value = readln()
                     // reply
-                    UNRESOLVED.readln(WorldFile, value)
+                    value = readln()
                     // move to
-                    UNRESOLVED.readln(WorldFile, value)
+                    value = readln()
                     // extra changes
-                    UNRESOLVED.readln(WorldFile, value)
+                    value = readln()
                     // extra requirements
-                    UNRESOLVED.readln(WorldFile, value)
+                    value = readln()
                     // map positions
-                    UNRESOLVED.readln(WorldFile, value)
+                    value = readln()
                 } else {
-                    rule = this.newRule()
-                    UNRESOLVED.readln(WorldFile, value)
-                    rule.setContext(trim(value))
-                    UNRESOLVED.readln(WorldFile, value)
-                    rule.setCommand(trim(value))
-                    UNRESOLVED.readln(WorldFile, value)
-                    rule.setReply(trim(value))
-                    UNRESOLVED.readln(WorldFile, value)
-                    rule.setMove(trim(value))
-                    UNRESOLVED.readln(WorldFile, value)
-                    rule.setChanges(trim(value))
-                    UNRESOLVED.readln(WorldFile, value)
-                    rule.setRequirements(trim(value))
-                    UNRESOLVED.readln(WorldFile, value)
-                    rule.setPosition(trim(value))
+                    const rule: TSRule = this.newRule()
+                    value = readln()
+                    rule.setContext(value.trim())
+                    value = readln()
+                    rule.setCommand(value.trim())
+                    value = readln()
+                    rule.setReply(value.trim())
+                    value = readln()
+                    rule.setMove(value.trim())
+                    value = readln()
+                    rule.setChanges(value.trim())
+                    value = readln()
+                    rule.setRequirements(value.trim())
+                    value = readln()
+                    rule.setPosition(value.trim())
                 }
                 count = count + 1
             }
         } finally {
-            CloseFile(WorldFile)
             usconsoleform.ConsoleForm.reportMode("Running")
         }
-        result = true
-        return result
+        return true
     }
-    
-    saveWorldToFile(name: string, saveOnlySelectedRules: boolean): void {
-        let i: int
-        let WorldFile: TextFile
-        let rule: TSRule
-        
-        AssignFile(WorldFile, name)
-        Rewrite(WorldFile)
+
+    /* TODO:IMPLEMENT: saveWorldToFile(name: string, saveOnlySelectedRules: boolean): void { */
+    saveWorldToFileContents(saveOnlySelectedRules: boolean): string {
+        // Emulate file writer
+        const lines: string[] = []
+        function writeln(...sections: (string | number)[]): void {
+            lines.push(sections.join(""))
+        }
+
         usconsoleform.ConsoleForm.reportMode("Saving")
         try {
             // 1.0 had all lower case
             // 1.3 supports mixed case
-            writeln(WorldFile, "; StoryHarp world file version 1.3")
-            writeln(WorldFile, "====================")
-            for (i = 0; i <= 5; i++) {
-                writeln(WorldFile, TSRule.headerForField(i))
+            writeln("; StoryHarp world file version 1.3")
+            writeln("====================")
+            for (let i = 0; i < 6; i++) {
+                writeln(TSRule.headerForField(i))
             }
-            writeln(WorldFile, "map positions")
-            for (i = 0; i <= this.rules.Count - 1; i++) {
-                rule = TSRule(this.rules.Items[i])
+            writeln("map positions")
+            for (let i = 0; i < this.rules.length; i++) {
+                const rule: TSRule = this.rules[i]
                 if (saveOnlySelectedRules && !rule.selected) {
                     continue
                 }
-                writeln(WorldFile, "====================")
-                writeln(WorldFile, rule.context.phrase)
-                writeln(WorldFile, rule.command.phrase)
-                writeln(WorldFile, rule.reply)
-                writeln(WorldFile, rule.move.phrase)
-                writeln(WorldFile, rule.changesString)
-                writeln(WorldFile, rule.requirementsString)
-                writeln(WorldFile, rule.position.X, ",", rule.position.Y, "|", rule.context.position.X, ",", rule.context.position.Y, "|", rule.move.position.X, ",", rule.move.position.Y)
+                writeln("====================")
+                writeln(rule.context.phrase)
+                writeln(rule.command.phrase)
+                writeln(rule.reply)
+                writeln(rule.move.phrase)
+                writeln(rule.changesString)
+                writeln(rule.requirementsString)
+                writeln(rule.position.X, ",", rule.position.Y, "|", rule.context.position.X, ",", rule.context.position.Y, "|", rule.move.position.X, ",", rule.move.position.Y)
             }
-            Flush(WorldFile)
         } finally {
-            CloseFile(WorldFile)
             usconsoleform.ConsoleForm.reportMode("Running")
         }
+
+        return lines.join("/n") + "/n"
     }
     
     newSession(): void {
@@ -893,134 +889,127 @@ export class TWorld {
         this.setInitialFocus()
     }
     
-    loadSessionFromFile(name: string, worldFileName: string): boolean {
-        let result = false
-        let SessionFile: TextFile
-        let variable: TSVariable
-        let header: string
-        let worldFileNameRead: string
-        let variableNameRead: string
+    /* TODO: IMPLEMENT: loadSessionFromFile(name: string, worldFileName: string): boolean { */
+
+    loadSessionFromFile(worldFileName: string, contents: string): boolean {
         let focusNameRead: string
         let previousFocusNameRead: string
-        let completeWorldFileName: string
         
-        result = false
-        AssignFile(SessionFile, name)
-        Reset(SessionFile)
-        try {
-            this.resetVariableValues()
-            // unfinished - need better error checking
-            UNRESOLVED.readln(SessionFile, header)
-            if (header !== "; session file version 1.0") {
-                ShowMessage("File header for session file is not correct")
-                return result
-            }
-            UNRESOLVED.readln(SessionFile, header)
-            if (header !== "============ Variables for world =================") {
-                return result
-            }
-            UNRESOLVED.readln(SessionFile, worldFileNameRead)
-            if (worldFileNameRead !== worldFileName) {
-                completeWorldFileName = findCompleteWorldFileName(worldFileNameRead)
-                if (completeWorldFileName !== "") {
-                    usruleeditorform.RuleEditorForm.openWorldFile(completeWorldFileName)
-                    // to counteract resetting session when load world
-                    usdomain.domain.sessionFileName = name
-                } else {
-                    return result
-                }
-            }
-            UNRESOLVED.readln(SessionFile, header)
-            if (header !== "============ Focus ===============================") {
-                return result
-            }
-            UNRESOLVED.readln(SessionFile, focusNameRead)
-            UNRESOLVED.readln(SessionFile, previousFocusNameRead)
-            UNRESOLVED.readln(SessionFile, header)
-            if (header !== "============ Variables ===========================") {
-                return result
-            }
-            while (!UNRESOLVED.eof(SessionFile)) {
-                UNRESOLVED.readln(SessionFile, variableNameRead)
-                variableNameRead = trim(variableNameRead)
-                variable = this.findOrCreateVariable(variableNameRead, false)
-                variable.state = TSVariableState.kPresent
-            }
-        } finally {
-            CloseFile(SessionFile)
+        // Emulate file reader
+        const lines = contents.split(/\r?\n/)
+        function readln(): string {
+            const result = lines.shift()
+            if (result !== undefined) return result
+            throw "Unexpected EOF loading World file"
         }
+        function eof() {
+            return !lines.length
+        }
+        
+        let header: string
+        this.resetVariableValues()
+        // unfinished - need better error checking
+        header = readln()
+        if (header !== "; session file version 1.0") {
+            ShowMessage("File header for session file is not correct")
+            return false
+        }
+        header = readln()
+        if (header !== "============ Variables for world =================") {
+            return false
+        }
+        const worldFileNameRead = readln()
+        if (worldFileNameRead !== worldFileName) {
+            // TODO: FIX THIS!!!!
+            throw new Error("worldFileNameRead !== worldFileName")
+            /* TODO FIX
+            const completeWorldFileName = findCompleteWorldFileName(worldFileNameRead)
+            if (completeWorldFileName !== "") {
+                usruleeditorform.RuleEditorForm.openWorldFile(completeWorldFileName)
+                // to counteract resetting session when load world
+                usdomain.domain.sessionFileName = name
+            } else {
+                return false
+            }
+            */
+        }
+        header = readln()
+        if (header !== "============ Focus ===============================") {
+            return false
+        }
+        focusNameRead = readln()
+        previousFocusNameRead = readln()
+        header = readln()
+        if (header !== "============ Variables ===========================") {
+            return false
+        }
+        while (!eof()) {
+            const variableNameRead = readln().trim()
+            const variable: TSVariable = this.findOrCreateVariable(variableNameRead, false)
+            variable.state = TSVariableState.kPresent
+        }
+
         this.focus = this.findOrCreateVariable(focusNameRead, false)
         this.previousFocus = this.findOrCreateVariable(previousFocusNameRead, false)
         this.updateAvailable()
-        result = true
-        return result
+        return true
     }
     
-    saveSessionToFile(name: string, worldFileName: string): void {
-        let i: int
-        let SessionFile: TextFile
-        let variable: TSVariable
-        
-        AssignFile(SessionFile, name)
-        Rewrite(SessionFile)
-        try {
-            writeln(SessionFile, "; session file version 1.0")
-            writeln(SessionFile, "============ Variables for world =================")
-            writeln(SessionFile, worldFileName)
-            writeln(SessionFile, "============ Focus ===============================")
-            writeln(SessionFile, this.focus.phrase)
-            writeln(SessionFile, this.previousFocus.phrase)
-            writeln(SessionFile, "============ Variables ===========================")
-            for (i = 0; i <= this.variables.Count - 1; i++) {
-                variable = TSVariable(this.variables.Items[i])
-                if (variable.state === TSVariableState.kPresent) {
-                    writeln(SessionFile, variable.phrase)
-                }
-            }
-            Flush(SessionFile)
-        } finally {
-            CloseFile(SessionFile)
+    /* TODO: IMPLEMENT: saveSessionToFile(name: string, worldFileName: string): void { */
+    saveSessionToFileContents(worldFileName: string): string {
+        // Emulate file writer
+        const lines: string[] = []
+        function writeln(...sections: (string | number)[]): void {
+            lines.push(sections.join(""))
         }
+        
+        writeln("; session file version 1.0")
+        writeln("============ Variables for world =================")
+        writeln(worldFileName)
+        writeln("============ Focus ===============================")
+        writeln(this.focus ? this.focus.phrase : "")
+        writeln(this.previousFocus ? this.previousFocus.phrase: "")
+        writeln("============ Variables ===========================")
+        for (let i = 0; i < this.variables.length; i++) {
+            const variable: TSVariable = this.variables[i]
+            if (variable.state === TSVariableState.kPresent) {
+                writeln(variable.phrase)
+            }
+        }
+
+        return lines.join("/n") + "/n"
     }
     
     updateAvailable(): void {
-        let rule: TSRule
-        let i: int
-        
-        if (this.rules.Count > 0) {
-            for (i = 0; i <= this.rules.Count - 1; i++) {
-                rule = TSRule(this.rules.Items[i])
-                rule.updateAvailable()
-            }
+        for (let i = 0; i < this.rules.length; i++) {
+            const rule: TSRule = this.rules[i]
+            rule.updateAvailable()
         }
     }
     
     setFocusTo(contextToFocusOn: TSVariable): void {
         if (contextToFocusOn !== null) {
             this.previousFocus = this.focus
-            this.previousFocus.setState(TSVariableState.kAbsent)
+            if (this.previousFocus) {
+                this.previousFocus.setState(TSVariableState.kAbsent)
+            }
             this.focus = contextToFocusOn
             this.focus.setState(TSVariableState.kPresent)
         }
     }
     
-    // retruns whether should redraw grid
+    // retuns whether should redraw grid
     deselectAllExcept(exceptObject: TSDraggableObject): boolean {
         let result = false
-        let rule: TSRule
-        let variable: TSVariable
-        let i: int
-        
-        result = false
-        for (i = 0; i <= this.rules.Count - 1; i++) {
-            rule = TSRule(this.rules[i])
+        for (let i = 0; i < this.rules.length; i++) {
+            const rule: TSRule = this.rules[i]
             if ((rule.selected) && (rule !== exceptObject)) {
                 rule.selected = false
                 result = true
             }
         }
-        for (i = 0; i <= this.variables.Count - 1; i++) {
-            variable = TSVariable(this.variables[i])
+        for (let i = 0; i < this.variables.length; i++) {
+            const variable: TSVariable = this.variables[i]
             if ((variable.selected) && (variable !== exceptObject)) {
                 variable.selected = false
                 result = true
@@ -1029,60 +1018,46 @@ export class TWorld {
         return result
     }
     
-    addDragRecordsToList(dragRecords: TList): void {
-        let rule: TSRule
-        let variable: TSVariable
-        let i: int
-        
-        for (i = 0; i <= this.rules.Count - 1; i++) {
-            rule = TSRule(this.rules[i])
+    addDragRecordsToList(dragRecords: TSDragRecord[]): void {
+        for (let i = 0; i < this.rules.length; i++) {
+            const rule: TSRule = this.rules[i]
             if ((rule.selected)) {
-                dragRecords.Add(TSDragRecord().createWithNode(rule))
+                dragRecords.push(new TSDragRecord(rule))
             }
         }
-        for (i = 0; i <= this.variables.Count - 1; i++) {
-            variable = TSVariable(this.variables[i])
+        for (let i = 0; i < this.variables.length; i++) {
+            const variable: TSVariable = this.variables[i]
             if ((variable.selected)) {
-                dragRecords.Add(TSDragRecord().createWithNode(variable))
+                dragRecords.push(new TSDragRecord(variable))
             }
         }
     }
-    
+
+    /* TODO FIX: Maybe move this code to Rule Editor Form?
     deleteSelectedRules(): void {
-        let rule: TSRule
-        let i: int
-        let command: TSDeleteRulesCommand
+        const command: TSDeleteRulesCommand = new TSDeleteRulesCommand()
         
-        command = uscommands.TSDeleteRulesCommand().create()
-        for (i = 0; i <= this.rules.Count - 1; i++) {
-            rule = TSRule(this.rules[i])
-            if ((rule.selected)) {
+        for (let i = 0; i < this.rules.length; i++) {
+            const rule: TSRule = this.rules[i]
+            if (rule.selected) {
                 command.addRule(rule, -1)
             }
         }
-        if (command.ruleWrappers.Count > 0) {
+        if (command.ruleWrappers.length > 0) {
             usdomain.domain.worldCommandList.doCommand(command)
-        } else {
-            command.free
         }
     }
     
     raiseSelectedRules(): void {
-        let rule: TSRule
-        let higherRule: TSRule
-        let i: int
-        let command: TSMoveRulesCommand
-        let moving: boolean
-        
-        command = uscommands.TSMoveRulesCommand().create()
+        const command: TSMoveRulesCommand = new TSMoveRulesCommand()
         command.action = "raise"
-        moving = false
-        for (i = 1; i <= this.rules.Count - 1; i++) {
+        let moving = false
+        for (let i = 1; i < this.rules.length; i++) {
             //skip first
-            rule = TSRule(this.rules[i])
+            const rule: TSRule = this.rules[i]
             if (rule.selected) {
                 if (!moving) {
-                    higherRule = TSRule(this.rules[i - 1])
+                    const higherRule: TSRule = this.rules[i - 1]
                     if (!higherRule.selected) {
                         moving = true
                     }
@@ -1094,29 +1069,26 @@ export class TWorld {
                 moving = true
             }
         }
-        if (command.ruleWrappers.Count > 0) {
+        if (command.ruleWrappers.length > 0) {
             usdomain.domain.worldCommandList.doCommand(command)
-        } else {
-            command.free
         }
     }
     
     lowerSelectedRules(): void {
         let rule: TSRule
         let lowerRule: TSRule
-        let i: int
         let command: TSMoveRulesCommand
         let moving: boolean
         
         command = uscommands.TSMoveRulesCommand().create()
         command.action = "lower"
         moving = false
-        for (i = this.rules.Count - 2; i >= 0; i--) {
+        for (let i = this.rules.length - 2; i >= 0; i--) {
             //skip first
-            rule = TSRule(this.rules[i])
+            const rule: TSRule = this.rules[i]
             if (rule.selected) {
                 if (!moving) {
-                    lowerRule = TSRule(this.rules[i + 1])
+                    const lowerRule: TSRule = this.rules[i + 1]
                     if (!lowerRule.selected) {
                         moving = true
                     }
@@ -1130,112 +1102,86 @@ export class TWorld {
         }
         if (command.ruleWrappers.Count > 0) {
             usdomain.domain.worldCommandList.doCommand(command)
-        } else {
-            command.free
         }
     }
+    */
     
     selectAvailable(): void {
-        let rule: TSRule
-        let i: int
-        
-        for (i = 0; i <= this.rules.Count - 1; i++) {
-            rule = TSRule(this.rules[i])
+        for (let i = 0; i < this.rules.length; i++) {
+            const rule: TSRule = this.rules[i]
             rule.selected = rule.available
         }
     }
     
-    firstAvailable(): TSRule {
+    firstAvailable(): TSRule | null {
         let result = new TSRule()
-        let rule: TSRule
-        let i: int
         
-        for (i = 0; i <= this.rules.Count - 1; i++) {
-            rule = TSRule(this.rules[i])
+        for (let i = 0; i < this.rules.length; i++) {
+            const rule: TSRule = this.rules[i]
             if (rule.available) {
-                result = rule
-                return result
+                return rule
             }
         }
-        result = null
-        return result
+
+        return null
     }
     
     selectInRectangle(rect: TRect): void {
         let intersection: TRect
-        let i: int
         let rule: TSRule
         let variable: TSVariable
         
-        if (Rect.right < Rect.left) {
-            Rect.left, Rect.right = swapIntegers(Rect.left, Rect.right)
+        if (rect.Right < rect.Left) {
+            [rect.Left, rect.Right] = swapIntegers(rect.Left, rect.Right)
         }
-        if (Rect.bottom < Rect.top) {
-            Rect.top, Rect.bottom = swapIntegers(Rect.top, Rect.bottom)
+        if (rect.Bottom < rect.Top) {
+            [rect.Top, rect.Bottom]= swapIntegers(rect.Top, rect.Bottom)
         }
-        for (i = 0; i <= this.rules.Count - 1; i++) {
-            rule = TSRule(this.rules[i])
-            delphi_compatability.IntersectRect(intersection, rule.bounds(), Rect)
-            if (!delphi_compatability.IsRectEmpty(intersection)) {
+        for (let i = 0; i < this.rules.length; i++) {
+            const rule:TSRule = this.rules[i]
+            if (rule.bounds().intersects(rect)) {
                 rule.selected = true
             }
         }
-        for (i = 0; i <= this.variables.Count - 1; i++) {
-            variable = TSVariable(this.variables[i])
-            delphi_compatability.IntersectRect(intersection, variable.bounds(), Rect)
-            if (!delphi_compatability.IsRectEmpty(intersection)) {
+        for (let i = 0; i < this.variables.length; i++) {
+            const variable: TSVariable = this.variables[i]
+            if (variable.bounds().intersects(rect)) {
                 variable.selected = true
             }
         }
     }
     
-    firstSelectedVariable(): TSVariable {
-        let result = new TSVariable()
-        let i: int
-        let variable: TSVariable
-        
-        result = null
-        for (i = 0; i <= this.variables.Count - 1; i++) {
-            variable = TSVariable(this.variables[i])
+    firstSelectedVariable(): TSVariable | null {
+        for (let i = 0; i < this.variables.length; i++) {
+            const variable: TSVariable = this.variables[i]
             if (variable.selected) {
-                result = variable
-                return result
+                return variable
             }
         }
-        return result
+        return null
     }
     
-    firstSelectedObject(): TSDraggableObject {
-        let result = new TSDraggableObject()
-        let i: int
-        let variable: TSVariable
-        let rule: TSRule
-        
-        result = null
-        for (i = 0; i <= this.variables.Count - 1; i++) {
-            variable = TSVariable(this.variables[i])
+    firstSelectedObject(): TSDraggableObject | null {
+        for (let i = 0; i < this.variables.length; i++) {
+            const variable: TSVariable = this.variables[i]
             if (variable.selected) {
-                result = variable
-                return result
+                return variable
             }
         }
-        for (i = 0; i <= this.rules.Count - 1; i++) {
-            rule = TSRule(this.rules[i])
+        for (let i = 0; i < this.rules.length; i++) {
+            const rule: TSRule = this.rules[i]
             if (rule.selected) {
-                result = rule
-                return result
+                return rule
             }
         }
-        return result
+        return null
     }
     
+    /* TODO: Maybe move this code used in wizard?
     addContextsToCombBox(comboBox: TComboBox): void {
-        let i: int
-        let variable: TSVariable
-        
         comboBox.Clear()
-        for (i = 0; i <= this.variables.Count - 1; i++) {
-            variable = TSVariable(this.variables[i])
+        for (let i = 0; i < this.variables.length; i++) {
+            const variable: TSVariable = this.variables[i]
             if (variable.contextUseages > 0) {
                 comboBox.Items.AddObject(variable.phrase, variable)
             }
@@ -1243,29 +1189,23 @@ export class TWorld {
     }
     
     addContextsToListBox(listBox: TListBox): void {
-        let i: int
-        let variable: TSVariable
-        
         listBox.Clear()
-        for (i = 0; i <= this.variables.Count - 1; i++) {
-            variable = TSVariable(this.variables[i])
+        for (let i = 0; i < this.variables.length; i++) {
+            const variable: TSVariable = this.variables[i]
             if (variable.contextUseages > 0) {
                 listBox.Items.AddObject(variable.phrase, variable)
             }
         }
     }
+    */
     
     boundsRect(): TRect {
-        let result = new TRect()
-        let node: TSDraggableObject
-        let i: int
-        
-        result.Top = 0
-        result.Bottom = 0
-        result.Left = 0
-        result.Right = 0
-        for (i = 0; i <= this.variables.Count - 1; i++) {
-            node = this.variables[i]
+        // It is OK to have left and right at zero because
+        // this is not a true bounds rect but one including the origin
+        let result = new TRect(0, 0, 0, 0)
+
+        for (let i = 0; i < this.variables.length; i++) {
+            const node = this.variables[i]
             if (result.Left > node.position.X) {
                 result.Left = node.position.X
             }
@@ -1279,8 +1219,8 @@ export class TWorld {
                 result.Bottom = node.position.Y + node.extent.Y
             }
         }
-        for (i = 0; i <= this.rules.Count - 1; i++) {
-            node = this.rules[i]
+        for (let i = 0; i < this.rules.length; i++) {
+            const node = this.rules[i]
             if (result.Left > node.position.X) {
                 result.Left = node.position.X
             }
@@ -1298,14 +1238,10 @@ export class TWorld {
     }
     
     updateVariablesForIndexInVariables(): void {
-        let i: int
-        let variable: TSVariable
-        
-        for (i = 0; i <= this.variables.Count - 1; i++) {
-            variable = TSVariable(this.variables[i])
+        for (let i = 0; i < this.variables.length; i++) {
+            const variable: TSVariable = this.variables[i]
             variable.indexInVariables = i
         }
     }
-    
 }
 

@@ -105,5 +105,16 @@ Failed to put string as return type instead of void:
    recordReplyMoveChanges(changedVariablesList: TSChangedVariableWrapper[], totalReply: string, contextToFocusTo: TSVariable): void
 Maybe got confused by needing manual fixup for assignment to a parameter?
 
-TODO: eed to handle super calls better for TS:
+TODO: need to handle super calls better for TS:
   TSDraggableObject.prototype.setPosition.call(this, firstPart)
+
+TODO: double parens on conditional (probably not worth fixing)
+   if ((rule.selected)) {
+
+Watch out for where the converter tries to be helpful by changing case on some variables (incorrectly)
+    if (Rect.bottom < Rect.top) {
+        Rect.top, Rect.bottom = swapIntegers(Rect.top, Rect.bottom)
+    }
+
+Static methods not converted correctly:
+  TSRule.headerForField
