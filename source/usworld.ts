@@ -1,5 +1,12 @@
 // unit usworld
 
+import { int, TPoint, TRect, StrToInt } from "./common"
+
+// TODO: temp - REMOVE!!!
+const usdomain: any;
+type TWorld = any
+
+/*
 from conversion_common import *
 import usdomain
 import uscommands
@@ -8,16 +15,16 @@ import usruleeditorform
 import usconsoleform
 import usmain
 import delphi_compatability
+*/
 
-// const
 const kSaveAllRules = false
 const kSaveOnlySelectedRules = true
 
-
 export enum TSVariableState { kPresent, kAbsent }
 
-TSVariableDisplayOptions = boolean[] /* 5 + 1 */
-// const
+type TSVariableDisplayOptions = boolean[] /* 5 + 1 */
+
+// need to be sequence from zero
 const kRuleContext = 0
 const kRuleCommand = 1
 const kRuleReply = 2
@@ -26,7 +33,7 @@ const kRuleRequirements = 4
 const kRuleChanges = 5
 const kLastRuleField = 5
 
-
+/* TODO
 function findCompleteWorldFileName(worldFileNameRead: string): string {
     let result = ""
     if (!FileExists(worldFileNameRead)) {
@@ -36,110 +43,82 @@ function findCompleteWorldFileName(worldFileNameRead: string): string {
     }
     return result
 }
+*/
 
-function swapIntegers(a: int, b: int): void {
-    let temp: int
-    
-    temp = a
-    a = b
-    b = temp
-    return a, b
+function swapIntegers(a: int, b: int): int[] {
+    return [b, a]
 }
-
 
 export class TSDraggableObject {
     position: TPoint = new TPoint()
     extent: TPoint = new TPoint()
     selected: boolean = false
     
-    // need to be sequence from zero
-    //////////////////// TObjectWithPosition ///////////////////////
     displayName(): string {
-        let result = ""
-        result = "Error - override needed"
-        return result
+        return "Error - override needed"
     }
     
     setPosition(value: string): void {
-        let firstNumber: string
-        let secondNumber: string
+        const [firstNumber, secondNumber] = value.split(",")
         
-        firstNumber = UNRESOLVED.Copy(value, 1, UNRESOLVED.pos(",", value) - 1)
-        secondNumber = UNRESOLVED.Copy(value, len(firstNumber) + 2, len(value))
-        //position.x := 0;
-        //position.y := 0;
         try {
             this.position.X = StrToInt(firstNumber)
             this.position.Y = StrToInt(secondNumber)
-        } catch (Exception e) {
-            // pass
+        } catch (e) {
+            console.log("setPosition exception", e)
         }
     }
     
     bounds(): TRect {
-        let result = new TRect()
-        let topLeft: TPoint
-        
-        topLeft = Point(this.position.X - this.extent.X / 2, this.position.Y - this.extent.Y / 2)
-        result = Rect(topLeft.X, topLeft.Y, topLeft.X + this.extent.X, topLeft.Y + this.extent.Y)
-        return result
+        const topLeft = new TPoint(this.position.X - this.extent.X / 2, this.position.Y - this.extent.Y / 2)
+        return new TRect(topLeft.X, topLeft.Y, topLeft.X + this.extent.X, topLeft.Y + this.extent.Y)
     }
     
     center(): TPoint {
-        let result = new TPoint()
-        result = this.position
-        return result
+        return this.position.copy()
     }
     
 }
 
 export class TSDragRecord {
-    draggedNode: TSDraggableObject = new TSDraggableObject()
-    originalLocation: TPoint = new TPoint()
-    newLocation: TPoint = new TPoint()
+    draggedNode: TSDraggableObject;
+    originalLocation: TPoint;
+    newLocation: TPoint;
     
-    //////////////////// TSDragRecord ///////////////////////
-    createWithNode(node: TSDraggableObject): void {
-        this.create
+    constructor(node: TSDraggableObject) {
         this.draggedNode = node
-        this.originalLocation = this.draggedNode.position
-        this.newLocation = this.originalLocation
+        this.originalLocation = this.draggedNode.position.copy()
+        this.newLocation = this.originalLocation.copy()
     }
     
     doDrag(): void {
-        this.draggedNode.position = this.newLocation
+        this.draggedNode.position = this.newLocation.copy()
     }
     
     undoDrag(): void {
-        this.draggedNode.position = this.originalLocation
+        this.draggedNode.position = this.originalLocation.copy()
     }
     
     offset(delta: TPoint): void {
-        this.newLocation = Point(this.newLocation.X + delta.X, this.newLocation.Y + delta.Y)
-        this.draggedNode.position = this.newLocation
-    }
-    
+        this.newLocation = new TPoint(this.newLocation.X + delta.X, this.newLocation.Y + delta.Y)
+        this.draggedNode.position = this.newLocation.copy()
+    }   
 }
 
-export class TSVariable {
-    world: TWorld = new TWorld()
+export class TSVariable extends TSDraggableObject {
+    world: TWorld = null
     phrase: string = ""
-    state: TSVariableState = new TSVariableState()
+    state: TSVariableState = TSVariableState.kAbsent
     contextUseages: int = 0
     requirementsUseages: int = 0
     commandUseages: int = 0
     moveUseages: int = 0
     changesUseages: int = 0
-    indexInVariables: int = 0
-    TSVariable.prototype = new TSDraggableObject()
-    TSVariable.prototype.constructor = TSVariable
-    
     // for java creation
-    //////////////////// TSVariable ///////////////////////
+    indexInVariables: int = 0
+    
     displayName(): string {
-        let result = ""
-        result = this.phrase
-        return result
+        return this.phrase
     }
     
     setPhrase(aPhrase: string): void {
@@ -147,18 +126,17 @@ export class TSVariable {
     }
     
     setState(newState: TSVariableState): void {
+        // TODO: Should we make a defensive copy?
         this.state = newState
     }
     
     getState(): TSVariableState {
-        let result = new TSVariableState()
-        result = this.state
-        return result
+        // TODO: Should we make a defensive copy?
+        return this.state
     }
     
     hasUseagesForField(col: int): boolean {
         let result = false
-        result = false
         switch (col) {
             case kRuleContext:
                 result = (this.contextUseages > 0) || (this.moveUseages > 0)
@@ -178,52 +156,44 @@ export class TSVariable {
             case kRuleChanges:
                 result = this.changesUseages > 0
                 break
+            default:
+                break
+        }
         return result
     }
     
     meetsDisplayOptions(displayOptions: TSVariableDisplayOptions): boolean {
-        let result = false
-        let i: int
-        
-        result = false
-        for (i = 0; i <= 5; i++) {
+        for (let i = 0; i <= 5; i++) {
             if (i === kRuleCommand) {
-                //don't display commands for now - used to display rules
+                // don't display commands for now - used to display rules
                 continue
             }
             if (this.hasUseagesForField(i) && displayOptions[i]) {
-                result = true
-                return result
+                return true
             }
         }
-        return result
+        return false
     }
-    
 }
 
 export class TSDesiredStateVariableWrapper {
-    variable: TSVariable = new TSVariable()
-    desiredState: TSVariableState = new TSVariableState()
+    variable: TSVariable
+    desiredState: TSVariableState
     
-    /////////////////////////// TSDesiredStateVariableWrapperleader /////////////////////////////////////
     leader(): string {
-        let result = ""
         if (this.desiredState === TSVariableState.kAbsent) {
-            result = "~"
+            return "~"
         } else {
-            result = ""
+            return ""
         }
-        return result
     }
     
     displayLeader(): string {
-        let result = ""
         if (this.desiredState === TSVariableState.kAbsent) {
-            result = "~"
+            return "~"
         } else {
-            result = "  "
+            return "  "
         }
-        return result
     }
     
     invertDesiredState(): void {
@@ -235,21 +205,16 @@ export class TSDesiredStateVariableWrapper {
     }
     
     displayString(): string {
-        let result = ""
-        result = this.displayLeader() + this.variable.phrase
-        return result
+        return this.displayLeader() + this.variable.phrase
     }
-    
 }
 
 export class TSChangedVariableWrapper {
-    variable: TSVariable = new TSVariable()
-    oldState: TSVariableState = new TSVariableState()
-    newState: TSVariableState = new TSVariableState()
+    variable: TSVariable
+    oldState: TSVariableState
+    newState: TSVariableState
     
-    /////////////////////////// TSChangedVariableWrapper /////////////////////////////////////
-    createWithVariableNewState(variable: TSVariable, newState: TSVariableState): void {
-        this.create
+    constructor(variable: TSVariable, newState: TSVariableState) {
         this.variable = variable
         this.newState = newState
         this.oldState = variable.getState()
@@ -265,22 +230,19 @@ export class TSChangedVariableWrapper {
     
 }
 
-export class TSRule {
-    world: TWorld = new TWorld()
-    context: TSVariable = new TSVariable()
-    requirements: TList = new TList()
-    command: TSVariable = new TSVariable()
+export class TSRule extends TSDraggableObject {
+    world: TWorld
+    context: TSVariable = null
+    requirements: TSDesiredStateVariableWrapper[] = []
+    command: TSVariable = null
     reply: string = ""
-    move: TSVariable = new TSVariable()
-    changes: TList = new TList()
+    move: TSVariable = null
+    changes: TSDesiredStateVariableWrapper[] = []
     available: boolean = false
     requirementsString: string = ""
     changesString: string = ""
     useagesRemoved: boolean = false
-    TSRule.prototype = new TSDraggableObject()
-    TSRule.prototype.constructor = TSRule
-    
-    //////////////////// TSRule ////////////////////////
+ 
     displayName(): string {
         let result = ""
         result = ""
@@ -291,52 +253,40 @@ export class TSRule {
         return result
     }
     
-    create(): void {
-        this.requirements = delphi_compatability.TList().Create()
-        this.changes = delphi_compatability.TList().Create()
-    }
-    
-    addUseages(): void {
-        let i: int
-        
+    addUseages(): void {  
         this.context.contextUseages += 1
-        for (i = 0; i <= this.requirements.Count - 1; i++) {
-            TSDesiredStateVariableWrapper(this.requirements[i]).variable.requirementsUseages += 1
+        for (let i = 0; i < this.requirements.length; i++) {
+            this.requirements[i].variable.requirementsUseages += 1
         }
         this.command.commandUseages += 1
         this.move.moveUseages += 1
-        for (i = 0; i <= this.changes.Count - 1; i++) {
-            TSDesiredStateVariableWrapper(this.changes[i]).variable.changesUseages += 1
+        for (let i = 0; i < this.changes.length; i++) {
+            this.changes[i].variable.changesUseages += 1
         }
         this.useagesRemoved = false
     }
     
     removeUseages(): void {
-        let i: int
-        
         this.context.contextUseages -= 1
-        for (i = 0; i <= this.requirements.Count - 1; i++) {
-            TSDesiredStateVariableWrapper(this.requirements[i]).variable.requirementsUseages -= 1
+        for (let i = 0; i < this.requirements.length; i++) {
+            this.requirements[i].variable.requirementsUseages -= 1
         }
         this.command.commandUseages -= 1
         this.move.moveUseages -= 1
-        for (i = 0; i <= this.changes.Count - 1; i++) {
-            TSDesiredStateVariableWrapper(this.changes[i]).variable.changesUseages -= 1
+        for (let i = 0; i < this.changes.length; i++) {
+            this.changes[i].variable.changesUseages -= 1
         }
         this.useagesRemoved = true
     }
     
-    destroy(): void {
-        let i: int
-        
+    destroyManually(): void {
         if (!this.useagesRemoved) {
             if (this.context !== null) {
                 this.context.contextUseages -= 1
             }
             if (this.requirements !== null) {
-                for (i = 0; i <= this.requirements.Count - 1; i++) {
-                    TSDesiredStateVariableWrapper(this.requirements[i]).variable.requirementsUseages -= 1
-                    TSDesiredStateVariableWrapper(this.requirements[i]).free
+                for (let i = 0; i < this.requirements.length; i++) {
+                    this.requirements[i].variable.requirementsUseages -= 1
                 }
             }
             if (this.command !== null) {
@@ -346,28 +296,11 @@ export class TSRule {
                 this.move.moveUseages -= 1
             }
             if (this.changes !== null) {
-                for (i = 0; i <= this.changes.Count - 1; i++) {
-                    TSDesiredStateVariableWrapper(this.changes[i]).variable.changesUseages -= 1
-                    TSDesiredStateVariableWrapper(this.changes[i]).free
-                }
-            }
-        } else {
-            if (this.requirements !== null) {
-                for (i = 0; i <= this.requirements.Count - 1; i++) {
-                    TSDesiredStateVariableWrapper(this.requirements[i]).free
-                }
-            }
-            if (this.changes !== null) {
-                for (i = 0; i <= this.changes.Count - 1; i++) {
-                    TSDesiredStateVariableWrapper(this.changes[i]).free
+                for (let i = 0; i < this.changes.length; i++) {
+                    this.changes[i].variable.changesUseages -= 1
                 }
             }
         }
-        this.requirements.free
-        this.requirements = null
-        this.changes.free
-        this.changes = null
-        TSDraggableObject.prototype.destroy.call(this)
     }
     
     setContext(aString: string): void {
@@ -378,22 +311,15 @@ export class TSRule {
         this.context.contextUseages += 1
     }
     
-    setRequirements(aString: string): void {
-        let i: int
-        
+    setRequirements(aString: string): void { 
         this.requirementsString = aString
-        if (this.requirements.Count > 0) {
-            for (i = 0; i <= this.requirements.Count - 1; i++) {
-                TSDesiredStateVariableWrapper(this.requirements[i]).variable.requirementsUseages -= 1
-                TSDesiredStateVariableWrapper(this.requirements[i]).free
-            }
+        for (let i = 0; i < this.requirements.length; i++) {
+            this.requirements[i].variable.requirementsUseages -= 1
         }
-        this.requirements.Clear()
+        this.requirements.length = 0
         this.compile(aString, this.requirements)
-        if (this.requirements.Count > 0) {
-            for (i = 0; i <= this.requirements.Count - 1; i++) {
-                TSDesiredStateVariableWrapper(this.requirements[i]).variable.requirementsUseages += 1
-            }
+        for (let i = 0; i < this.requirements.length; i++) {
+            this.requirements[i].variable.requirementsUseages += 1
         }
     }
     
@@ -406,18 +332,7 @@ export class TSRule {
     }
     
     setReply(aString: string): void {
-        let i: int
-        let safeString: string
-        
-        safeString = aString
-        for (i = 1; i <= len(safeString); i++) {
-            if (safeString[i] === chr(13)) {
-                safeString[i] = " "
-            }
-            if (safeString[i] === chr(10)) {
-                safeString[i] = " "
-            }
-        }
+        const safeString = aString.replace("\r", " ").replace("\n", " ")
         this.reply = safeString
     }
     
@@ -430,25 +345,18 @@ export class TSRule {
     }
     
     setChanges(aString: string): void {
-        let i: int
-        
         this.changesString = aString
-        if (this.changes.Count > 0) {
-            for (i = 0; i <= this.changes.Count - 1; i++) {
-                TSDesiredStateVariableWrapper(this.changes[i]).variable.changesUseages -= 1
-                TSDesiredStateVariableWrapper(this.changes[i]).free
-            }
+        for (let i = 0; i < this.changes.length; i++) {
+            this.changes[i].variable.changesUseages -= 1
         }
-        this.changes.Clear()
+        this.changes.length = 0
         this.compile(aString, this.changes)
-        if (this.changes.Count > 0) {
-            for (i = 0; i <= this.changes.Count - 1; i++) {
-                TSDesiredStateVariableWrapper(this.changes[i]).variable.changesUseages += 1
-            }
+        for (let i = 0; i < this.changes.length; i++) {
+            this.changes[i].variable.changesUseages += 1
         }
     }
     
-    compile(aString: string, list: TList): void {
+    compile(aString: string, list: TSDesiredStateVariableWrapper[]): void {
         let phrase: string
         let position: int
         let remaining: string

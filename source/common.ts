@@ -1,6 +1,32 @@
+export type int = number
+
+
 export class TPoint {
-    x: number
-    y: number
+    X: int
+    Y: int
+
+    constructor(x = 0, y = 0) {
+        this.X = Math.round(x)
+        this.Y = Math.round(y)
+    }
+
+    copy(): TPoint {
+        return new TPoint(this.X, this.Y)
+    }
+}
+
+export class TRect {
+    Left: int
+    Top: int
+    Right: int
+    Bottom: int
+
+    constructor(Left = 0, Top = 0, Right = Left, Bottom = Top) {
+        this.Left = Math.round(Left)
+        this.Top = Math.round(Top)
+        this.Right = Math.round(Right)
+        this.Bottom = Math.round(Bottom)
+    }
 }
 
 export function arrayRemove(theArray: Array<any>, item: any) {
@@ -8,4 +34,8 @@ export function arrayRemove(theArray: Array<any>, item: any) {
     if (index !== -1) {
         theArray.splice(index, 1)
     }
+}
+
+export function StrToInt(value: string): int {
+    return parseInt(value)
 }
