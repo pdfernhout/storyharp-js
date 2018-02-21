@@ -1,6 +1,6 @@
 // unit usworld
 
-import { int, TPoint, TRect, StrToInt, compareTextIgnoreCase, ShowMessage } from "./common"
+import { int, TPoint, TRect, StrToInt, compareTextIgnoreCase } from "./common"
 
 /* External dependencies that need to be defined in app:
   // These can be set at World creation
@@ -772,10 +772,11 @@ export class TWorld {
 
         // Emulate file reader
         const lines = contents.split(/\r?\n/)
+        if (lines.length && lines[lines.length - 1] === "") lines.pop()
         function readln(): string {
             const result = lines.shift()
             if (result !== undefined) return result
-            throw "Unexpected EOF loading World file"
+            throw new Error("Unexpected EOF loading file")
         }
         function eof() {
             return !lines.length
@@ -789,12 +790,11 @@ export class TWorld {
             // unfinished - need better error checking
             const header = readln()
             if ((header !== "; world file version 1.0") && (header !== "; StoryHarp world file version 1.3")) {
-                ShowMessage("File header for world file is not correct")
-                return false
+               throw new Error("File header for world file is not correct")
             }
             while (!eof()) {
                 let value = readln()
-                if ((value !== "") && (value[1] === ";")) {
+                if ((value !== "") && (value[0] === ";")) {
                     continue
                 }
                 if (value !== "====================") {
@@ -892,10 +892,11 @@ export class TWorld {
         
         // Emulate file reader
         const lines = contents.split(/\r?\n/)
+        if (lines.length && lines[lines.length - 1] === "") lines.pop()
         function readln(): string {
             const result = lines.shift()
             if (result !== undefined) return result
-            throw "Unexpected EOF loading World file"
+            throw new Error("Unexpected EOF loading file")
         }
         function eof() {
             return !lines.length
@@ -906,8 +907,7 @@ export class TWorld {
         // unfinished - need better error checking
         header = readln()
         if (header !== "; session file version 1.0") {
-            ShowMessage("File header for session file is not correct")
-            return false
+            throw new Error("File header for session file is not correct")
         }
         header = readln()
         if (header !== "============ Variables for world =================") {

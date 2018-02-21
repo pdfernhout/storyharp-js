@@ -62,6 +62,8 @@ export function compareTextIgnoreCase(a: string, b: string): boolean {
     return a.toUpperCase() === b.toUpperCase()
 }
 
+/*
 export function ShowMessage(message: string) {
     alert(message)
 }
+*/
