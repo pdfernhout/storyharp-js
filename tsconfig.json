@@ -9,4 +9,7 @@
         "strictNullChecks": true,
         "outDir": "dist",
     },
+    "include": [
+        "source/**/*"
+    ]
 }

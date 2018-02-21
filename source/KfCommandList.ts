@@ -93,14 +93,14 @@ export class KfCommandList {
     mouseMove(point: TPoint): void {
         let mouseDidMove: boolean
         let nextMouseCommand: KfCommand | null
-        let pointMovedTo: TPoint = {x: 0, y: 0}
+        let pointMovedTo: TPoint = new TPoint(0, 0)
 
         nextMouseCommand = this.mouseCommand
         this.mouseCommand = null
         if (nextMouseCommand !== null) {
             mouseDidMove = 
-                (Math.abs(this.previousPoint.x - point.x) > kMinMouseMoveDistance) ||
-                (Math.abs(this.previousPoint.y - point.y) > kMinMouseMoveDistance)
+                (Math.abs(this.previousPoint.X - point.X) > kMinMouseMoveDistance) ||
+                (Math.abs(this.previousPoint.Y - point.Y) > kMinMouseMoveDistance)
             if (mouseDidMove) {
                 pointMovedTo = point
             } else {
@@ -120,8 +120,8 @@ export class KfCommandList {
         this.mouseCommand = null
         if (nextMouseCommand !== null){
             mouseDidMove = 
-                (Math.abs(point.x - this.anchorPoint.x) > kMinMouseMoveDistance) ||
-                (Math.abs(point.y - this.anchorPoint.y) > kMinMouseMoveDistance)
+                (Math.abs(point.X - this.anchorPoint.X) > kMinMouseMoveDistance) ||
+                (Math.abs(point.Y - this.anchorPoint.Y) > kMinMouseMoveDistance)
             if (mouseDidMove) {
                 pointMovedTo = point
             } else {

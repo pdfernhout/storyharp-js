@@ -8,5 +8,8 @@
         "sourceMap": false,
         "strictNullChecks": true,
         "outDir": "dist-test"
-    }
+    },
+    "include": [
+        "source/**/*"
+    ]
 }
