@@ -4,7 +4,6 @@ import { int, TPoint, TRect, StrToInt } from "./common"
 
 // TODO: temp - REMOVE!!!
 const usdomain: any;
-type TWorld = any
 
 /*
 from conversion_common import *
@@ -106,7 +105,7 @@ export class TSDragRecord {
 }
 
 export class TSVariable extends TSDraggableObject {
-    world: TWorld = null
+    world: TWorld
     phrase: string = ""
     state: TSVariableState = TSVariableState.kAbsent
     contextUseages: int = 0
@@ -157,7 +156,7 @@ export class TSVariable extends TSDraggableObject {
                 result = this.changesUseages > 0
                 break
             default:
-                break
+                throw new Error("Unexpected case")
         }
         return result
     }
@@ -179,6 +178,11 @@ export class TSVariable extends TSDraggableObject {
 export class TSDesiredStateVariableWrapper {
     variable: TSVariable
     desiredState: TSVariableState
+
+    constructor(variable: TSVariable, desiredState: TSVariableState) {
+        this.variable = variable
+        this.desiredState = desiredState
+    }
     
     leader(): string {
         if (this.desiredState === TSVariableState.kAbsent) {
@@ -232,11 +236,11 @@ export class TSChangedVariableWrapper {
 
 export class TSRule extends TSDraggableObject {
     world: TWorld
-    context: TSVariable = null
+    context: TSVariable
     requirements: TSDesiredStateVariableWrapper[] = []
-    command: TSVariable = null
+    command: TSVariable
     reply: string = ""
-    move: TSVariable = null
+    move: TSVariable
     changes: TSDesiredStateVariableWrapper[] = []
     available: boolean = false
     requirementsString: string = ""
@@ -281,21 +285,21 @@ export class TSRule extends TSDraggableObject {
     
     destroyManually(): void {
         if (!this.useagesRemoved) {
-            if (this.context !== null) {
+            if (this.context) {
                 this.context.contextUseages -= 1
             }
-            if (this.requirements !== null) {
+            if (this.requirements) {
                 for (let i = 0; i < this.requirements.length; i++) {
                     this.requirements[i].variable.requirementsUseages -= 1
                 }
             }
-            if (this.command !== null) {
+            if (this.command) {
                 this.command.commandUseages -= 1
             }
-            if (this.move !== null) {
+            if (this.move) {
                 this.move.moveUseages -= 1
             }
-            if (this.changes !== null) {
+            if (this.changes) {
                 for (let i = 0; i < this.changes.length; i++) {
                     this.changes[i].variable.changesUseages -= 1
                 }
@@ -304,7 +308,7 @@ export class TSRule extends TSDraggableObject {
     }
     
     setContext(aString: string): void {
-        if (this.context !== null) {
+        if (this.context) {
             this.context.contextUseages -= 1
         }
         this.context = this.world.findOrCreateVariable(aString, false)
@@ -324,7 +328,7 @@ export class TSRule extends TSDraggableObject {
     }
     
     setCommand(aString: string): void {
-        if (this.command !== null) {
+        if (this.command) {
             this.command.commandUseages -= 1
         }
         this.command = this.world.findOrCreateVariable(aString, false)
@@ -337,7 +341,7 @@ export class TSRule extends TSDraggableObject {
     }
     
     setMove(aString: string): void {
-        if (this.move !== null) {
+        if (this.move) {
             this.move.moveUseages -= 1
         }
         this.move = this.world.findOrCreateVariable(aString, false)
@@ -357,59 +361,43 @@ export class TSRule extends TSDraggableObject {
     }
     
     compile(aString: string, list: TSDesiredStateVariableWrapper[]): void {
-        let phrase: string
-        let position: int
-        let remaining: string
-        let variable: TSVariable
-        let desiredState: TSVariableState
-        let wrapper: TSDesiredStateVariableWrapper
-        
-        remaining = trim(aString)
-        while ((len(trim(remaining)) > 0)) {
-            position = UNRESOLVED.pos("&", remaining)
-            if (position > 0) {
-                phrase = UNRESOLVED.Copy(remaining, 1, position - 1)
+        let remaining = aString.trim()
+        while (remaining.length > 0) {
+            let phrase: string
+            let rest: string
+            const position = remaining.indexOf("&")
+            if (position >= 0) {
+                phrase = remaining.substring(0, position)
+                rest = remaining.substring(position + 1)
             } else {
                 phrase = remaining
+                rest = ""
             }
-            phrase = trim(phrase)
-            if (UNRESOLVED.pos("~", phrase) === 1) {
+            phrase = phrase.trim()
+
+            let desiredState: TSVariableState
+            if (phrase.indexOf("~") === 0) {
                 desiredState = TSVariableState.kAbsent
             } else {
                 desiredState = TSVariableState.kPresent
             }
             if (desiredState === TSVariableState.kAbsent) {
-                phrase = trim(UNRESOLVED.Copy(phrase, 2, len(phrase)))
+                phrase = phrase.substring(1)
             }
-            variable = this.world.findOrCreateVariable(phrase, false)
-            if (list === this.requirements) {
-                // need to distinguish for context list
-                wrapper = TSDesiredStateVariableWrapper.create
-            } else {
-                wrapper = TSDesiredStateVariableWrapper.create
-            }
-            wrapper.variable = variable
-            wrapper.desiredState = desiredState
-            list.Add(wrapper)
-            if (position > 0) {
-                remaining = UNRESOLVED.Copy(remaining, position + 1, len(remaining))
-            } else {
-                remaining = ""
-            }
+
+            const variable: TSVariable = this.world.findOrCreateVariable(phrase, false)
+            const wrapper: TSDesiredStateVariableWrapper = new TSDesiredStateVariableWrapper(variable, desiredState)
+            list.push(wrapper)
+
+            remaining = rest.trim()
         }
     }
     
-    decompile(list: TList): string {
+    decompile(list: TSDesiredStateVariableWrapper[]): string {
         let result = ""
-        let i: int
-        let wrapper: TSDesiredStateVariableWrapper
-        let item: string
-        
-        result = ""
-        for (i = 0; i <= list.Count - 1; i++) {
-            // OK to cast requirements as this
-            wrapper = TSDesiredStateVariableWrapper(list[i])
-            item = wrapper.leader() + wrapper.variable.phrase
+        for (let i = 0; i < list.length; i++) {
+            const wrapper: TSDesiredStateVariableWrapper = list[i]
+            const item = wrapper.leader() + wrapper.variable.phrase
             if (result !== "") {
                 result = result + " & " + item
             } else {
@@ -420,22 +408,15 @@ export class TSRule extends TSDraggableObject {
     }
     
     decompileRequirements(): string {
-        let result = ""
-        result = this.decompile(this.requirements)
-        return result
+        return this.decompile(this.requirements)
     }
     
     decompileChanges(): string {
-        let result = ""
-        result = this.decompile(this.changes)
-        return result
+        return this.decompile(this.changes)
     }
     
     updateAvailable(): void {
-        let i: int
-        let wrapper: TSDesiredStateVariableWrapper
-        
-        // assuming all field set up correctly and not nil
+        // assuming all field set up correctly and not null or undefined
         this.available = false
         if (this.context === this.world.emptyEntry) {
             //for now - really should do anyway - assuming unfinished
@@ -444,22 +425,17 @@ export class TSRule extends TSDraggableObject {
         if (this.context.state !== TSVariableState.kPresent) {
             return
         }
-        i = 0
-        while (i < this.requirements.Count) {
-            wrapper = TSDesiredStateVariableWrapper(this.requirements.Items[i])
+        for (let i = 0; i < this.requirements.length; i++) {
+            const wrapper: TSDesiredStateVariableWrapper = this.requirements[i]
             if (wrapper.variable.getState() !== wrapper.desiredState) {
                 return
             }
-            i = i + 1
         }
         this.available = true
     }
     
-    recordReplyMoveChanges(changedVariablesList: TList, totalReply: string, contextToFocusTo: TSVariable): void {
-        raise "method recordReplyMoveChanges had assigned to var parameter contextToFocusTo not added to return -- fixup manually"
-        let i: int
-        let desiredStateWrapper: TSDesiredStateVariableWrapper
-        let changedVariableWrapper: TSChangedVariableWrapper
+    recordReplyMoveChanges(changedVariablesList: TSChangedVariableWrapper[], totalReply: string, contextToFocusTo: TSVariable): string {
+        // TODO: raise "method recordReplyMoveChanges had assigned to var parameter contextToFocusTo not added to return -- fixup manually"
         
         if ((totalReply !== "") && (this.reply !== "")) {
             totalReply = totalReply + " "
@@ -468,12 +444,10 @@ export class TSRule extends TSDraggableObject {
         if (this.move !== this.world.emptyEntry) {
             contextToFocusTo = this.move
         }
-        i = 0
-        while (i < this.changes.Count) {
-            desiredStateWrapper = TSDesiredStateVariableWrapper(this.changes[i])
-            changedVariableWrapper = TSChangedVariableWrapper().createWithVariableNewState(desiredStateWrapper.variable, desiredStateWrapper.desiredState)
-            changedVariablesList.Add(changedVariableWrapper)
-            i = i + 1
+        for (let i = 0; i < this.changes.length; i++) {
+            const desiredStateWrapper: TSDesiredStateVariableWrapper = this.changes[i]
+            const changedVariableWrapper: TSChangedVariableWrapper = new TSChangedVariableWrapper(desiredStateWrapper.variable, desiredStateWrapper.desiredState)
+            changedVariablesList.push(changedVariableWrapper)
         }
         return totalReply
     }
@@ -498,6 +472,9 @@ export class TSRule extends TSDraggableObject {
             case kRuleChanges:
                 this.setChanges(text)
                 break
+            default:
+                throw new Error("Unexpected case")
+        }
     }
     
     getTextForField(col: int): string {
@@ -521,6 +498,9 @@ export class TSRule extends TSDraggableObject {
             case kRuleChanges:
                 result = this.changesString
                 break
+            default:
+                throw new Error("Unexpected case")
+        }
         return result
     }
     
@@ -545,23 +525,20 @@ export class TSRule extends TSDraggableObject {
             case kRuleChanges:
                 result = "Changes"
                 break
+            default:
+                throw new Error("Unexpected case")
+        }
         return result
     }
     
-    usesVariableInList(variable: TSVariable, list: TList): boolean {
-        let result = false
-        let i: int
-        let wrapper: TSDesiredStateVariableWrapper
-        
-        result = true
-        for (i = 0; i <= list.Count - 1; i++) {
-            wrapper = TSDesiredStateVariableWrapper(list.Items[i])
+    usesVariableInList(variable: TSVariable, list: TSDesiredStateVariableWrapper[]): boolean {
+        for (let i = 0; i < list.length; i++) {
+            const wrapper: TSDesiredStateVariableWrapper = list[i]
             if (wrapper.variable === variable) {
-                return result
+                return true
             }
         }
-        result = false
-        return result
+        return false
     }
     
     usesVariableFor(variable: TSVariable, col: int): boolean {
@@ -576,6 +553,7 @@ export class TSRule extends TSDraggableObject {
                 break
             case kRuleReply:
                 // error
+                console.log("Is this an error?")
                 result = false
                 break
             case kRuleMove:
@@ -587,18 +565,19 @@ export class TSRule extends TSDraggableObject {
             case kRuleChanges:
                 result = this.usesVariableInList(variable, this.changes)
                 break
+            default:
+                throw new Error("Unexpected case")
+        }
         return result
     }
     
-    variableInList(n: int, list: TList): TSVariable {
-        let result = new TSVariable()
-        let wrapper: TSDesiredStateVariableWrapper
-        
+    variableInList(n: int, list: TSDesiredStateVariableWrapper[]): TSVariable {
+        let result: TSVariable
         if (n < 0) {
             n = 0
         }
-        if (list.Count > n) {
-            wrapper = TSDesiredStateVariableWrapper(list.Items[n])
+        if (n < list.length) {
+            const wrapper: TSDesiredStateVariableWrapper = list[n]
             result = wrapper.variable
         } else {
             result = this.world.emptyEntry
@@ -607,8 +586,7 @@ export class TSRule extends TSDraggableObject {
     }
     
     variableForFieldWithSelections(col: int, requirementsIndex: int, changesIndex: int): TSVariable {
-        let result = new TSVariable()
-        result = this.world.emptyEntry
+        let result: TSVariable = this.world.emptyEntry
         switch (col) {
             case kRuleContext:
                 result = this.context
@@ -618,6 +596,7 @@ export class TSRule extends TSDraggableObject {
                 break
             case kRuleReply:
                 // error
+                console.log("Is this an error too?")
                 result = this.world.emptyEntry
                 break
             case kRuleMove:
@@ -629,41 +608,33 @@ export class TSRule extends TSDraggableObject {
             case kRuleChanges:
                 result = this.variableInList(changesIndex, this.changes)
                 break
+            default:
+                throw new Error("Unexpected case")
+        }
         return result
     }
     
     variableForField(col: int): TSVariable {
-        let result = new TSVariable()
-        result = this.variableForFieldWithSelections(col, 0, 0)
+        const result: TSVariable = this.variableForFieldWithSelections(col, 0, 0)
         return result
     }
     
     setPosition(value: string): void {
-        let firstPart: string
-        let secondPart: string
-        let thirdPart: string
-        let rest: string
-        
-        firstPart = UNRESOLVED.Copy(value, 1, UNRESOLVED.pos("|", value) - 1)
-        rest = UNRESOLVED.Copy(value, len(firstPart) + 2, len(value))
-        secondPart = UNRESOLVED.Copy(rest, 1, UNRESOLVED.pos("|", rest) - 1)
-        thirdPart = UNRESOLVED.Copy(rest, len(secondPart) + 2, len(rest))
-        TSDraggableObject.prototype.setPosition.call(this, firstPart)
+        const [firstPart, secondPart, thirdPart] = value.split("|")
+        super.setPosition(firstPart)
         this.context.setPosition(secondPart)
         this.move.setPosition(thirdPart)
     }
-    
 }
 
 export class TSIndexChangeRuleWrapper {
-    rule: TSRule = new TSRule()
-    oldIndex: int = 0
-    newIndex: int = 0
+    rule: TSRule
+    oldIndex: int
+    newIndex: int
     
-    //////////////////// TSIndexChangeRuleWrapper ///////////////////////////
-    createWithRuleNewIndex(rule: TSRule, newIndex: int): void {
+    constructor(rule: TSRule, newIndex: int) {
         this.rule = rule
-        this.oldIndex = rule.world.rules.IndexOf(rule)
+        this.oldIndex = rule.world.rules.indexOf(rule)
         this.newIndex = newIndex
     }
     
@@ -672,9 +643,10 @@ export class TSIndexChangeRuleWrapper {
             return
         }
         if (this.newIndex >= 0) {
-            this.rule.world.rules.Move(this.oldIndex, this.newIndex)
+            this.rule.world.rules.splice(this.oldIndex, 1)
+            this.rule.world.rules.splice(this.newIndex, 0, this.rule)
         } else {
-            this.rule.world.rules.Delete(this.oldIndex)
+            this.rule.world.rules.splice(this.oldIndex, 1)
         }
     }
     
@@ -683,9 +655,10 @@ export class TSIndexChangeRuleWrapper {
             return
         }
         if (this.newIndex >= 0) {
-            this.rule.world.rules.Move(this.newIndex, this.oldIndex)
+            this.rule.world.rules.splice(this.newIndex, 1)
+            this.rule.world.rules.splice(this.oldIndex, 0, this.rule)
         } else {
-            this.rule.world.rules.Insert(this.oldIndex, this.rule)
+            this.rule.world.rules.splice(this.oldIndex, 0, this.rule)
         }
     }
     
@@ -693,63 +666,42 @@ export class TSIndexChangeRuleWrapper {
 
 export class TWorld {
     emptyEntry: TSVariable = new TSVariable()
-    variables: TList = new TList()
-    rules: TList = new TList()
-    focus: TSVariable = new TSVariable()
-    previousFocus: TSVariable = new TSVariable()
+    variables: TSVariable[] = []
+    rules: TSRule[] = []
+    focus: TSVariable
+    previousFocus: TSVariable
     firstCommandDoneForLastCommandPhrase: int = 0
     lastVariableCreated: string = ""
     
-    //////////////////// TWorld ///////////////////////////
-    Create(): void {
-        this.variables = delphi_compatability.TList().Create()
-        this.rules = delphi_compatability.TList().Create()
-        this.emptyEntry = TSVariable.create
-    }
-    
     resetVariableValues(): void {
-        let i: int
-        
-        if (this.variables !== null) {
-            if (this.variables.Count > 0) {
-                for (i = 0; i <= this.variables.Count - 1; i++) {
-                    TSVariable(this.variables.Items[i]).state = TSVariableState.kAbsent
-                }
+        if (this.variables) {
+            for (let i = 0; i < this.variables.length; i++) {
+                this.variables[i].state = TSVariableState.kAbsent
             }
         }
     }
     
     resetVariablesAndRules(): void {
-        let i: int
-        
-        if (this.rules !== null) {
-            if (this.rules.Count > 0) {
-                for (i = 0; i <= this.rules.Count - 1; i++) {
-                    TSRule(this.rules.Items[i]).free
-                }
+        if (this.rules) {
+            // TODO: This loop may be unneeded since all the variables are being cleared too
+            for (let i = 0; i < this.rules.length; i++) {
+                this.rules[i].destroyManually()
             }
-            this.rules.Clear()
+            this.rules.length = 0
         }
-        if (this.variables !== null) {
-            if (this.variables.Count > 0) {
-                for (i = 0; i <= this.variables.Count - 1; i++) {
-                    TSVariable(this.variables.Items[i]).free
-                }
-            }
-            this.variables.Clear()
+        if (this.variables) {
+            this.variables.length = 0
         }
     }
     
-    Destroy(): void {
+    /* TODO: Probably not needed
+    destroyManually(): void {
         this.resetVariablesAndRules()
-        this.rules.free
-        this.rules = null
-        this.variables.free
-        this.variables = null
-        this.emptyEntry.free
-        this.emptyEntry = null
-        TObject.prototype.Destroy.call(this)
+        this.rules = undefined
+        this.variables = undefined
+        this.emptyEntry = undefined
     }
+    */
     
     newRule(): TSRule {
         let result = new TSRule()

@@ -162,6 +162,7 @@ export class TSDoCommandPhrase {
                     if (this.newFirstCommandDoneForLastCommandPhrase === -1) {
                         this.newFirstCommandDoneForLastCommandPhrase = i
                     }
+                    // TODO FROM OTHER FILE: raise "method recordReplyMoveChanges had assigned to var parameter contextToFocusTo not added to return -- fixup manually"
                     this.newLastSaidTextWithMacros = rule.recordReplyMoveChanges(this.changedVariables, this.newLastSaidTextWithMacros, this.newFocus)
                 }
             }

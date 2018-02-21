@@ -100,3 +100,10 @@ after delcaring: requirements: TSDesiredStateVariableWrapper[] = []
    this.requirements[i].variable.requirementsUseages -= 1
 
 Delphi strings are 1-based not 0-based!!!
+
+Failed to put string as return type instead of void:
+   recordReplyMoveChanges(changedVariablesList: TSChangedVariableWrapper[], totalReply: string, contextToFocusTo: TSVariable): void
+Maybe got confused by needing manual fixup for assignment to a parameter?
+
+TODO: eed to handle super calls better for TS:
+  TSDraggableObject.prototype.setPosition.call(this, firstPart)
