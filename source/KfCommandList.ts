@@ -1,6 +1,6 @@
-import { KfCommand, TCommandEvent, TrackPhase } from "./KfCommand.js"
+import { KfCommand, TCommandEvent, TrackPhase } from "./KfCommand"
 
-import { TPoint, arrayRemove } from "./common.js"
+import { TPoint, arrayRemove } from "./common"
 
 type longint = number
 type integer = number
