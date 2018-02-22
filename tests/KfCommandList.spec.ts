@@ -1,8 +1,7 @@
 var o = require("ospec")
 
-var { KfCommand, KfCommandChangeType } = require("../source/KfCommand")
-var { KfCommandList } = require("../source/KfCommandList")
-
+import { KfCommand, KfCommandChangeType } from "../source/KfCommand"
+import { KfCommandList } from "../source/KfCommandList"
 
 o.spec("KfCommandList", () => {
 
@@ -17,7 +16,7 @@ o.spec("KfCommandList", () => {
 
         let commandChangeType = null
         
-        command.notifyProcedure = (command: any, state: any) => {
+        command.notifyProcedure = (command, state) => {
             commandChangeType = state
         }
         

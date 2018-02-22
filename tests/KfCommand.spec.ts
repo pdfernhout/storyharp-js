@@ -1,6 +1,6 @@
 var o = require("ospec")
 
-var { KfCommand } = require("../source/KfCommand")
+import { KfCommand } from "../source/KfCommand"
 
 o.spec("KfCommand", () => {
 

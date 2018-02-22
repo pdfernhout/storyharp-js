@@ -2,8 +2,7 @@ var fs = require("fs")
 
 var o = require("ospec")
 
-var { TWorld } = require("../source/TWorld")
-var { TSRule } = require("../source/TSRule")
+import { TWorld } from "../source/TWorld"
 
 const GarTrekWorldContents = fs.readFileSync("data/GarTrek.wld").toString()
 const GarTrekSessionContents = fs.readFileSync("data/just at sphinx 2.ses").toString()
@@ -54,7 +53,7 @@ o.spec("usworld", () => {
             o(world.focus).equals(null)
             const loadedSession = world.loadSessionFromFile("GarTrek.wld", GarTrekSessionContents)
             o(loadedSession).equals(true)
-            // if (!world.focus) throw "focus is null"
+            if (!world.focus) throw "focus is null"
             o(world.focus.phrase).equals("<sphinx>")
         })
 
@@ -64,13 +63,13 @@ o.spec("usworld", () => {
             world.reportModeCallback = function() {}
             world.loadWorldFromFileContents(GarTrekWorldContents)
             world.loadSessionFromFile("GarTrek.wld", GarTrekSessionContents)
-            // if (!world.focus) throw "focus is null"
+            if (!world.focus) throw "focus is null"
             o(world.focus.phrase).equals("<sphinx>")
             // Manually activate a rule -- normally a command would do this
-            const rule = world.rules.find((rule: any) => rule.command.phrase === "$answer herring")
-            // if (!rule) throw "rule is null"
+            const rule = world.rules.find(rule => rule.command.phrase === "$answer herring")
+            if (!rule) throw "rule is null"
             const result = rule.recordReplyMoveChanges([], "")
-            // if (!result.contextToFocusTo) throw "result.contextToFocusTo is null"
+            if (!result.contextToFocusTo) throw "result.contextToFocusTo is null"
             o(result.contextToFocusTo.phrase).equals("nether regions")
             o(result.totalReply.startsWith("The Sphinx says: ")).equals(true)
         })  

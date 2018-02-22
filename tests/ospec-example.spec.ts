@@ -1,4 +1,3 @@
-// import o from "ospec"
 var o = require("ospec")
 
 o("addition", function() {
