@@ -1,4 +1,4 @@
-var o = require("ospec")
+import * as o from "ospec"
 
 import { KfCommand, KfCommandChangeType } from "../source/KfCommand"
 import { KfCommandList } from "../source/KfCommandList"

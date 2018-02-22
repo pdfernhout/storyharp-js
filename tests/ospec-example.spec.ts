@@ -1,4 +1,4 @@
-var o = require("ospec")
+import * as o from "ospec"
 
 o("addition", function() {
     o(1 + 1).equals(2)

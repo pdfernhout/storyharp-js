@@ -1,6 +1,6 @@
 import * as fs from "fs"
 
-var o = require("ospec")
+import * as o from "ospec"
 
 import { TWorld } from "../source/TWorld"
 
