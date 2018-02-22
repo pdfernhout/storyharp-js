@@ -1,4 +1,4 @@
-var fs = require("fs")
+import * as fs from "fs"
 
 var o = require("ospec")
 
