@@ -1,6 +1,6 @@
 // An undoable and redoable command
 
-import { TPoint } from "./common"
+import { TPoint } from "./TPoint.js"
 
 export enum TrackPhase { trackPress, trackMove, trackRelease }
 

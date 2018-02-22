@@ -1,7 +1,7 @@
 const o = require("ospec")
 const fs = require("fs")
 
-const usworld = require("../dist-test/usworld")
+const TWorld = require("../dist-test/TWorld").TWorld
 
 const GarTrekWorldContents = fs.readFileSync("data/GarTrek.wld").toString()
 const GarTrekSessionContents = fs.readFileSync("data/just at sphinx 2.ses").toString()
@@ -11,12 +11,12 @@ o.spec("usworld", () => {
     o.spec("Tworld", () => {
 
         o("new", () => {
-            const world = new usworld.TWorld()
+            const world = new TWorld()
             o(world).notEquals(null)
         })
 
         o("load world with missing contents", () => {
-            const world = new usworld.TWorld()
+            const world = new TWorld()
             world.reportModeCallback = function() {}
             try {
                 const loaded = world.loadWorldFromFileContents("")
@@ -27,7 +27,7 @@ o.spec("usworld", () => {
         })
 
         o("load world with bad contents", () => {
-            const world = new usworld.TWorld()
+            const world = new TWorld()
             world.reportModeCallback = function() {}
             try {
                 const loaded = world.loadWorldFromFileContents("Not a robot")
@@ -38,14 +38,14 @@ o.spec("usworld", () => {
         })
 
         o("load world for GarTrek", () => {
-            const world = new usworld.TWorld()
+            const world = new TWorld()
             world.reportModeCallback = function() {}
             const loaded = world.loadWorldFromFileContents(GarTrekWorldContents)
             o(loaded).equals(true)
         })
 
         o("load session for GarTrek", () => {
-            const world = new usworld.TWorld()
+            const world = new TWorld()
             world.reportModeCallback = function() {}
             const loadedWorld = world.loadWorldFromFileContents(GarTrekWorldContents)
             o(loadedWorld).equals(true)
@@ -57,7 +57,7 @@ o.spec("usworld", () => {
 
         o("saying phrase in GarTrek", () => {
             // can't easily do this without commands
-            const world = new usworld.TWorld()
+            const world = new TWorld()
             world.reportModeCallback = function() {}
             world.loadWorldFromFileContents(GarTrekWorldContents)
             world.loadSessionFromFile("GarTrek.wld", GarTrekSessionContents)
