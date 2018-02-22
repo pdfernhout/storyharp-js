@@ -1,7 +1,8 @@
-const o = require("ospec")
+var o = require("ospec")
 
-const { KfCommand, KfCommandChangeType } = require("../dist-test/KfCommand")
-const KfCommandList = require("../dist-test/KfCommandList").KfCommandList
+var { KfCommand, KfCommandChangeType } = require("../source/KfCommand")
+var { KfCommandList } = require("../source/KfCommandList")
+
 
 o.spec("KfCommandList", () => {
 
@@ -16,7 +17,7 @@ o.spec("KfCommandList", () => {
 
         let commandChangeType = null
         
-        command.notifyProcedure = (command, state) => {
+        command.notifyProcedure = (command: any, state: any) => {
             commandChangeType = state
         }
         

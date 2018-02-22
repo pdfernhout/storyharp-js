@@ -1,4 +1,5 @@
-const o = require("ospec")
+// import o from "ospec"
+var o = require("ospec")
 
 o("addition", function() {
     o(1 + 1).equals(2)

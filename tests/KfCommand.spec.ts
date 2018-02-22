@@ -1,6 +1,6 @@
-const o = require("ospec")
+var o = require("ospec")
 
-const KfCommand = require("../dist-test/KfCommand").KfCommand
+var { KfCommand } = require("../source/KfCommand")
 
 o.spec("KfCommand", () => {
 
