@@ -113,7 +113,6 @@ export class TWorld {
             return match
         }
         const result = new TSVariable()
-        result.world = this
         result.setPhrase(aString.trim())
         // directly set for now - otherwise circular error on startup...
         result.state = TSVariableState.kAbsent

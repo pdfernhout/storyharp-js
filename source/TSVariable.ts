@@ -8,7 +8,6 @@ export enum TSVariableState { kPresent, kAbsent }
 type TSVariableDisplayOptions = boolean[] /* 5 + 1 */
 
 export class TSVariable extends TSDraggableObject {
-    world: TWorld
     phrase: string = ""
     state: TSVariableState = TSVariableState.kAbsent
     contextUseages: int = 0
