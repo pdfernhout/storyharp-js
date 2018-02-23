@@ -1,14 +1,17 @@
 // unit usfocuscommands
 
-from conversion_common import *
-import usdomain
-import quickfillcombobox
-import usmodelchanges
-import usworld
-import ucommand
-import delphi_compatability
+import { int } from "./common"
+import { KfCommand } from "./KfCommand"
 
-// record
+// TODO: Remove
+const usdomain: any = {}
+type TWinControl = any
+type TForm = any
+type TModelChange = any
+class TControl {Text: string; selStart: number; selLength: number}
+class TCustomEdit extends TControl {}
+class TQuickFillComboBox extends TControl {}
+
 export interface TSelectionInformation {
     text: string
     selStart: int
@@ -16,51 +19,45 @@ export interface TSelectionInformation {
 }
 
 function RecordSelectionInformation(selectionInformation: TSelectionInformation, control: TControl): void {
-    if (control instanceof delphi_compatability.TCustomEdit) {
-        selectionInformation.text = (control).Text
-        selectionInformation.selStart = (control).selStart
-        selectionInformation.selLength = (control).selLength
-    } else if (control instanceof quickfillcombobox.TQuickFillComboBox) {
-        selectionInformation.text = (control).Text
-        selectionInformation.selStart = (control).selStart
-        selectionInformation.selLength = (control).selLength
+    if (control instanceof TCustomEdit) {
+        selectionInformation.text = control.Text
+        selectionInformation.selStart = control.selStart
+        selectionInformation.selLength = control.selLength
+    } else if (control instanceof TQuickFillComboBox) {
+        selectionInformation.text = control.Text
+        selectionInformation.selStart = control.selStart
+        selectionInformation.selLength = control.selLength
     } else {
         // error
-        throw new GeneralException.create("RecordSelectionInformation: unsupported control class")
+        throw new Error("RecordSelectionInformation: unsupported control class")
     }
 }
 
 function RestoreSelectionInformation(selectionInformation: TSelectionInformation, control: TControl): void {
-    if (control instanceof delphi_compatability.TCustomEdit) {
-        (control).Text = selectionInformation.text
-        (control).selStart = selectionInformation.selStart
-        (control).selLength = selectionInformation.selLength
-    } else if (control instanceof quickfillcombobox.TQuickFillComboBox) {
-        (control).Text = selectionInformation.text
-        (control).selStart = selectionInformation.selStart
-        (control).selLength = selectionInformation.selLength
+    if (control instanceof TCustomEdit) {
+        control.Text = selectionInformation.text
+        control.selStart = selectionInformation.selStart
+        control.selLength = selectionInformation.selLength
+    } else if (control instanceof TQuickFillComboBox) {
+        control.Text = selectionInformation.text
+        control.selStart = selectionInformation.selStart
+        control.selLength = selectionInformation.selLength
     } else {
         // error
-        throw new GeneralException.create("RestoreSelectionInformation: unsupported control class")
+        throw new Error("RestoreSelectionInformation: unsupported control class")
     }
 }
 
-
 export class TFocusShiftAction {
-    control: TWinControl = new TWinControl()
-    form: TForm = new TForm()
-    modelChange: TModelChange = new TModelChange()
+    control: TWinControl
+    form: TForm
+    modelChange: TModelChange
     
-    ///////////////////////////// TFocusShiftAction //////////////////////////
-    createWithFormControlModelChange(form: TForm, control: TWinControl, modelChange: TModelChange): void {
+    // createWithFormControlModelChange
+    constructor(form: TForm, control: TWinControl, modelChange: TModelChange) {
         this.form = form
         this.control = control
         this.modelChange = modelChange
-    }
-    
-    destroy(): void {
-        this.modelChange.free
-        TObject.prototype.destroy.call(this)
     }
     
     // param ignored
@@ -99,105 +96,84 @@ export class TFocusShiftAction {
     
 }
 
-export class TFocusExitAction {
-    TFocusExitAction.prototype = new TFocusShiftAction()
-    TFocusExitAction.prototype.constructor = TFocusExitAction
+export class TFocusExitAction extends TFocusShiftAction {
     
-    //////////////////////////// TFocusExitAction ////////////////////////////////
     doShift(): void {
-        TFocusShiftAction.prototype.doShift.call(this)
+        super.doShift()
     }
     
     // exit moves focus on undo
     undoShift(): void {
         this.restoreStateWithFocus()
         // need to restore selectionInformation in form
-        TFocusShiftAction.prototype.undoShift.call(this)
+        super.undoShift()
     }
     
     redoShift(): void {
-        TFocusShiftAction.prototype.redoShift.call(this)
+        super.redoShift()
     }
     
 }
 
-export class TFocusEnterAction {
-    TFocusEnterAction.prototype = new TFocusShiftAction()
-    TFocusEnterAction.prototype.constructor = TFocusEnterAction
+export class TFocusEnterAction extends TFocusShiftAction {
     
-    //////////////////////////// TFocusEnterAction ////////////////////////////////
     doShift(): void {
-        TFocusShiftAction.prototype.doShift.call(this)
+        super.doShift()
     }
     
     undoShift(): void {
-        TFocusShiftAction.prototype.undoShift.call(this)
+        super.undoShift()
     }
     
     // enter moves focus on redo
     redoShift(): void {
         this.restoreStateWithFocus()
-        TFocusShiftAction.prototype.redoShift.call(this)
+        super.redoShift()
     }
     
 }
 
-export class TTextFocusExitAction {
-    selectionInformation: TSelectionInformation = new TSelectionInformation()
-    TTextFocusExitAction.prototype = new TFocusExitAction()
-    TTextFocusExitAction.prototype.constructor = TTextFocusExitAction
+export class TTextFocusExitAction extends TFocusExitAction {
+    selectionInformation: TSelectionInformation
     
-    //////////////////////////// TTextFocusExitAction ////////////////////////////////
     recordState(selectionInformation: TSelectionInformation): void {
-        TFocusExitAction.prototype.recordState.call(this, selectionInformation)
+        super.recordState(selectionInformation)
         this.selectionInformation = selectionInformation
-        //RecordSelectionInformation(selectionInformation, control);
+        // RecordSelectionInformation(selectionInformation, control)
     }
     
     restoreStateWithFocus(): void {
-        TFocusExitAction.prototype.restoreStateWithFocus.call(this)
+        super.restoreStateWithFocus()
         RestoreSelectionInformation(this.selectionInformation, this.control)
     }
     
 }
 
-export class TTextFocusEnterAction {
-    TTextFocusEnterAction.prototype = new TFocusEnterAction()
-    TTextFocusEnterAction.prototype.constructor = TTextFocusEnterAction
+export class TTextFocusEnterAction extends TFocusEnterAction {
     
 }
 
-export class TFocusShiftCommand {
-    focusExitAction: TFocusExitAction = new TFocusExitAction()
-    focusEnterAction: TFocusEnterAction = new TFocusEnterAction()
-    TFocusShiftCommand.prototype = new KfCommand()
-    TFocusShiftCommand.prototype.constructor = TFocusShiftCommand
+export class TFocusShiftCommand extends KfCommand {
+    focusExitAction: TFocusExitAction
+    focusEnterAction: TFocusEnterAction
     
-    //////////////////////////// TTextFocusEnterAction ////////////////////////////////
-    //////////////////////////// TFocusShiftCommand ////////////////////////////////
-    createWithFocusExitAction(focusExitAction: TFocusExitAction): void {
-        this.create()
+    constructor(focusExitAction: TFocusExitAction) {
+        super()
         this.focusExitAction = focusExitAction
         //self.focusExitAction.recordState;
         // responsibility of component being focused to call setFocusEnterAction
     }
     
     setFocusEnterAction(focusEnterAction: TFocusEnterAction): void {
-        let selectionInformation: TSelectionInformation
+        let selectionInformation: TSelectionInformation = {text: "", selStart: 0, selLength: 0}
         
         this.focusEnterAction = focusEnterAction
         // param ignored
         this.focusEnterAction.recordState(selectionInformation)
     }
     
-    destroy(): void {
-        this.focusExitAction.free
-        this.focusEnterAction.free
-        KfCommand.prototype.destroy.call(this)
-    }
-    
     doCommand(): void {
-        KfCommand.prototype.doCommand.call(this)
+        super.doCommand()
         usdomain.domain.beginUpdate()
         this.focusExitAction.doShift()
         if (this.focusEnterAction !== null) {
@@ -207,7 +183,7 @@ export class TFocusShiftCommand {
     }
     
     undoCommand(): void {
-        KfCommand.prototype.undoCommand.call(this)
+        super.undoCommand()
         usdomain.domain.beginUpdate()
         if (this.focusEnterAction !== null) {
             this.focusEnterAction.undoShift()
@@ -217,7 +193,7 @@ export class TFocusShiftCommand {
     }
     
     redoCommand(): void {
-        KfCommand.prototype.doCommand.call(this)
+        super.doCommand()
         usdomain.domain.beginUpdate()
         this.focusExitAction.redoShift()
         if (this.focusEnterAction !== null) {
@@ -233,4 +209,3 @@ export class TFocusShiftCommand {
     }
     
 }
-
