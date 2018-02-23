@@ -15,6 +15,11 @@ export function compareTextIgnoreCase(a: string, b: string): boolean {
     return a.toUpperCase() === b.toUpperCase()
 }
 
+export enum Color {
+    clRed,
+    clBlue
+}
+
 /*
 export function ShowMessage(message: string) {
     alert(message)
