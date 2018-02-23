@@ -1,6 +1,6 @@
 import * as o from "ospec"
 
-import { KfCommand } from "../source/KfCommand"
+import { KfCommand } from "../source/KfCommand.js"
 
 o.spec("KfCommand", () => {
 

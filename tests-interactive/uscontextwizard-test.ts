@@ -1,17 +1,21 @@
 
 // Exported from: ../../storyharp-js/converted_source/uscontextwizard.lfm
 
-import "../node_modules/mithril/mithril.js"
-/* global m */
+// import * as m from "mithril"
+// var m = require("mithril")
 
-function caption(text) {
+declare var m: any;
+
+function caption(text: string) {
     return text.replace("&", "")
 }
 
-function hexToBase64(hexString) {
+function hexToBase64(hexString: string) {
     hexString = hexString.substring("07544269746D6170FA040000".length)
     // hexString = hexString.substring("7544269746D6170FA0400002F2A2058504D202A2F0A".length)
-    return btoa(hexString.match(/\w{2}/g).map(function(a) {
+    const matches = hexString.match(/\w{2}/g)
+    if (matches === null) throw new Error("no matches")
+    return btoa(matches.map(function(a) {
         return String.fromCharCode(parseInt(a, 16))
     }).join(""))
 }

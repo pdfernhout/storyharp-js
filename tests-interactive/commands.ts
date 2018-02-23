@@ -1,15 +1,19 @@
-import "../node_modules/mithril/mithril.js"
-/* global m */
+// import * as m from "mithril"
+// var m = require("mithril")
 
-import { KfCommand } from "../dist/KfCommand.js"
-import { KfCommandList } from "../dist/KfCommandList.js"
+declare var m: any;
+
+import { KfCommand } from "../source/KfCommand.js"
+import { KfCommandList } from "../source/KfCommandList.js"
 
 const commandList = new KfCommandList()
 commandList.undoLimit = 10
 
-const items = []
+const items: Date[] = []
 
 class CommandAddItem extends KfCommand {
+    date: Date
+
     constructor() {
         super()
         this.date = new Date()
@@ -36,7 +40,7 @@ function viewMain() {
         m("div.mb2", "KfCommandList test"),
         m("div.mb2", 
             m("button", { onclick: () => {
-                const newValueString = prompt("New undo limit?", commandList.undoLimit)
+                const newValueString = prompt("New undo limit?", "" + commandList.undoLimit)
                 if (!newValueString) return
                 const newValue = parseInt(newValueString)
                 commandList.setNewUndoLimit(newValue)
