@@ -1,4 +1,4 @@
-import { int } from "./common.js"
+import { int } from "./common"
 
 export class TRect {
     Left: int

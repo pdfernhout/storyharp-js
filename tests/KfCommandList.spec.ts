@@ -1,7 +1,7 @@
 import * as o from "ospec"
 
-import { KfCommand, KfCommandChangeType } from "../source/KfCommand.js"
-import { KfCommandList } from "../source/KfCommandList.js"
+import { KfCommand, KfCommandChangeType } from "../source/KfCommand"
+import { KfCommandList } from "../source/KfCommandList"
 
 o.spec("KfCommandList", () => {
 

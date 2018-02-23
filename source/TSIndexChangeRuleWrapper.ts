@@ -1,5 +1,5 @@
-import { int } from "./common.js"
-import { TSRule } from "./TSRule.js"
+import { int } from "./common"
+import { TSRule } from "./TSRule"
 
 export class TSIndexChangeRuleWrapper {
     rule: TSRule

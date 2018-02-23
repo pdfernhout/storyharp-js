@@ -1,10 +1,7 @@
-// import * as m from "mithril"
-// var m = require("mithril")
+import * as m from "mithril"
 
-declare var m: any;
-
-import { KfCommand } from "../source/KfCommand.js"
-import { KfCommandList } from "../source/KfCommandList.js"
+import { KfCommand } from "../source/KfCommand"
+import { KfCommandList } from "../source/KfCommandList"
 
 const commandList = new KfCommandList()
 commandList.undoLimit = 10

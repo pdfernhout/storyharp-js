@@ -1,7 +1,7 @@
-import { int } from "./common.js"
-import { TSDraggableObject } from "./TSDraggableObject.js"
-import { TWorld } from "./TWorld.js"
-import { TSRuleField } from "./TSRule.js"
+import { int } from "./common"
+import { TSDraggableObject } from "./TSDraggableObject"
+import { TWorld } from "./TWorld"
+import { TSRuleField } from "./TSRule"
 
 export enum TSVariableState { kPresent, kAbsent }
 

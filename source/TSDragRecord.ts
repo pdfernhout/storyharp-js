@@ -1,5 +1,5 @@
-import { TPoint } from "./TPoint.js"
-import { TSDraggableObject } from "./TSDraggableObject.js"
+import { TPoint } from "./TPoint"
+import { TSDraggableObject } from "./TSDraggableObject"
 
 export class TSDragRecord {
     draggedNode: TSDraggableObject;

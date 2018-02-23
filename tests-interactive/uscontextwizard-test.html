@@ -2,11 +2,23 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Test KfCommandList</title>
+    <title>Test uscontextwizard</title>
     <link rel="stylesheet" href="../node_modules/tachyons/css/tachyons.css">
-    <script src="../node_modules/mithril/mithril.js"></script>
+    <script src="../node_modules/systemjs/dist/system.src.js"></script> 
   </head>
   <body>
-    <script type="module" src="../dist/tests-interactive/uscontextwizard-test.js"></script>
-    </body>
+    <script>
+        SystemJS.config({
+          packages: {
+            '../dist/': {
+                defaultExtension: 'js'
+            }
+          },
+          map: {
+            mithril: "../node_modules/mithril/mithril.js"
+          },
+        });
+        SystemJS.import("../dist/tests-interactive/uscontextwizard-test.js");
+    </script>
+  </body>
 </html>

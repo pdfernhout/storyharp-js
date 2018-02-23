@@ -1,6 +1,6 @@
-import { TPoint } from "./TPoint.js"
-import { TRect } from "./TRect.js"
-import { StrToInt } from "./common.js"
+import { TPoint } from "./TPoint"
+import { TRect } from "./TRect"
+import { StrToInt } from "./common"
 
 export class TSDraggableObject {
     position: TPoint = new TPoint()

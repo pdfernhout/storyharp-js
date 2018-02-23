@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-        "module": "es6",
+        "module": "amd",
         "target": "es6",
         "noImplicitAny": true,
         "removeComments": true,

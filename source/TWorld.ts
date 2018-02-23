@@ -1,10 +1,10 @@
-import { int, compareTextIgnoreCase } from "./common.js"
-import { TPoint } from "./TPoint.js"
-import { TRect } from "./TRect.js"
-import { TSVariable, TSVariableState } from "./TSVariable.js"
-import { TSRule } from "./TSRule.js"
-import { TSDragRecord } from "./TSDragRecord.js"
-import { TSDraggableObject } from "./TSDraggableObject.js"
+import { int, compareTextIgnoreCase } from "./common"
+import { TPoint } from "./TPoint"
+import { TRect } from "./TRect"
+import { TSVariable, TSVariableState } from "./TSVariable"
+import { TSRule } from "./TSRule"
+import { TSDragRecord } from "./TSDragRecord"
+import { TSDraggableObject } from "./TSDraggableObject"
 
 /* External dependencies that need to be defined in app:
   // These can be set at World creation

@@ -1,4 +1,4 @@
-import { TSVariable, TSVariableState } from "./TSVariable.js"
+import { TSVariable, TSVariableState } from "./TSVariable"
 
 export class TSChangedVariableWrapper {
     variable: TSVariable

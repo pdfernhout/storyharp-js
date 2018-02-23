@@ -1,10 +1,7 @@
 
 // Exported from: ../../storyharp-js/converted_source/uscontextwizard.lfm
 
-// import * as m from "mithril"
-// var m = require("mithril")
-
-declare var m: any;
+import * as m from "mithril"
 
 function caption(text: string) {
     return text.replace("&", "")

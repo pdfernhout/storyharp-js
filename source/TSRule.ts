@@ -1,9 +1,9 @@
-import { int } from "./common.js"
-import { TSDraggableObject } from "./TSDraggableObject.js"
-import { TSVariable, TSVariableState } from "./TSVariable.js"
-import { TSChangedVariableWrapper } from "./TSChangedVariableWrapper.js"
-import { TSDesiredStateVariableWrapper } from "./TSDesiredStateVariableWrapper.js"
-import { TWorld } from "./TWorld.js"
+import { int } from "./common"
+import { TSDraggableObject } from "./TSDraggableObject"
+import { TSVariable, TSVariableState } from "./TSVariable"
+import { TSChangedVariableWrapper } from "./TSChangedVariableWrapper"
+import { TSDesiredStateVariableWrapper } from "./TSDesiredStateVariableWrapper"
+import { TWorld } from "./TWorld"
 
 // TODO: This should become an enum
 // need to be sequence from zero
