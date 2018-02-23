@@ -50,7 +50,7 @@ export class KfCommand {
         nextPoint: TPoint,
         mouseDidMove: boolean,
         rightButtonDown: boolean
-    ): KfCommand {
+    ): KfCommand | null {
         // subclasses should override if needed
         return this
     }

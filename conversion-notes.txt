@@ -107,6 +107,8 @@ Maybe got confused by needing manual fixup for assignment to a parameter?
 
 TODO: need to handle super calls better for TS:
   TSDraggableObject.prototype.setPosition.call(this, firstPart)
+Becomes:
+  super.setPosition(firstPart)
 
 TODO: double parens on conditional (probably not worth fixing)
    if ((rule.selected)) {
@@ -118,3 +120,10 @@ Watch out for where the converter tries to be helpful by changing case on some v
 
 Static methods not converted correctly:
   TSRule.headerForField
+
+TODO: TList .Count should generally become .length
+
+TODO (too hard to do automatically?) <= x - 1 SHOULD BECOME < x
+
+TODO: delphi_compatability.Assigned(...) wrapper can be removed leaving only ...
+

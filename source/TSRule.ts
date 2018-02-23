@@ -219,7 +219,6 @@ export class TSRule extends TSDraggableObject {
     }
     
     recordReplyMoveChanges(changedVariablesList: TSChangedVariableWrapper[], totalReply: string): {totalReply: string, contextToFocusTo: TSVariable | null} {
-        // TODO: raise "method recordReplyMoveChanges had assigned to var parameter contextToFocusTo not added to return -- fixup manually"
         let contextToFocusTo = null
 
         if ((totalReply !== "") && (this.reply !== "")) {
@@ -234,7 +233,7 @@ export class TSRule extends TSDraggableObject {
             const changedVariableWrapper: TSChangedVariableWrapper = new TSChangedVariableWrapper(desiredStateWrapper.variable, desiredStateWrapper.desiredState)
             changedVariablesList.push(changedVariableWrapper)
         }
-        return {totalReply, contextToFocusTo}
+        return { totalReply, contextToFocusTo }
     }
     
     setTextForField(col: int, text: string): void {

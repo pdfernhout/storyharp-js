@@ -1,5 +1,23 @@
 // unit uscommands
 
+import { int, /* compareTextIgnoreCase, Color */ } from "./common"
+import { KfCommand, TrackPhase, KfCommandChangeType, TCommandEvent } from "./KfCommand"
+import { KfCommandList } from "./KfCommandList"
+import { TSVariable /*, TSVariableState */ } from "./TSVariable"
+// import { TSChangedVariableWrapper } from "./TSChangedVariableWrapper"
+import { TSRule, TSRuleField } from "./TSRule"
+import { TSIndexChangeRuleWrapper } from "./TSIndexChangeRuleWrapper"
+import { TPoint } from "./TPoint"
+import { TSDragRecord } from "./TSDragRecord"
+import { TSToggleVariableCommand, TSMoveFocusCommand, TSDoCommandPhrase } from "./usvariablecommands"
+
+// TODO: FIX THIS
+const usconsoleform: any = {};
+const usdomain: any = {};
+const usruleeditorform: any = {};
+const uschangelog: any = {};
+
+/*
 from conversion_common import *
 import uschangelog
 import usruleeditorform
@@ -11,7 +29,7 @@ import usfocuscommands
 import usworld
 import ucommand
 import delphi_compatability
-
+*/
 
 //TEditChangeCommand = class(KfCommand)
 //  	entryField: TObject;
@@ -30,17 +48,16 @@ import delphi_compatability
 //    newSelectionInformation: TSelectionInformation;
 //		constructor createWithRule(Sender: TObject;  const lastSelectionInformation: TSelectionInformation);
 //   
-export class TSRuleFieldChange {
-    rule: TSRule = new TSRule()
-    field: int = 0
-    oldValue: string = ""
-    newValue: string = ""
-    TSRuleFieldChange.prototype = new KfCommand()
-    TSRuleFieldChange.prototype.constructor = TSRuleFieldChange
-    
+
+export class TSRuleFieldChange extends KfCommand {
+    rule: TSRule
+    field: int
+    oldValue: string
+    newValue: string
+
     // TSRuleFieldChange ------------------------------------------
-    createWithRule(rule: TSRule, field: int, newValue: string): void {
-        this.create()
+    constructor(rule: TSRule, field: int, newValue: string) {
+        super()
         this.rule = rule
         this.field = field
         this.oldValue = rule.getTextForField(field)
@@ -50,13 +67,13 @@ export class TSRuleFieldChange {
     updateEditorForChange(): void {
         usruleeditorform.RuleEditorForm.rule = this.rule
         usruleeditorform.RuleEditorForm.loadAllRuleFields()
-        if ((this.field === usworld.kRuleContext) || (this.field === usworld.kRuleMove)) {
+        if ((this.field === TSRuleField.kRuleContext) || (this.field === TSRuleField.kRuleMove)) {
             usconsoleform.ConsoleForm.locationCacheValid = false
         }
-        if (this.field === usworld.kRuleRequirements) {
+        if (this.field === TSRuleField.kRuleRequirements) {
             //wrapper entries will get freed if list box - so reset them
             usruleeditorform.RuleEditorForm.fillListBox(usruleeditorform.RuleEditorForm.RequirementsListBox, this.rule.requirements)
-        } else if (this.field === usworld.kRuleChanges) {
+        } else if (this.field === TSRuleField.kRuleChanges) {
             usruleeditorform.RuleEditorForm.fillListBox(usruleeditorform.RuleEditorForm.ChangesListBox, this.rule.changes)
         }
         usruleeditorform.RuleEditorForm.RuleGrid.Invalidate()
@@ -72,104 +89,77 @@ export class TSRuleFieldChange {
     doCommand(): void {
         usdomain.domain.world.lastVariableCreated = ""
         this.rule.setTextForField(this.field, this.newValue)
-        if (this.field !== usworld.kRuleReply) {
+        if (this.field !== TSRuleField.kRuleReply) {
             // log changes
             uschangelog.ChangeLogForm.addToLog(usdomain.domain.world.lastVariableCreated)
         } else {
             uschangelog.ChangeLogForm.addToLog(this.newValue)
         }
         this.updateEditorForChange()
-        KfCommand.prototype.doCommand.call(this)
+        super.doCommand()
     }
     
     undoCommand(): void {
         this.rule.setTextForField(this.field, this.oldValue)
         this.updateEditorForChange()
         usruleeditorform.RuleEditorForm.selectEditorField(this.field)
-        KfCommand.prototype.undoCommand.call(this)
+        super.undoCommand()
     }
     
     redoCommand(): void {
         this.rule.setTextForField(this.field, this.newValue)
         this.updateEditorForChange()
         usruleeditorform.RuleEditorForm.selectEditorField(this.field)
-        KfCommand.prototype.doCommand.call(this)
+        super.doCommand()
     }
     
     description(): string {
         let result = ""
         //  result := 'rule ' + IntToStr(domain.world.rules.indexOf(rule) + 1) + ' change of ' + TSRule.headerForField(field);
-        result = "Change " + usworld.TSRule.headerForField(this.field) + " For Rule " + IntToStr(usdomain.domain.world.rules.IndexOf(this.rule) + 1)
+        result = "Change " + TSRule.headerForField(this.field) + " For Rule " + (usdomain.domain.world.rules.IndexOf(this.rule) + 1)
         return result
     }
     
 }
 
-export class TSNewRulesCommand {
-    rules: TList = new TList()
+export class TSNewRulesCommand extends KfCommand {
+    rules: TSRule[] = []
     creator: string = ""
-    TSNewRulesCommand.prototype = new KfCommand()
-    TSNewRulesCommand.prototype.constructor = TSNewRulesCommand
-    
-    // TSNewRulesCommand ------------------------------------------
-    create(): void {
-        this.rules = delphi_compatability.TList().Create()
-    }
-    
-    destroy(): void {
-        let i: int
-        
-        if (!this.done) {
-            if (this.rules !== null) {
-                for (i = 0; i <= this.rules.Count - 1; i++) {
-                    UNRESOLVED.TObject(this.rules[i]).free
-                }
-            }
-        }
-        this.rules.free
-        this.rules = null
-    }
     
     addRule(rule: TSRule): void {
-        this.rules.Add(rule)
+        this.rules.push(rule)
     }
     
     doCommand(): void {
         //already added at start
-        KfCommand.prototype.doCommand.call(this)
+        super.doCommand()
         usruleeditorform.RuleEditorForm.updateForRuleChange()
         usruleeditorform.RuleEditorForm.scrollGridSelectionsIntoView(usruleeditorform.kFromBottom)
     }
     
     undoCommand(): void {
-        let i: int
-        let rule: TSRule
-        
-        for (i = 0; i <= this.rules.Count - 1; i++) {
-            rule = usworld.TSRule(this.rules[i])
+        for (let i = 0; i < this.rules.length; i++) {
+            const rule: TSRule = this.rules[i]
             usdomain.domain.world.rules.Remove(rule)
             rule.selected = false
             rule.removeUseages()
         }
-        KfCommand.prototype.undoCommand.call(this)
-        if (this.rules.IndexOf(usruleeditorform.RuleEditorForm.rule) >= 0) {
+        super.undoCommand()
+        if (this.rules.indexOf(usruleeditorform.RuleEditorForm.rule) >= 0) {
             usruleeditorform.RuleEditorForm.editRule(null)
         }
         usruleeditorform.RuleEditorForm.updateForRuleChange()
     }
     
     redoCommand(): void {
-        let i: int
-        let rule: TSRule
-        
         usdomain.domain.world.deselectAllExcept(null)
-        for (i = 0; i <= this.rules.Count - 1; i++) {
-            rule = usworld.TSRule(this.rules[i])
+        for (let i = 0; i < this.rules.length; i++) {
+            const rule: TSRule = this.rules[i]
             rule.selected = true
             usdomain.domain.world.rules.Add(rule)
             rule.addUseages()
         }
-        KfCommand.prototype.doCommand.call(this)
+        super.doCommand()
         usruleeditorform.RuleEditorForm.updateForRuleChange()
         usruleeditorform.RuleEditorForm.scrollGridSelectionsIntoView(usruleeditorform.kFromBottom)
         //if rules.count > 0 then
@@ -178,9 +168,9 @@ export class TSNewRulesCommand {
     
     description(): string {
         let result = ""
-        if (this.rules.Count > 1) {
+        if (this.rules.length > 1) {
             result = "new rules"
-        } else if (this.rules.Count === 1) {
+        } else if (this.rules.length === 1) {
             result = "new rule"
         } else {
             result = "new rule"
@@ -196,99 +186,62 @@ export class TSNewRulesCommand {
     
 }
 
-export class TSDeleteRulesCommand {
-    ruleWrappers: TList = new TList()
-    TSDeleteRulesCommand.prototype = new KfCommand()
-    TSDeleteRulesCommand.prototype.constructor = TSDeleteRulesCommand
-    
-    // TSDeleteRulesCommand ------------------------------------------
-    create(): void {
-        this.ruleWrappers = delphi_compatability.TList().Create()
-    }
-    
-    destroy(): void {
-        let i: int
-        let rule: TSRule
-        let wrapper: TSIndexChangeRuleWrapper
-        
-        if (this.ruleWrappers !== null) {
-            for (i = 0; i <= this.ruleWrappers.Count - 1; i++) {
-                wrapper = usworld.TSIndexChangeRuleWrapper(this.ruleWrappers[i])
-                rule = wrapper.rule
-                if (this.done) {
-                    rule.free
-                }
-                wrapper.free
-            }
-        }
-        this.ruleWrappers.free
-        this.ruleWrappers = null
-    }
+export class TSDeleteRulesCommand extends KfCommand {
+    ruleWrappers: TSIndexChangeRuleWrapper[] = []
     
     addRule(rule: TSRule, newIndex: int): void {
-        let wrapper: TSIndexChangeRuleWrapper
-        
-        wrapper = usworld.TSIndexChangeRuleWrapper().createWithRuleNewIndex(rule, newIndex)
-        this.ruleWrappers.Add(wrapper)
+        const wrapper: TSIndexChangeRuleWrapper = new TSIndexChangeRuleWrapper(rule, newIndex)
+        this.ruleWrappers.push(wrapper)
     }
     
     doCommand(): void {
-        let i: int
-        let wrapper: TSIndexChangeRuleWrapper
-        
-        for (i = this.ruleWrappers.Count - 1; i >= 0; i--) {
-            wrapper = usworld.TSIndexChangeRuleWrapper(this.ruleWrappers[i])
+        for (let i = this.ruleWrappers.length - 1; i >= 0; i--) {
+            const wrapper: TSIndexChangeRuleWrapper = this.ruleWrappers[i]
             if ((wrapper.rule === usruleeditorform.RuleEditorForm.rule)) {
                 usruleeditorform.RuleEditorForm.editRule(null)
             }
             wrapper.rule.removeUseages()
             wrapper.doChange()
         }
-        KfCommand.prototype.doCommand.call(this)
+        super.doCommand()
         usruleeditorform.RuleEditorForm.updateForRuleChange()
     }
     
     undoCommand(): void {
-        let i: int
-        let wrapper: TSIndexChangeRuleWrapper
-        
         usdomain.domain.world.deselectAllExcept(null)
-        for (i = 0; i <= this.ruleWrappers.Count - 1; i++) {
-            wrapper = usworld.TSIndexChangeRuleWrapper(this.ruleWrappers[i])
+        for (let i = 0; i < this.ruleWrappers.length; i++) {
+            const wrapper: TSIndexChangeRuleWrapper = this.ruleWrappers[i]
             wrapper.rule.addUseages()
             wrapper.undoChange()
             wrapper.rule.selected = true
         }
-        if (this.ruleWrappers.Count > 0) {
-            usruleeditorform.RuleEditorForm.editRule(usworld.TSIndexChangeRuleWrapper(this.ruleWrappers[0]).rule)
+        if (this.ruleWrappers.length > 0) {
+            usruleeditorform.RuleEditorForm.editRule(this.ruleWrappers[0].rule)
         }
-        KfCommand.prototype.undoCommand.call(this)
+        super.undoCommand()
         usruleeditorform.RuleEditorForm.updateForRuleChange()
         usruleeditorform.RuleEditorForm.scrollGridSelectionsIntoView(usruleeditorform.kFromTop)
     }
     
     redoCommand(): void {
-        let i: int
-        let wrapper: TSIndexChangeRuleWrapper
-        
         usdomain.domain.world.deselectAllExcept(null)
-        for (i = this.ruleWrappers.Count - 1; i >= 0; i--) {
-            wrapper = usworld.TSIndexChangeRuleWrapper(this.ruleWrappers[i])
+        for (let i = this.ruleWrappers.length - 1; i >= 0; i--) {
+            const wrapper: TSIndexChangeRuleWrapper = this.ruleWrappers[i]
             if ((wrapper.rule === usruleeditorform.RuleEditorForm.rule)) {
                 usruleeditorform.RuleEditorForm.editRule(null)
             }
             wrapper.rule.removeUseages()
             wrapper.doChange()
         }
-        KfCommand.prototype.doCommand.call(this)
+        super.doCommand()
         usruleeditorform.RuleEditorForm.updateForRuleChange()
     }
     
     description(): string {
         let result = ""
-        if (this.ruleWrappers.Count > 1) {
+        if (this.ruleWrappers.length > 1) {
             result = "delete rules"
-        } else if (this.ruleWrappers.Count === 1) {
+        } else if (this.ruleWrappers.length === 1) {
             result = "delete rule"
         } else {
             result = "delete rule"
@@ -298,47 +251,21 @@ export class TSDeleteRulesCommand {
     
 }
 
-export class TSMoveRulesCommand {
-    ruleWrappers: TList = new TList()
+export class TSMoveRulesCommand extends KfCommand {
+    ruleWrappers: TSIndexChangeRuleWrapper[] = []
     action: string = ""
-    TSMoveRulesCommand.prototype = new KfCommand()
-    TSMoveRulesCommand.prototype.constructor = TSMoveRulesCommand
-    
-    // TSMoveRulesCommand ------------------------------------------
-    create(): void {
-        this.ruleWrappers = delphi_compatability.TList().Create()
-    }
-    
-    destroy(): void {
-        let i: int
-        let wrapper: TSIndexChangeRuleWrapper
-        
-        if (this.ruleWrappers !== null) {
-            for (i = 0; i <= this.ruleWrappers.Count - 1; i++) {
-                wrapper = usworld.TSIndexChangeRuleWrapper(this.ruleWrappers[i])
-                wrapper.free
-            }
-        }
-        this.ruleWrappers.free
-        this.ruleWrappers = null
-    }
     
     addRule(rule: TSRule, newIndex: int): void {
-        let wrapper: TSIndexChangeRuleWrapper
-        
-        wrapper = usworld.TSIndexChangeRuleWrapper().createWithRuleNewIndex(rule, newIndex)
-        this.ruleWrappers.Add(wrapper)
+        const wrapper: TSIndexChangeRuleWrapper = new TSIndexChangeRuleWrapper(rule, newIndex)
+        this.ruleWrappers.push(wrapper)
     }
     
     doCommand(): void {
-        let i: int
-        let wrapper: TSIndexChangeRuleWrapper
-        
-        for (i = 0; i <= this.ruleWrappers.Count - 1; i++) {
-            wrapper = usworld.TSIndexChangeRuleWrapper(this.ruleWrappers[i])
+        for (let i = 0; i < this.ruleWrappers.length; i++) {
+            const wrapper: TSIndexChangeRuleWrapper = this.ruleWrappers[i]
             wrapper.doChange()
         }
-        KfCommand.prototype.doCommand.call(this)
+        super.doCommand()
         usruleeditorform.RuleEditorForm.RuleGrid.Invalidate()
         if (this.action === "raise") {
             usruleeditorform.RuleEditorForm.scrollGridSelectionsIntoView(usruleeditorform.kFromTop)
@@ -349,16 +276,13 @@ export class TSMoveRulesCommand {
     }
     
     undoCommand(): void {
-        let i: int
-        let wrapper: TSIndexChangeRuleWrapper
-        
         usdomain.domain.world.deselectAllExcept(null)
-        for (i = this.ruleWrappers.Count - 1; i >= 0; i--) {
-            wrapper = usworld.TSIndexChangeRuleWrapper(this.ruleWrappers[i])
+        for (let i = this.ruleWrappers.length - 1; i >= 0; i--) {
+            const wrapper: TSIndexChangeRuleWrapper = this.ruleWrappers[i]
             wrapper.rule.selected = true
             wrapper.undoChange()
         }
-        KfCommand.prototype.undoCommand.call(this)
+        super.undoCommand()
         usruleeditorform.RuleEditorForm.RuleGrid.Invalidate()
         if (this.action === "raise") {
             usruleeditorform.RuleEditorForm.scrollGridSelectionsIntoView(usruleeditorform.kFromBottom)
@@ -369,16 +293,13 @@ export class TSMoveRulesCommand {
     }
     
     redoCommand(): void {
-        let i: int
-        let wrapper: TSIndexChangeRuleWrapper
-        
         usdomain.domain.world.deselectAllExcept(null)
-        for (i = 0; i <= this.ruleWrappers.Count - 1; i++) {
-            wrapper = usworld.TSIndexChangeRuleWrapper(this.ruleWrappers[i])
+        for (let i = 0; i < this.ruleWrappers.length; i++) {
+            const wrapper: TSIndexChangeRuleWrapper = this.ruleWrappers[i]
             wrapper.rule.selected = true
             wrapper.doChange()
         }
-        KfCommand.prototype.doCommand.call(this)
+        super.doCommand()
         usruleeditorform.RuleEditorForm.RuleGrid.Invalidate()
         if (this.action === "raise") {
             usruleeditorform.RuleEditorForm.scrollGridSelectionsIntoView(usruleeditorform.kFromTop)
@@ -390,9 +311,9 @@ export class TSMoveRulesCommand {
     
     description(): string {
         let result = ""
-        if (this.ruleWrappers.Count > 1) {
+        if (this.ruleWrappers.length > 1) {
             result = "rules"
-        } else if (this.ruleWrappers.Count === 1) {
+        } else if (this.ruleWrappers.length === 1) {
             result = "rule"
         } else {
             result = "rule"
@@ -407,178 +328,144 @@ export class TSMoveRulesCommand {
     
 }
 
-export class TSMapDragCommand {
-    dragRecords: TList = new TList()
-    notifyProcedure: TCommandEvent = new TCommandEvent()
-    TSMapDragCommand.prototype = new KfCommand()
-    TSMapDragCommand.prototype.constructor = TSMapDragCommand
+export class TSMapDragCommand extends KfCommand {
+    dragRecords: TSDragRecord[] = []
+    notifyProcedure: TCommandEvent
     
     // TSMapDragCommand ------------------------------------------
     create(): void {
-        this.dragRecords = delphi_compatability.TList().Create()
         usdomain.domain.world.addDragRecordsToList(this.dragRecords)
     }
     
-    destroy(): void {
-        let i: int
-        
-        if (this.dragRecords !== null) {
-            for (i = 0; i <= this.dragRecords.Count - 1; i++) {
-                UNRESOLVED.TObject(this.dragRecords[i]).free
-            }
-        }
-        this.dragRecords.free
-        this.dragRecords = null
-    }
-    
     doCommand(): void {
-        let i: int
-        
-        for (i = 0; i <= this.dragRecords.Count - 1; i++) {
-            usworld.TSDragRecord(this.dragRecords[i]).doDrag()
+        for (let i = 0; i < this.dragRecords.length; i++) {
+            this.dragRecords[i].doDrag()
         }
-        if (delphi_compatability.Assigned(this.notifyProcedure)) {
-            this.notifyProcedure(this, ucommand.KfCommandChangeType.commandDone)
+        if (this.notifyProcedure) {
+            this.notifyProcedure(this, KfCommandChangeType.commandDone)
         }
-        KfCommand.prototype.doCommand.call(this)
+        super.doCommand()
     }
     
     undoCommand(): void {
-        let i: int
-        
         usdomain.domain.world.deselectAllExcept(null)
-        for (i = 0; i <= this.dragRecords.Count - 1; i++) {
-            usworld.TSDragRecord(this.dragRecords[i]).draggedNode.selected = true
-            usworld.TSDragRecord(this.dragRecords[i]).undoDrag()
+        for (let i = 0; i < this.dragRecords.length; i++) {
+            this.dragRecords[i].draggedNode.selected = true
+            this.dragRecords[i].undoDrag()
         }
-        if (delphi_compatability.Assigned(this.notifyProcedure)) {
-            this.notifyProcedure(this, ucommand.KfCommandChangeType.commandUndone)
+        if (this.notifyProcedure) {
+            this.notifyProcedure(this, KfCommandChangeType.commandUndone)
         }
-        KfCommand.prototype.undoCommand.call(this)
+        super.undoCommand()
     }
     
     redoCommand(): void {
-        let i: int
-        
         usdomain.domain.world.deselectAllExcept(null)
-        for (i = 0; i <= this.dragRecords.Count - 1; i++) {
-            usworld.TSDragRecord(this.dragRecords[i]).draggedNode.selected = true
-            usworld.TSDragRecord(this.dragRecords[i]).doDrag()
+        for (let i = 0; i < this.dragRecords.length; i++) {
+            this.dragRecords[i].draggedNode.selected = true
+            this.dragRecords[i].doDrag()
         }
-        if (delphi_compatability.Assigned(this.notifyProcedure)) {
-            this.notifyProcedure(this, ucommand.KfCommandChangeType.commandDone)
+        if (this.notifyProcedure) {
+            this.notifyProcedure(this, KfCommandChangeType.commandDone)
         }
-        KfCommand.prototype.doCommand.call(this)
+        super.doCommand()
     }
     
     description(): string {
         let result = ""
-        if (this.dragRecords.Count > 1) {
+        if (this.dragRecords.length > 1) {
             result = "Drag nodes"
-        } else if (this.dragRecords.Count === 1) {
-            result = "Drag " + usworld.TSDragRecord(this.dragRecords[0]).draggedNode.displayName()
+        } else if (this.dragRecords.length === 1) {
+            result = "Drag " + this.dragRecords[0].draggedNode.displayName()
         } else {
             result = "Drag"
         }
         return result
     }
     
-    TrackMouse(aTrackPhase: TrackPhase, anchorPoint: TPoint, previousPoint: TPoint, nextPoint: TPoint, mouseDidMove: boolean, rightButtonDown: boolean): KfCommand {
-        let result = new KfCommand()
-        let i: int
-        let delta: TPoint
-        
+    trackMouse(aTrackPhase: TrackPhase, anchorPoint: TPoint, previousPoint: TPoint, nextPoint: TPoint, mouseDidMove: boolean, rightButtonDown: boolean): KfCommand | null {
+        let result: KfCommand | null
+
         result = this
         switch (aTrackPhase) {
-            case ucommand.TrackPhase.trackPress:
-                if (this.dragRecords.Count === 0) {
+            case TrackPhase.trackPress:
+                if (this.dragRecords.length === 0) {
                     result = null
-                    this.free
-                    return result
                 }
                 break
-            case ucommand.TrackPhase.trackMove:
+            case TrackPhase.trackMove:
                 if (mouseDidMove) {
-                    delta = Point(nextPoint.X - previousPoint.X, nextPoint.Y - previousPoint.Y)
-                    for (i = 0; i <= this.dragRecords.Count - 1; i++) {
-                        usworld.TSDragRecord(this.dragRecords[i]).offset(delta)
+                    const delta = new TPoint(nextPoint.X - previousPoint.X, nextPoint.Y - previousPoint.Y)
+                    for (let i = 0; i < this.dragRecords.length; i++) {
+                        this.dragRecords[i].offset(delta)
                     }
-                    if (delphi_compatability.Assigned(this.notifyProcedure)) {
-                        this.notifyProcedure(this, ucommand.KfCommandChangeType.commandDone)
+                    if (this.notifyProcedure) {
+                        this.notifyProcedure(this, KfCommandChangeType.commandDone)
                     }
                 }
                 break
-            case ucommand.TrackPhase.trackRelease:
+            case TrackPhase.trackRelease:
                 if (!mouseDidMove) {
-                    if ((usworld.TSDragRecord(this.dragRecords[0]).draggedNode.position.X !== usworld.TSDragRecord(this.dragRecords[0]).originalLocation.X) || (usworld.TSDragRecord(this.dragRecords[0]).draggedNode.position.Y !== usworld.TSDragRecord(this.dragRecords[0]).originalLocation.Y)) {
-                        for (i = 0; i <= this.dragRecords.Count - 1; i++) {
-                            usworld.TSDragRecord(this.dragRecords[i]).undoDrag()
+                    if ((this.dragRecords[0].draggedNode.position.X !== this.dragRecords[0].originalLocation.X) || (this.dragRecords[0].draggedNode.position.Y !== this.dragRecords[0].originalLocation.Y)) {
+                        for (let i = 0; i < this.dragRecords.length; i++) {
+                            this.dragRecords[i].undoDrag()
                         }
-                        if (delphi_compatability.Assigned(this.notifyProcedure)) {
-                            this.notifyProcedure(this, ucommand.KfCommandChangeType.commandDone)
+                        if (this.notifyProcedure) {
+                            this.notifyProcedure(this, KfCommandChangeType.commandDone)
                         }
                     }
                     result = null
-                    this.free
                 } else {
-                    delta = Point(nextPoint.X - previousPoint.X, nextPoint.Y - previousPoint.Y)
+                    const delta = new TPoint(nextPoint.X - previousPoint.X, nextPoint.Y - previousPoint.Y)
                     if ((delta.X !== 0) || (delta.Y !== 0)) {
-                        for (i = 0; i <= this.dragRecords.Count - 1; i++) {
-                            usworld.TSDragRecord(this.dragRecords[i]).offset(delta)
+                        for (let i = 0; i < this.dragRecords.length; i++) {
+                            this.dragRecords[i].offset(delta)
                         }
-                        if (delphi_compatability.Assigned(this.notifyProcedure)) {
-                            this.notifyProcedure(this, ucommand.KfCommandChangeType.commandDone)
+                        if (this.notifyProcedure) {
+                            this.notifyProcedure(this, KfCommandChangeType.commandDone)
                         }
                     }
                 }
                 break
+        }
         return result
     }
     
 }
 
-export class TSCommandList {
-    TSCommandList.prototype = new KfCommandList()
-    TSCommandList.prototype.constructor = TSCommandList
+export class TSCommandList extends KfCommandList {
     
     // ----------------------------- TSCommandList -------------------------------
     toggleVariable(variable: TSVariable): TSToggleVariableCommand {
-        let result = new TSToggleVariableCommand()
-        result = usvariablecommands.TSToggleVariableCommand().createWithVariable(variable)
+        const result= new TSToggleVariableCommand(variable)
         this.doCommand(result)
         return result
     }
     
     moveFocus(newFocus: TSVariable): TSMoveFocusCommand {
-        let result = new TSMoveFocusCommand()
-        result = usvariablecommands.TSMoveFocusCommand().createWithNewFocus(newFocus)
+        const result = new TSMoveFocusCommand(newFocus)
         this.doCommand(result)
         return result
     }
     
     doCommandPhrase(commandPhrase: string): TSDoCommandPhrase {
-        let result = new TSDoCommandPhrase()
-        result = usvariablecommands.TSDoCommandPhrase().createWithCommandPhrase(commandPhrase)
+        const result = new TSDoCommandPhrase(commandPhrase)
         this.doCommand(result)
         return result
     }
     
     ruleFieldChange(rule: TSRule, field: int, newValue: string): TSRuleFieldChange {
-        let result = new TSRuleFieldChange()
-        let newContextOrMove: TSVariable
-        
-        if ((field === usworld.kRuleContext) || (field === usworld.kRuleMove)) {
-            if (UNRESOLVED.Pos("new context ", rule.getTextForField(field)) === 1) {
+        if ((field === TSRuleField.kRuleContext) || (field === TSRuleField.kRuleMove)) {
+            if (rule.getTextForField(field).startsWith("new context ")) {
                 if (usdomain.domain.world.findVariable(newValue) === null) {
-                    newContextOrMove = usdomain.domain.world.findOrCreateVariable(newValue, false)
+                    const newContextOrMove: TSVariable = usdomain.domain.world.findOrCreateVariable(newValue, false)
                     newContextOrMove.position = rule.context.position
                 }
             }
         }
-        result = TSRuleFieldChange().createWithRule(rule, field, newValue)
+        const result = new TSRuleFieldChange(rule, field, newValue)
         this.doCommand(result)
         return result
     }
     
 }
-
