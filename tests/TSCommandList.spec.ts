@@ -6,8 +6,8 @@ import { KfCommand, KfCommandChangeType } from "../source/KfCommand"
 import { TSCommandList } from "../source/TSCommandList"
 import { TWorld } from "../source/TWorld"
 
-const GarTrekWorldContents = fs.readFileSync("data/GarTrek.wld").toString()
-const GarTrekSessionContents = fs.readFileSync("data/just at sphinx 2.ses").toString()
+const GarTrekWorldContents = fs.readFileSync("../data/GarTrek.wld").toString()
+const GarTrekSessionContents = fs.readFileSync("../data/just at sphinx 2.ses").toString()
 
 o.spec("TSCommandList", () => {
 

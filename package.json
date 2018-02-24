@@ -4,7 +4,7 @@
   "description": "StoryHarp CYOA Editor",
   "main": "index.js",
   "scripts": {
-    "test": "tsc -p tsconfig-test.json && ./node_modules/ospec/bin/ospec",
+    "test": "tsc -p tsconfig-test.json && cd dist-test && ../node_modules/ospec/bin/ospec",
     "test-interactive": "tsc && echo \"browse to: http://localhost:8080/tests-interactive/\" && http-server -c-1",
     "build": "tsc"
   },
