@@ -127,3 +127,9 @@ TODO (too hard to do automatically?) <= x - 1 SHOULD BECOME < x
 
 TODO: delphi_compatability.Assigned(...) wrapper can be removed leaving only ...
 
+TODO: Constants on units are reachable through the unit.
+Not sure how to change translation where they are not exported.
+
+Need to rethink UI from independent windows to one or more web pages.
+Need to rethink storage from files to a mix of server calls, local storage, and indexeddb.
+Ideally need to move from classes accesing globals to more testable independent classes (manual DI).
