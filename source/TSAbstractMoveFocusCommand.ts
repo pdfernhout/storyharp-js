@@ -5,7 +5,7 @@ import { KfCommand } from "./KfCommand"
 // TODO: Fix these as imports
 import { ConsoleForm } from "./fixTypes"
 
-// need to have abstract base so TSDoCommandPhrase can defer updating till after changes
+// need to have abstract base so TSDoCommandPhraseCommand can defer updating till after changes
 export class TSAbstractMoveFocusCommand extends KfCommand {
     world: TWorld
     consoleForm: ConsoleForm

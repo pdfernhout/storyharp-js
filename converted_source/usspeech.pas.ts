@@ -289,7 +289,7 @@ export class TSSpeechSystem {
         let commandPhrase: string
         let commandPhraseModified: string
         
-        //command: TSDoCommandPhrase;
+        //command: TSDoCommandPhraseCommand;
         this.haltSpeechAndSound()
         commandPhrase = utterance
         if (commandPhrase === undoCommand) {

@@ -3,7 +3,7 @@ import { KfCommandList } from "./KfCommandList"
 import { TSVariable } from "./TSVariable"
 import { TSToggleVariableCommand } from "./TSToggleVariableCommand"
 import { TSMoveFocusCommand } from "./TSMoveFocusCommand"
-import { TSDoCommandPhrase } from "./TSDoCommandPhrase"
+import { TSDoCommandPhraseCommand } from "./TSDoCommandPhraseCommand"
 import { TSRule, TSRuleField } from "./TSRule"
 import { TSRuleFieldChangeCommand } from "./TSRuleFieldChangeCommand"
 import { TWorld } from "./TWorld"
@@ -31,8 +31,8 @@ export class TSCommandList extends KfCommandList {
         return result
     }
     
-    doCommandPhrase(consoleForm: ConsoleForm, ruleEditorForm: RuleEditorForm, commandPhrase: string): TSDoCommandPhrase {
-        const result = new TSDoCommandPhrase(this.world, consoleForm, ruleEditorForm, commandPhrase)
+    doCommandPhrase(consoleForm: ConsoleForm, ruleEditorForm: RuleEditorForm, commandPhrase: string): TSDoCommandPhraseCommand {
+        const result = new TSDoCommandPhraseCommand(this.world, consoleForm, ruleEditorForm, commandPhrase)
         this.doCommand(result)
         return result
     }

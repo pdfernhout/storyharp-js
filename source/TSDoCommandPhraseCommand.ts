@@ -8,7 +8,7 @@ import { TSVariableState } from "./TSVariable"
 // TODO: Fix these as imports
 import { ConsoleForm, RuleEditorForm } from "./fixTypes"
 
-export class TSDoCommandPhrase extends TSAbstractMoveFocusCommand {
+export class TSDoCommandPhraseCommand extends TSAbstractMoveFocusCommand {
     commandPhrase: string
     changedVariables: TSChangedVariableWrapper[]
     oldLastSaidTextWithMacros: string
