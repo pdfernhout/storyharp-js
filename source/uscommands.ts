@@ -8,21 +8,25 @@ import { TPoint } from "./TPoint"
 import { TSDragRecord } from "./TSDragRecord"
 import { TWorld } from "./TWorld";
 
-// TODO: FIX THIS
-const usconsoleform: any = {};
-const usruleeditorform: any = {};
-const uschangelog: any = {};
+// TODO: Fix these as imports
+import { RuleEditorForm, ChangeLogForm, ConsoleForm, ScrollIntoViewDirection } from "./fixTypes"
 
 export class TSRuleFieldChange extends KfCommand {
     world: TWorld
+    ruleEditorForm: RuleEditorForm
+    changeLogForm: ChangeLogForm
+    consoleForm: ConsoleForm
     rule: TSRule
     field: int
     oldValue: string
     newValue: string
 
-    constructor(world: TWorld, rule: TSRule, field: int, newValue: string) {
+    constructor(world: TWorld, ruleEditorForm: RuleEditorForm, changeLogForm: ChangeLogForm, consoleForm: ConsoleForm, rule: TSRule, field: int, newValue: string) {
         super()
         this.world = world
+        this.ruleEditorForm = ruleEditorForm
+        this.changeLogForm = changeLogForm
+        this.consoleForm = consoleForm
         this.rule = rule
         this.field = field
         this.oldValue = rule.getTextForField(field)
@@ -30,24 +34,25 @@ export class TSRuleFieldChange extends KfCommand {
     }
     
     updateEditorForChange(): void {
-        usruleeditorform.RuleEditorForm.rule = this.rule
-        usruleeditorform.RuleEditorForm.loadAllRuleFields()
+        this.ruleEditorForm.rule = this.rule
+        this.ruleEditorForm.loadAllRuleFields()
+        // TODO: This locationCacheValid field probably can be removed along with consoleForm after finish refactoring
         if ((this.field === TSRuleField.kRuleContext) || (this.field === TSRuleField.kRuleMove)) {
-            usconsoleform.ConsoleForm.locationCacheValid = false
+            this.consoleForm.locationCacheValid = false
         }
         if (this.field === TSRuleField.kRuleRequirements) {
             //wrapper entries will get freed if list box - so reset them
-            usruleeditorform.RuleEditorForm.fillListBox(usruleeditorform.RuleEditorForm.RequirementsListBox, this.rule.requirements)
+            this.ruleEditorForm.fillListBox(this.ruleEditorForm.RequirementsListBox, this.rule.requirements)
         } else if (this.field === TSRuleField.kRuleChanges) {
-            usruleeditorform.RuleEditorForm.fillListBox(usruleeditorform.RuleEditorForm.ChangesListBox, this.rule.changes)
+            this.ruleEditorForm.fillListBox(this.ruleEditorForm.ChangesListBox, this.rule.changes)
         }
-        usruleeditorform.RuleEditorForm.RuleGrid.Invalidate()
-        usruleeditorform.RuleEditorForm.MapPaintBoxChanged()
+        this.ruleEditorForm.RuleGrid.Invalidate()
+        this.ruleEditorForm.MapPaintBoxChanged()
         // could optimize to only do in certain cases
-        usruleeditorform.RuleEditorForm.SecondListBox.Invalidate()
-        if (usruleeditorform.RuleEditorForm.organizeByField === this.field) {
+        this.ruleEditorForm.SecondListBox.Invalidate()
+        if (this.ruleEditorForm.organizeByField === this.field) {
             // could optimize to only do when browser visible
-            usruleeditorform.RuleEditorForm.setOrganizeByField(usruleeditorform.RuleEditorForm.organizeByField)
+            this.ruleEditorForm.setOrganizeByField(this.ruleEditorForm.organizeByField)
         }
     }
     
@@ -56,9 +61,9 @@ export class TSRuleFieldChange extends KfCommand {
         this.rule.setTextForField(this.field, this.newValue)
         if (this.field !== TSRuleField.kRuleReply) {
             // log changes
-            uschangelog.ChangeLogForm.addToLog(this.world.lastVariableCreated)
+            this.changeLogForm.addToLog(this.world.lastVariableCreated)
         } else {
-            uschangelog.ChangeLogForm.addToLog(this.newValue)
+            this.changeLogForm.addToLog(this.newValue)
         }
         this.updateEditorForChange()
         super.doCommand()
@@ -67,14 +72,14 @@ export class TSRuleFieldChange extends KfCommand {
     undoCommand(): void {
         this.rule.setTextForField(this.field, this.oldValue)
         this.updateEditorForChange()
-        usruleeditorform.RuleEditorForm.selectEditorField(this.field)
+        this.ruleEditorForm.selectEditorField(this.field)
         super.undoCommand()
     }
     
     redoCommand(): void {
         this.rule.setTextForField(this.field, this.newValue)
         this.updateEditorForChange()
-        usruleeditorform.RuleEditorForm.selectEditorField(this.field)
+        this.ruleEditorForm.selectEditorField(this.field)
         super.doCommand()
     }
     
@@ -89,12 +94,14 @@ export class TSRuleFieldChange extends KfCommand {
 
 export class TSNewRulesCommand extends KfCommand {
     world: TWorld
+    ruleEditorForm: RuleEditorForm
     rules: TSRule[] = []
     creator: string = ""
 
-    constructor(world: TWorld) {
+    constructor(world: TWorld, ruleEditorForm: RuleEditorForm) {
         super()
         this.world = world
+        this.ruleEditorForm = ruleEditorForm 
     }
     
     addRule(rule: TSRule): void {
@@ -104,8 +111,8 @@ export class TSNewRulesCommand extends KfCommand {
     doCommand(): void {
         //already added at start
         super.doCommand()
-        usruleeditorform.RuleEditorForm.updateForRuleChange()
-        usruleeditorform.RuleEditorForm.scrollGridSelectionsIntoView(usruleeditorform.kFromBottom)
+        this.ruleEditorForm.updateForRuleChange()
+        this.ruleEditorForm.scrollGridSelectionsIntoView(ScrollIntoViewDirection.kFromBottom)
     }
     
     undoCommand(): void {
@@ -116,10 +123,10 @@ export class TSNewRulesCommand extends KfCommand {
             rule.removeUseages()
         }
         super.undoCommand()
-        if (this.rules.indexOf(usruleeditorform.RuleEditorForm.rule) >= 0) {
-            usruleeditorform.RuleEditorForm.editRule(null)
+        if (this.rules.indexOf(this.ruleEditorForm.rule) >= 0) {
+            this.ruleEditorForm.editRule(null)
         }
-        usruleeditorform.RuleEditorForm.updateForRuleChange()
+        this.ruleEditorForm.updateForRuleChange()
     }
     
     redoCommand(): void {
@@ -131,8 +138,8 @@ export class TSNewRulesCommand extends KfCommand {
             rule.addUseages()
         }
         super.doCommand()
-        usruleeditorform.RuleEditorForm.updateForRuleChange()
-        usruleeditorform.RuleEditorForm.scrollGridSelectionsIntoView(usruleeditorform.kFromBottom)
+        this.ruleEditorForm.updateForRuleChange()
+        this.ruleEditorForm.scrollGridSelectionsIntoView(ScrollIntoViewDirection.kFromBottom)
         //if rules.count > 0 then
         //  RuleEditorForm.editRule(rules[rules.count - 1]);
     }
@@ -159,11 +166,13 @@ export class TSNewRulesCommand extends KfCommand {
 
 export class TSDeleteRulesCommand extends KfCommand {
     world: TWorld
+    ruleEditorForm: RuleEditorForm
     ruleWrappers: TSIndexChangeRuleWrapper[] = []
 
-    constructor(world: TWorld) {
+    constructor(world: TWorld, ruleEditorForm: RuleEditorForm) {
         super()
         this.world = world
+        this.ruleEditorForm = ruleEditorForm
     }
     
     addRule(rule: TSRule, newIndex: int): void {
@@ -174,14 +183,14 @@ export class TSDeleteRulesCommand extends KfCommand {
     doCommand(): void {
         for (let i = this.ruleWrappers.length - 1; i >= 0; i--) {
             const wrapper: TSIndexChangeRuleWrapper = this.ruleWrappers[i]
-            if ((wrapper.rule === usruleeditorform.RuleEditorForm.rule)) {
-                usruleeditorform.RuleEditorForm.editRule(null)
+            if ((wrapper.rule === this.ruleEditorForm.rule)) {
+                this.ruleEditorForm.editRule(null)
             }
             wrapper.rule.removeUseages()
             wrapper.doChange()
         }
         super.doCommand()
-        usruleeditorform.RuleEditorForm.updateForRuleChange()
+        this.ruleEditorForm.updateForRuleChange()
     }
     
     undoCommand(): void {
@@ -193,25 +202,25 @@ export class TSDeleteRulesCommand extends KfCommand {
             wrapper.rule.selected = true
         }
         if (this.ruleWrappers.length > 0) {
-            usruleeditorform.RuleEditorForm.editRule(this.ruleWrappers[0].rule)
+            this.ruleEditorForm.editRule(this.ruleWrappers[0].rule)
         }
         super.undoCommand()
-        usruleeditorform.RuleEditorForm.updateForRuleChange()
-        usruleeditorform.RuleEditorForm.scrollGridSelectionsIntoView(usruleeditorform.kFromTop)
+        this.ruleEditorForm.updateForRuleChange()
+        this.ruleEditorForm.scrollGridSelectionsIntoView(ScrollIntoViewDirection.kFromTop)
     }
     
     redoCommand(): void {
         this.world.deselectAllExcept(null)
         for (let i = this.ruleWrappers.length - 1; i >= 0; i--) {
             const wrapper: TSIndexChangeRuleWrapper = this.ruleWrappers[i]
-            if ((wrapper.rule === usruleeditorform.RuleEditorForm.rule)) {
-                usruleeditorform.RuleEditorForm.editRule(null)
+            if ((wrapper.rule === this.ruleEditorForm.rule)) {
+                this.ruleEditorForm.editRule(null)
             }
             wrapper.rule.removeUseages()
             wrapper.doChange()
         }
         super.doCommand()
-        usruleeditorform.RuleEditorForm.updateForRuleChange()
+        this.ruleEditorForm.updateForRuleChange()
     }
     
     description(): string {
@@ -230,12 +239,14 @@ export class TSDeleteRulesCommand extends KfCommand {
 
 export class TSMoveRulesCommand extends KfCommand {
     world: TWorld
+    ruleEditorForm: RuleEditorForm
     ruleWrappers: TSIndexChangeRuleWrapper[] = []
     action: string = ""
 
-    constructor(world: TWorld) {
+    constructor(world: TWorld, ruleEditorForm: RuleEditorForm) {
         super()
         this.world = world
+        this.ruleEditorForm = ruleEditorForm
     }
     
     addRule(rule: TSRule, newIndex: int): void {
@@ -249,13 +260,13 @@ export class TSMoveRulesCommand extends KfCommand {
             wrapper.doChange()
         }
         super.doCommand()
-        usruleeditorform.RuleEditorForm.RuleGrid.Invalidate()
+        this.ruleEditorForm.RuleGrid.Invalidate()
         if (this.action === "raise") {
-            usruleeditorform.RuleEditorForm.scrollGridSelectionsIntoView(usruleeditorform.kFromTop)
+            this.ruleEditorForm.scrollGridSelectionsIntoView(ScrollIntoViewDirection.kFromTop)
         } else {
-            usruleeditorform.RuleEditorForm.scrollGridSelectionsIntoView(usruleeditorform.kFromBottom)
+            this.ruleEditorForm.scrollGridSelectionsIntoView(ScrollIntoViewDirection.kFromBottom)
         }
-        usruleeditorform.RuleEditorForm.updateRuleNumberLabel()
+        this.ruleEditorForm.updateRuleNumberLabel()
     }
     
     undoCommand(): void {
@@ -266,13 +277,13 @@ export class TSMoveRulesCommand extends KfCommand {
             wrapper.undoChange()
         }
         super.undoCommand()
-        usruleeditorform.RuleEditorForm.RuleGrid.Invalidate()
+        this.ruleEditorForm.RuleGrid.Invalidate()
         if (this.action === "raise") {
-            usruleeditorform.RuleEditorForm.scrollGridSelectionsIntoView(usruleeditorform.kFromBottom)
+            this.ruleEditorForm.scrollGridSelectionsIntoView(ScrollIntoViewDirection.kFromBottom)
         } else {
-            usruleeditorform.RuleEditorForm.scrollGridSelectionsIntoView(usruleeditorform.kFromTop)
+            this.ruleEditorForm.scrollGridSelectionsIntoView(ScrollIntoViewDirection.kFromTop)
         }
-        usruleeditorform.RuleEditorForm.updateRuleNumberLabel()
+        this.ruleEditorForm.updateRuleNumberLabel()
     }
     
     redoCommand(): void {
@@ -283,13 +294,13 @@ export class TSMoveRulesCommand extends KfCommand {
             wrapper.doChange()
         }
         super.doCommand()
-        usruleeditorform.RuleEditorForm.RuleGrid.Invalidate()
+        this.ruleEditorForm.RuleGrid.Invalidate()
         if (this.action === "raise") {
-            usruleeditorform.RuleEditorForm.scrollGridSelectionsIntoView(usruleeditorform.kFromTop)
+            this.ruleEditorForm.scrollGridSelectionsIntoView(ScrollIntoViewDirection.kFromTop)
         } else {
-            usruleeditorform.RuleEditorForm.scrollGridSelectionsIntoView(usruleeditorform.kFromBottom)
+            this.ruleEditorForm.scrollGridSelectionsIntoView(ScrollIntoViewDirection.kFromBottom)
         }
-        usruleeditorform.RuleEditorForm.updateRuleNumberLabel()
+        this.ruleEditorForm.updateRuleNumberLabel()
     }
     
     description(): string {

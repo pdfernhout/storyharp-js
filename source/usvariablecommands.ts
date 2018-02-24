@@ -7,19 +7,20 @@ import { TSChangedVariableWrapper } from "./TSChangedVariableWrapper"
 import { TSRule } from "./TSRule"
 import { TWorld } from "./TWorld";
 
-// TODO: FIX THIS
-const usconsoleform: any = {};
-const usruleeditorform: any = {};
+// TODO: Fix these as imports
+import { RuleEditorForm, ConsoleForm } from "./fixTypes"
 
 export class TSToggleVariableCommand extends KfCommand {
     world: TWorld
+    consoleForm: ConsoleForm
     variable: TSVariable = new TSVariable()
     oldState: TSVariableState
     newState: TSVariableState
     
-    constructor(world: TWorld, variable: TSVariable) {
+    constructor(world: TWorld, consoleForm: ConsoleForm, variable: TSVariable) {
         super()
         this.world = world
+        this.consoleForm = consoleForm
         this.variable = variable
         this.oldState = variable.getState()
         if (this.oldState === TSVariableState.kPresent) {
@@ -31,15 +32,15 @@ export class TSToggleVariableCommand extends KfCommand {
     
     setVariableStateWithUpdate(state: TSVariableState): void {
         this.variable.setState(state)
-        if (usconsoleform.ConsoleForm.ShowOnlyTrueVariablesButton.Down) {
-            usconsoleform.ConsoleForm.updateVariables()
-            usconsoleform.ConsoleForm.VariablesListBox.ItemIndex = usconsoleform.ConsoleForm.VariablesListBox.Items.IndexOfObject(this.variable)
-            usconsoleform.ConsoleForm.VariablesListBox.Invalidate()
+        if (this.consoleForm.ShowOnlyTrueVariablesButton.Down) {
+            this.consoleForm.updateVariables()
+            this.consoleForm.VariablesListBox.ItemIndex = this.consoleForm.VariablesListBox.Items.IndexOfObject(this.variable)
+            this.consoleForm.VariablesListBox.Invalidate()
         } else {
-            usconsoleform.ConsoleForm.VariablesListBox.Invalidate()
+            this.consoleForm.VariablesListBox.Invalidate()
         }
         this.world.updateAvailable()
-        usconsoleform.ConsoleForm.speechSystem.listenForAvailableCommands()
+        this.consoleForm.speechSystem.listenForAvailableCommands()
     }
     
     doCommand(): void {
@@ -67,14 +68,16 @@ export class TSToggleVariableCommand extends KfCommand {
 // need to have abstract base so TSDoCommandPhrase can defer updating till after changes
 export class TSAbstractMoveFocusCommand extends KfCommand {
     world: TWorld
+    consoleForm: ConsoleForm
     oldFocus: TSVariable
     oldFocusOldState: TSVariableState
     newFocus: TSVariable
     newFocusOldState: TSVariableState
     
-    constructor(world: TWorld, newFocus: TSVariable) {
+    constructor(world: TWorld, consoleForm: ConsoleForm, newFocus: TSVariable) {
         super()
         this.world = world
+        this.consoleForm = consoleForm
         // the old states are stored for undo in case author has been toggling them individually
         this.newFocus = newFocus
         this.newFocusOldState = newFocus.getState()
@@ -89,9 +92,9 @@ export class TSAbstractMoveFocusCommand extends KfCommand {
     
     updateForChanges(): void {
         this.world.updateAvailable()
-        usconsoleform.ConsoleForm.speechSystem.listenForAvailableCommands()
-        usconsoleform.ConsoleForm.updateVariables()
-        usconsoleform.ConsoleForm.VariablesListBox.Invalidate()
+        this.consoleForm.speechSystem.listenForAvailableCommands()
+        this.consoleForm.updateVariables()
+        this.consoleForm.VariablesListBox.Invalidate()
     }
     
     shiftsFocus(): boolean {
@@ -136,20 +139,20 @@ export class TSDoCommandPhrase extends TSAbstractMoveFocusCommand {
     oldFirstCommandDoneForLastCommandPhrase: int
     newFirstCommandDoneForLastCommandPhrase: int
     
-    constructor(world: TWorld, commandPhrase: string) {
+    constructor(world: TWorld, consoleForm: ConsoleForm, ruleEditorForm: RuleEditorForm, commandPhrase: string) {
         // determine what would need to change - including new focus and all variables
         // Reorganized with temporary variables to work around TypeScript limitation
         // of no access to this before super constructor called.
         const changedVariables: TSChangedVariableWrapper[] = []
         let newFocus = world.emptyEntry
-        const oldLastSaidTextWithMacros = usconsoleform.ConsoleForm.speechSystem.lastSaidTextWithMacros
+        const oldLastSaidTextWithMacros = consoleForm.speechSystem.lastSaidTextWithMacros
         let newLastSaidTextWithMacros = ""
         const oldFirstCommandDoneForLastCommandPhrase = world.firstCommandDoneForLastCommandPhrase
         let newFirstCommandDoneForLastCommandPhrase = -1
         for (let i = 0; i < world.rules.length; i++) {
             const rule: TSRule = world.rules[i]
             if (rule.available && compareTextIgnoreCase(rule.command.phrase, commandPhrase)) {
-                usruleeditorform.RuleEditorForm.lastCommand = rule
+                ruleEditorForm.lastCommand = rule
                 if (newFirstCommandDoneForLastCommandPhrase === -1) {
                     newFirstCommandDoneForLastCommandPhrase = i
                 }
@@ -166,7 +169,7 @@ export class TSDoCommandPhrase extends TSAbstractMoveFocusCommand {
             commandPhrase = commandPhrase.substring(1)
         }
 
-        super(world, newFocus)
+        super(world, consoleForm, newFocus)
 
         this.newFocus = newFocus
         this.oldLastSaidTextWithMacros = oldLastSaidTextWithMacros
@@ -180,12 +183,12 @@ export class TSDoCommandPhrase extends TSAbstractMoveFocusCommand {
     doCommand(): void {
         let i: int
         
-        usconsoleform.ConsoleForm.addLineToTranscript("> " + this.commandPhrase, Color.clRed)
-        usconsoleform.ConsoleForm.addLineToTranscript(usconsoleform.ConsoleForm.speechSystem.stripMacros(this.newLastSaidTextWithMacros), Color.clBlue)
-        usconsoleform.ConsoleForm.scrollTranscriptEndIntoView()
-        usconsoleform.ConsoleForm.speechSystem.sayTextWithMacros(this.newLastSaidTextWithMacros)
+        this.consoleForm.addLineToTranscript("> " + this.commandPhrase, Color.clRed)
+        this.consoleForm.addLineToTranscript(this.consoleForm.speechSystem.stripMacros(this.newLastSaidTextWithMacros), Color.clBlue)
+        this.consoleForm.scrollTranscriptEndIntoView()
+        this.consoleForm.speechSystem.sayTextWithMacros(this.newLastSaidTextWithMacros)
         //common with undo
-        usconsoleform.ConsoleForm.speechSystem.lastSaidTextWithMacros = this.newLastSaidTextWithMacros
+        this.consoleForm.speechSystem.lastSaidTextWithMacros = this.newLastSaidTextWithMacros
         this.world.firstCommandDoneForLastCommandPhrase = this.newFirstCommandDoneForLastCommandPhrase
         if (this.newFocus !== this.world.emptyEntry) {
             this.oldFocus.setState(TSVariableState.kAbsent)
@@ -196,7 +199,7 @@ export class TSDoCommandPhrase extends TSAbstractMoveFocusCommand {
             this.changedVariables[i].doChange()
         }
         this.updateForChanges()
-        usconsoleform.ConsoleForm.speechSystem.checkForSayOptionsMacro()
+        this.consoleForm.speechSystem.checkForSayOptionsMacro()
         super.doCommand()
     }
     
@@ -204,13 +207,13 @@ export class TSDoCommandPhrase extends TSAbstractMoveFocusCommand {
         let i: int
         let undoPhrase: string
         
-        usconsoleform.ConsoleForm.addLineToTranscript("> undo", Color.clRed)
+        this.consoleForm.addLineToTranscript("> undo", Color.clRed)
         //  undoPhrase := 'It is as if "' + commandPhrase + '" had never been said.';
         undoPhrase = "(You decide not to say \"" + this.commandPhrase + "\")"
-        usconsoleform.ConsoleForm.addLineToTranscript(undoPhrase, Color.clBlue)
-        usconsoleform.ConsoleForm.scrollTranscriptEndIntoView()
-        usconsoleform.ConsoleForm.speechSystem.speakText(undoPhrase)
-        usconsoleform.ConsoleForm.speechSystem.lastSaidTextWithMacros = this.oldLastSaidTextWithMacros
+        this.consoleForm.addLineToTranscript(undoPhrase, Color.clBlue)
+        this.consoleForm.scrollTranscriptEndIntoView()
+        this.consoleForm.speechSystem.speakText(undoPhrase)
+        this.consoleForm.speechSystem.lastSaidTextWithMacros = this.oldLastSaidTextWithMacros
         this.world.firstCommandDoneForLastCommandPhrase = this.oldFirstCommandDoneForLastCommandPhrase
         for (let i = this.changedVariables.length - 1; i >= 0; i--) {
             this.changedVariables[i].undoChange()
@@ -225,13 +228,13 @@ export class TSDoCommandPhrase extends TSAbstractMoveFocusCommand {
     }
     
     redoCommand(): void { 
-        usconsoleform.ConsoleForm.addLineToTranscript("> redo", Color.clRed)
+        this.consoleForm.addLineToTranscript("> redo", Color.clRed)
         const redoPhrase = "(You decide to say \"" + this.commandPhrase + "\" anyway)"
-        usconsoleform.ConsoleForm.addLineToTranscript(redoPhrase, Color.clBlue)
-        usconsoleform.ConsoleForm.scrollTranscriptEndIntoView()
-        usconsoleform.ConsoleForm.speechSystem.speakText(redoPhrase)
+        this.consoleForm.addLineToTranscript(redoPhrase, Color.clBlue)
+        this.consoleForm.scrollTranscriptEndIntoView()
+        this.consoleForm.speechSystem.speakText(redoPhrase)
         //common with do
-        usconsoleform.ConsoleForm.speechSystem.lastSaidTextWithMacros = this.newLastSaidTextWithMacros
+        this.consoleForm.speechSystem.lastSaidTextWithMacros = this.newLastSaidTextWithMacros
         this.world.firstCommandDoneForLastCommandPhrase = this.newFirstCommandDoneForLastCommandPhrase
         if (this.newFocus !== this.world.emptyEntry) {
             this.oldFocus.setState(TSVariableState.kAbsent)

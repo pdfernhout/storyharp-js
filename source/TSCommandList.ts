@@ -6,6 +6,9 @@ import { TSRule, TSRuleField } from "./TSRule"
 import { TSRuleFieldChange } from "./uscommands"
 import { TWorld } from "./TWorld"
 
+// TODO: Fix these as imports
+import { RuleEditorForm, ChangeLogForm, ConsoleForm } from "./fixTypes"
+
 export class TSCommandList extends KfCommandList {
     world: TWorld
 
@@ -14,25 +17,25 @@ export class TSCommandList extends KfCommandList {
         this.world = world
     }
     
-    toggleVariable(variable: TSVariable): TSToggleVariableCommand {
-        const result= new TSToggleVariableCommand(this.world, variable)
+    toggleVariable(consoleForm: ConsoleForm, variable: TSVariable): TSToggleVariableCommand {
+        const result= new TSToggleVariableCommand(this.world, consoleForm, variable)
         this.doCommand(result)
         return result
     }
     
-    moveFocus(newFocus: TSVariable): TSMoveFocusCommand {
-        const result = new TSMoveFocusCommand(this.world, newFocus)
+    moveFocus(consoleForm: ConsoleForm, newFocus: TSVariable): TSMoveFocusCommand {
+        const result = new TSMoveFocusCommand(this.world, consoleForm, newFocus)
         this.doCommand(result)
         return result
     }
     
-    doCommandPhrase(commandPhrase: string): TSDoCommandPhrase {
-        const result = new TSDoCommandPhrase(this.world, commandPhrase)
+    doCommandPhrase(consoleForm: ConsoleForm, ruleEditorForm: RuleEditorForm, commandPhrase: string): TSDoCommandPhrase {
+        const result = new TSDoCommandPhrase(this.world, consoleForm, ruleEditorForm, commandPhrase)
         this.doCommand(result)
         return result
     }
     
-    ruleFieldChange(rule: TSRule, field: int, newValue: string): TSRuleFieldChange {
+    ruleFieldChange(ruleEditorForm: RuleEditorForm, changeLogForm: ChangeLogForm, consoleForm: ConsoleForm, rule: TSRule, field: int, newValue: string): TSRuleFieldChange {
         if ((field === TSRuleField.kRuleContext) || (field === TSRuleField.kRuleMove)) {
             if (rule.getTextForField(field).startsWith("new context ")) {
                 if (this.world.findVariable(newValue) === null) {
@@ -41,7 +44,7 @@ export class TSCommandList extends KfCommandList {
                 }
             }
         }
-        const result = new TSRuleFieldChange(this.world, rule, field, newValue)
+        const result = new TSRuleFieldChange(this.world, ruleEditorForm, changeLogForm, consoleForm, rule, field, newValue)
         this.doCommand(result)
         return result
     }
