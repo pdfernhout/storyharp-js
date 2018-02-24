@@ -2,13 +2,10 @@
 
 import { int, /* compareTextIgnoreCase, Color */ } from "./common"
 import { KfCommand, TrackPhase, KfCommandChangeType, TCommandEvent } from "./KfCommand"
-import { KfCommandList } from "./KfCommandList"
-import { TSVariable /*, TSVariableState */ } from "./TSVariable"
 import { TSRule, TSRuleField } from "./TSRule"
 import { TSIndexChangeRuleWrapper } from "./TSIndexChangeRuleWrapper"
 import { TPoint } from "./TPoint"
 import { TSDragRecord } from "./TSDragRecord"
-import { TSToggleVariableCommand, TSMoveFocusCommand, TSDoCommandPhrase } from "./usvariablecommands"
 
 // TODO: FIX THIS
 const usconsoleform: any = {};
@@ -395,43 +392,6 @@ export class TSMapDragCommand extends KfCommand {
                 }
                 break
         }
-        return result
-    }
-    
-}
-
-export class TSCommandList extends KfCommandList {
-    
-    // ----------------------------- TSCommandList -------------------------------
-    toggleVariable(variable: TSVariable): TSToggleVariableCommand {
-        const result= new TSToggleVariableCommand(variable)
-        this.doCommand(result)
-        return result
-    }
-    
-    moveFocus(newFocus: TSVariable): TSMoveFocusCommand {
-        const result = new TSMoveFocusCommand(newFocus)
-        this.doCommand(result)
-        return result
-    }
-    
-    doCommandPhrase(commandPhrase: string): TSDoCommandPhrase {
-        const result = new TSDoCommandPhrase(commandPhrase)
-        this.doCommand(result)
-        return result
-    }
-    
-    ruleFieldChange(rule: TSRule, field: int, newValue: string): TSRuleFieldChange {
-        if ((field === TSRuleField.kRuleContext) || (field === TSRuleField.kRuleMove)) {
-            if (rule.getTextForField(field).startsWith("new context ")) {
-                if (usdomain.domain.world.findVariable(newValue) === null) {
-                    const newContextOrMove: TSVariable = usdomain.domain.world.findOrCreateVariable(newValue, false)
-                    newContextOrMove.position = rule.context.position
-                }
-            }
-        }
-        const result = new TSRuleFieldChange(rule, field, newValue)
-        this.doCommand(result)
         return result
     }
     
