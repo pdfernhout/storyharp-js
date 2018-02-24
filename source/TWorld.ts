@@ -58,25 +58,12 @@ export class TWorld {
     
     resetVariablesAndRules(): void {
         if (this.rules) {
-            // TODO: This loop may be unneeded since all the variables are being cleared too
-            for (let i = 0; i < this.rules.length; i++) {
-                this.rules[i].destroyManually()
-            }
             this.rules.length = 0
         }
         if (this.variables) {
             this.variables.length = 0
         }
     }
-    
-    /* TODO: Probably not needed
-    destroyManually(): void {
-        this.resetVariablesAndRules()
-        this.rules = undefined
-        this.variables = undefined
-        this.emptyEntry = undefined
-    }
-    */
     
     newRule(): TSRule {
         // TODO: Maybe make a constructor for TSRule?
@@ -367,7 +354,7 @@ export class TWorld {
         }
     }
     
-    // retuns whether should redraw grid
+    // returns whether should redraw grid
     deselectAllExcept(exceptObject: TSDraggableObject | null): boolean {
         let result = false
         for (let i = 0; i < this.rules.length; i++) {

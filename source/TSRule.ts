@@ -67,30 +67,6 @@ export class TSRule extends TSDraggableObject {
         this.useagesRemoved = true
     }
     
-    destroyManually(): void {
-        if (!this.useagesRemoved) {
-            if (this.context) {
-                this.context.contextUseages -= 1
-            }
-            if (this.requirements) {
-                for (let i = 0; i < this.requirements.length; i++) {
-                    this.requirements[i].variable.requirementsUseages -= 1
-                }
-            }
-            if (this.command) {
-                this.command.commandUseages -= 1
-            }
-            if (this.move) {
-                this.move.moveUseages -= 1
-            }
-            if (this.changes) {
-                for (let i = 0; i < this.changes.length; i++) {
-                    this.changes[i].variable.changesUseages -= 1
-                }
-            }
-        }
-    }
-    
     setContext(aString: string): void {
         if (this.context) {
             this.context.contextUseages -= 1
