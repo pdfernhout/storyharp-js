@@ -1,6 +1,6 @@
-import { TWorld } from "./TWorld";
-import { TSVariable, TSVariableState } from "./TSVariable";
-import { KfCommand } from "./KfCommand";
+import { TWorld } from "./TWorld"
+import { TSVariable, TSVariableState } from "./TSVariable"
+import { KfCommand } from "./KfCommand"
 
 // TODO: Fix these as imports
 import { ConsoleForm } from "./fixTypes"

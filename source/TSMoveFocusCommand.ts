@@ -1,5 +1,5 @@
-import { TSAbstractMoveFocusCommand } from "./TSAbstractMoveFocusCommand";
-import { TSVariableState } from "./TSVariable";
+import { TSAbstractMoveFocusCommand } from "./TSAbstractMoveFocusCommand"
+import { TSVariableState } from "./TSVariable"
 
 export class TSMoveFocusCommand extends TSAbstractMoveFocusCommand {
     
