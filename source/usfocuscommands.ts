@@ -1,4 +1,5 @@
 // unit usfocuscommands
+// TODO: This does not seem to be used and can probably be removed.
 
 import { int } from "./common"
 import { KfCommand } from "./KfCommand"
