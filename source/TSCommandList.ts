@@ -5,7 +5,7 @@ import { TSToggleVariableCommand } from "./TSToggleVariableCommand"
 import { TSMoveFocusCommand } from "./TSMoveFocusCommand"
 import { TSDoCommandPhrase } from "./TSDoCommandPhrase"
 import { TSRule, TSRuleField } from "./TSRule"
-import { TSRuleFieldChangeCommand } from "./uscommands"
+import { TSRuleFieldChangeCommand } from "./TSRuleFieldChangeCommand"
 import { TWorld } from "./TWorld"
 
 // TODO: Fix these as imports
