@@ -11,7 +11,7 @@ import { TWorld } from "./TWorld";
 // TODO: Fix these as imports
 import { RuleEditorForm, ChangeLogForm, ConsoleForm, ScrollIntoViewDirection } from "./fixTypes"
 
-export class TSRuleFieldChange extends KfCommand {
+export class TSRuleFieldChangeCommand extends KfCommand {
     world: TWorld
     ruleEditorForm: RuleEditorForm
     changeLogForm: ChangeLogForm

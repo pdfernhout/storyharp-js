@@ -5,7 +5,7 @@ import { TSToggleVariableCommand } from "./TSToggleVariableCommand"
 import { TSMoveFocusCommand } from "./TSMoveFocusCommand"
 import { TSDoCommandPhrase } from "./TSDoCommandPhrase"
 import { TSRule, TSRuleField } from "./TSRule"
-import { TSRuleFieldChange } from "./uscommands"
+import { TSRuleFieldChangeCommand } from "./uscommands"
 import { TWorld } from "./TWorld"
 
 // TODO: Fix these as imports
@@ -37,7 +37,7 @@ export class TSCommandList extends KfCommandList {
         return result
     }
     
-    ruleFieldChange(ruleEditorForm: RuleEditorForm, changeLogForm: ChangeLogForm, consoleForm: ConsoleForm, rule: TSRule, field: int, newValue: string): TSRuleFieldChange {
+    ruleFieldChange(ruleEditorForm: RuleEditorForm, changeLogForm: ChangeLogForm, consoleForm: ConsoleForm, rule: TSRule, field: int, newValue: string): TSRuleFieldChangeCommand {
         if ((field === TSRuleField.kRuleContext) || (field === TSRuleField.kRuleMove)) {
             if (rule.getTextForField(field).startsWith("new context ")) {
                 if (this.world.findVariable(newValue) === null) {
@@ -46,7 +46,7 @@ export class TSCommandList extends KfCommandList {
                 }
             }
         }
-        const result = new TSRuleFieldChange(this.world, ruleEditorForm, changeLogForm, consoleForm, rule, field, newValue)
+        const result = new TSRuleFieldChangeCommand(this.world, ruleEditorForm, changeLogForm, consoleForm, rule, field, newValue)
         this.doCommand(result)
         return result
     }
