@@ -11,6 +11,7 @@
     },
     "include": [
         "source/**/*",
-        "tests-interactive/**/*"
+        "tests-interactive/**/*",
+        "tests/**/*"
     ]
 }
