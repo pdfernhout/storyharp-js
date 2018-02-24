@@ -20,6 +20,10 @@ export enum Color {
     clBlue
 }
 
+export function caption(text: string) {
+    return text.replace("&", "")
+}
+
 /*
 export function ShowMessage(message: string) {
     alert(message)

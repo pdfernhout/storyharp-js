@@ -1,8 +1,8 @@
 
 // Exported from: ../../storyharp-js/converted_source/usconsoleform.lfm
 
-import { m } from "mithril"
-import { caption } from "common"
+import * as m from "mithril"
+import { caption } from "./common"
 
 export function viewConsoleForm() {
     return m("ConsoleForm.TConsoleForm",
