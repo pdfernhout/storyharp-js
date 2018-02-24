@@ -4,7 +4,6 @@ import { int, /* compareTextIgnoreCase, Color */ } from "./common"
 import { KfCommand, TrackPhase, KfCommandChangeType, TCommandEvent } from "./KfCommand"
 import { KfCommandList } from "./KfCommandList"
 import { TSVariable /*, TSVariableState */ } from "./TSVariable"
-// import { TSChangedVariableWrapper } from "./TSChangedVariableWrapper"
 import { TSRule, TSRuleField } from "./TSRule"
 import { TSIndexChangeRuleWrapper } from "./TSIndexChangeRuleWrapper"
 import { TPoint } from "./TPoint"
@@ -16,38 +15,6 @@ const usconsoleform: any = {};
 const usdomain: any = {};
 const usruleeditorform: any = {};
 const uschangelog: any = {};
-
-/*
-from conversion_common import *
-import uschangelog
-import usruleeditorform
-import usspeech
-import usconsoleform
-import usdomain
-import usvariablecommands
-import usfocuscommands
-import usworld
-import ucommand
-import delphi_compatability
-*/
-
-//TEditChangeCommand = class(KfCommand)
-//  	entryField: TObject;
-//    oldSelectionInformation: TSelectionInformation;
-//    newSelectionInformation: TSelectionInformation;
-//		closed: boolean;
-//		procedure recordChangesMadeToEdit;
-//		constructor createWithEdit(Sender: TObject;  const lastSelectionInformation: TSelectionInformation);
-// 		procedure doCommand; override;
-//		procedure undoCommand; override;
-//		procedure redoCommand; override;
-//		function description: string; override;
-//		end;
-//
-//  	entryField: TObject;
-//    newSelectionInformation: TSelectionInformation;
-//		constructor createWithRule(Sender: TObject;  const lastSelectionInformation: TSelectionInformation);
-//   
 
 export class TSRuleFieldChange extends KfCommand {
     rule: TSRule

@@ -11,16 +11,6 @@ const usconsoleform: any = {};
 const usdomain: any = {};
 const usruleeditorform: any = {};
 
-/*
-from conversion_common import *
-import usruleeditorform
-import usdomain
-import usconsoleform
-import usworld
-import ucommand
-import delphi_compatability
-*/
-
 export class TSToggleVariableCommand extends KfCommand {
     variable: TSVariable = new TSVariable()
     oldState: TSVariableState
