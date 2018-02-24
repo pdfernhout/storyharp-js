@@ -1,135 +1,12 @@
-// unit usvariablecommands
-
-import { int, compareTextIgnoreCase, Color } from "./common"
-import { KfCommand } from "./KfCommand"
-import { TSVariable, TSVariableState } from "./TSVariable"
-import { TSChangedVariableWrapper } from "./TSChangedVariableWrapper"
-import { TSRule } from "./TSRule"
+import { TSAbstractMoveFocusCommand } from "./TSAbstractMoveFocusCommand";
+import { TSChangedVariableWrapper } from "./TSChangedVariableWrapper";
+import { int, compareTextIgnoreCase, Color } from "./common";
 import { TWorld } from "./TWorld";
+import { TSRule } from "./TSRule";
+import { TSVariableState } from "./TSVariable";
 
 // TODO: Fix these as imports
-import { RuleEditorForm, ConsoleForm } from "./fixTypes"
-
-export class TSToggleVariableCommand extends KfCommand {
-    world: TWorld
-    consoleForm: ConsoleForm
-    variable: TSVariable = new TSVariable()
-    oldState: TSVariableState
-    newState: TSVariableState
-    
-    constructor(world: TWorld, consoleForm: ConsoleForm, variable: TSVariable) {
-        super()
-        this.world = world
-        this.consoleForm = consoleForm
-        this.variable = variable
-        this.oldState = variable.getState()
-        if (this.oldState === TSVariableState.kPresent) {
-            this.newState = TSVariableState.kAbsent
-        } else {
-            this.newState = TSVariableState.kPresent
-        }
-    }
-    
-    setVariableStateWithUpdate(state: TSVariableState): void {
-        this.variable.setState(state)
-        if (this.consoleForm.ShowOnlyTrueVariablesButton.Down) {
-            this.consoleForm.updateVariables()
-            this.consoleForm.VariablesListBox.ItemIndex = this.consoleForm.VariablesListBox.Items.IndexOfObject(this.variable)
-            this.consoleForm.VariablesListBox.Invalidate()
-        } else {
-            this.consoleForm.VariablesListBox.Invalidate()
-        }
-        this.world.updateAvailable()
-        this.consoleForm.speechSystem.listenForAvailableCommands()
-    }
-    
-    doCommand(): void {
-        this.setVariableStateWithUpdate(this.newState)
-        KfCommand.prototype.doCommand.call(this)
-    }
-    
-    undoCommand(): void {
-        this.setVariableStateWithUpdate(this.oldState)
-        KfCommand.prototype.undoCommand.call(this)
-    }
-    
-    description(): string {
-        let result = ""
-        if (this.newState === TSVariableState.kPresent) {
-            result = "toggle \"" + this.variable.phrase + "\" to true"
-        } else {
-            result = "toggle \"" + this.variable.phrase + "\" to false"
-        }
-        return result
-    }
-    
-}
-
-// need to have abstract base so TSDoCommandPhrase can defer updating till after changes
-export class TSAbstractMoveFocusCommand extends KfCommand {
-    world: TWorld
-    consoleForm: ConsoleForm
-    oldFocus: TSVariable
-    oldFocusOldState: TSVariableState
-    newFocus: TSVariable
-    newFocusOldState: TSVariableState
-    
-    constructor(world: TWorld, consoleForm: ConsoleForm, newFocus: TSVariable) {
-        super()
-        this.world = world
-        this.consoleForm = consoleForm
-        // the old states are stored for undo in case author has been toggling them individually
-        this.newFocus = newFocus
-        this.newFocusOldState = newFocus.getState()
-        if (this.world.focus !== null) {
-            this.oldFocus = this.world.focus
-            this.oldFocusOldState = this.oldFocus.getState()
-        } else {
-            this.oldFocus = newFocus
-            this.oldFocusOldState = newFocus.getState()
-        }
-    }
-    
-    updateForChanges(): void {
-        this.world.updateAvailable()
-        this.consoleForm.speechSystem.listenForAvailableCommands()
-        this.consoleForm.updateVariables()
-        this.consoleForm.VariablesListBox.Invalidate()
-    }
-    
-    shiftsFocus(): boolean {
-        let result = false
-        result = (this.newFocus !== this.world.emptyEntry) && (this.newFocus !== this.oldFocus)
-        return result
-    }
-    
-}
-
-export class TSMoveFocusCommand extends TSAbstractMoveFocusCommand {
-    
-    doCommand(): void {
-        this.oldFocus.setState(TSVariableState.kAbsent)
-        this.world.focus = this.newFocus
-        this.newFocus.setState(TSVariableState.kPresent)
-        this.updateForChanges()
-        TSAbstractMoveFocusCommand.prototype.doCommand.call(this)
-    }
-    
-    undoCommand(): void {
-        this.newFocus.setState(this.newFocusOldState)
-        this.world.focus = this.oldFocus
-        this.oldFocus.setState(this.oldFocusOldState)
-        this.updateForChanges()
-        TSAbstractMoveFocusCommand.prototype.undoCommand.call(this)
-    }
-    
-    description(): string {
-        let result = ""
-        result = "move focus to " + this.newFocus.phrase
-        return result
-    }
-    
-}
+import { ConsoleForm, RuleEditorForm } from "./fixTypes"
 
 export class TSDoCommandPhrase extends TSAbstractMoveFocusCommand {
     commandPhrase: string
@@ -255,4 +132,3 @@ export class TSDoCommandPhrase extends TSAbstractMoveFocusCommand {
     }
     
 }
-
