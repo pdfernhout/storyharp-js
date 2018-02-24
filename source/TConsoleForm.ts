@@ -1,5 +1,6 @@
 // unit usconsoleform
 
+/*
 from conversion_common import *
 import uspictureform
 import usabout
@@ -510,7 +511,7 @@ export class TConsoleForm {
     }
     
     WMDropFiles(Msg: TWMDropFiles): void {
-        let CFileName: char[] /* MAX_PATH + 1 */
+        let CFileName: char[] /* MAX_PATH + 1 *//*
         
         try {
             if (UNRESOLVED.DragQueryFile(Msg.Drop, 0, CFileName, UNRESOLVED.MAX_PATH) > 0) {
@@ -1235,4 +1236,4 @@ export class TConsoleForm {
     }
     
 }
-
+*/
