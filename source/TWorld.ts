@@ -368,7 +368,7 @@ export class TWorld {
     }
     
     // retuns whether should redraw grid
-    deselectAllExcept(exceptObject: TSDraggableObject): boolean {
+    deselectAllExcept(exceptObject: TSDraggableObject | null): boolean {
         let result = false
         for (let i = 0; i < this.rules.length; i++) {
             const rule: TSRule = this.rules[i]

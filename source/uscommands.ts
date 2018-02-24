@@ -1,26 +1,28 @@
 // unit uscommands
 
-import { int, /* compareTextIgnoreCase, Color */ } from "./common"
+import { int, arrayRemove} from "./common"
 import { KfCommand, TrackPhase, KfCommandChangeType, TCommandEvent } from "./KfCommand"
 import { TSRule, TSRuleField } from "./TSRule"
 import { TSIndexChangeRuleWrapper } from "./TSIndexChangeRuleWrapper"
 import { TPoint } from "./TPoint"
 import { TSDragRecord } from "./TSDragRecord"
+import { TWorld } from "./TWorld";
 
 // TODO: FIX THIS
 const usconsoleform: any = {};
-const usdomain: any = {};
 const usruleeditorform: any = {};
 const uschangelog: any = {};
 
 export class TSRuleFieldChange extends KfCommand {
+    world: TWorld
     rule: TSRule
     field: int
     oldValue: string
     newValue: string
 
-    constructor(rule: TSRule, field: int, newValue: string) {
+    constructor(world: TWorld, rule: TSRule, field: int, newValue: string) {
         super()
+        this.world = world
         this.rule = rule
         this.field = field
         this.oldValue = rule.getTextForField(field)
@@ -50,11 +52,11 @@ export class TSRuleFieldChange extends KfCommand {
     }
     
     doCommand(): void {
-        usdomain.domain.world.lastVariableCreated = ""
+        this.world.lastVariableCreated = ""
         this.rule.setTextForField(this.field, this.newValue)
         if (this.field !== TSRuleField.kRuleReply) {
             // log changes
-            uschangelog.ChangeLogForm.addToLog(usdomain.domain.world.lastVariableCreated)
+            uschangelog.ChangeLogForm.addToLog(this.world.lastVariableCreated)
         } else {
             uschangelog.ChangeLogForm.addToLog(this.newValue)
         }
@@ -79,15 +81,21 @@ export class TSRuleFieldChange extends KfCommand {
     description(): string {
         let result = ""
         //  result := 'rule ' + IntToStr(domain.world.rules.indexOf(rule) + 1) + ' change of ' + TSRule.headerForField(field);
-        result = "Change " + TSRule.headerForField(this.field) + " For Rule " + (usdomain.domain.world.rules.IndexOf(this.rule) + 1)
+        result = "Change " + TSRule.headerForField(this.field) + " For Rule " + (this.world.rules.indexOf(this.rule) + 1)
         return result
     }
     
 }
 
 export class TSNewRulesCommand extends KfCommand {
+    world: TWorld
     rules: TSRule[] = []
     creator: string = ""
+
+    constructor(world: TWorld) {
+        super()
+        this.world = world
+    }
     
     addRule(rule: TSRule): void {
         this.rules.push(rule)
@@ -103,7 +111,7 @@ export class TSNewRulesCommand extends KfCommand {
     undoCommand(): void {
         for (let i = 0; i < this.rules.length; i++) {
             const rule: TSRule = this.rules[i]
-            usdomain.domain.world.rules.Remove(rule)
+            arrayRemove(this.world.rules, rule)
             rule.selected = false
             rule.removeUseages()
         }
@@ -115,11 +123,11 @@ export class TSNewRulesCommand extends KfCommand {
     }
     
     redoCommand(): void {
-        usdomain.domain.world.deselectAllExcept(null)
+        this.world.deselectAllExcept(null)
         for (let i = 0; i < this.rules.length; i++) {
             const rule: TSRule = this.rules[i]
             rule.selected = true
-            usdomain.domain.world.rules.Add(rule)
+            this.world.rules.push(rule)
             rule.addUseages()
         }
         super.doCommand()
@@ -150,7 +158,13 @@ export class TSNewRulesCommand extends KfCommand {
 }
 
 export class TSDeleteRulesCommand extends KfCommand {
+    world: TWorld
     ruleWrappers: TSIndexChangeRuleWrapper[] = []
+
+    constructor(world: TWorld) {
+        super()
+        this.world = world
+    }
     
     addRule(rule: TSRule, newIndex: int): void {
         const wrapper: TSIndexChangeRuleWrapper = new TSIndexChangeRuleWrapper(rule, newIndex)
@@ -171,7 +185,7 @@ export class TSDeleteRulesCommand extends KfCommand {
     }
     
     undoCommand(): void {
-        usdomain.domain.world.deselectAllExcept(null)
+        this.world.deselectAllExcept(null)
         for (let i = 0; i < this.ruleWrappers.length; i++) {
             const wrapper: TSIndexChangeRuleWrapper = this.ruleWrappers[i]
             wrapper.rule.addUseages()
@@ -187,7 +201,7 @@ export class TSDeleteRulesCommand extends KfCommand {
     }
     
     redoCommand(): void {
-        usdomain.domain.world.deselectAllExcept(null)
+        this.world.deselectAllExcept(null)
         for (let i = this.ruleWrappers.length - 1; i >= 0; i--) {
             const wrapper: TSIndexChangeRuleWrapper = this.ruleWrappers[i]
             if ((wrapper.rule === usruleeditorform.RuleEditorForm.rule)) {
@@ -215,8 +229,14 @@ export class TSDeleteRulesCommand extends KfCommand {
 }
 
 export class TSMoveRulesCommand extends KfCommand {
+    world: TWorld
     ruleWrappers: TSIndexChangeRuleWrapper[] = []
     action: string = ""
+
+    constructor(world: TWorld) {
+        super()
+        this.world = world
+    }
     
     addRule(rule: TSRule, newIndex: int): void {
         const wrapper: TSIndexChangeRuleWrapper = new TSIndexChangeRuleWrapper(rule, newIndex)
@@ -239,7 +259,7 @@ export class TSMoveRulesCommand extends KfCommand {
     }
     
     undoCommand(): void {
-        usdomain.domain.world.deselectAllExcept(null)
+        this.world.deselectAllExcept(null)
         for (let i = this.ruleWrappers.length - 1; i >= 0; i--) {
             const wrapper: TSIndexChangeRuleWrapper = this.ruleWrappers[i]
             wrapper.rule.selected = true
@@ -256,7 +276,7 @@ export class TSMoveRulesCommand extends KfCommand {
     }
     
     redoCommand(): void {
-        usdomain.domain.world.deselectAllExcept(null)
+        this.world.deselectAllExcept(null)
         for (let i = 0; i < this.ruleWrappers.length; i++) {
             const wrapper: TSIndexChangeRuleWrapper = this.ruleWrappers[i]
             wrapper.rule.selected = true
@@ -292,11 +312,14 @@ export class TSMoveRulesCommand extends KfCommand {
 }
 
 export class TSMapDragCommand extends KfCommand {
+    world: TWorld
     dragRecords: TSDragRecord[] = []
     notifyProcedure: TCommandEvent
     
-    create(): void {
-        usdomain.domain.world.addDragRecordsToList(this.dragRecords)
+    constructor(world: TWorld) {
+        super()
+        this.world = world
+        this.world.addDragRecordsToList(this.dragRecords)
     }
     
     doCommand(): void {
@@ -310,7 +333,7 @@ export class TSMapDragCommand extends KfCommand {
     }
     
     undoCommand(): void {
-        usdomain.domain.world.deselectAllExcept(null)
+        this.world.deselectAllExcept(null)
         for (let i = 0; i < this.dragRecords.length; i++) {
             this.dragRecords[i].draggedNode.selected = true
             this.dragRecords[i].undoDrag()
@@ -322,7 +345,7 @@ export class TSMapDragCommand extends KfCommand {
     }
     
     redoCommand(): void {
-        usdomain.domain.world.deselectAllExcept(null)
+        this.world.deselectAllExcept(null)
         for (let i = 0; i < this.dragRecords.length; i++) {
             this.dragRecords[i].draggedNode.selected = true
             this.dragRecords[i].doDrag()

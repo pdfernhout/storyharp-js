@@ -332,24 +332,24 @@ export class TRuleEditorForm {
         if (this.rule === null) {
             return
         }
-        // TODO: Added this.world reference here -- may need to make further adjustments
+        
         if (this.ContextEdit.Text !== this.rule.context.phrase) {
-            usdomain.domain.worldCommandList.ruleFieldChange(this.world, this.rule, usworld.kRuleContext, this.ContextEdit.Text)
+            usdomain.domain.worldCommandList.ruleFieldChange(this.rule, usworld.kRuleContext, this.ContextEdit.Text)
         }
         if (this.CommandEdit.Text !== this.rule.command.phrase) {
-            usdomain.domain.worldCommandList.ruleFieldChange(this.world, this.rule, usworld.kRuleCommand, this.CommandEdit.Text)
+            usdomain.domain.worldCommandList.ruleFieldChange(this.rule, usworld.kRuleCommand, this.CommandEdit.Text)
         }
         if (this.ReplyMemo.Text !== this.rule.reply) {
-            usdomain.domain.worldCommandList.ruleFieldChange(this.world, this.rule, usworld.kRuleReply, this.ReplyMemo.Text)
+            usdomain.domain.worldCommandList.ruleFieldChange(this.rule, usworld.kRuleReply, this.ReplyMemo.Text)
         }
         if (this.MoveEdit.Text !== this.rule.move.phrase) {
-            usdomain.domain.worldCommandList.ruleFieldChange(this.world, this.rule, usworld.kRuleMove, this.MoveEdit.Text)
+            usdomain.domain.worldCommandList.ruleFieldChange(this.rule, usworld.kRuleMove, this.MoveEdit.Text)
         }
         if (this.logicalStatementForListBox(this.RequirementsListBox) !== this.rule.decompileRequirements()) {
-            usdomain.domain.worldCommandList.ruleFieldChange(this.world, this.rule, usworld.kRuleRequirements, this.logicalStatementForListBox(this.RequirementsListBox))
+            usdomain.domain.worldCommandList.ruleFieldChange(this.rule, usworld.kRuleRequirements, this.logicalStatementForListBox(this.RequirementsListBox))
         }
         if (this.logicalStatementForListBox(this.ChangesListBox) !== this.rule.decompileChanges()) {
-            usdomain.domain.worldCommandList.ruleFieldChange(this.world, this.rule, usworld.kRuleChanges, this.logicalStatementForListBox(this.ChangesListBox))
+            usdomain.domain.worldCommandList.ruleFieldChange(this.rule, usworld.kRuleChanges, this.logicalStatementForListBox(this.ChangesListBox))
         }
     }
     
