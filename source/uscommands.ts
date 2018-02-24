@@ -19,7 +19,6 @@ export class TSRuleFieldChange extends KfCommand {
     oldValue: string
     newValue: string
 
-    // TSRuleFieldChange ------------------------------------------
     constructor(rule: TSRule, field: int, newValue: string) {
         super()
         this.rule = rule
@@ -296,7 +295,6 @@ export class TSMapDragCommand extends KfCommand {
     dragRecords: TSDragRecord[] = []
     notifyProcedure: TCommandEvent
     
-    // TSMapDragCommand ------------------------------------------
     create(): void {
         usdomain.domain.world.addDragRecordsToList(this.dragRecords)
     }

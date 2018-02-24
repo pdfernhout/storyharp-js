@@ -16,7 +16,6 @@ export class TSToggleVariableCommand extends KfCommand {
     oldState: TSVariableState
     newState: TSVariableState
     
-    // ----------------------------- TSToggleVariableCommand --------------------- 
     constructor(variable: TSVariable) {
         super()
         this.variable = variable
@@ -70,7 +69,6 @@ export class TSAbstractMoveFocusCommand extends KfCommand {
     newFocus: TSVariable
     newFocusOldState: TSVariableState
     
-    // ----------------------------- TSAbstractMoveFocusCommand --------------------- 
     constructor(newFocus: TSVariable) {
         super()
         // the old states are stored for undo in case author has been toggling them individually
@@ -102,7 +100,6 @@ export class TSAbstractMoveFocusCommand extends KfCommand {
 
 export class TSMoveFocusCommand extends TSAbstractMoveFocusCommand {
     
-    // ----------------------------- TSMoveFocusCommand --------------------- 
     doCommand(): void {
         this.oldFocus.setState(TSVariableState.kAbsent)
         usdomain.domain.world.focus = this.newFocus
@@ -135,7 +132,6 @@ export class TSDoCommandPhrase extends TSAbstractMoveFocusCommand {
     oldFirstCommandDoneForLastCommandPhrase: int
     newFirstCommandDoneForLastCommandPhrase: int
     
-    // ----------------------------- TSDoCommandPhrase -------------------------------
     constructor(commandPhrase: string) {
         // determine what would need to change - including new focus and all variables
         // Reorganized with temporary variables to work around TypeScript limitation
