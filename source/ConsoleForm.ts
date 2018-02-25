@@ -54,16 +54,44 @@ function doCommand(domain: any, commandPhrase: string) {
     domain.commandList.doCommandPhrase(domain.consoleForm, domain.ruleEditorForm, commandPhraseModified)
 }
 
+function scrollIntoView() {
+    const buttons = document.getElementById("undoRedoButtons")
+    if (buttons) buttons.scrollIntoView()
+}
+
 function viewChoices(domain: any) {
     const commands = availableCommands(domain.world)
+    Promise.resolve().then(scrollIntoView)
     return m("div", 
         m("hr"),
         m("div", "You can choose from:"),
-        commands.sort().map(command => m("div.ma2", { onclick: () => doCommand(domain, command) }, command))
+        commands.sort().map(command => m("div.ma2", {
+            onclick: () => doCommand(domain, command),
+        }, command)),
+        m("div#undoRedoButtons.ma2",
+            m("button.ml2.w4", {
+                disabled: !domain.commandList.isUndoEnabled(),
+                onclick: () => domain.commandList.undoLast(),
+                title: "Undo " + domain.commandList.undoDescription()
+            }, "Undo"),
+            m("button.ml2.w4", { 
+                disabled: !domain.commandList.isRedoEnabled(),
+                onclick: () => domain.commandList.redoLast(),
+                title: "Redo " + domain.commandList.redoDescription()
+            }, "Redo"), 
+        )
     )
 }
 
 let changingFile = false
+
+function color(color: Color) {
+    switch (color) {
+        case Color.clBlue: return ".blue"
+        case Color.clRed: return ".red"
+        default: return ""
+    }
+}
 
 export function viewConsoleForm(domain: any) {
     return m(".ConsoleForm.ml3",
@@ -74,14 +102,14 @@ export function viewConsoleForm(domain: any) {
         ),
         changingFile 
             ? domain.availableWorldFiles.map((name: string) => 
-                m("div", { onclick: () => {
+                m("div.mt1", { onclick: () => {
                     domain.transcript.length = 0
                     domain.loadTestWorld(name)
                     changingFile = false
                 }}, name)
             )
             : [
-                domain.transcript.map((text: string) => m("div.mw6", text)),
+                domain.transcript.map((item: any) => m("div.mw6" + color(item.color), item.text)),
                 viewChoices(domain),
             ]
     )

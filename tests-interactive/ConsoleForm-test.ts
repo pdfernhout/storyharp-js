@@ -9,7 +9,7 @@ import { TSCommandList } from "../source/TSCommandList";
 
 const world = new TWorld()
 const commandList = new TSCommandList(world)
-const transcript: string[] = []
+const transcript: {text: string, color: number}[] = []
 
 const fakeDomain = {
     world,
@@ -24,7 +24,7 @@ const fakeDomain = {
             checkForSayOptionsMacro: () => null,
             speakText: (text: string) => null,
         },
-        addLineToTranscript: (text: string) => fakeDomain.transcript.push(text),
+        addLineToTranscript: (text: string, color: number) => fakeDomain.transcript.push({text, color}),
         scrollTranscriptEndIntoView: () => null,
         updateVariables: () => null,
         VariablesListBox: {
