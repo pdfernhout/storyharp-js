@@ -29,7 +29,8 @@ const fakeDomain = {
         updateVariables: () => null,
         VariablesListBox: {
             Invalidate: () => null
-        }
+        },
+        ShowOnlyTrueVariablesButton: {}
     },
     ruleEditorForm: {},
     availableWorldFiles: [

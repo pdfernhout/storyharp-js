@@ -20,7 +20,7 @@ export class TSCommandList extends KfCommandList {
     }
     
     toggleVariable(consoleForm: ConsoleForm, variable: TSVariable): TSToggleVariableCommand {
-        const result= new TSToggleVariableCommand(this.world, consoleForm, variable)
+        const result = new TSToggleVariableCommand(this.world, consoleForm, variable)
         this.doCommand(result)
         return result
     }
