@@ -151,3 +151,6 @@ With Mithril, can use unicode characters instead of custom glyphs (at least to s
 Overall, with Mithril, probably easier to mostly start over with many forms and copy over bits of code as needed --
 rather than try to work from the generated lfm.ts file.
 The exception may be data entry forms like the wizards where there is a lot of text.
+
+It has been very useful (almost essential) to look at screenshots of the previous application
+and also consult the related help documentaiton: http://www.kurtz-fernhout.com/StoryHarp/screens.htm
