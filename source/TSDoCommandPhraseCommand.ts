@@ -60,8 +60,8 @@ export class TSDoCommandPhraseCommand extends TSAbstractMoveFocusCommand {
     doCommand(): void {
         let i: int
         
-        this.consoleForm.addLineToTranscript("> " + this.commandPhrase, Color.clRed)
-        this.consoleForm.addLineToTranscript(this.consoleForm.speechSystem.stripMacros(this.newLastSaidTextWithMacros), Color.clBlue)
+        this.consoleForm.addLineToTranscript("> " + this.commandPhrase, Color.clBlue)
+        this.consoleForm.addLineToTranscript(this.consoleForm.speechSystem.stripMacros(this.newLastSaidTextWithMacros), Color.clBlack)
         this.consoleForm.scrollTranscriptEndIntoView()
         this.consoleForm.speechSystem.sayTextWithMacros(this.newLastSaidTextWithMacros)
         //common with undo
@@ -84,7 +84,7 @@ export class TSDoCommandPhraseCommand extends TSAbstractMoveFocusCommand {
         let i: int
         let undoPhrase: string
         
-        this.consoleForm.addLineToTranscript("> undo", Color.clRed)
+        this.consoleForm.addLineToTranscript("> undo", Color.clBlue)
         //  undoPhrase := 'It is as if "' + commandPhrase + '" had never been said.';
         undoPhrase = "(You decide not to say \"" + this.commandPhrase + "\")"
         this.consoleForm.addLineToTranscript(undoPhrase, Color.clBlue)
@@ -105,7 +105,7 @@ export class TSDoCommandPhraseCommand extends TSAbstractMoveFocusCommand {
     }
     
     redoCommand(): void { 
-        this.consoleForm.addLineToTranscript("> redo", Color.clRed)
+        this.consoleForm.addLineToTranscript("> redo", Color.clBlue)
         const redoPhrase = "(You decide to say \"" + this.commandPhrase + "\" anyway)"
         this.consoleForm.addLineToTranscript(redoPhrase, Color.clBlue)
         this.consoleForm.scrollTranscriptEndIntoView()

@@ -46,9 +46,9 @@ function doCommand(domain: any, commandPhrase: string) {
             // elimitate leading $
             commandPhrase = commandPhrase.substring(1)
         }
-        domain.consoleForm.addLineToTranscript("> " + commandPhrase, Color.clRed);
+        domain.consoleForm.addLineToTranscript("> " + commandPhrase, Color.clBlue);
         // bug - or bad riddle answer.
-        domain.consoleForm.addLineToTranscript("That accomplishes nothing.", Color.clBlue)
+        domain.consoleForm.addLineToTranscript("That accomplishes nothing.", Color.clBlack)
         return
     }   
     domain.commandList.doCommandPhrase(domain.consoleForm, domain.ruleEditorForm, commandPhraseModified)
@@ -65,7 +65,7 @@ function viewChoices(domain: any) {
     return m("div", 
         m("hr"),
         m("div", "You can choose from:"),
-        commands.sort().map(command => m("div.ma2", {
+        commands.sort().map(command => m("div.ma2.blue", {
             onclick: () => doCommand(domain, command),
         }, command)),
         m("hr"),
@@ -89,6 +89,8 @@ let changingFile = false
 function color(color: Color) {
     switch (color) {
         case Color.clBlue: return ".blue"
+        case Color.clGreen: return ".green"
+        case Color.clBlack: return ".black"
         case Color.clRed: return ".red"
         default: return ""
     }

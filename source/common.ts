@@ -16,8 +16,10 @@ export function compareTextIgnoreCase(a: string, b: string): boolean {
 }
 
 export enum Color {
+    clGreen,
+    clBlue,
     clRed,
-    clBlue
+    clBlack
 }
 
 export function caption(text: string) {
