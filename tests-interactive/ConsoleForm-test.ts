@@ -24,34 +24,57 @@ const fakeDomain = {
             checkForSayOptionsMacro: () => null,
             speakText: (text: string) => null,
         },
-        addLineToTranscript: (text: string) => transcript.push(text),
+        addLineToTranscript: (text: string) => fakeDomain.transcript.push(text),
         scrollTranscriptEndIntoView: () => null,
         updateVariables: () => null,
         VariablesListBox: {
             Invalidate: () => null
         }
     },
-    ruleEditorForm: {}
+    ruleEditorForm: {},
+    availableWorldFiles: [
+        "Astronomy Test",
+        "GarTrek",
+        "Grue Pit",
+        "House and Yard",
+        "insurance",
+        "interview",
+        "Intro",
+        "java1",
+        "java2",
+        "Max the Computer",
+        "prompter",
+        "testing",
+        "Tutorial Basic",
+        "Tutorial Intermediate",
+        "Tutorial Advanced",
+    ],
+    loadedFileName: "",
+    loadTestWorld: null
 }
 
 const MyComponent = { view: () => viewConsoleForm(fakeDomain) }
 
-async function loadTestWorld() {
-    //const worldFileName = "../data/GarTrek.wld"
-    const worldFileName = "../data/House and Yard.wld"
+async function loadTestWorld(worldFileName: string) {
 
-    const worldContent = await m.request(worldFileName, {deserialize: (text) => text})
+    const worldContent = await m.request("../data/" + worldFileName + ".wld", {deserialize: (text) => text})
 
-    fakeDomain.world.reportModeCallback = function() {}
+    fakeDomain.world.reportModeCallback = function(text: string) { /* fakeDomain.transcript.push(text) */ }
 
+    world.resetVariablesAndRules()
     const loaded = fakeDomain.world.loadWorldFromFileContents(worldContent)
     if (!loaded) throw new Error("Failed to load")
 
-    transcript.push("Playing: " + worldFileName.substring(worldFileName.lastIndexOf("/") + 1))
+    // transcript.push("Playing: " + worldFileName)
+    fakeDomain.loadedFileName = worldFileName
 
     fakeDomain.world.newSession()
 
     m.mount(document.body, MyComponent)
 }
 
-loadTestWorld()
+
+fakeDomain.loadTestWorld = <any>loadTestWorld
+
+// loadTestWorld("GarTrek")
+loadTestWorld("House and Yard")

@@ -27,7 +27,7 @@ function availableCommands(world: TWorld, showRiddleAnswers=false): string[] {
 }
 
 function doCommand(domain: any, commandPhrase: string) {
-    console.log("doCommand", commandPhrase)
+    // console.log("doCommand", commandPhrase)
     if (commandPhrase === firstRiddleAnswer) {
         // for riddles - need to be reassembled into command string first
         const answer = prompt("Please enter the answer to a riddle. [case-sensitive]", "")
@@ -40,7 +40,7 @@ function doCommand(domain: any, commandPhrase: string) {
     } else {
         commandPhraseModified = commandPhrase
     }
-    console.log("test", commandPhraseModified, availableCommands(domain.world, true))
+    // console.log("test", commandPhraseModified, availableCommands(domain.world, true))
     if ((availableCommands(domain.world, true).indexOf(commandPhraseModified) === -1)) {
         if (commandPhrase.startsWith("$")) {
             // elimitate leading $
@@ -63,10 +63,26 @@ function viewChoices(domain: any) {
     )
 }
 
+let changingFile = false
+
 export function viewConsoleForm(domain: any) {
-    return m(".ConsoleForm",
+    return m(".ConsoleForm.ml3",
         m("h3", "StoryHarp 2.0 CYOA Player and Editor"),
-        domain.transcript.map((text: string) => m("div.mw6", text)),
-        viewChoices(domain)
+        m("div.mb3",
+            "Playing: " + domain.loadedFileName,
+            m("button.ml2", { onclick: () => changingFile = !changingFile }, "Switch"),
+        ),
+        changingFile 
+            ? domain.availableWorldFiles.map((name: string) => 
+                m("div", { onclick: () => {
+                    domain.transcript.length = 0
+                    domain.loadTestWorld(name)
+                    changingFile = false
+                }}, name)
+            )
+            : [
+                domain.transcript.map((text: string) => m("div.mw6", text)),
+                viewChoices(domain),
+            ]
     )
 }
