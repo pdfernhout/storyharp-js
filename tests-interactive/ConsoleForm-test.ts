@@ -69,6 +69,7 @@ async function loadTestWorld(worldFileName: string) {
     fakeDomain.loadedFileName = worldFileName
 
     fakeDomain.world.newSession()
+    fakeDomain.commandList.clear()
 
     m.mount(document.body, MyComponent)
 }
