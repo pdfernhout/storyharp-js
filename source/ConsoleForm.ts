@@ -86,8 +86,8 @@ function viewChoices(domain: any) {
     )
 }
 
-type formName = "console" | "files" | "ruleEditor"
-let activeForm: formName = "console"
+type FormName = "console" | "files" | "ruleEditor"
+let activeForm: FormName = "console"
 
 function color(color: Color) {
     switch (color) {
@@ -120,13 +120,18 @@ function viewConsole(domain: any) {
 }
 
 export function viewConsoleForm(domain: any) {
+
+    function buttonWithHighlight(selection: FormName) {
+        return "button.ml2" + (activeForm === selection ? ".bg-light-blue" : "")
+    }
+
     return m(".ConsoleForm.ml3",
         m("h3", "StoryHarp 2.0 CYOA Player and Editor"),
         m("div.mb3",
             "Playing: " + domain.loadedFileName,
-            activeForm === "files" ? [] : m("button.ml2", { onclick: () => activeForm = "files" }, "Files"),
-            activeForm === "console" ? [] : m("button.ml2", { onclick: () => activeForm = "console" }, "Console"),
-            activeForm === "ruleEditor" ? [] : m("button.ml2", { onclick: () => activeForm = "ruleEditor" }, "Rule Editor"),
+            m(buttonWithHighlight("files"), { onclick: () => activeForm = "files" }, "Files"),
+            m(buttonWithHighlight("console"), { onclick: () => activeForm = "console" }, "Console"),
+            m(buttonWithHighlight("ruleEditor"), { onclick: () => activeForm = "ruleEditor" }, "Rule Editor"),
         ),
         // TODO: Probably should wrap these with hidden divs so the component state is preserved
         activeForm === "console" ? viewConsole(domain) : [],
