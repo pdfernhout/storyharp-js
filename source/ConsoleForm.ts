@@ -139,7 +139,7 @@ class VariablesView {
                 (!this.buttonState.command || variable.commandUseages > 0)
         )
 
-        return m("div.ml1", { style: { "min-width": "26rem" } },
+        return m("div.ml1", { style: { "min-width": "25rem" } },
             "Context:",
             m("select.ml1.ma2",
                 {
@@ -165,6 +165,7 @@ class VariablesView {
                     )
             ),
             m("div",
+                m("span.ml1", "Filter:"),
                 this.makeToggleButton("present", "⊞"),
                 this.makeToggleButton("context", "⌂"),
                 this.makeToggleButton("move", "⛹"),
@@ -181,10 +182,10 @@ class VariablesView {
                 },
                 shownVariables.map(variable => 
                     m("div.nowrap",
-                        m("span.blue", {
+                        m("span.blue.w1", {
                             onclick: () => sessionCommandList.toggleVariable(this.domain.consoleForm, variable)
-                        }, variable.getState() === TSVariableState.kPresent ? "⊞" : "☐"),
-                        m("span.ml1.mw5.truncate.dib", variable.phrase),
+                        }, variable.getState() === TSVariableState.kPresent ? "⊞" : "◻"),
+                        m("span.ml1.mw5.truncate.dib", { title: variable.phrase }, variable.phrase),
                         m("div.nowrap.ml1.fr",
                             m("span.blue.w1", variable.contextUseages > 0 ? "⌂" : " "),
                             m("span.blue.w1", variable.moveUseages > 0 ? "⛹" : " "),
@@ -200,7 +201,7 @@ class VariablesView {
 
     view(vnode: m.Vnode) {
         return m("div.fixed.ba.right-0.top-0.bg-washed-blue", 
-            m("div", { onclick: () => this.expanded = !this.expanded }, "Variables " + (this.expanded ? "▲" : "▼")),
+            m("div", { onclick: () => this.expanded = !this.expanded }, m("span.b", "Variables " + (this.expanded ? "▲" : "▼"))),
             !this.expanded
                 ? []
                 : this.viewInterior()
@@ -225,7 +226,7 @@ export function viewConsoleForm(domain: any) {
         m("h3", "StoryHarp 2.0 CYOA Player and Editor"),
         m("div.mb3",
             "Playing: " + domain.loadedFileName,
-            m("button.ml2", { onclick: () => changingFile = !changingFile }, "Switch"),
+            m("button.ml2", { onclick: () => changingFile = !changingFile }, "Switch World"),
         ),
         changingFile 
             ? domain.availableWorldFiles.map((name: string) => 
