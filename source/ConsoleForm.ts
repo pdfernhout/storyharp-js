@@ -65,7 +65,7 @@ function viewChoices(domain: any) {
 
 export function viewConsoleForm(domain: any) {
     return m(".ConsoleForm",
-        m("h1", "StoryHarp-js"),
+        m("h3", "StoryHarp 2.0 CYOA Player and Editor"),
         domain.transcript.map((text: string) => m("div.mw6", text)),
         viewChoices(domain)
     )

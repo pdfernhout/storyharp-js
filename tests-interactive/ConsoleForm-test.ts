@@ -9,10 +9,7 @@ import { TSCommandList } from "../source/TSCommandList";
 
 const world = new TWorld()
 const commandList = new TSCommandList(world)
-const transcript = [
-    "Hello, StoryHarp!",
-    "Welcome to an Audioventure"
-]
+const transcript: string[] = []
 
 const fakeDomain = {
     world,
@@ -40,12 +37,17 @@ const fakeDomain = {
 const MyComponent = { view: () => viewConsoleForm(fakeDomain) }
 
 async function loadTestWorld() {
-    const GarTrekWorldContents = await m.request("../data/GarTrek.wld", {deserialize: (text) => text})
+    //const worldFileName = "../data/GarTrek.wld"
+    const worldFileName = "../data/House and Yard.wld"
+
+    const worldContent = await m.request(worldFileName, {deserialize: (text) => text})
 
     fakeDomain.world.reportModeCallback = function() {}
 
-    const loaded = fakeDomain.world.loadWorldFromFileContents(GarTrekWorldContents)
+    const loaded = fakeDomain.world.loadWorldFromFileContents(worldContent)
     if (!loaded) throw new Error("Failed to load")
+
+    transcript.push("Playing: " + worldFileName.substring(worldFileName.lastIndexOf("/") + 1))
 
     fakeDomain.world.newSession()
 
