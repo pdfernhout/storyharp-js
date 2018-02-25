@@ -3,6 +3,7 @@ import * as m from "mithril"
 import { Color } from "./common"
 import { TWorld } from "./TWorld"
 import { VariablesView } from "./VariablesView"
+import { RuleEditorForm } from "./RuleEditorForm"
 
 const firstRiddleAnswer = "say an answer for a riddle"
 
@@ -118,12 +119,6 @@ function viewConsole(domain: any) {
     ]
 }
 
-function viewRuleEditor(domain: any) {
-    return [
-        "Unfinished",
-    ]
-}
-
 export function viewConsoleForm(domain: any) {
     return m(".ConsoleForm.ml3",
         m("h3", "StoryHarp 2.0 CYOA Player and Editor"),
@@ -135,6 +130,6 @@ export function viewConsoleForm(domain: any) {
         ),
         activeForm === "console" ? viewConsole(domain) : [],
         activeForm === "files" ? viewFiles(domain) : [],
-        activeForm === "ruleEditor" ? viewRuleEditor(domain) : [],
+        activeForm === "ruleEditor" ? m(RuleEditorForm, <any>{domain: domain}) : [],
     )
 }
