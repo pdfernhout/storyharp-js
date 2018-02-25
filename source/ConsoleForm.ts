@@ -84,6 +84,23 @@ function viewChoices(domain: any) {
     )
 }
 
+class VariablesView {
+    expanded = false
+
+    viewInterior(): m.Vnode {
+        return m("div", "Some stuff inside")
+    }
+
+    view(vnode: m.Vnode) {
+        return m("div.fixed.ba.right-0.top-0.bg-washed-blue", 
+            m("div", { onclick: () => this.expanded = !this.expanded }, "Variables " + (this.expanded ? "▲" : "▼")),
+            !this.expanded
+                ? []
+                : this.viewInterior()
+        )
+    }
+}
+
 let changingFile = false
 
 function color(color: Color) {
@@ -114,6 +131,7 @@ export function viewConsoleForm(domain: any) {
             : [
                 domain.transcript.map((item: any) => m("div.mw6" + color(item.color), item.text)),
                 viewChoices(domain),
-            ]
+                m(VariablesView, <any>{domain}),
+            ],
     )
 }
