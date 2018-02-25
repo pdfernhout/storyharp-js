@@ -2,6 +2,8 @@ import * as m from "mithril"
 
 import { Color } from "./common"
 import { TWorld } from "./TWorld"
+import { TSVariableState } from "./TSVariable"
+import { TSCommandList } from "./TSCommandList";
 
 const firstRiddleAnswer = "say an answer for a riddle"
 
@@ -51,7 +53,7 @@ function doCommand(domain: any, commandPhrase: string) {
         domain.consoleForm.addLineToTranscript("That accomplishes nothing.", Color.clBlack)
         return
     }   
-    domain.commandList.doCommandPhrase(domain.consoleForm, domain.ruleEditorForm, commandPhraseModified)
+    domain.sessionCommandList.doCommandPhrase(domain.consoleForm, domain.ruleEditorForm, commandPhraseModified)
 }
 
 function scrollIntoView() {
@@ -71,24 +73,72 @@ function viewChoices(domain: any) {
         m("hr"),
         m("div#undoRedoButtons.ma2",
             m("button.ml2.w4", {
-                disabled: !domain.commandList.isUndoEnabled(),
-                onclick: () => domain.commandList.undoLast(),
-                title: "Undo " + domain.commandList.undoDescription()
+                disabled: !domain.sessionCommandList.isUndoEnabled(),
+                onclick: () => domain.sessionCommandList.undoLast(),
+                title: "Undo " + domain.sessionCommandList.undoDescription()
             }, "Undo"),
             m("button.ml2.w4", { 
-                disabled: !domain.commandList.isRedoEnabled(),
-                onclick: () => domain.commandList.redoLast(),
-                title: "Redo " + domain.commandList.redoDescription()
+                disabled: !domain.sessionCommandList.isRedoEnabled(),
+                onclick: () => domain.sessionCommandList.redoLast(),
+                title: "Redo " + domain.sessionCommandList.redoDescription()
             }, "Redo"), 
         )
     )
 }
 
 class VariablesView {
+    domain: any
     expanded = false
 
-    viewInterior(): m.Vnode {
-        return m("div", "Some stuff inside")
+    constructor(vnode: m.Vnode) {
+        this.domain = (<any>vnode.attrs).domain
+    }
+
+    viewInterior() {
+        const world: TWorld = this.domain.world
+        const sessionCommandList: TSCommandList = this.domain.sessionCommandList
+        const selectedPhrase: string = world.focus ? world.focus.phrase : ""
+        const allVariables = world.variables.slice().sort((a, b) => a.phrase.localeCompare(b.phrase))
+        const contextVariables =  allVariables.filter(
+            variable => variable.contextUseages > 0 || variable.moveUseages > 0
+        )
+        const shownVariables = allVariables
+
+        return m("div.ml1",
+            "Context:",
+            m("select.ml1.ma2",
+                {
+                    onchange: (event: any) => {
+                        const newFocusPhrase = event.target.value
+                        const newFocus = world.findVariable(newFocusPhrase)
+                        if (!newFocus) return
+
+                        if ((newFocus === world.focus) && (newFocus.getState() === TSVariableState.kPresent)) {
+                            return
+                        }
+                        sessionCommandList.moveFocus(this.domain.consoleForm, newFocus)
+
+                    }
+                },
+                contextVariables
+                    .map(variable => variable.phrase)
+                    .map(phrase =>
+                        m("option", {
+                            value: phrase,
+                            selected: (phrase === selectedPhrase ? "selected" : undefined),
+                        }, phrase)
+                    )
+            ),
+            m("div.overflow-auto.ma2",
+                {
+                    style: {
+                        height: (window.innerHeight - 90) + "px",
+                        "max-width": "20rem"
+                    },
+                },
+                shownVariables.map(variable => m("div.nowrap", variable.phrase))
+            )
+        )
     }
 
     view(vnode: m.Vnode) {

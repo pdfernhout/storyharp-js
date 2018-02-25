@@ -8,12 +8,12 @@ import { TWorld } from "../source/TWorld"
 import { TSCommandList } from "../source/TSCommandList";
 
 const world = new TWorld()
-const commandList = new TSCommandList(world)
+const sessionCommandList = new TSCommandList(world)
 const transcript: {text: string, color: number}[] = []
 
 const fakeDomain = {
     world,
-    commandList,
+    sessionCommandList,
     transcript,
     consoleForm: {
         speechSystem: {
@@ -69,7 +69,7 @@ async function loadTestWorld(worldFileName: string) {
     fakeDomain.loadedFileName = worldFileName
 
     fakeDomain.world.newSession()
-    fakeDomain.commandList.clear()
+    fakeDomain.sessionCommandList.clear()
 
     m.mount(document.body, MyComponent)
 }
