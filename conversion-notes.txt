@@ -154,3 +154,10 @@ The exception may be data entry forms like the wizards where there is a lot of t
 
 It has been very useful (almost essential) to look at screenshots of the previous application
 and also consult the related help documentaiton: http://www.kurtz-fernhout.com/StoryHarp/screens.htm
+
+Scrollbars generally go away as manually managed things to be replaced with HTML "overflow: auto".
+Menus become action buttons and toggle button state indicators.
+Splitters may go away -- or might be kept?
+Try to make the current state of the application and available actions more visible.
+
+To eliminate extra comments in lfm files replace this regex with nothing (without quotes): "^ *// .*\n"
