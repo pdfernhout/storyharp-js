@@ -133,3 +133,21 @@ Not sure how to change translation where they are not exported.
 Need to rethink UI from independent windows to one or more web pages.
 Need to rethink storage from files to a mix of server calls, local storage, and indexeddb.
 Ideally need to move from classes accesing globals to more testable independent classes (manual DI).
+
+==== UI Form changes moving from Delphi to Mithril
+
+With Mithril, no longer need to name each field.
+
+With Mithril, no longer need to update each component's internal state when other things change (usually).
+
+With Mithril, no longer need to have explicit positions for most components.
+With Mithril, no longer need to do a lot of complex sizing calculaitons.
+
+With Mithril, you do need to rethink component placement and user interactions.
+With Mithril, need to rethink how floating windows are replaced by flowing pages with floating panels.
+
+With Mithril, can use unicode characters instead of custom glyphs (at least to start).
+
+Overall, with Mithril, probably easier to mostly start over with many forms and copy over bits of code as needed --
+rather than try to work from the generated lfm.ts file.
+The exception may be data entry forms like the wizards where there is a lot of text.
