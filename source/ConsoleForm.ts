@@ -85,7 +85,8 @@ function viewChoices(domain: any) {
     )
 }
 
-let changingFile = false
+type formName = "console" | "files" | "ruleEditor"
+let activeForm: formName = "console"
 
 function color(color: Color) {
     switch (color) {
@@ -97,25 +98,43 @@ function color(color: Color) {
     }
 }
 
+function viewFiles(domain: any) {
+    return domain.availableWorldFiles.map((name: string) => 
+        m("div.mt1", 
+            { onclick: () => {
+            domain.transcript.length = 0
+            domain.loadTestWorld(name)
+            activeForm = "console"
+            }
+        }, name)
+    )
+}
+
+function viewConsole(domain: any) {
+    return [
+        domain.transcript.map((item: any) => m("div.mw6" + color(item.color), item.text)),
+        viewChoices(domain),
+        m(VariablesView, <any>{domain}),
+    ]
+}
+
+function viewRuleEditor(domain: any) {
+    return [
+        "Unfinished",
+    ]
+}
+
 export function viewConsoleForm(domain: any) {
     return m(".ConsoleForm.ml3",
         m("h3", "StoryHarp 2.0 CYOA Player and Editor"),
         m("div.mb3",
             "Playing: " + domain.loadedFileName,
-            m("button.ml2", { onclick: () => changingFile = !changingFile }, "Switch World"),
+            activeForm === "files" ? [] : m("button.ml2", { onclick: () => activeForm = "files" }, "Files"),
+            activeForm === "console" ? [] : m("button.ml2", { onclick: () => activeForm = "console" }, "Console"),
+            activeForm === "ruleEditor" ? [] : m("button.ml2", { onclick: () => activeForm = "ruleEditor" }, "Rule Editor"),
         ),
-        changingFile 
-            ? domain.availableWorldFiles.map((name: string) => 
-                m("div.mt1", { onclick: () => {
-                    domain.transcript.length = 0
-                    domain.loadTestWorld(name)
-                    changingFile = false
-                }}, name)
-            )
-            : [
-                domain.transcript.map((item: any) => m("div.mw6" + color(item.color), item.text)),
-                viewChoices(domain),
-                m(VariablesView, <any>{domain}),
-            ],
+        activeForm === "console" ? viewConsole(domain) : [],
+        activeForm === "files" ? viewFiles(domain) : [],
+        activeForm === "ruleEditor" ? viewRuleEditor(domain) : [],
     )
 }
