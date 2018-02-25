@@ -128,6 +128,7 @@ export function viewConsoleForm(domain: any) {
             activeForm === "console" ? [] : m("button.ml2", { onclick: () => activeForm = "console" }, "Console"),
             activeForm === "ruleEditor" ? [] : m("button.ml2", { onclick: () => activeForm = "ruleEditor" }, "Rule Editor"),
         ),
+        // TODO: Probably should wrap these with hidden divs so the component state is preserved
         activeForm === "console" ? viewConsole(domain) : [],
         activeForm === "files" ? viewFiles(domain) : [],
         activeForm === "ruleEditor" ? m(RuleEditorForm, <any>{domain: domain}) : [],
