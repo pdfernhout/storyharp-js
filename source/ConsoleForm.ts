@@ -68,6 +68,7 @@ function viewChoices(domain: any) {
         commands.sort().map(command => m("div.ma2", {
             onclick: () => doCommand(domain, command),
         }, command)),
+        m("hr"),
         m("div#undoRedoButtons.ma2",
             m("button.ml2.w4", {
                 disabled: !domain.commandList.isUndoEnabled(),
