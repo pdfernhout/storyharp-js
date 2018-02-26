@@ -38,6 +38,11 @@ const fakeDomain = {
     ruleEditorForm: {
         selectEditorField: (fieldIndex: number) => null,
         updateForRuleChange: () => null,
+        scrollGridSelectionsIntoView: () => null,
+        RuleGrid: {
+            Invalidate: () => null
+        },
+        updateRuleNumberLabel: () => null,
     },
     changeLogForm: {
         addToLog: (text: string) => null

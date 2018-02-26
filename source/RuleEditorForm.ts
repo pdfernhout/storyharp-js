@@ -91,7 +91,7 @@ class RuleTableView {
 
         return m("div",
             m("table.collapse",
-                m("tr", 
+                m("tr",
                     m("th.w-10", "context"),
                     m("th.w-20", "requirements"),
                     m("th.w-20", "command"),
@@ -141,6 +141,7 @@ class RuleBrowserView {
     }
 }
 
+// TODO: Change capitalization on some method names
 class IndividualRuleView {
     domain: any
     expanded = true
@@ -315,6 +316,19 @@ class IndividualRuleView {
         */
     }
 
+
+    MoveDownClick() {
+        const worldCommandList: TSCommandList = this.domain.worldCommandList
+        const ruleEditorForm: any = this.domain.ruleEditorForm
+        worldCommandList.lowerSelectedRules(ruleEditorForm)
+    }
+
+    MoveUpClick() {
+        const worldCommandList: TSCommandList = this.domain.worldCommandList
+        const ruleEditorForm: any = this.domain.ruleEditorForm
+        worldCommandList.raiseSelectedRules(ruleEditorForm)
+    }
+
     editRule(rule: TSRule | null): void {
         this.domain.editedRule = rule
     }
@@ -330,10 +344,6 @@ class IndividualRuleView {
         const consoleForm: any = this.domain.consoleForm
         
         function SpeedButtonClick() { console.log("SpeedButtonClick") }
-
-        function MoveDownButtonClick() { console.log("MoveDownButtonClick") }
-
-        function MoveUpButtonClick() { console.log("MoveUpButtonClick") }
 
         function InsertMusicButtonClick() { console.log("InsertMusicButtonClick") }
 
@@ -369,7 +379,16 @@ class IndividualRuleView {
                 }, "Rule Viewer " + (this.expanded ? "▲" : "▼")
             ),
             !this.expanded ? [] : [
-                rule ? [] : "Rule Viewer: Please select a rule",
+                rule ? [] : m("div",
+                    "Rule Viewer: Please select a rule or make a new one: ",
+                    m("button.ml1",
+                        {
+                            onclick: () => this.RuleNewClick(),
+                            title: "Make a new rule",
+                        },
+                        "New Rule",
+                    ),
+                ),
                 !rule ? [] : [
                     m("div.PanelRest.TPanel",
                         m("div.PanelButtonBar.TPanel",
@@ -398,14 +417,14 @@ class IndividualRuleView {
                             ),
                             m("button.MoveUpButton.TSpeedButton",
                                 {
-                                    onclick: MoveUpButtonClick,
+                                    onclick: () => this.MoveUpClick(),
                                     title: "Raise all selected rules",
                                 },
                                 "Raise",
                             ),
                             m("button.MoveDownButton.TSpeedButton",
                                 {
-                                    onclick: MoveDownButtonClick,
+                                    onclick: () => this.MoveDownClick(),
                                     title: "Lower all selected rules",
                                 },
                                 "Lower",
