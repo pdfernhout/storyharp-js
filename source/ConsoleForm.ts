@@ -132,7 +132,7 @@ export function viewConsoleForm(domain: any) {
         m("div.mb3",
             "Playing: " + domain.loadedFileName,
             m(buttonWithHighlight("files"), { onclick: () => activeForm = "files" }, "Files"),
-            m(buttonWithHighlight("console"), { onclick: () => activeForm = "console" }, "Console"),
+            m(buttonWithHighlight("console"), { onclick: () => { activeForm = "console"; domain.world.updateAvailable() }}, "Console"),
             m(buttonWithHighlight("ruleEditor"), { onclick: () => activeForm = "ruleEditor" }, "Rule Editor"),
         ),
         // TODO: Probably should wrap these with hidden divs so the component state is preserved
