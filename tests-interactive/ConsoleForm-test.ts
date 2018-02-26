@@ -36,7 +36,8 @@ const fakeDomain = {
         ShowOnlyTrueVariablesButton: {}
     },
     ruleEditorForm: {
-        selectEditorField: (fieldIndex: number) => null
+        selectEditorField: (fieldIndex: number) => null,
+        updateForRuleChange: () => null,
     },
     changeLogForm: {
         addToLog: (text: string) => null
@@ -61,6 +62,7 @@ const fakeDomain = {
     loadedFileName: "",
     loadTestWorld: null,
     editedRule: null,
+    lastSingleRuleIndex: 0
 }
 
 const MyComponent = { view: () => viewConsoleForm(fakeDomain) }
@@ -82,6 +84,7 @@ async function loadTestWorld(worldFileName: string) {
     fakeDomain.sessionCommandList.clear()
     fakeDomain.worldCommandList.clear()
     fakeDomain.editedRule = null
+    fakeDomain.lastSingleRuleIndex = 0
 
     m.mount(document.body, MyComponent)
 }

@@ -407,6 +407,21 @@ export class TWorld {
 
         return null
     }
+
+    /* TODO: Remove if not needed
+    firstSelectedRule(): TSRule | null {
+        let result = new TSRule()
+        
+        for (let i = 0; i < this.rules.length; i++) {
+            const rule: TSRule = this.rules[i]
+            if (rule.selected) {
+                return rule
+            }
+        }
+
+        return null
+    }
+    */
     
     selectInRectangle(rect: TRect): void {
         let intersection: TRect

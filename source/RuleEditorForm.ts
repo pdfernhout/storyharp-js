@@ -2,6 +2,7 @@ import * as m from "mithril"
 import { TWorld } from "./TWorld"
 import { TSRule, TSRuleField } from "./TSRule"
 import { TSCommandList } from "./TSCommandList"
+import { TSNewRulesCommand } from "./TSNewRulesCommand"
 
 type ViewName = "table" | "map" | "browser"
 
@@ -26,6 +27,9 @@ ruleShadow: TSRuleShadow = {
 }
 */
 
+// TODO: POSSIBLE BUG: What happens to undo/redo for console when delete rules? Or change rule? Maybe just ignore?
+// TODO: Should variables be deleted when they are no longer used by a rule?
+
 class RuleTableView {
     domain: any
 
@@ -33,15 +37,60 @@ class RuleTableView {
         this.domain = (<any>vnode.attrs).domain
     }
 
+    ruleClicked(event: MouseEvent, rule: TSRule): void {
+        const world: TWorld = this.domain.world
+        const index = world.rules.indexOf(rule)
+        const editedRule: TSRule = this.domain.editedRule
+        const lastSingleRuleIndex: number = this.domain.lastSingleRuleIndex
+
+        const isShiftClick = event.shiftKey
+        const isControlClick = event.ctrlKey
+        
+        // TODO: POSSIBLE BUG: What if deselect the currently edited rule using control click?
+        // TODO: POSSIBLE BUG: Seems like might be an issue if first click is a shift click?
+        if (isShiftClick) {
+            if ((lastSingleRuleIndex >= 0) && (lastSingleRuleIndex <= world.rules.length - 1) && (lastSingleRuleIndex !== index)) {
+                world.deselectAllExcept(rule)
+                if (lastSingleRuleIndex < index) {
+                    for (let i = lastSingleRuleIndex; i <= index; i++) {
+                        world.rules[i].selected = true
+                    }
+                } else if (lastSingleRuleIndex > index) {
+                    for (let i = lastSingleRuleIndex; i >= index; i--) {
+                        world.rules[i].selected = true
+                    }
+                }
+            }
+        } else if (isControlClick) {
+            rule.selected = !rule.selected
+        } else {
+            // just plain click
+            if (!rule.selected) {
+                world.deselectAllExcept(rule)
+                rule.selected = true
+                this.domain.lastSingleRuleIndex = index
+            } else {
+                // do nothing except maybe drag...
+            }
+        }
+        if (rule.selected && (editedRule !== rule) && !isControlClick && !isShiftClick) {
+            // TODO: Remove this -- odd how it is not easy to access one component from a sibling component
+            // this.editRule(rule)
+            this.domain.editedRule = rule
+        }
+    }
+
     view() {
         const world: TWorld = this.domain.world
+        const editedRule: TSRule = this.domain.editedRule
         let row = 0
 
         function color(row: number): string { return (row % 2 == 0) ? ".bg-washed-green" : "." }
         function ellipsis(text: string): string { return text.length > 58 ? text.substring(0, 58) + "..." : text }
+        function selected(rule: TSRule): string { return rule.selected ? (rule === editedRule ? ".ba.bw2" : ".ba.bw1") : "" }
 
         return m("div",
-            m("table",
+            m("table.collapse",
                 m("tr", 
                     m("th.w-10", "context"),
                     m("th.w-20", "requirements"),
@@ -51,9 +100,9 @@ class RuleTableView {
                     m("th.w-20", "changes"),
                 ),
                 world.rules.map(rule => 
-                    m("tr" + color(row++),
+                    m("tr" + color(row++) + selected(rule),
                         {
-                            onclick: () => this.domain.editedRule = rule
+                            onclick: (event: any) => this.ruleClicked(event, rule)
                         },
                         m("td.w-10", rule.context.phrase),
                         m("td.w-20", rule.requirements.map(wrapper => m("div.nowrap", wrapper.displayString()))),
@@ -184,6 +233,92 @@ class IndividualRuleView {
     }
     */
 
+   RuleNewClick(): void {
+        const world: TWorld = this.domain.world
+        const rule: TSRule = this.domain.editedRule
+        const worldCommandList: TSCommandList = this.domain.worldCommandList
+
+        const newRulesCommand = new TSNewRulesCommand(world, this.domain.ruleEditorForm)
+        const newRule = world.newRule()
+        newRulesCommand.addRule(newRule)
+        // TODO: Remove this or use it to set context
+        //
+        //  if ListPages.ActivePage = TabSheetTable then
+        //    begin
+        //
+        //    end
+        // 	else if ListPages.ActivePage = TabSheetBrowse then
+        //    begin
+        //    end
+        //	else if ListPages.ActivePage = TabSheetMap then
+        //    begin
+        //  	if lastChoice is TSVariable then
+        //    	newRule.setContext(TSVariable(lastChoice).phrase)
+        //  	else if lastChoice is TSRule then
+        //    	newRule.setContext(TSRule(lastChoice).context.phrase);
+        //    end;
+        //    
+        const variable = world.firstSelectedVariable()
+        if (variable !== null) {
+            newRule.setContext(variable.phrase)
+        } else if (rule !== null) {
+            newRule.setContext(rule.context.phrase)
+        }
+        world.deselectAllExcept(newRule)
+        newRule.selected = true
+        worldCommandList.doCommand(newRulesCommand)
+        this.editRule(newRule)
+        /* TODO: Use this to set focus or remove it
+        if (newRule.context.phrase.trim() !== "") {
+            this.ActiveControl = this.CommandEdit
+        } else {
+            this.ActiveControl = this.ContextEdit
+        }
+        */
+    }
+
+    RuleDuplicateClick(): void {
+        const world: TWorld = this.domain.world
+        const rule: TSRule = this.domain.editedRule
+        const worldCommandList: TSCommandList = this.domain.worldCommandList
+
+        if (rule === null) {
+            return
+        }
+        const newRulesCommand = new TSNewRulesCommand(world, this.domain.ruleEditorForm)
+        newRulesCommand.creator = "duplicating"
+        const newRule: TSRule = world.newRule()
+        newRulesCommand.addRule(newRule)
+        newRule.setContext(rule.context.phrase)
+        newRule.setCommand(rule.command.phrase)
+        newRule.setReply(rule.reply)
+        newRule.setMove(rule.move.phrase)
+        newRule.setRequirements(rule.requirementsString)
+        newRule.setChanges(rule.changesString)
+        world.deselectAllExcept(newRule)
+        newRule.selected = true
+        worldCommandList.doCommand(newRulesCommand)
+        this.editRule(newRule)
+    }
+
+    RuleDeleteClick(): void {
+        const rule: TSRule = this.domain.editedRule
+        const worldCommandList: TSCommandList = this.domain.worldCommandList
+
+        if ((rule !== null) && (rule.selected)) {
+            this.editRule(null)
+        }
+        worldCommandList.deleteSelectedRules(this.domain.ruleEditorForm)
+        /* TODO: Remove or implement -- used in map
+        this.previousChoice = null
+        this.lastChoice = null
+        */
+    }
+
+    editRule(rule: TSRule | null): void {
+        this.domain.editedRule = rule
+    }
+
     view() {
         const world: TWorld = this.domain.world
         const worldCommandList: TSCommandList = this.domain.worldCommandList
@@ -199,12 +334,6 @@ class IndividualRuleView {
         function MoveDownButtonClick() { console.log("MoveDownButtonClick") }
 
         function MoveUpButtonClick() { console.log("MoveUpButtonClick") }
-
-        function NewRuleButtonClick() { console.log("NewRuleButtonClick") }
-
-        function DeleteRuleButtonClick() { console.log("DeleteRuleButtonClick") }
-
-        function DuplicateRuleButtonClick() { console.log("DuplicateRuleButtonClick") }
 
         function InsertMusicButtonClick() { console.log("InsertMusicButtonClick") }
 
@@ -248,21 +377,21 @@ class IndividualRuleView {
                             },
                             m("button.NewRuleButton.TSpeedButton",
                                 {
-                                    onclick: NewRuleButtonClick,
+                                    onclick: () => this.RuleNewClick(),
                                     title: "Make a new rule",
                                 },
                                 "New",
                             ),
                             m("button.DuplicateRuleButton.TSpeedButton",
                                 {
-                                    onclick: DuplicateRuleButtonClick,
+                                    onclick: () => this.RuleDuplicateClick(),
                                     title: "Duplicate the rule showing in the rule editor panel",
                                 },
                                 "Duplicate",
                             ),
                             m("button.DeleteRuleButton.TSpeedButton",
                                 {
-                                    onclick: DeleteRuleButtonClick,
+                                    onclick: () => this.RuleDeleteClick(),
                                     title: "Delete all selected rules",
                                 },
                                 "Delete",
