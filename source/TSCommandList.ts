@@ -10,6 +10,8 @@ import { TWorld } from "./TWorld"
 
 // TODO: Fix these as imports
 import { RuleEditorForm, ChangeLogForm, ConsoleForm } from "./fixTypes"
+import { TSDeleteRulesCommand } from "./TSDeleteRulesCommand";
+import { TSMoveRulesCommand } from "./TSMoveRulesCommand";
 
 export class TSCommandList extends KfCommandList {
     world: TWorld
@@ -49,6 +51,74 @@ export class TSCommandList extends KfCommandList {
         const result = new TSRuleFieldChangeCommand(this.world, ruleEditorForm, changeLogForm, consoleForm, rule, field, newValue)
         this.doCommand(result)
         return result
+    }
+    
+    deleteSelectedRules(ruleEditorForm: RuleEditorForm): void {
+        const command: TSDeleteRulesCommand = new TSDeleteRulesCommand(this.world, ruleEditorForm)
+        
+        for (let i = 0; i < this.world.rules.length; i++) {
+            const rule: TSRule = this.world.rules[i]
+            if (rule.selected) {
+                command.addRule(rule, -1)
+            }
+        }
+        if (command.ruleWrappers.length > 0) {
+            this.doCommand(command)
+        }
+    }
+    
+    raiseSelectedRules(ruleEditorForm: RuleEditorForm): void {
+        const command: TSMoveRulesCommand = new TSMoveRulesCommand(this.world, ruleEditorForm)
+
+        command.action = "raise"
+        let moving = false
+        for (let i = 1; i < this.world.rules.length; i++) {
+            //skip first
+            const rule: TSRule = this.world.rules[i]
+            if (rule.selected) {
+                if (!moving) {
+                    const higherRule: TSRule = this.world.rules[i - 1]
+                    if (!higherRule.selected) {
+                        moving = true
+                    }
+                }
+                if (moving) {
+                    command.addRule(rule, i - 1)
+                }
+            } else {
+                moving = true
+            }
+        }
+        if (command.ruleWrappers.length > 0) {
+            this.doCommand(command)
+        }
+    }
+    
+    lowerSelectedRules(ruleEditorForm: RuleEditorForm): void {
+        const command = new TSMoveRulesCommand(this.world, ruleEditorForm)
+
+        command.action = "lower"
+        let moving = false
+        for (let i = this.world.rules.length - 2; i >= 0; i--) {
+            //skip first
+            const rule: TSRule = this.world.rules[i]
+            if (rule.selected) {
+                if (!moving) {
+                    const lowerRule: TSRule = this.world.rules[i + 1]
+                    if (!lowerRule.selected) {
+                        moving = true
+                    }
+                }
+                if (moving) {
+                    command.addRule(rule, i + 1)
+                }
+            } else {
+                moving = true
+            }
+        }
+        if (command.ruleWrappers.length > 0) {
+            this.doCommand(command)
+        }
     }
     
 }

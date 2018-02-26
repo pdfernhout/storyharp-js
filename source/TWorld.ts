@@ -201,7 +201,7 @@ export class TWorld {
         return true
     }
 
-    /* TODO:IMPLEMENT: saveWorldToFile(name: string, saveOnlySelectedRules: boolean): void { */
+    /* TODO: IMPLEMENT: saveWorldToFile(name: string, saveOnlySelectedRules: boolean): void { */
     saveWorldToFileContents(saveOnlySelectedRules: boolean): string {
         // Emulate file writer
         const lines: string[] = []
@@ -246,7 +246,6 @@ export class TWorld {
     }
     
     /* TODO: IMPLEMENT: loadSessionFromFile(name: string, worldFileName: string): boolean { */
-
     loadSessionFromFile(worldFileName: string, contents: string): boolean {
         let focusNameRead: string
         let previousFocusNameRead: string
@@ -388,79 +387,6 @@ export class TWorld {
             }
         }
     }
-
-    /* TODO FIX: Maybe move this code to Rule Editor Form?
-    deleteSelectedRules(): void {
-        const command: TSDeleteRulesCommand = new TSDeleteRulesCommand()
-        
-        for (let i = 0; i < this.rules.length; i++) {
-            const rule: TSRule = this.rules[i]
-            if (rule.selected) {
-                command.addRule(rule, -1)
-            }
-        }
-        if (command.ruleWrappers.length > 0) {
-            usdomain.domain.worldCommandList.doCommand(command)
-        }
-    }
-    
-    raiseSelectedRules(): void {
-        const command: TSMoveRulesCommand = new TSMoveRulesCommand()
-        command.action = "raise"
-        let moving = false
-        for (let i = 1; i < this.rules.length; i++) {
-            //skip first
-            const rule: TSRule = this.rules[i]
-            if (rule.selected) {
-                if (!moving) {
-                    const higherRule: TSRule = this.rules[i - 1]
-                    if (!higherRule.selected) {
-                        moving = true
-                    }
-                }
-                if (moving) {
-                    command.addRule(rule, i - 1)
-                }
-            } else {
-                moving = true
-            }
-        }
-        if (command.ruleWrappers.length > 0) {
-            usdomain.domain.worldCommandList.doCommand(command)
-        }
-    }
-    
-    lowerSelectedRules(): void {
-        let rule: TSRule
-        let lowerRule: TSRule
-        let command: TSMoveRulesCommand
-        let moving: boolean
-        
-        command = uscommands.TSMoveRulesCommand().create()
-        command.action = "lower"
-        moving = false
-        for (let i = this.rules.length - 2; i >= 0; i--) {
-            //skip first
-            const rule: TSRule = this.rules[i]
-            if (rule.selected) {
-                if (!moving) {
-                    const lowerRule: TSRule = this.rules[i + 1]
-                    if (!lowerRule.selected) {
-                        moving = true
-                    }
-                }
-                if (moving) {
-                    command.addRule(rule, i + 1)
-                }
-            } else {
-                moving = true
-            }
-        }
-        if (command.ruleWrappers.Count > 0) {
-            usdomain.domain.worldCommandList.doCommand(command)
-        }
-    }
-    */
     
     selectAvailable(): void {
         for (let i = 0; i < this.rules.length; i++) {
@@ -533,7 +459,7 @@ export class TWorld {
         return null
     }
     
-    /* TODO: Maybe move this code used in wizard?
+    /* TODO: Maybe move this code used in wizard? If it is still needed with Mithril?
     addContextsToCombBox(comboBox: TComboBox): void {
         comboBox.Clear()
         for (let i = 0; i < this.variables.length; i++) {
