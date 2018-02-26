@@ -373,7 +373,7 @@ class IndividualRuleView {
             worldCommandList.ruleFieldChange(ruleEditorForm, changeLogForm, consoleForm, rule, TSRuleField.kRuleChanges, event.target.value)
         }
 
-        return m("div.IndividualRuleView.ba.bg-light-gray.w-100.ma1",
+        return m("div.IndividualRuleView.ba.bg-light-gray.w-100.pa1",
             m("div", {
                 onclick: () => this.expanded = !this.expanded
                 }, "Rule Viewer " + (this.expanded ? "▲" : "▼")
@@ -390,53 +390,59 @@ class IndividualRuleView {
                     ),
                 ),
                 !rule ? [] : [
-                    m("div.PanelRest.TPanel",
-                        m("div.PanelButtonBar.TPanel",
+                    m("div",
+                        m("div.PanelButtonBar.TPanel.ma1",
                             {
                             },
-                            m("button.NewRuleButton.TSpeedButton",
+                            m("span.dib.w2.RuleNumberLabel.TLabel",
+                                {
+                                    title: "The index of the edited rule in the table",
+                                },
+                                "#" + (world.rules.indexOf(rule) + 1),
+                            ),
+                            m("button.NewRuleButton.TSpeedButton.ml1",
                                 {
                                     onclick: () => this.RuleNewClick(),
                                     title: "Make a new rule",
                                 },
                                 "New",
                             ),
-                            m("button.DuplicateRuleButton.TSpeedButton",
+                            m("button.DuplicateRuleButton.TSpeedButton.ml1",
                                 {
                                     onclick: () => this.RuleDuplicateClick(),
                                     title: "Duplicate the rule showing in the rule editor panel",
                                 },
                                 "Duplicate",
                             ),
-                            m("button.DeleteRuleButton.TSpeedButton",
+                            m("button.DeleteRuleButton.TSpeedButton.ml1",
                                 {
                                     onclick: () => this.RuleDeleteClick(),
                                     title: "Delete all selected rules",
                                 },
                                 "Delete",
                             ),
-                            m("button.MoveUpButton.TSpeedButton",
+                            m("button.MoveUpButton.TSpeedButton.ml1",
                                 {
                                     onclick: () => this.MoveUpClick(),
                                     title: "Raise all selected rules",
                                 },
                                 "Raise",
                             ),
-                            m("button.MoveDownButton.TSpeedButton",
+                            m("button.MoveDownButton.TSpeedButton.ml1",
                                 {
                                     onclick: () => this.MoveDownClick(),
                                     title: "Lower all selected rules",
                                 },
                                 "Lower",
                             ),
-                            m("button.insertSound.TSpeedButton",
+                            m("button.insertSound.TSpeedButton.ml1",
                                 {
                                     onclick: InsertSoundClick,
                                     title: "Insert a sound into a reply",
                                 },
                                 "Sound",
                             ),
-                            m("button.InsertMusicButton.TSpeedButton",
+                            m("button.InsertMusicButton.TSpeedButton.ml1",
                                 {
                                     onclick: InsertMusicButtonClick,
                                     title: "Insert music into a reply",
@@ -444,13 +450,7 @@ class IndividualRuleView {
                                 "Music",
                             ),
                         ),
-                        m(".Context",
-                            m("div.RuleNumberLabel.TLabel",
-                                {
-                                    title: "The index of the edited rule in the table",
-                                },
-                                "#" + (world.rules.indexOf(rule) + 1),
-                            ),
+                        m(".Context.mt1",
                             m("button.ContextSpeedButton.TSpeedButton.w4.mr1",
                                 {
                                     onclick: SpeedButtonClick,
@@ -466,7 +466,29 @@ class IndividualRuleView {
                                 },
                             ),
                         ),
-                        m(".Command",
+                        m(".Requirements.mt1",
+                            m("button.RequirementsSpeedButton.TSpeedButton.w4.mr1",
+                                {
+                                    onclick: SpeedButtonClick,
+                                    title: "Browse all rules with the selected requirement",
+                                },
+                                "Requirements",
+                            ),
+                            /*
+                            m("TListBox.RequirementsListBox.TListBox",
+                                {
+                                },
+                            ),
+                            */
+                            m("input.RequirementsEdit.TEdit",
+                                {
+                                    style: { width: "35rem", },
+                                    value: rule.decompileRequirements(),
+                                    onchange: requirementsChange
+                                },
+                            ),
+                        ),
+                        m(".Command.mt1",
                             m("button.CommandSpeedButton.TSpeedButton.w4.mr1",
                                 {
                                     onclick: SpeedButtonClick,
@@ -482,7 +504,7 @@ class IndividualRuleView {
                                 },
                             ),
                         ),
-                        m(".Reply.flex.items-center",
+                        m(".Reply.flex.items-center.mt1",
                             /*
                             m("img.replyPicture.TImage",
                                 {
@@ -506,7 +528,7 @@ class IndividualRuleView {
                                 },
                             ),
                         ),
-                        m(".Move",
+                        m(".Move.mt1",
                             m("button.MoveSpeedButton.TSpeedButton.w4.mr1",
                                 {
                                     onclick: SpeedButtonClick,
@@ -523,55 +545,26 @@ class IndividualRuleView {
                             ),
                         ),
                     ),
-                    m("div.SplitterRequirementsChanges.TSplitter",
-                        "--------------------------------------------------------------"
-                    ),
-                    m("div.PanelRequirementsChanges.TPanel",
-                        {
-                        },
-                        m(".Requirements",
-                            m("button.RequirementsSpeedButton.TSpeedButton.w4.mr1",
-                                {
-                                    onclick: SpeedButtonClick,
-                                    title: "Browse all rules with the selected requirement",
-                                },
-                                "Requirements",
-                            ),
-                            /*
-                            m("TListBox.RequirementsListBox.TListBox",
-                                {
-                                },
-                            ),
-                            */
-                            m("input.RequirementsEdit.TEdit",
-                                {
-                                    style: { width: "35rem", },
-                                    value: rule.decompileRequirements(),
-                                    onchange: requirementsChange
-                                },
-                            ),
+                    m(".Changes.mt1",
+                        m("button.ChangesSpeedButton.TSpeedButton.w4.mr1",
+                            {
+                                onclick: SpeedButtonClick,
+                                title: "Browse all rules with the selected change",
+                            },
+                            "Changes",
                         ),
-                        m(".Changes",
-                            m("button.ChangesSpeedButton.TSpeedButton.w4.mr1",
-                                {
-                                    onclick: SpeedButtonClick,
-                                    title: "Browse all rules with the selected change",
-                                },
-                                "Changes",
-                            ),
-                            /*
-                            m("TListBox.ChangesListBox.TListBox",
-                                {
-                                },
-                            ),
-                            */
-                            m("input.ChangesEdit.TEdit",
-                                {
-                                    style: { width: "35rem", },
-                                    value: rule.decompileChanges(),
-                                    onchange: changesChange,
-                                },
-                            ),
+                        /*
+                        m("TListBox.ChangesListBox.TListBox",
+                            {
+                            },
+                        ),
+                        */
+                        m("input.ChangesEdit.TEdit",
+                            {
+                                style: { width: "35rem", },
+                                value: rule.decompileChanges(),
+                                onchange: changesChange,
+                            },
                         ),
                     ),
                 ]
@@ -603,8 +596,6 @@ export class RuleEditorForm {
                 m(buttonWithHighlight("table"), { onclick: () => this.currentView = "table" }, "Table"),
                 m(buttonWithHighlight("map"),  { onclick: () => this.currentView = "map" }, "Map"),
                 m(buttonWithHighlight("browser"),  { onclick: () => this.currentView = "browser" }, "Browser"),
-            ),
-            m("div.ma2",
                 m("button.ml2.w4", {
                     disabled: !domain.worldCommandList.isUndoEnabled(),
                     onclick: () => domain.worldCommandList.undoLast(),
