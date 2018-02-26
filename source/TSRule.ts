@@ -141,11 +141,9 @@ export class TSRule extends TSDraggableObject {
             let desiredState: TSVariableState
             if (phrase.indexOf("~") === 0) {
                 desiredState = TSVariableState.kAbsent
+                phrase = phrase.substring(1)
             } else {
                 desiredState = TSVariableState.kPresent
-            }
-            if (desiredState === TSVariableState.kAbsent) {
-                phrase = phrase.substring(1)
             }
 
             const variable: TSVariable = this.world.findOrCreateVariable(phrase, false)
