@@ -81,6 +81,7 @@ async function loadTestWorld(worldFileName: string) {
     fakeDomain.world.newSession()
     fakeDomain.sessionCommandList.clear()
     fakeDomain.worldCommandList.clear()
+    fakeDomain.editedRule = null
 
     m.mount(document.body, MyComponent)
 }
