@@ -164,3 +164,6 @@ To eliminate extra comments in lfm files replace this regex with nothing (withou
 
 With Mithril, you may need an intermediate state-holding object in forms
 because the state is no held in the UI elements -- unless you want to directly edit your domain objects.
+
+Suprising how it is not easy to access one dynamically created component from a sibling component in Mithril.
+May require application design changes.
