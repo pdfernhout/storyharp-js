@@ -75,6 +75,7 @@ class RuleBrowserView {
 
 class IndividualRuleView {
     domain: any
+    expanded = true
 
     constructor(vnode: m.Vnode) {
         this.domain = (<any>vnode.attrs).domain
@@ -94,179 +95,182 @@ class IndividualRuleView {
         let rule: TSRule = this.domain.editedRule
 
         // TODO: Resolve how to handle a null rule better
-        if (!rule) {
-            return m("div.IndividualRuleView.ba.bg-light-gray.w-100", "Please select a rule")
-        }
 
-        return m("div.IndividualRuleView.ba.bg-light-gray.w-100",
-            m("div.PanelRest.TPanel",
-                {
-                },
-                m("div.PanelButtonBar.TPanel",
-                    {
-                    },
-                    m("button.NewRuleButton.TSpeedButton",
-                        {
-                            onclick: NewRuleButtonClick,
-                            title: "Make a new rule",
-                        },
-                        "New",
-                    ),
-                    m("button.DuplicateRuleButton.TSpeedButton",
-                        {
-                            onclick: DuplicateRuleButtonClick,
-                            title: "Duplicate the rule showing in the rule editor panel",
-                        },
-                        "Duplicate",
-                    ),
-                    m("button.DeleteRuleButton.TSpeedButton",
-                        {
-                            onclick: DeleteRuleButtonClick,
-                            title: "Delete all selected rules",
-                        },
-                        "Delete",
-                    ),
-                    m("button.MoveUpButton.TSpeedButton",
-                        {
-                            onclick: MoveUpButtonClick,
-                            title: "Raise all selected rules",
-                        },
-                        "Raise",
-                    ),
-                    m("button.MoveDownButton.TSpeedButton",
-                        {
-                            onclick: MoveDownButtonClick,
-                            title: "Lower all selected rules",
-                        },
-                        "Lower",
-                    ),
-                    m("button.insertSound.TSpeedButton",
-                        {
-                            onclick: InsertSoundClick,
-                            title: "Insert a sound into a reply",
-                        },
-                        "Sound",
-                    ),
-                    m("button.InsertMusicButton.TSpeedButton",
-                        {
-                            onclick: InsertMusicButtonClick,
-                            title: "Insert music into a reply",
-                        },
-                        "Music",
-                    ),
-                ),
-                m(".Context",
-                    m("div.RuleNumberLabel.TLabel",
-                        {
-                            title: "The index of the edited rule in the table",
-                        },
-                        "#" + (world.rules.indexOf(rule) + 1),
-                    ),
-                    m("button.ContextSpeedButton.TSpeedButton",
-                        {
-                            onclick: SpeedButtonClick,
-                            title: "Browse all rules with this context",
-                        },
-                        "Context",
-                    ),
-                    m("input.ContextEdit.TEdit",
-                        {
-                            value: rule.context.phrase
-                        },
-                    ),
-                ),
-                m(".Command",
-                    m("button.CommandSpeedButton.TSpeedButton",
-                        {
-                            onclick: SpeedButtonClick,
-                            title: "Browse all rules with this command",
-                        },
-                        "Command",
-                    ),
-                    m("input.CommandEdit.TEdit",
-                        {
-                            value: rule.command.phrase
-                        },
-                    ),
-                ),
-                m(".Reply",
-                    m("Group.Group.g00000064",
-                        m("img.replyPicture.TImage",
-                            {
-                                title: "Test saying the reply",
-                            },
-                        ),
-                        m("div.Label5.TLabel",
+        return m("div.IndividualRuleView.ba.bg-light-gray.w-100.ma1",
+            m("div", {
+                onclick: () => this.expanded = !this.expanded
+                }, "Rule Viewer " + (this.expanded ? "▲" : "▼")
+            ),
+            !this.expanded ? [] : [
+                rule ? [] : "Rule Viewer: Please select a rule",
+                !rule ? [] : [
+                    m("div.PanelRest.TPanel",
+                        m("div.PanelButtonBar.TPanel",
                             {
                             },
-                            "Reply",
+                            m("button.NewRuleButton.TSpeedButton",
+                                {
+                                    onclick: NewRuleButtonClick,
+                                    title: "Make a new rule",
+                                },
+                                "New",
+                            ),
+                            m("button.DuplicateRuleButton.TSpeedButton",
+                                {
+                                    onclick: DuplicateRuleButtonClick,
+                                    title: "Duplicate the rule showing in the rule editor panel",
+                                },
+                                "Duplicate",
+                            ),
+                            m("button.DeleteRuleButton.TSpeedButton",
+                                {
+                                    onclick: DeleteRuleButtonClick,
+                                    title: "Delete all selected rules",
+                                },
+                                "Delete",
+                            ),
+                            m("button.MoveUpButton.TSpeedButton",
+                                {
+                                    onclick: MoveUpButtonClick,
+                                    title: "Raise all selected rules",
+                                },
+                                "Raise",
+                            ),
+                            m("button.MoveDownButton.TSpeedButton",
+                                {
+                                    onclick: MoveDownButtonClick,
+                                    title: "Lower all selected rules",
+                                },
+                                "Lower",
+                            ),
+                            m("button.insertSound.TSpeedButton",
+                                {
+                                    onclick: InsertSoundClick,
+                                    title: "Insert a sound into a reply",
+                                },
+                                "Sound",
+                            ),
+                            m("button.InsertMusicButton.TSpeedButton",
+                                {
+                                    onclick: InsertMusicButtonClick,
+                                    title: "Insert music into a reply",
+                                },
+                                "Music",
+                            ),
+                        ),
+                        m(".Context",
+                            m("div.RuleNumberLabel.TLabel",
+                                {
+                                    title: "The index of the edited rule in the table",
+                                },
+                                "#" + (world.rules.indexOf(rule) + 1),
+                            ),
+                            m("button.ContextSpeedButton.TSpeedButton",
+                                {
+                                    onclick: SpeedButtonClick,
+                                    title: "Browse all rules with this context",
+                                },
+                                "Context",
+                            ),
+                            m("input.ContextEdit.TEdit",
+                                {
+                                    value: rule.context.phrase
+                                },
+                            ),
+                        ),
+                        m(".Command",
+                            m("button.CommandSpeedButton.TSpeedButton",
+                                {
+                                    onclick: SpeedButtonClick,
+                                    title: "Browse all rules with this command",
+                                },
+                                "Command",
+                            ),
+                            m("input.CommandEdit.TEdit",
+                                {
+                                    value: rule.command.phrase
+                                },
+                            ),
+                        ),
+                        m(".Reply",
+                            m("Group.Group.g00000064",
+                                m("img.replyPicture.TImage",
+                                    {
+                                        title: "Test saying the reply",
+                                    },
+                                ),
+                                m("div.Label5.TLabel",
+                                    {
+                                    },
+                                    "Reply",
+                                ),
+                            ),
+                            m("textarea.ReplyMemo.TMemo",
+                                {
+                                    value: rule.reply
+                                },
+                            ),
+                        ),
+                        m(".Move",
+                            m("button.MoveSpeedButton.TSpeedButton",
+                                {
+                                    onclick: SpeedButtonClick,
+                                    title: "Browse all rules with this move",
+                                },
+                                "Move",
+                            ),
+                            m("input.MoveEdit.TEdit",
+                                {
+                                    value: rule.move.phrase
+                                },
+                            ),
                         ),
                     ),
-                    m("textarea.ReplyMemo.TMemo",
-                        {
-                            value: rule.reply
-                        },
+                    m("div.SplitterRequirementsChanges.TSplitter",
+                        "--------------------------------------------------------------"
                     ),
-                ),
-                m(".Move",
-                    m("button.MoveSpeedButton.TSpeedButton",
-                        {
-                            onclick: SpeedButtonClick,
-                            title: "Browse all rules with this move",
-                        },
-                        "Move",
-                    ),
-                    m("input.MoveEdit.TEdit",
-                        {
-                            value: rule.move.phrase
-                        },
-                    ),
-                ),
-            ),
-            m("div.SplitterRequirementsChanges.TSplitter",
-                "--------------------------------------------------------------"
-            ),
-            m("div.PanelRequirementsChanges.TPanel",
-                {
-                },
-                m(".Requirements",
-                    m("button.RequirementsSpeedButton.TSpeedButton",
-                        {
-                            onclick: SpeedButtonClick,
-                            title: "Browse all rules with the selected requirement",
-                        },
-                        "Requirements",
-                    ),
-                    m("TListBox.RequirementsListBox.TListBox",
+                    m("div.PanelRequirementsChanges.TPanel",
                         {
                         },
+                        m(".Requirements",
+                            m("button.RequirementsSpeedButton.TSpeedButton",
+                                {
+                                    onclick: SpeedButtonClick,
+                                    title: "Browse all rules with the selected requirement",
+                                },
+                                "Requirements",
+                            ),
+                            m("TListBox.RequirementsListBox.TListBox",
+                                {
+                                },
+                            ),
+                            m("input.RequirementsEdit.TEdit",
+                                {
+                                    value: rule.decompileRequirements()
+                                },
+                            ),
+                        ),
+                        m(".Changes",
+                            m("button.ChangesSpeedButton.TSpeedButton",
+                                {
+                                    onclick: SpeedButtonClick,
+                                    title: "Browse all rules with the selected change",
+                                },
+                                "Changes",
+                            ),
+                            m("TListBox.ChangesListBox.TListBox",
+                                {
+                                },
+                            ),
+                            m("input.ChangesEdit.TEdit",
+                                {
+                                    value: rule.decompileChanges()
+                                },
+                            ),
+                        ),
                     ),
-                    m("input.RequirementsEdit.TEdit",
-                        {
-                            value: rule.decompileRequirements()
-                        },
-                    ),
-                ),
-                m(".Changes",
-                    m("button.ChangesSpeedButton.TSpeedButton",
-                        {
-                            onclick: SpeedButtonClick,
-                            title: "Browse all rules with the selected change",
-                        },
-                        "Changes",
-                    ),
-                    m("TListBox.ChangesListBox.TListBox",
-                        {
-                        },
-                    ),
-                    m("input.ChangesEdit.TEdit",
-                        {
-                            value: rule.decompileChanges()
-                        },
-                    ),
-
-                ),
-            ),
+                ]
+            ]
         )
     }
 }
