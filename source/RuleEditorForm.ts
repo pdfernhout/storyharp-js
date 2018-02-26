@@ -30,19 +30,21 @@ class RuleTableView {
         return m("div",
             m("table",
                 // context command reply move requirements changes
-                 world.rules.map(rule => m("tr" + color(row++),
-                    {
-                        onclick: () => this.domain.editedRule = rule
-                    },
-                    m("td.w-10", rule.context.phrase),
-                    m("td.w-20", rule.command.phrase),
-                    m("td.w-20", ellipsis(rule.reply)),
-                    m("td.w-10", rule.move.phrase),
-                    // lists
-                    m("td.w-20", rule.requirements.map(wrapper => m("div.nowrap", wrapper.displayString()))),
-                    m("td.w-20", rule.changes.map(wrapper => m("div.nowrap", wrapper.displayString()))),
-                )
-            )   
+                world.rules.map(rule => 
+                    m("tr" + color(row++),
+                        {
+                            onclick: () => this.domain.editedRule = rule
+                        },
+                        m("td.w-10", rule.context.phrase),
+                        m("td.w-20", rule.command.phrase),
+                        m("td.w-20", ellipsis(rule.reply)),
+                        m("td.w-10", rule.move.phrase),
+                        // lists
+                        m("td.w-20", rule.requirements.map(wrapper => m("div.nowrap", wrapper.displayString()))),
+                        m("td.w-20", rule.changes.map(wrapper => m("div.nowrap", wrapper.displayString()))),
+                    )
+                )   
+            )
         )
     }
 }
@@ -80,6 +82,13 @@ class IndividualRuleView {
 
     view() {
         function SpeedButtonClick() { console.log("SpeedButtonClick") }
+        function MoveDownButtonClick() { console.log("MoveDownButtonClick") }
+        function MoveUpButtonClick() { console.log("MoveUpButtonClick") }
+        function NewRuleButtonClick() { console.log("NewRuleButtonClick") }
+        function DeleteRuleButtonClick() { console.log("DeleteRuleButtonClick") }
+        function DuplicateRuleButtonClick() { console.log("DuplicateRuleButtonClick") }
+        function InsertMusicButtonClick() { console.log("InsertMusicButtonClick") }
+        function InsertSoundClick() { console.log("insertSoundClick") }
 
         const world: TWorld = this.domain.world
         let rule: TSRule = this.domain.editedRule
@@ -93,6 +102,59 @@ class IndividualRuleView {
             m("div.PanelRest.TPanel",
                 {
                 },
+                m("div.PanelButtonBar.TPanel",
+                    {
+                    },
+                    m("button.NewRuleButton.TSpeedButton",
+                        {
+                            onclick: NewRuleButtonClick,
+                            title: "Make a new rule",
+                        },
+                        "New",
+                    ),
+                    m("button.DuplicateRuleButton.TSpeedButton",
+                        {
+                            onclick: DuplicateRuleButtonClick,
+                            title: "Duplicate the rule showing in the rule editor panel",
+                        },
+                        "Duplicate",
+                    ),
+                    m("button.DeleteRuleButton.TSpeedButton",
+                        {
+                            onclick: DeleteRuleButtonClick,
+                            title: "Delete all selected rules",
+                        },
+                        "Delete",
+                    ),
+                    m("button.MoveUpButton.TSpeedButton",
+                        {
+                            onclick: MoveUpButtonClick,
+                            title: "Raise all selected rules",
+                        },
+                        "Raise",
+                    ),
+                    m("button.MoveDownButton.TSpeedButton",
+                        {
+                            onclick: MoveDownButtonClick,
+                            title: "Lower all selected rules",
+                        },
+                        "Lower",
+                    ),
+                    m("button.insertSound.TSpeedButton",
+                        {
+                            onclick: InsertSoundClick,
+                            title: "Insert a sound into a reply",
+                        },
+                        "Sound",
+                    ),
+                    m("button.InsertMusicButton.TSpeedButton",
+                        {
+                            onclick: InsertMusicButtonClick,
+                            title: "Insert music into a reply",
+                        },
+                        "Music",
+                    ),
+                ),
                 m(".Context",
                     m("div.RuleNumberLabel.TLabel",
                         {
