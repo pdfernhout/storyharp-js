@@ -30,6 +30,7 @@ export class TSRule extends TSDraggableObject {
     available: boolean = false
     requirementsString: string = ""
     changesString: string = ""
+    // TODO: useagesRemoved may be no longer needed
     useagesRemoved: boolean = false
  
     displayName(): string {
@@ -71,6 +72,8 @@ export class TSRule extends TSDraggableObject {
         if (this.context) {
             this.context.contextUseages -= 1
         }
+        // TODO: Seems like this and the other "setXYZ" methods will leak memory
+        // if the world holds onto variables which no longer have references
         this.context = this.world.findOrCreateVariable(aString, false)
         this.context.contextUseages += 1
     }
