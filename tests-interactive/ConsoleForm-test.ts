@@ -5,7 +5,8 @@ import * as m from "mithril"
 import { viewConsoleForm } from "../source/ConsoleForm"
 
 import { TWorld } from "../source/TWorld"
-import { TSCommandList } from "../source/TSCommandList";
+import { TSCommandList } from "../source/TSCommandList"
+import { Color } from "../source/common"
 
 const world = new TWorld()
 const sessionCommandList = new TSCommandList(world)
@@ -51,7 +52,8 @@ const fakeDomain = {
         "Tutorial Advanced",
     ],
     loadedFileName: "",
-    loadTestWorld: null
+    loadTestWorld: null,
+    editedRule: null,
 }
 
 const MyComponent = { view: () => viewConsoleForm(fakeDomain) }
@@ -66,7 +68,7 @@ async function loadTestWorld(worldFileName: string) {
     const loaded = fakeDomain.world.loadWorldFromFileContents(worldContent)
     if (!loaded) throw new Error("Failed to load")
 
-    // transcript.push("Playing: " + worldFileName)
+    transcript.push({text: "Playing: " + worldFileName, color: Color.clGreen})
     fakeDomain.loadedFileName = worldFileName
 
     fakeDomain.world.newSession()

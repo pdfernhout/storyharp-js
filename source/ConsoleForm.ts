@@ -112,11 +112,13 @@ function viewFiles(domain: any) {
 }
 
 function viewConsole(domain: any) {
-    return [
-        domain.transcript.map((item: any) => m("div.mw6" + color(item.color), item.text)),
+    return m("div.overflow-auto", { style: "height: calc(100% - 5rem)" },
+        m("div",
+            domain.transcript.map((item: any) => m("div.mw6" + color(item.color), item.text)),
+        ),
         viewChoices(domain),
         m(VariablesView, <any>{domain}),
-    ]
+)
 }
 
 export function viewConsoleForm(domain: any) {
@@ -125,7 +127,7 @@ export function viewConsoleForm(domain: any) {
         return "button.ml2" + (activeForm === selection ? ".bg-light-blue" : "")
     }
 
-    return m(".ConsoleForm.ml3",
+    return m(".ConsoleForm.ml3.h-100.overflow-hidden",
         m("h3", "StoryHarp 2.0 CYOA Player and Editor"),
         m("div.mb3",
             "Playing: " + domain.loadedFileName,
