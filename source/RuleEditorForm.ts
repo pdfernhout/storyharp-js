@@ -596,12 +596,12 @@ export class RuleEditorForm {
                 m(buttonWithHighlight("table"), { onclick: () => this.currentView = "table" }, "Table"),
                 m(buttonWithHighlight("map"),  { onclick: () => this.currentView = "map" }, "Map"),
                 m(buttonWithHighlight("browser"),  { onclick: () => this.currentView = "browser" }, "Browser"),
-                m("button.ml2.w4", {
+                m("button.ml4.w3", {
                     disabled: !domain.worldCommandList.isUndoEnabled(),
                     onclick: () => domain.worldCommandList.undoLast(),
                     title: "Undo " + domain.worldCommandList.undoDescription()
                 }, "Undo"),
-                m("button.ml2.w4", { 
+                m("button.ml2.w3", { 
                     disabled: !domain.worldCommandList.isRedoEnabled(),
                     onclick: () => domain.worldCommandList.redoLast(),
                     title: "Redo " + domain.worldCommandList.redoDescription()
