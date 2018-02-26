@@ -43,6 +43,7 @@ const fakeDomain = {
             Invalidate: () => null
         },
         updateRuleNumberLabel: () => null,
+        editRule: (rule: any) => null,
     },
     changeLogForm: {
         addToLog: (text: string) => null
