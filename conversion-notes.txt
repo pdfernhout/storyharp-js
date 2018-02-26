@@ -161,3 +161,6 @@ Splitters may go away -- or might be kept?
 Try to make the current state of the application and available actions more visible.
 
 To eliminate extra comments in lfm files replace this regex with nothing (without quotes): "^ *// .*\n"
+
+With Mithril, you may need an intermediate state-holding object in forms
+because the state is no held in the UI elements -- unless you want to directly edit your domain objects.
