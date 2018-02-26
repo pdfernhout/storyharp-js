@@ -226,8 +226,6 @@ class IndividualRuleView {
             worldCommandList.ruleFieldChange(ruleEditorForm, changeLogForm, consoleForm, rule, TSRuleField.kRuleMove, event.target.value)
         }
 
-        // TODO: Resolve how to handle a null rule better
-
         return m("div.IndividualRuleView.ba.bg-light-gray.w-100.ma1",
             m("div", {
                 onclick: () => this.expanded = !this.expanded
@@ -341,6 +339,10 @@ class IndividualRuleView {
                             ),
                             m("textarea.ReplyMemo.TMemo",
                                 {
+                                    style: {
+                                        width: "45rem",
+                                        height: "5em",
+                                    },
                                     value: rule.reply,
                                     onchange: replyChange
                                 },
