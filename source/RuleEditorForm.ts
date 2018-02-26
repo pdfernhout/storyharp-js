@@ -399,7 +399,7 @@ class IndividualRuleView {
                                 {
                                     style: { width: "35rem", },
                                     value: rule.decompileRequirements(),
-                                    onChange: requirementsChange
+                                    onchange: requirementsChange
                                 },
                             ),
                         ),
