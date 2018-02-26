@@ -29,18 +29,24 @@ class RuleTableView {
 
         return m("div",
             m("table",
-                // context command reply move requirements changes
+                m("tr", 
+                    m("th.w-10", "context"),
+                    m("th.w-20", "requirements"),
+                    m("th.w-20", "command"),
+                    m("th.w-20", "reply"),
+                    m("th.w-10", "move"),
+                    m("th.w-20", "changes"),
+                ),
                 world.rules.map(rule => 
                     m("tr" + color(row++),
                         {
                             onclick: () => this.domain.editedRule = rule
                         },
                         m("td.w-10", rule.context.phrase),
+                        m("td.w-20", rule.requirements.map(wrapper => m("div.nowrap", wrapper.displayString()))),
                         m("td.w-20", rule.command.phrase),
                         m("td.w-20", ellipsis(rule.reply)),
                         m("td.w-10", rule.move.phrase),
-                        // lists
-                        m("td.w-20", rule.requirements.map(wrapper => m("div.nowrap", wrapper.displayString()))),
                         m("td.w-20", rule.changes.map(wrapper => m("div.nowrap", wrapper.displayString()))),
                     )
                 )   
