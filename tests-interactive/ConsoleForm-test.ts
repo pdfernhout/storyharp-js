@@ -10,11 +10,13 @@ import { Color } from "../source/common"
 
 const world = new TWorld()
 const sessionCommandList = new TSCommandList(world)
+const worldCommandList = new TSCommandList(world)
 const transcript: {text: string, color: number}[] = []
 
 const fakeDomain = {
     world,
     sessionCommandList,
+    worldCommandList,
     transcript,
     consoleForm: {
         speechSystem: {
@@ -33,7 +35,12 @@ const fakeDomain = {
         },
         ShowOnlyTrueVariablesButton: {}
     },
-    ruleEditorForm: {},
+    ruleEditorForm: {
+        selectEditorField: (fieldIndex: number) => null
+    },
+    changeLogForm: {
+        addToLog: (text: string) => null
+    },
     availableWorldFiles: [
         "Astronomy Test",
         "GarTrek",
@@ -73,6 +80,7 @@ async function loadTestWorld(worldFileName: string) {
 
     fakeDomain.world.newSession()
     fakeDomain.sessionCommandList.clear()
+    fakeDomain.worldCommandList.clear()
 
     m.mount(document.body, MyComponent)
 }

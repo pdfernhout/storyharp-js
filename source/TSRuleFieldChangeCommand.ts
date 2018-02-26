@@ -29,6 +29,7 @@ export class TSRuleFieldChangeCommand extends KfCommand {
     }
     
     updateEditorForChange(): void {
+        /* TODO: Maybe most or all of this is no longer needed with Mithril? Perhaps the map invalidation is still needed?
         this.ruleEditorForm.rule = this.rule
         this.ruleEditorForm.loadAllRuleFields()
         // TODO: This locationCacheValid field probably can be removed along with consoleForm after finish refactoring
@@ -49,6 +50,7 @@ export class TSRuleFieldChangeCommand extends KfCommand {
             // could optimize to only do when browser visible
             this.ruleEditorForm.setOrganizeByField(this.ruleEditorForm.organizeByField)
         }
+        */
     }
     
     doCommand(): void {

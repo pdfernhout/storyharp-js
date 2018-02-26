@@ -1,16 +1,29 @@
 import * as m from "mithril"
 import { TWorld } from "./TWorld"
-import { TSRule } from "./TSRule"
+import { TSRule, TSRuleField } from "./TSRule"
+import { TSCommandList } from "./TSCommandList"
 
 type ViewName = "table" | "map" | "browser"
 
-/* From TSRule:
-    context: TSVariable
-    requirements: TSDesiredStateVariableWrapper[] = []
-    command: TSVariable
-    reply: string = ""
-    move: TSVariable
-    changes: TSDesiredStateVariableWrapper[] = []
+/* Decided not to use and to edit a rule directly
+// Similar to TSRule:
+interface TSRuleShadow {
+    context: string
+    requirements: string[]
+    command: string
+    reply: string
+    move: string
+    changes: string[]
+}
+
+ruleShadow: TSRuleShadow = {
+    context: "",
+    requirements: [],
+    command: "",
+    reply: "",
+    move: "",
+    changes: [],
+}
 */
 
 class RuleTableView {
@@ -87,18 +100,131 @@ class IndividualRuleView {
         this.domain = (<any>vnode.attrs).domain
     }
 
+    /*
+    commitChangesToRule(): void {
+        // this.RequirementsEdit.Hide()
+        // this.ChangesEdit.Hide()
+        if (this.rule === null) {
+            return
+        }
+        
+        if (this.ContextEdit.Text !== this.rule.context.phrase) {
+            usdomain.domain.worldCommandList.ruleFieldChange(this.rule, usworld.kRuleContext, this.ContextEdit.Text)
+        }
+        if (this.CommandEdit.Text !== this.rule.command.phrase) {
+            usdomain.domain.worldCommandList.ruleFieldChange(this.rule, usworld.kRuleCommand, this.CommandEdit.Text)
+        }
+        if (this.ReplyMemo.Text !== this.rule.reply) {
+            usdomain.domain.worldCommandList.ruleFieldChange(this.rule, usworld.kRuleReply, this.ReplyMemo.Text)
+        }
+        if (this.MoveEdit.Text !== this.rule.move.phrase) {
+            usdomain.domain.worldCommandList.ruleFieldChange(this.rule, usworld.kRuleMove, this.MoveEdit.Text)
+        }
+        if (this.logicalStatementForListBox(this.RequirementsListBox) !== this.rule.decompileRequirements()) {
+            usdomain.domain.worldCommandList.ruleFieldChange(this.rule, usworld.kRuleRequirements, this.logicalStatementForListBox(this.RequirementsListBox))
+        }
+        if (this.logicalStatementForListBox(this.ChangesListBox) !== this.rule.decompileChanges()) {
+            usdomain.domain.worldCommandList.ruleFieldChange(this.rule, usworld.kRuleChanges, this.logicalStatementForListBox(this.ChangesListBox))
+        }
+    }
+
+    logicalStatementForListBox(listBox: TListBox): string {
+        let result = ""
+        let i: int
+        
+        result = ""
+        for (i = 0; i <= listBox.Items.Count - 2; i++) {
+            if (result !== "") {
+                // use 2 because last is always blank for adding
+                result = result + " & " + trim(listBox.Items[i])
+            } else {
+                result = trim(listBox.Items[i])
+            }
+        }
+        return result
+    }
+
+    selectEditorField(field: int): void {
+        if (this.rule === null) {
+            return
+        }
+        switch (field) {
+            case usworld.kRuleContext:
+                this.ContextEdit.SetFocus()
+                this.ContextEdit.SelStart = 0
+                this.ContextEdit.SelLength = len(this.ContextEdit.Text)
+                break
+            case usworld.kRuleCommand:
+                this.CommandEdit.SetFocus()
+                this.CommandEdit.SelStart = 0
+                this.CommandEdit.SelLength = len(this.CommandEdit.Text)
+                break
+            case usworld.kRuleReply:
+                this.ReplyMemo.SetFocus()
+                this.ReplyMemo.SelStart = 0
+                this.ReplyMemo.SelLength = len(this.ReplyMemo.Text)
+                break
+            case usworld.kRuleMove:
+                this.MoveEdit.SetFocus()
+                this.MoveEdit.SelStart = 0
+                this.MoveEdit.SelLength = len(this.MoveEdit.Text)
+                break
+            case usworld.kRuleRequirements:
+                this.RequirementsListBox.SetFocus()
+                if (this.RequirementsListBox.Items.Count > 0) {
+                    this.RequirementsListBox.ItemIndex = 0
+                }
+                break
+            case usworld.kRuleChanges:
+                this.ChangesListBox.SetFocus()
+                if (this.ChangesListBox.Items.Count > 0) {
+                    this.ChangesListBox.ItemIndex = 0
+                }
+                break
+    }
+    */
+
     view() {
+        const world: TWorld = this.domain.world
+        const worldCommandList: TSCommandList = this.domain.worldCommandList
+        const rule: TSRule = this.domain.editedRule
+
+        // TODO: Fix all these
+        const ruleEditorForm: any = this.domain.ruleEditorForm
+        const changeLogForm: any = this.domain.changeLogForm
+        const consoleForm: any = this.domain.consoleForm
+        
         function SpeedButtonClick() { console.log("SpeedButtonClick") }
+
         function MoveDownButtonClick() { console.log("MoveDownButtonClick") }
+
         function MoveUpButtonClick() { console.log("MoveUpButtonClick") }
+
         function NewRuleButtonClick() { console.log("NewRuleButtonClick") }
+
         function DeleteRuleButtonClick() { console.log("DeleteRuleButtonClick") }
+
         function DuplicateRuleButtonClick() { console.log("DuplicateRuleButtonClick") }
+
         function InsertMusicButtonClick() { console.log("InsertMusicButtonClick") }
+
         function InsertSoundClick() { console.log("insertSoundClick") }
 
-        const world: TWorld = this.domain.world
-        let rule: TSRule = this.domain.editedRule
+        function contextChange(event: { target: HTMLInputElement }) {
+            worldCommandList.ruleFieldChange(ruleEditorForm, changeLogForm, consoleForm, rule, TSRuleField.kRuleContext, event.target.value)
+        }
+
+        function commandChange(event: { target: HTMLInputElement }) {
+            worldCommandList.ruleFieldChange(ruleEditorForm, changeLogForm, consoleForm, rule, TSRuleField.kRuleCommand, event.target.value)
+        }
+
+        function replyChange(event: { target: HTMLTextAreaElement }) {
+            worldCommandList.ruleFieldChange(ruleEditorForm, changeLogForm, consoleForm, rule, TSRuleField.kRuleReply, event.target.value)
+        }
+
+        function moveChange(event: { target: HTMLInputElement }) {
+            worldCommandList.ruleFieldChange(ruleEditorForm, changeLogForm, consoleForm, rule, TSRuleField.kRuleMove, event.target.value)
+        }
 
         // TODO: Resolve how to handle a null rule better
 
@@ -180,7 +306,8 @@ class IndividualRuleView {
                             ),
                             m("input.ContextEdit.TEdit",
                                 {
-                                    value: rule.context.phrase
+                                    value: rule.context.phrase,
+                                    onchange: contextChange
                                 },
                             ),
                         ),
@@ -194,7 +321,8 @@ class IndividualRuleView {
                             ),
                             m("input.CommandEdit.TEdit",
                                 {
-                                    value: rule.command.phrase
+                                    value: rule.command.phrase,
+                                    onchange: commandChange
                                 },
                             ),
                         ),
@@ -213,7 +341,8 @@ class IndividualRuleView {
                             ),
                             m("textarea.ReplyMemo.TMemo",
                                 {
-                                    value: rule.reply
+                                    value: rule.reply,
+                                    onchange: replyChange
                                 },
                             ),
                         ),
@@ -227,7 +356,8 @@ class IndividualRuleView {
                             ),
                             m("input.MoveEdit.TEdit",
                                 {
-                                    value: rule.move.phrase
+                                    value: rule.move.phrase,
+                                    onchange: moveChange
                                 },
                             ),
                         ),
@@ -298,12 +428,24 @@ export class RuleEditorForm {
         }
 
         return m(".RuleEditorForm.ml3.flex.flex-column.flex-nowrap.overflow-hidden",
-            { style: "height: calc(100% - 5rem)" },
+            { style: "height: calc(100% - 7rem)" },
             m("div.flex-none",
                 m("span.b", "Rule Editor"),
                 m(buttonWithHighlight("table"), { onclick: () => this.currentView = "table" }, "Table"),
                 m(buttonWithHighlight("map"),  { onclick: () => this.currentView = "map" }, "Map"),
                 m(buttonWithHighlight("browser"),  { onclick: () => this.currentView = "browser" }, "Browser"),
+            ),
+            m("div.ma2",
+                m("button.ml2.w4", {
+                    disabled: !domain.worldCommandList.isUndoEnabled(),
+                    onclick: () => domain.worldCommandList.undoLast(),
+                    title: "Undo " + domain.worldCommandList.undoDescription()
+                }, "Undo"),
+                m("button.ml2.w4", { 
+                    disabled: !domain.worldCommandList.isRedoEnabled(),
+                    onclick: () => domain.worldCommandList.redoLast(),
+                    title: "Redo " + domain.worldCommandList.redoDescription()
+                }, "Redo"), 
             ),
             // TODO: Probably should wrap these with hidden divs so the component state is preserved
             m("div.mt2.flex-auto.overflow-auto",
