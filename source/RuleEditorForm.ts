@@ -226,6 +226,14 @@ class IndividualRuleView {
             worldCommandList.ruleFieldChange(ruleEditorForm, changeLogForm, consoleForm, rule, TSRuleField.kRuleMove, event.target.value)
         }
 
+        function requirementsChange(event: { target: HTMLInputElement }) {
+            worldCommandList.ruleFieldChange(ruleEditorForm, changeLogForm, consoleForm, rule, TSRuleField.kRuleRequirements, event.target.value)
+        }
+
+        function changesChange(event: { target: HTMLInputElement }) {
+            worldCommandList.ruleFieldChange(ruleEditorForm, changeLogForm, consoleForm, rule, TSRuleField.kRuleChanges, event.target.value)
+        }
+
         return m("div.IndividualRuleView.ba.bg-light-gray.w-100.ma1",
             m("div", {
                 onclick: () => this.expanded = !this.expanded
@@ -295,7 +303,7 @@ class IndividualRuleView {
                                 },
                                 "#" + (world.rules.indexOf(rule) + 1),
                             ),
-                            m("button.ContextSpeedButton.TSpeedButton",
+                            m("button.ContextSpeedButton.TSpeedButton.w4.mr1",
                                 {
                                     onclick: SpeedButtonClick,
                                     title: "Browse all rules with this context",
@@ -304,13 +312,14 @@ class IndividualRuleView {
                             ),
                             m("input.ContextEdit.TEdit",
                                 {
+                                    style: { width: "35rem", },
                                     value: rule.context.phrase,
                                     onchange: contextChange
                                 },
                             ),
                         ),
                         m(".Command",
-                            m("button.CommandSpeedButton.TSpeedButton",
+                            m("button.CommandSpeedButton.TSpeedButton.w4.mr1",
                                 {
                                     onclick: SpeedButtonClick,
                                     title: "Browse all rules with this command",
@@ -319,28 +328,29 @@ class IndividualRuleView {
                             ),
                             m("input.CommandEdit.TEdit",
                                 {
+                                    style: { width: "35rem", },
                                     value: rule.command.phrase,
                                     onchange: commandChange
                                 },
                             ),
                         ),
-                        m(".Reply",
-                            m("Group.Group.g00000064",
-                                m("img.replyPicture.TImage",
-                                    {
-                                        title: "Test saying the reply",
-                                    },
-                                ),
-                                m("div.Label5.TLabel",
-                                    {
-                                    },
-                                    "Reply",
-                                ),
+                        m(".Reply.flex.items-center",
+                            /*
+                            m("img.replyPicture.TImage",
+                                {
+                                    title: "Test saying the reply",
+                                },
+                            ),
+                            */
+                            m("button.Label5.TLabel.w4.mr1",
+                                {
+                                },
+                                "Reply",
                             ),
                             m("textarea.ReplyMemo.TMemo",
                                 {
                                     style: {
-                                        width: "45rem",
+                                        width: "35rem",
                                         height: "5em",
                                     },
                                     value: rule.reply,
@@ -349,7 +359,7 @@ class IndividualRuleView {
                             ),
                         ),
                         m(".Move",
-                            m("button.MoveSpeedButton.TSpeedButton",
+                            m("button.MoveSpeedButton.TSpeedButton.w4.mr1",
                                 {
                                     onclick: SpeedButtonClick,
                                     title: "Browse all rules with this move",
@@ -358,6 +368,7 @@ class IndividualRuleView {
                             ),
                             m("input.MoveEdit.TEdit",
                                 {
+                                    style: { width: "35rem", },
                                     value: rule.move.phrase,
                                     onchange: moveChange
                                 },
@@ -371,38 +382,46 @@ class IndividualRuleView {
                         {
                         },
                         m(".Requirements",
-                            m("button.RequirementsSpeedButton.TSpeedButton",
+                            m("button.RequirementsSpeedButton.TSpeedButton.w4.mr1",
                                 {
                                     onclick: SpeedButtonClick,
                                     title: "Browse all rules with the selected requirement",
                                 },
                                 "Requirements",
                             ),
+                            /*
                             m("TListBox.RequirementsListBox.TListBox",
                                 {
                                 },
                             ),
+                            */
                             m("input.RequirementsEdit.TEdit",
                                 {
-                                    value: rule.decompileRequirements()
+                                    style: { width: "35rem", },
+                                    value: rule.decompileRequirements(),
+                                    onChange: requirementsChange
                                 },
                             ),
                         ),
                         m(".Changes",
-                            m("button.ChangesSpeedButton.TSpeedButton",
+                            m("button.ChangesSpeedButton.TSpeedButton.w4.mr1",
                                 {
                                     onclick: SpeedButtonClick,
                                     title: "Browse all rules with the selected change",
                                 },
                                 "Changes",
                             ),
+                            /*
                             m("TListBox.ChangesListBox.TListBox",
                                 {
                                 },
                             ),
+                            */
                             m("input.ChangesEdit.TEdit",
                                 {
-                                    value: rule.decompileChanges()
+                                    style: { width: "35rem", },
+                                    value: rule.decompileChanges(),
+                                    onchange: changesChange,
                                 },
                             ),
                         ),
