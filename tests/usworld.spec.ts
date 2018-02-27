@@ -6,6 +6,7 @@ import { TWorld } from "../source/TWorld"
 
 const GarTrekWorldContents = fs.readFileSync("../data/GarTrek.wld").toString()
 const GarTrekSessionContents = fs.readFileSync("../data/just at sphinx 2.ses").toString()
+const Java1WorldContents = fs.readFileSync("../data/java1.wld").toString().replace(/\r/g, "")
 
 o.spec("usworld", () => {
 
@@ -43,6 +44,15 @@ o.spec("usworld", () => {
             world.reportModeCallback = function() {}
             const loaded = world.loadWorldFromFileContents(GarTrekWorldContents)
             o(loaded).equals(true)
+        })
+
+        o("save world for java1", () => {
+            const world = new TWorld()
+            world.reportModeCallback = function() {}
+            const loaded = world.loadWorldFromFileContents(Java1WorldContents)
+            o(loaded).equals(true)
+            const contents = world.saveWorldToFileContents(false)
+            o(contents).equals(Java1WorldContents.replace("; world file version 1.0", "; StoryHarp world file version 1.3"))
         })
 
         o("load session for GarTrek", () => {
