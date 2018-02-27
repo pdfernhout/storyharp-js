@@ -83,7 +83,7 @@ async function loadTestWorld(worldFileName: string) {
     const loaded = fakeDomain.world.loadWorldFromFileContents(worldContent)
     if (!loaded) throw new Error("Failed to load")
 
-    transcript.push({text: "Playing: " + worldFileName, color: Color.clGreen})
+    transcript.push({text: "Starting: " + worldFileName, color: Color.clGreen})
     fakeDomain.loadedFileName = worldFileName
 
     fakeDomain.world.newSession()

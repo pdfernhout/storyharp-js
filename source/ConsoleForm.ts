@@ -118,7 +118,15 @@ function viewConsole(domain: any) {
         ),
         viewChoices(domain),
         m(VariablesView, <any>{domain}),
-)
+    )
+}
+
+function resetConsole(domain: any) {
+    if (!confirm("Are you sure you want to restart the world?\nThis is not undoable.")) return
+    domain.transcript.length = 0
+    domain.transcript.push({text: "Starting: " + domain.loadedFileName, color: Color.clGreen})
+    domain.world.newSession()
+    domain.sessionCommandList.clear()
 }
 
 export function viewConsoleForm(domain: any) {
@@ -131,6 +139,7 @@ export function viewConsoleForm(domain: any) {
         m("h3", "StoryHarp 2.0 CYOA Player and Editor"),
         m("div.mb3",
             "Playing: " + domain.loadedFileName,
+            m("button.ml2.mr4", { onclick: () => resetConsole(domain) }, "Restart World"),
             m(buttonWithHighlight("files"), { onclick: () => activeForm = "files" }, "Files"),
             m(buttonWithHighlight("console"), { onclick: () => { activeForm = "console"; domain.world.updateAvailable() }}, "Console"),
             m(buttonWithHighlight("ruleEditor"), { onclick: () => activeForm = "ruleEditor" }, "Rule Editor"),
