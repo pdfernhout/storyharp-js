@@ -108,7 +108,6 @@ function viewFiles(domain: any) {
         domain.availableWorldFiles.map((name: string) => 
             m("div.mt1.ml2", 
                 { onclick: () => {
-                domain.transcript.length = 0
                 domain.loadTestWorld(name)
                 activeForm = "console"
                 }
@@ -170,6 +169,8 @@ function newWorld(domain: any) {
     const world: TWorld = domain.world
     world.resetVariablesAndRules()
     world.newSession()
+    domain.transcript.length = 0
+    domain.transcript.push({text: "Starting: " + domain.loadedFileName, color: Color.clGreen})
     domain.sessionCommandList.clear()
     domain.worldCommandList.clear()
     domain.editedRule = null
