@@ -1,8 +1,15 @@
 import * as m from "mithril"
 
+enum ContextWizardPages {
+    kStartPage = 0,
+    kContextsPage = 1,
+    kDescriptionPage = 2,
+    kFinishPage = 3,
+}
+
 export class ContextWizardView {
     domain: any
-    wizardPage = 1
+    wizardPage = ContextWizardPages.kStartPage
 
     constructor(vnode: m.Vnode) {
         this.domain = (<any>vnode.attrs).domain
@@ -10,13 +17,13 @@ export class ContextWizardView {
 
     cancelClick() { console.log("cancelClick") }
 
-    goBackClick() { this.wizardPage = Math.max(1, this.wizardPage - 1) }
+    goBackClick() { this.wizardPage = Math.max(ContextWizardPages.kStartPage, this.wizardPage - 1) }
 
     goNextClick() { 
-        if (this.wizardPage === 4) {
+        if (this.wizardPage === ContextWizardPages.kFinishPage) {
             alert("Finished!!!")
         }
-        this.wizardPage = Math.min(4, this.wizardPage + 1)
+        this.wizardPage = Math.min(ContextWizardPages.kFinishPage, this.wizardPage + 1)
     }
 
     helpButtonClick() { console.log("helpButtonClick") }
@@ -43,7 +50,7 @@ export class ContextWizardView {
                 {
                     onclick: () => this.goNextClick(),
                 },
-                this.wizardPage === 4 ? "Finish" : caption("&Next >>"),
+                this.wizardPage === ContextWizardPages.kFinishPage ? "Finish" : caption("&Next >>"),
             ),
             m("button.cancel.TButton",
                 {
@@ -54,7 +61,7 @@ export class ContextWizardView {
             m("TNotebook.notebook.TNotebook",
                 {
                 },
-                this.wizardPage !== 1 ? [] : m("TPage.page1.TPage",
+                this.wizardPage !== ContextWizardPages.kStartPage ? [] : m("TPage.page1.TPage",
                     {
                     },
                     m("h1", "Start"),
@@ -115,7 +122,7 @@ export class ContextWizardView {
                         "You can click Cancel at any time to close the wizard without making any new rules.",
                     ),
                 ),
-                this.wizardPage !== 2 ? [] : m("TPage.page2.TPage",
+                this.wizardPage !== ContextWizardPages.kContextsPage ? [] : m("TPage.page2.TPage",
                     {
                     },
                     m("h1", "Enter Contexts"),
@@ -148,7 +155,7 @@ export class ContextWizardView {
                         " When you are finished entering contexts, click Next.",
                     ),
                 ),
-                this.wizardPage !== 3 ? [] : m("TPage.page3.TPage",
+                this.wizardPage !== ContextWizardPages.kDescriptionPage ? [] : m("TPage.page3.TPage",
                     {
                     },
                     m("h1", "Generate Descriptions"),
@@ -190,7 +197,7 @@ export class ContextWizardView {
                         "If you have not entered a description for a context, the wizard will add a default description of 'There is nothing of interest here.' ",
                     ),
                 ),
-                this.wizardPage !== 4 ? [] : m("TPage.page4.TPage",
+                this.wizardPage !== ContextWizardPages.kFinishPage ? [] : m("TPage.page4.TPage",
                     {
                     },
                     m("h1", "Finish"),
