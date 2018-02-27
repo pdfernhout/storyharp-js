@@ -140,7 +140,7 @@ export function viewConsoleForm(domain: any) {
         m("div.mb3",
             "Playing: " + domain.loadedFileName,
             m("button.ml2.mr4", { onclick: () => resetConsole(domain) }, "Restart World"),
-            m(buttonWithHighlight("files"), { onclick: () => activeForm = "files" }, "Files"),
+            m(buttonWithHighlight("files"), { onclick: () => activeForm = "files" }, "Demos"),
             m(buttonWithHighlight("console"), { onclick: () => { activeForm = "console"; domain.world.updateAvailable() }}, "Console"),
             m(buttonWithHighlight("ruleEditor"), { onclick: () => activeForm = "ruleEditor" }, "Rule Editor"),
         ),
