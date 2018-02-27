@@ -3,6 +3,7 @@ import { TWorld } from "./TWorld"
 import { TSRule, TSRuleField } from "./TSRule"
 import { TSCommandList } from "./TSCommandList"
 import { TSNewRulesCommand } from "./TSNewRulesCommand"
+import { FileUtils } from "./FileUtils";
 
 type ViewName = "table" | "map" | "browser"
 
@@ -581,6 +582,33 @@ export class RuleEditorForm {
         this.domain = (<any>vnode.attrs).domain
     }
 
+    load() {
+        const world: TWorld = this.domain.world
+        FileUtils.loadFromFile(false, (fileName: string, contents: string) => {
+            console.log("chose", fileName)
+            world.resetVariablesAndRules()
+            const loaded = world.loadWorldFromFileContents(contents)
+            console.log("load status", loaded)
+            this.domain.loadedFileName = fileName
+            this.domain.world.newSession()
+            this.domain.sessionCommandList.clear()
+            this.domain.worldCommandList.clear()
+            this.domain.editedRule = null
+            this.domain.lastSingleRuleIndex = 0
+            m.redraw()
+        })
+    }
+
+    save() {
+        const world: TWorld = this.domain.world
+        const fileName = this.domain.loadedFileName
+        FileUtils.saveToFile(fileName, world.saveWorldToFileContents(false), ".wld", (fileName: string) => {
+            console.log("written", fileName)
+            this.domain.loadedFileName = fileName
+            m.redraw()
+        })
+    }
+
     view(vnode: m.Vnode) {
         const currentView = this.currentView
         const domain = (<any>vnode.attrs).domain
@@ -601,11 +629,13 @@ export class RuleEditorForm {
                     onclick: () => domain.worldCommandList.undoLast(),
                     title: "Undo " + domain.worldCommandList.undoDescription()
                 }, "Undo"),
-                m("button.ml2.w3", { 
+                m("button.ml1.w3", { 
                     disabled: !domain.worldCommandList.isRedoEnabled(),
                     onclick: () => domain.worldCommandList.redoLast(),
                     title: "Redo " + domain.worldCommandList.redoDescription()
                 }, "Redo"), 
+                m("button.ml4.w3", { onclick: () => this.save() }, "Save"),
+                m("button.ml1.w3", { onclick: () => this.load() }, "Load"),
             ),
             // TODO: Probably should wrap these with hidden divs so the component state is preserved
             m("div.mt2.flex-auto.overflow-auto",

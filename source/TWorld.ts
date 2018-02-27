@@ -237,7 +237,7 @@ export class TWorld {
             this.reportModeCallback("Running")
         }
 
-        return lines.join("/n") + "/n"
+        return lines.join("\n") + "\n"
     }
     
     newSession(): void {
@@ -332,7 +332,7 @@ export class TWorld {
             }
         }
 
-        return lines.join("/n") + "/n"
+        return lines.join("\n") + "\n"
     }
     
     updateAvailable(): void {
