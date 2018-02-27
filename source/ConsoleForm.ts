@@ -5,6 +5,7 @@ import { TWorld } from "./TWorld"
 import { VariablesView } from "./VariablesView"
 import { RuleEditorForm } from "./RuleEditorForm"
 import { FileUtils } from "./FileUtils"
+import { authoringHelp } from "./authoringHelp"
 
 const firstRiddleAnswer = "say an answer for a riddle"
 
@@ -87,7 +88,7 @@ function viewChoices(domain: any) {
     )
 }
 
-type FormName = "console" | "files" | "ruleEditor"
+type FormName = "about" | "console" | "files" | "ruleEditor"
 let activeForm: FormName = "console"
 
 function color(color: Color) {
@@ -115,6 +116,26 @@ function viewFiles(domain: any) {
         )
     )
 }
+
+let showAuthoringHelp = false
+
+function viewAbout(domain: any) {
+    return m("div.overflow-auto", { style: "height: calc(100% - 7rem)" },
+        m("p", `
+            StoryHarp is an interactive environment for playing and creating
+            interactive CYOA (choose your own adventure) stories.
+        `),
+        m("p"),
+        m("div", { onclick: () => showAuthoringHelp = !showAuthoringHelp }, (showAuthoringHelp ? "▲" : "▼ (Click for:) ") + "Authoring help"),
+        showAuthoringHelp ? authoringHelp.split("\n\n").map(text => m("p", text)) : [],
+        m("hr"),
+        m("p", "StoryHarp 1.0 was originally a stand-alone desktop program. Version 2.0 is web-based."),
+        m("p"),
+        m("p", "StoryHarp 2.0 Copyright Paul D. Fernhout and Cynthia F. Kurtz 1998-2008"),
+        m("p", "StoryHarp is a trademark of Paul D. Fernhout and Cynthia F. Kurtz")
+    )
+}
+
 
 function viewConsole(domain: any) {
     return m("div.overflow-auto", { style: "height: calc(100% - 7rem)" },
@@ -190,19 +211,27 @@ export function viewConsoleForm(domain: any) {
             m("span.i", "" + domain.loadedFileName),
         ),
         m("div.mb3",
+            m(buttonWithHighlight("about"), { onclick: () => activeForm = "about" }, "About"),
             m(buttonWithHighlight("files"), { onclick: () => activeForm = "files" }, "Demos"),
             m(buttonWithHighlight("console"), { onclick: () => { activeForm = "console"; domain.world.updateAvailable() }}, "Console"),
             m(buttonWithHighlight("ruleEditor"), { onclick: () => activeForm = "ruleEditor" }, "Rule Editor"),
-            activeForm !== "files" ? m("button.ml4", { title: "Open a world file", onclick: () => loadWorld(domain) }, "Load World") : [],
-            activeForm === "console" ? m("button.ml2.mr4", { title: "Reset current world", onclick: () => resetConsole(domain) }, "Restart World") : [],
-            activeForm === "ruleEditor" ? [
-                m("button.ml1", { title: "Save a world file", onclick: () => saveWorld(domain) }, "Save World"),
-                m("button.ml3", { title: "Make a new world", onclick: () => newWorld(domain) }, "New World"),
-            ] : []
+            (activeForm !== "about" && activeForm !== "files")
+                ? m("button.ml4", { title: "Open a world file", onclick: () => loadWorld(domain) }, "Load World")
+                : [],
+            activeForm === "console" 
+                ? m("button.ml2.mr4", { title: "Reset current world", onclick: () => resetConsole(domain) }, "Restart World")
+                : [],
+            activeForm === "ruleEditor" 
+                ? [
+                    m("button.ml1", { title: "Save a world file", onclick: () => saveWorld(domain) }, "Save World"),
+                    m("button.ml3", { title: "Make a new world", onclick: () => newWorld(domain) }, "New World"),
+                ]
+                : []
         ),
+        activeForm === "about" ? viewAbout(domain) : [],
+        activeForm === "files" ? viewFiles(domain) : [],
         // TODO: Probably should wrap these with hidden divs so the component state is preserved
         activeForm === "console" ? viewConsole(domain) : [],
-        activeForm === "files" ? viewFiles(domain) : [],
         activeForm === "ruleEditor" ? m(RuleEditorForm, <any>{domain: domain}) : [],
     )
 }
