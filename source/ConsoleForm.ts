@@ -4,6 +4,7 @@ import { Color } from "./common"
 import { TWorld } from "./TWorld"
 import { VariablesView } from "./VariablesView"
 import { RuleEditorForm } from "./RuleEditorForm"
+import { FileUtils } from "./FileUtils"
 
 const firstRiddleAnswer = "say an answer for a riddle"
 
@@ -100,19 +101,24 @@ function color(color: Color) {
 }
 
 function viewFiles(domain: any) {
-    return domain.availableWorldFiles.map((name: string) => 
-        m("div.mt1", 
-            { onclick: () => {
-            domain.transcript.length = 0
-            domain.loadTestWorld(name)
-            activeForm = "console"
-            }
-        }, name)
+    return m("div",
+        "Choose a demo world file to load:",
+        m("br"),
+        m("br"),
+        domain.availableWorldFiles.map((name: string) => 
+            m("div.mt1.ml2", 
+                { onclick: () => {
+                domain.transcript.length = 0
+                domain.loadTestWorld(name)
+                activeForm = "console"
+                }
+            }, name)
+        )
     )
 }
 
 function viewConsole(domain: any) {
-    return m("div.overflow-auto", { style: "height: calc(100% - 5rem)" },
+    return m("div.overflow-auto", { style: "height: calc(100% - 7rem)" },
         m("div",
             domain.transcript.map((item: any) => m("div.mw6" + color(item.color), item.text)),
         ),
@@ -122,11 +128,52 @@ function viewConsole(domain: any) {
 }
 
 function resetConsole(domain: any) {
-    if (!confirm("Are you sure you want to restart the world?\nThis is not undoable.")) return
+    if (!confirm("Are you sure you want to restart the world?")) return
     domain.transcript.length = 0
     domain.transcript.push({text: "Starting: " + domain.loadedFileName, color: Color.clGreen})
     domain.world.newSession()
     domain.sessionCommandList.clear()
+}
+
+function loadWorld(domain: any) {
+    const world: TWorld = domain.world
+    FileUtils.loadFromFile(false, (fileName: string, contents: string) => {
+        console.log("chose", fileName)
+        world.resetVariablesAndRules()
+        const loaded = world.loadWorldFromFileContents(contents)
+        console.log("load status", loaded)
+        if (fileName.endsWith(".wld")) fileName = fileName.substring(0, fileName.length - 4)
+        domain.loadedFileName = fileName
+        domain.world.newSession()
+        domain.sessionCommandList.clear()
+        domain.worldCommandList.clear()
+        domain.editedRule = null
+        domain.lastSingleRuleIndex = 0
+        m.redraw()
+    })
+}
+
+function saveWorld(domain: any) {
+    const world: TWorld = domain.world
+    const fileName = domain.loadedFileName
+    FileUtils.saveToFile(fileName, world.saveWorldToFileContents(false), ".wld", (fileName: string) => {
+        console.log("written", fileName)
+        domain.loadedFileName = fileName
+        m.redraw()
+    })
+}
+
+function newWorld(domain: any) {
+    const fileName = prompt("What would you like to call your new world?")
+    if (!fileName) return
+    domain.loadedFileName = fileName
+    const world: TWorld = domain.world
+    world.resetVariablesAndRules()
+    world.newSession()
+    domain.sessionCommandList.clear()
+    domain.worldCommandList.clear()
+    domain.editedRule = null
+    domain.lastSingleRuleIndex = 0
 }
 
 export function viewConsoleForm(domain: any) {
@@ -136,13 +183,21 @@ export function viewConsoleForm(domain: any) {
     }
 
     return m(".ConsoleForm.ml3.h-100.overflow-hidden",
-        m("h3", "StoryHarp 2.0 CYOA Player and Editor"),
+        m("div.mt1.mb2",
+            m("span.f5.b.mr3.dib", "StoryHarp 2.0 CYOA Player and Editor"),
+            m("span", "World: "),
+            m("span.i", "" + domain.loadedFileName),
+        ),
         m("div.mb3",
-            "Playing: " + domain.loadedFileName,
-            m("button.ml2.mr4", { onclick: () => resetConsole(domain) }, "Restart World"),
             m(buttonWithHighlight("files"), { onclick: () => activeForm = "files" }, "Demos"),
             m(buttonWithHighlight("console"), { onclick: () => { activeForm = "console"; domain.world.updateAvailable() }}, "Console"),
             m(buttonWithHighlight("ruleEditor"), { onclick: () => activeForm = "ruleEditor" }, "Rule Editor"),
+            activeForm !== "files" ? m("button.ml4", { title: "Open a world file", onclick: () => loadWorld(domain) }, "Load World") : [],
+            activeForm === "console" ? m("button.ml2.mr4", { title: "Reset current world", onclick: () => resetConsole(domain) }, "Restart World") : [],
+            activeForm === "ruleEditor" ? [
+                m("button.ml1", { title: "Save a world file", onclick: () => saveWorld(domain) }, "Save World"),
+                m("button.ml3", { title: "Make a new world", onclick: () => newWorld(domain) }, "New World"),
+            ] : []
         ),
         // TODO: Probably should wrap these with hidden divs so the component state is preserved
         activeForm === "console" ? viewConsole(domain) : [],
