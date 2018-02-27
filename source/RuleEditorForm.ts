@@ -1,42 +1,15 @@
 import * as m from "mithril"
-
-import { TWorld } from "./TWorld"
-// import { TSRule, TSRuleField } from "./TSRule"
-// import { TSCommandList } from "./TSCommandList"
-// import { TSNewRulesCommand } from "./TSNewRulesCommand"
-
 import { FileUtils } from "./FileUtils"
+import { TWorld } from "./TWorld"
 import { IndividualRuleView } from "./IndividualRuleView"
 import { RuleTableView } from "./RuleTableView";
+import { RuleMapView } from "./RuleMapView"
+import { RuleBrowserView } from "./RuleBrowserView"
 
 type ViewName = "table" | "map" | "browser"
 
 // TODO: POSSIBLE BUG: What happens to undo/redo for console when delete rules? Or change rule? Maybe just ignore?
 // TODO: Should variables be deleted when they are no longer used by a rule?
-
-class RuleMapView {
-    domain: any
-
-    constructor(vnode: m.Vnode) {
-        this.domain = (<any>vnode.attrs).domain
-    }
-
-    view() {
-        return m("div", "Unfinished RuleMapForm")
-    }
-}
-
-class RuleBrowserView {
-    domain: any
-
-    constructor(vnode: m.Vnode) {
-        this.domain = (<any>vnode.attrs).domain
-    }
-
-    view() {
-        return m("div", "Unfinished RuleBrowserForm")
-    }
-}
 
 export class RuleEditorForm {
     domain: any
