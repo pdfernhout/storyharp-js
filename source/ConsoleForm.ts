@@ -138,7 +138,7 @@ function viewAbout(domain: any) {
 
 
 function viewConsole(domain: any) {
-    return m("div.overflow-auto", { style: "height: calc(100% - 7rem)" },
+    return m("div.overflow-auto", { style: "height: calc(100% - 5rem)" },
         m("div",
             domain.transcript.map((item: any) => m("div.mw6" + color(item.color), item.text)),
         ),

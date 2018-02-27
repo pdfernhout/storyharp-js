@@ -56,7 +56,7 @@ export class RuleEditorForm {
         }
 
         return m(".RuleEditorForm.ml3.flex.flex-column.flex-nowrap.overflow-hidden",
-            { style: "height: calc(100% - 7rem)" },
+            { style: "height: calc(100% - 5rem)" },
             m("div.flex-none",
                 m("span.b", "Rule Editor"),
                 m(buttonWithHighlight("table"), { onclick: () => this.currentView = "table" }, "Table"),
