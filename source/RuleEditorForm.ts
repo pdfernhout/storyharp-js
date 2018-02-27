@@ -589,6 +589,7 @@ export class RuleEditorForm {
             world.resetVariablesAndRules()
             const loaded = world.loadWorldFromFileContents(contents)
             console.log("load status", loaded)
+            if (fileName.endsWith(".wld")) fileName = fileName.substring(0, fileName.length - 4)
             this.domain.loadedFileName = fileName
             this.domain.world.newSession()
             this.domain.sessionCommandList.clear()
@@ -607,6 +608,19 @@ export class RuleEditorForm {
             this.domain.loadedFileName = fileName
             m.redraw()
         })
+    }
+
+    newWorld() {
+        const fileName = prompt("What would you like to call your new world?")
+        if (!fileName) return
+        this.domain.loadedFileName = fileName
+        const world: TWorld = this.domain.world
+        world.resetVariablesAndRules()
+        world.newSession()
+        this.domain.sessionCommandList.clear()
+        this.domain.worldCommandList.clear()
+        this.domain.editedRule = null
+        this.domain.lastSingleRuleIndex = 0
     }
 
     view(vnode: m.Vnode) {
@@ -636,6 +650,7 @@ export class RuleEditorForm {
                 }, "Redo"), 
                 m("button.ml4.w3", { onclick: () => this.save() }, "Save"),
                 m("button.ml1.w3", { onclick: () => this.load() }, "Load"),
+                m("button.ml4.w3", { onclick: () => this.newWorld() }, "New"),
             ),
             // TODO: Probably should wrap these with hidden divs so the component state is preserved
             m("div.mt2.flex-auto.overflow-auto",
