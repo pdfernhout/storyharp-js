@@ -16,11 +16,14 @@ export class FileUtils {
     static callback: (a: any, b: any) => null
 
     static loadFromFile(convertToBase64: boolean, callback: any) {
+        console.log("loadFromFile")
         if (typeof convertToBase64 === "function") {
             callback = convertToBase64
             convertToBase64 = false
         }
-        if (!FileUtils.fileControl) {
+        // Mithril can clobber the fileControl if it mounts something on the body
+        // if (true && !FileUtils.fileControl) {
+            console.log("making file control")
             const fileControl = document.createElement("input")
             FileUtils.fileControl = <any>fileControl
             fileControl.type = "file"
@@ -41,11 +44,13 @@ export class FileUtils {
                     }
                 
                     if (FileUtils.callback) FileUtils.callback(file.name, contents)
+                    document.body.removeChild(FileUtils.fileControl)
                 }
                 
                 reader.onerror = function(event: any) {
                     console.error("File could not be read! Code " + event.target.error.code)
                     if (FileUtils.callback) FileUtils.callback(null, null)
+                    document.body.removeChild(FileUtils.fileControl)
                 }
                             
                 if (convertToBase64) {
@@ -54,7 +59,7 @@ export class FileUtils {
                     reader.readAsText(file)
                 }
             }, false)
-        }
+        // }
 
         FileUtils.callback = callback
         FileUtils.fileControl.click()
