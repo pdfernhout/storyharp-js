@@ -149,10 +149,10 @@ function viewConsole(domain: any) {
 
 function resetConsole(domain: any) {
     if (!confirm("Are you sure you want to restart the world?")) return
-    domain.transcript.length = 0
-    domain.transcript.push({text: "Starting: " + domain.loadedFileName, color: Color.clGreen})
     domain.world.newSession()
     domain.sessionCommandList.clear()
+    domain.transcript.length = 0
+    domain.transcript.push({text: "Starting: " + domain.loadedFileName, color: Color.clGreen})
 }
 
 function loadWorld(domain: any) {
@@ -191,11 +191,11 @@ function newWorld(domain: any) {
     world.resetVariablesAndRules()
     world.newSession()
     domain.transcript.length = 0
-    domain.transcript.push({text: "Starting: " + domain.loadedFileName, color: Color.clGreen})
     domain.sessionCommandList.clear()
     domain.worldCommandList.clear()
     domain.editedRule = null
     domain.lastSingleRuleIndex = 0
+    domain.transcript.push({text: "Starting: " + domain.loadedFileName, color: Color.clGreen})
 }
 
 export function viewConsoleForm(domain: any) {

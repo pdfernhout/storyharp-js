@@ -74,25 +74,31 @@ const fakeDomain = {
 const MyComponent = { view: () => viewConsoleForm(fakeDomain) }
 
 async function loadTestWorld(worldFileName: string) {
+    const domain = fakeDomain
 
     const worldContent = await m.request("../data/" + worldFileName + ".wld", {deserialize: (text) => text})
 
-    fakeDomain.world.reportModeCallback = function(text: string) { /* fakeDomain.transcript.push(text) */ }
+    domain.world.reportModeCallback = function(text: string) { /* domain.transcript.push(text) */ }
 
     world.resetVariablesAndRules()
-    const loaded = fakeDomain.world.loadWorldFromFileContents(worldContent)
+    const loaded = domain.world.loadWorldFromFileContents(worldContent)
     if (!loaded) throw new Error("Failed to load")
 
+    domain.loadedFileName = worldFileName
+
+    domain.world.newSession()
+    domain.sessionCommandList.clear()
+    domain.worldCommandList.clear()
+    domain.editedRule = null
+    domain.lastSingleRuleIndex = 0
     transcript.length = 0
     transcript.push({text: "Starting: " + worldFileName, color: Color.clGreen})
-    fakeDomain.loadedFileName = worldFileName
-
-    fakeDomain.world.newSession()
-    fakeDomain.sessionCommandList.clear()
-    fakeDomain.worldCommandList.clear()
-    fakeDomain.editedRule = null
-    fakeDomain.lastSingleRuleIndex = 0
-
+    /*
+    if (domain.world.rules.length) {
+        domain.transcript.push({text: "> " + domain.world.rules[0].command.phrase, color: Color.clBlue})
+        domain.transcript.push({text: domain.world.rules[0].reply, color: Color.clBlack})
+    }
+    */
     m.mount(document.body, MyComponent)
 }
 
