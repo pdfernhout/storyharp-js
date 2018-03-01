@@ -1,5 +1,6 @@
 import * as m from "mithril"
-import { TSRuleField } from "./TSRule"
+import { TSVariable } from "./TSVariable"
+import { TSRuleField, TSRule } from "./TSRule"
 import { Glyph } from "./VariablesView"
 
 export class RuleBrowserView {
@@ -10,22 +11,27 @@ export class RuleBrowserView {
         this.domain = (<any>vnode.attrs).domain
     }
 
-    /*
-    loadFirstListBox(): void {
-        let i: int
-        let variable: TSVariable
-        
-        this.FirstListBox.Clear()
-        this.firstListBoxLabel.Caption = "All " + lowercase(usworld.TSRule.headerForField(this.organizeByField))
-        if (this.firstListBoxLabel.Caption[len(this.firstListBoxLabel.Caption)] !== "s") {
-            this.firstListBoxLabel.Caption = this.firstListBoxLabel.Caption + "s"
+    viewFirstListBox() {
+        let label = TSRule.headerForField(this.browseBy).toLowerCase()
+        if (!label.endsWith("s")) {
+            label += "s"
         }
-        for (i = 0; i <= usdomain.domain.world.variables.Count - 1; i++) {
-            variable = usdomain.domain.world.variables[i]
-            if (variable.hasUseagesForField(this.organizeByField)) {
-                this.FirstListBox.Items.AddObject(variable.phrase, variable)
-            }
-        }
+
+        return m("div",
+            m("div",
+                {
+                    onclick: () => this.firstListBoxImageClick(),
+                },
+                this.glyphForBrowseBy(),
+                " All ",
+                label
+            ),
+            this.domain.world.variables
+                .filter((variable: TSVariable) => variable.hasUseagesForField(this.browseBy))
+                .map((variable: TSVariable) => variable.phrase)
+                .sort()
+                .map((phrase: string) => m("div", phrase))
+        )
     }
     
     loadSecondListBox(): void {
@@ -60,7 +66,8 @@ export class RuleBrowserView {
             }
         }
     }
-    
+
+    /*
     FirstListBoxDrawItem(Control: TWinControl, index: int, Rect: TRect, State: TOwnerDrawState): void {
         let i: int
         let focused: boolean
@@ -307,27 +314,7 @@ export class RuleBrowserView {
                 {
                 },
                 "PanelLists",
-                m("div.PanelFirstList.TPanel",
-                    {
-                    },
-                    m("Group.Group.g00000002",
-                        m("firstListBoxImage.TImage",
-                            {
-                                onclick: () => this.firstListBoxImageClick(),
-                            },
-                            this.glyphForBrowseBy()
-                        ),
-                        m("div.firstListBoxLabel.TLabel",
-                            {
-                            },
-                            "Contexts",
-                        ),
-                    ),
-                    m("TListBox.FirstListBox.TListBox",
-                        {
-                        },
-                    ),
-                ),
+                this.viewFirstListBox(),
                 m("div.SplitterLists.TSplitter",
                     {
                     },
