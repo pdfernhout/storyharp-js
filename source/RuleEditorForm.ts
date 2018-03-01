@@ -17,15 +17,17 @@ type WizardName = "context" | "command" | "link"
 
 export class RuleEditorForm {
     domain: any
-    currentView: ViewName = "table"
-    currentWizard: WizardName = "context"
 
     constructor(vnode: m.Vnode) {
         this.domain = (<any>vnode.attrs).domain
     }
 
+    setCurrentWizard(wizardName: WizardName) {
+        this.domain.currentEditorWizard = wizardName
+    }
+
     viewWizards() {
-        const currentWizard = this.currentWizard
+        const currentWizard = this.domain.currentEditorWizard
         const domain = this.domain
 
         function wizardButtonWithHighlight(selection: WizardName) {
@@ -35,9 +37,9 @@ export class RuleEditorForm {
         return m("div",
             m("div.mt2",
                 "Wizard:",
-                m(wizardButtonWithHighlight("context"), { onclick: () => this.currentWizard = "context" }, "Context"),
-                m(wizardButtonWithHighlight("command"),  { onclick: () => this.currentWizard = "command" }, "Command"),
-                m(wizardButtonWithHighlight("link"),  { onclick: () => this.currentWizard = "link" }, "Link"),
+                m(wizardButtonWithHighlight("context"), { onclick: () => this.setCurrentWizard("context") }, "Context"),
+                m(wizardButtonWithHighlight("command"),  { onclick: () => this.setCurrentWizard("command") }, "Command"),
+                m(wizardButtonWithHighlight("link"),  { onclick: () => this.setCurrentWizard("link") }, "Link"),
             ),
             m("div.mt2",
                 currentWizard === "context" ? m(ContextWizardView, <any>{domain: domain}) : [],
@@ -47,8 +49,12 @@ export class RuleEditorForm {
         )
     }
 
+    setCurrentView(viewName: ViewName) {
+        this.domain.currentEditorView = viewName
+    }
+
     view() {
-        const currentView = this.currentView
+        const currentView = this.domain.currentEditorView
         const domain = this.domain
 
         function buttonWithHighlight(selection: ViewName) {
@@ -59,10 +65,10 @@ export class RuleEditorForm {
             { style: "height: calc(100% - 5rem)" },
             m("div.flex-none",
                 m("span.b", "Rule Editor"),
-                m(buttonWithHighlight("table"), { onclick: () => this.currentView = "table" }, "Table"),
-                m(buttonWithHighlight("map"),  { onclick: () => this.currentView = "map" }, "Map"),
-                m(buttonWithHighlight("browser"),  { onclick: () => this.currentView = "browser" }, "Browser"),
-                m(buttonWithHighlight("wizards"),  { onclick: () => this.currentView = "wizards" }, "Wizards"),
+                m(buttonWithHighlight("table"), { onclick: () => this.setCurrentView("table") }, "Table"),
+                m(buttonWithHighlight("map"),  { onclick: () => this.setCurrentView("map") }, "Map"),
+                m(buttonWithHighlight("browser"),  { onclick: () => this.setCurrentView("browser") }, "Browser"),
+                m(buttonWithHighlight("wizards"),  { onclick: () => this.setCurrentView("wizards") }, "Wizards"),
                 m("button.ml4.w3", {
                     disabled: !domain.worldCommandList.isUndoEnabled(),
                     onclick: () => domain.worldCommandList.undoLast(),

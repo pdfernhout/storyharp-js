@@ -13,6 +13,7 @@ export class RuleBrowserView {
 
     constructor(vnode: m.Vnode) {
         this.domain = (<any>vnode.attrs).domain
+        this.domain.setOrganizeByField = this.setOrganizeByField.bind(this)
         this.setOrganizeByField(TSRuleField.kRuleContext)
     }
 
@@ -182,11 +183,6 @@ export class RuleBrowserView {
         return result
     }
     
-    SpeedButtonClick(Sender: TObject): void {
-        this.commitChangesToRule()
-        this.switchToPage(this.TabSheetBrowse)
-        this.setOrganizeByField((Sender).tag)
-    }
     */
 
     firstListBoxImageClick() {
@@ -230,13 +226,12 @@ export class RuleBrowserView {
         this.browseBy = newValue
         
         if (this.domain.editedRule !== null) {
-            const variable: TSVariable = this.domain.editedRule.variableForFieldWithSelections(
+            this.selectedVariable = this.domain.editedRule.variableForFieldWithSelections(
                 this.browseBy,
                 // TODO -- maybe move back to lists for requirments and changes?
                 0, /* TODO: this.RequirementsListBox.ItemIndex, */
                 0, /* TODO: this.ChangesListBox.ItemIndex */
             )
-            this.selectedVariable = variable
         } else {
             this.selectedVariable = null
         }

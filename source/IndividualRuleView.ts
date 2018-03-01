@@ -217,6 +217,11 @@ export class IndividualRuleView {
         this.domain.editedRule = rule
     }
 
+    SpeedButtonClick(field: TSRuleField) {
+        this.domain.currentEditorView = "browser"
+        this.domain.setOrganizeByField(field)
+    }
+
     view() {
         const world: TWorld = this.domain.world
         const worldCommandList: TSCommandList = this.domain.worldCommandList
@@ -226,8 +231,6 @@ export class IndividualRuleView {
         const ruleEditorForm: any = this.domain.ruleEditorForm
         const changeLogForm: any = this.domain.changeLogForm
         const consoleForm: any = this.domain.consoleForm
-        
-        function SpeedButtonClick() { console.log("SpeedButtonClick") }
 
         function InsertMusicButtonClick() { console.log("InsertMusicButtonClick") }
 
@@ -337,7 +340,7 @@ export class IndividualRuleView {
                         m(".Context.mt1",
                             m("button.ContextSpeedButton.TSpeedButton.w4.mr1",
                                 {
-                                    onclick: SpeedButtonClick,
+                                    onclick: () => this.SpeedButtonClick(TSRuleField.kRuleContext),
                                     title: "Browse all rules with this context",
                                 },
                                 "Context",
@@ -353,7 +356,7 @@ export class IndividualRuleView {
                         m(".Requirements.mt1",
                             m("button.RequirementsSpeedButton.TSpeedButton.w4.mr1",
                                 {
-                                    onclick: SpeedButtonClick,
+                                    onclick: () => this.SpeedButtonClick(TSRuleField.kRuleRequirements),
                                     title: "Browse all rules with the selected requirement",
                                 },
                                 "Requirements",
@@ -375,7 +378,7 @@ export class IndividualRuleView {
                         m(".Command.mt1",
                             m("button.CommandSpeedButton.TSpeedButton.w4.mr1",
                                 {
-                                    onclick: SpeedButtonClick,
+                                    onclick: () => this.SpeedButtonClick(TSRuleField.kRuleCommand),
                                     title: "Browse all rules with this command",
                                 },
                                 "Command",
@@ -415,7 +418,7 @@ export class IndividualRuleView {
                         m(".Move.mt1",
                             m("button.MoveSpeedButton.TSpeedButton.w4.mr1",
                                 {
-                                    onclick: SpeedButtonClick,
+                                    onclick: () => this.SpeedButtonClick(TSRuleField.kRuleMove),
                                     title: "Browse all rules with this move",
                                 },
                                 "Move",
@@ -432,7 +435,7 @@ export class IndividualRuleView {
                     m(".Changes.mt1",
                         m("button.ChangesSpeedButton.TSpeedButton.w4.mr1",
                             {
-                                onclick: SpeedButtonClick,
+                                onclick: () => this.SpeedButtonClick(TSRuleField.kRuleChanges),
                                 title: "Browse all rules with the selected change",
                             },
                             "Changes",

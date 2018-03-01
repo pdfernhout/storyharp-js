@@ -7,6 +7,7 @@ import { viewConsoleForm } from "../source/ConsoleForm"
 import { TWorld } from "../source/TWorld"
 import { TSCommandList } from "../source/TSCommandList"
 import { Color } from "../source/common"
+import { TSRuleField } from "../source/TSRule"
 
 const world = new TWorld()
 const sessionCommandList = new TSCommandList(world)
@@ -68,7 +69,11 @@ const fakeDomain = {
     loadedFileName: "",
     loadTestWorld: null,
     editedRule: null,
-    lastSingleRuleIndex: 0
+    lastSingleRuleIndex: 0,
+    currentEditorView:"table",
+    currentEditorWizard: "context",
+    // set by the browser as callback
+    setOrganizeByField: (newValue: TSRuleField) => null,
 }
 
 const MyComponent = { view: () => viewConsoleForm(fakeDomain) }
