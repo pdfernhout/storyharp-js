@@ -8,6 +8,7 @@ export class RuleBrowserView {
     domain: any
     browseBy = TSRuleField.kRuleContext
     selectedVariable: TSVariable | null = null
+    selectedRule: TSRule | null
 
     constructor(vnode: m.Vnode) {
         this.domain = (<any>vnode.attrs).domain
@@ -33,10 +34,14 @@ export class RuleBrowserView {
                 this.domain.world.variables
                     .filter((variable: TSVariable) => variable.hasUseagesForField(this.browseBy))
                     .sort((a: TSVariable, b: TSVariable) => a.phrase.localeCompare(b.phrase)) 
-                    .map((variable: TSVariable) => m("div.ma1" + (variable === this.selectedVariable ? ".ba" : ""), 
+                    .map((variable: TSVariable) => m("div.ma1" + (variable === this.selectedVariable ? ".bg-light-blue" : ""), 
                         {
                             onclick: () => this.selectedVariable = variable
                         },
+                        // TODO: maybe? iterating over all rules in second list, then:
+                        // focused = (rule === this.rule) && rule.selected
+                        // not sure how this changes the look: 
+                        // setCanvasColorsForSelection(listBox.Canvas, selected, focused, false)
                         variable.phrase
                     ))
             )
@@ -77,7 +82,13 @@ export class RuleBrowserView {
         return m("div",
             caption,
             m("div.ba.pa1",
-                rules.map(rule => m("div.ma1",
+                rules.map(rule => m("div.ma1" + (rule === this.selectedRule ? ".bg-light-blue" : ""),
+                    {
+                        onclick: () => {
+                            this.selectedRule = rule
+                            this.domain.editedRule = rule
+                        }
+                    },
                     rule.variableForField(displayFieldType).phrase
                 ))
             )
@@ -85,80 +96,6 @@ export class RuleBrowserView {
     }
 
     /*
-    FirstListBoxDrawItem(Control: TWinControl, index: int, Rect: TRect, State: TOwnerDrawState): void {
-        let i: int
-        let focused: boolean
-        let rule: TSRule
-        let variable: TSVariable
-        
-        if ((index < 0) || (index > this.FirstListBox.Items.Count - 1)) {
-            return
-        }
-        focused = false
-        if (delphi_compatability.TOwnerDrawStateType.odSelected in State) {
-            for (i = 0; i <= this.SecondListBox.Items.Count - 1; i++) {
-                rule = UNRESOLVED.TObject(this.SecondListBox.Items.Objects[i])
-                focused = (rule === this.rule) && rule.selected
-                if (focused) {
-                    break
-                }
-            }
-        }
-        variable = UNRESOLVED.TObject(this.FirstListBox.Items.Objects[index])
-        if (variable === null) {
-            return
-        }
-        this.drawBrowserListBoxItem(this.FirstListBox, variable.phrase, index, Rect, delphi_compatability.TOwnerDrawStateType.odSelected in State, focused)
-    }
-    
-    SecondListBoxDrawItem(Control: TWinControl, index: int, Rect: TRect, State: TOwnerDrawState): void {
-        let selected: boolean
-        let focused: boolean
-        let rule: TSRule
-        let displayFieldType: int
-        let displayString: string
-        
-        if ((index < 0) || (index > this.SecondListBox.Items.Count - 1)) {
-            return
-        }
-        rule = UNRESOLVED.TObject(this.SecondListBox.Items.Objects[index])
-        selected = rule.selected
-        focused = rule === this.rule
-        if (this.organizeByField === TSRuleField.kRuleCommand) {
-            displayFieldType = TSRuleField.kRuleContext
-        } else {
-            displayFieldType = TSRuleField.kRuleCommand
-        }
-        displayString = rule.variableForField(displayFieldType).phrase
-        this.drawBrowserListBoxItem(this.SecondListBox, displayString, index, Rect, selected, focused)
-    }
-    
-    drawBrowserListBoxItem(Control: TWinControl, displayString: string, index: int, Rect: TRect, selected: boolean, focused: boolean): void {
-        let listBox: TListBox
-        
-        if (delphi_compatability.Application.terminated) {
-            //cText: array[0..255] of Char;
-            return
-        }
-        listBox = Control
-        if (listBox === null) {
-            return
-        }
-        if ((index < 0) || (index > listBox.Items.Count - 1)) {
-            return
-        }
-        setCanvasColorsForSelection(listBox.Canvas, selected, focused, false)
-        listBox.Canvas.FillRect(Rect)
-        //strPCopy(cText, displayString);
-        // margin for text 
-        Rect.left = Rect.left + 2
-        UNRESOLVED.DrawText(listBox.Canvas.Handle, displayString, len(displayString), Rect, delphi_compatability.DT_LEFT)
-    }
-    
-    FirstListBoxMouseDown(Sender: TObject, Button: TMouseButton, Shift: TShiftState, X: int, Y: int): void {
-        this.FirstListBox.Invalidate()
-        this.loadSecondListBox()
-    }
     
     SecondListBoxMouseDown(Sender: TObject, Button: TMouseButton, Shift: TShiftState, X: int, Y: int): void {
         let rule: TSRule
