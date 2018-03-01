@@ -12,6 +12,19 @@ interface ButtonState {
     command: boolean;
 }
 
+export enum Glyph {
+    absent = "◻",
+    present =  "⊞",
+
+    context = "⌂",
+    move = "⛹",
+    requirements = "🔒",
+    changes = "⚿",
+    command = "！",
+
+    spacer = " ",
+}
+
 export class VariablesView {
     domain: any
 
@@ -30,8 +43,9 @@ export class VariablesView {
         this.domain = (<any>vnode.attrs).domain
     }
 
-    makeToggleButton(buttonName: keyof ButtonState, glyph: string) {
+    makeToggleButton(buttonName: keyof ButtonState) {
         const state = this.buttonState[buttonName]
+        const glyph = Glyph[buttonName]
         return m("button.ml1" + (state ? ".bg-light-blue" : ""),
             { onclick: () => this.buttonState[buttonName] = !this.buttonState[buttonName] },
             glyph
@@ -83,12 +97,12 @@ export class VariablesView {
             ),
             m("div",
                 m("span.ml1", "Filter:"),
-                this.makeToggleButton("present", "⊞"),
-                this.makeToggleButton("context", "⌂"),
-                this.makeToggleButton("move", "⛹"),
-                this.makeToggleButton("requirements", "🔒"),
-                this.makeToggleButton("changes", "⚿"),
-                this.makeToggleButton("command", "！"),
+                this.makeToggleButton("present"),
+                this.makeToggleButton("context"),
+                this.makeToggleButton("move"),
+                this.makeToggleButton("requirements"),
+                this.makeToggleButton("changes"),
+                this.makeToggleButton("command"),
             ),
             m("div.overflow-auto.ma2",
                 {
@@ -101,14 +115,14 @@ export class VariablesView {
                     m("div.nowrap",
                         m("span.blue.w1", {
                             onclick: () => sessionCommandList.toggleVariable(this.domain.consoleForm, variable)
-                        }, variable.getState() === TSVariableState.kPresent ? "⊞" : "◻"),
+                        }, variable.getState() === TSVariableState.kPresent ? Glyph.present : Glyph.absent),
                         m("span.ml1.mw5.truncate.dib", { title: variable.phrase }, variable.phrase),
                         m("div.nowrap.ml1.fr",
-                            m("span.blue.w1", variable.contextUseages > 0 ? "⌂" : " "),
-                            m("span.blue.w1", variable.moveUseages > 0 ? "⛹" : " "),
-                            m("span.blue.w1", variable.requirementsUseages > 0 ? "🔒" : " "),
-                            m("span.blue.w1", variable.changesUseages > 0 ? "⚿" : " "),
-                            m("span.blue.w1", variable.commandUseages > 0 ? "！" : " "),
+                            m("span.blue.w1", variable.contextUseages > 0 ? Glyph.context : Glyph.spacer),
+                            m("span.blue.w1", variable.moveUseages > 0 ? Glyph.move : Glyph.spacer),
+                            m("span.blue.w1", variable.requirementsUseages > 0 ? Glyph.requirements : Glyph.spacer),
+                            m("span.blue.w1", variable.changesUseages > 0 ? Glyph.changes : Glyph.spacer),
+                            m("span.blue.w1", variable.commandUseages > 0 ? Glyph.command: Glyph.spacer),
                         )
                     )
                 )
