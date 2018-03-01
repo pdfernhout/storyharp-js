@@ -68,7 +68,6 @@ function viewChoices(domain: any) {
     Promise.resolve().then(scrollIntoView)
     return m("div", 
         m("hr"),
-        m("div", "You can choose from:"),
         commands.sort().map(command => m("div.ma2.dark-blue.hover-blue", {
             onclick: () => doCommand(domain, command),
         }, command)),
