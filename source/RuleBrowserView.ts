@@ -1,4 +1,5 @@
 import * as m from "mithril"
+import { int } from "./common"
 import { TSVariable } from "./TSVariable"
 import { TSRuleField, TSRule } from "./TSRule"
 import { Glyph } from "./VariablesView"
@@ -6,9 +7,11 @@ import { Glyph } from "./VariablesView"
 export class RuleBrowserView {
     domain: any
     browseBy = TSRuleField.kRuleContext
+    selectedVariable: TSVariable | null = null
 
     constructor(vnode: m.Vnode) {
         this.domain = (<any>vnode.attrs).domain
+        this.setOrganizeByField(TSRuleField.kRuleContext)
     }
 
     viewFirstListBox() {
@@ -28,43 +31,53 @@ export class RuleBrowserView {
             ),
             this.domain.world.variables
                 .filter((variable: TSVariable) => variable.hasUseagesForField(this.browseBy))
-                .map((variable: TSVariable) => variable.phrase)
-                .sort()
-                .map((phrase: string) => m("div", phrase))
+                .sort((a: TSVariable, b: TSVariable) => a.phrase.localeCompare(b.phrase)) 
+                .map((variable: TSVariable) => m("div" + (variable === this.selectedVariable ? ".ba" : ""), 
+                    {
+                        onclick: () => this.selectedVariable = variable
+                    },
+                    variable.phrase
+                ))
         )
     }
     
-    loadSecondListBox(): void {
-        let i: int
-        let variable: TSVariable
-        let rule: TSRule
+    viewSecondListBox() {
         let displayFieldType: int
-        let selectedItemString: string
+        let glyph: string
         
-        this.SecondListBox.Clear()
-        if (this.organizeByField === TSRuleField.kRuleCommand) {
+        if (this.browseBy === TSRuleField.kRuleCommand) {
             displayFieldType = TSRuleField.kRuleContext
-            this.SecondListBoxImage.Picture.Bitmap = this.ContextSpeedButton.Glyph
+            glyph = Glyph.context
         } else {
             displayFieldType = TSRuleField.kRuleCommand
-            this.SecondListBoxImage.Picture.Bitmap = this.CommandSpeedButton.Glyph
+            glyph = Glyph.command
         }
-        selectedItemString = lowercase(usworld.TSRule.headerForField(this.organizeByField))
-        if (selectedItemString[len(selectedItemString)] === "s") {
+
+        let selectedItemString = TSRule.headerForField(this.browseBy).toLowerCase()
+        if (selectedItemString.endsWith("s")) {
             // remove plural 's' for singular use
-            selectedItemString = UNRESOLVED.copy(selectedItemString, 1, len(selectedItemString) - 1)
+            selectedItemString = selectedItemString.substring(0, selectedItemString.length - 1)
         }
-        this.SecondListBoxLabel.Caption = usworld.TSRule.headerForField(displayFieldType) + "s with selected " + selectedItemString
-        if (this.FirstListBox.ItemIndex < 0) {
-            return
-        }
-        variable = UNRESOLVED.TObject(this.FirstListBox.Items.Objects[this.FirstListBox.ItemIndex])
-        for (i = 0; i <= usdomain.domain.world.rules.Count - 1; i++) {
-            rule = usdomain.domain.world.rules[i]
-            if (rule.usesVariableFor(variable, this.organizeByField)) {
-                this.SecondListBox.Items.AddObject(rule.variableForField(displayFieldType).phrase, rule)
+
+        const caption = TSRule.headerForField(displayFieldType) + "s with selected " + selectedItemString
+
+        let rules: TSRule[] = []
+
+        if (this.selectedVariable) {
+            for (let i = 0; i < this.domain.world.rules.length; i++) {
+                const rule: TSRule = this.domain.world.rules[i]
+                if (rule.usesVariableFor(this.selectedVariable, this.browseBy)) {
+                    rules.push(rule)
+                }
             }
         }
+
+        return m("div",
+            caption,
+            rules.map(rule => m("div",
+                rule.variableForField(displayFieldType).phrase
+            ))
+        )
     }
 
     /*
@@ -276,13 +289,19 @@ export class RuleBrowserView {
 
         // if organizeByField <> newValue then
         this.browseBy = newValue
+        
+        if (this.domain.editedRule !== null) {
+            const variable: TSVariable = this.domain.editedRule.variableForFieldWithSelections(
+                this.browseBy,
+                0, /* TODO: this.RequirementsListBox.ItemIndex, */
+                0, /* TODO: this.ChangesListBox.ItemIndex */
+            )
+            this.selectedVariable = variable
+        } else {
+            this.selectedVariable = null
+        }
 
         /*
-        this.loadFirstListBox()
-        if (this.rule !== null) {
-            const variable: TSVariable = this.rule.variableForFieldWithSelections(this.organizeByField, this.RequirementsListBox.ItemIndex, this.ChangesListBox.ItemIndex)
-            this.FirstListBox.ItemIndex = this.FirstListBox.Items.IndexOfObject(variable)
-        }
         this.loadSecondListBox()
         this.SecondListBox.ItemIndex = this.SecondListBox.Items.IndexOfObject(this.rule)
         */
@@ -319,25 +338,7 @@ export class RuleBrowserView {
                     {
                     },
                 ),
-                m("div.PanelSecondList.TPanel",
-                    {
-                    },
-                    m("Group.Group.g00000002",
-                        m("img.SecondListBoxImage.TImage",
-                            {
-                            },
-                        ),
-                        m("div.SecondListBoxLabel.TLabel",
-                            {
-                            },
-                            "Commands",
-                        ),
-                    ),
-                    m("TListBox.SecondListBox.TListBox",
-                        {
-                        },
-                    ),
-                ),
+                this.viewSecondListBox(),
             ),
         )
     }
