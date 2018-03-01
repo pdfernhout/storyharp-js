@@ -29,15 +29,17 @@ export class RuleBrowserView {
                 " All ",
                 label
             ),
-            this.domain.world.variables
-                .filter((variable: TSVariable) => variable.hasUseagesForField(this.browseBy))
-                .sort((a: TSVariable, b: TSVariable) => a.phrase.localeCompare(b.phrase)) 
-                .map((variable: TSVariable) => m("div" + (variable === this.selectedVariable ? ".ba" : ""), 
-                    {
-                        onclick: () => this.selectedVariable = variable
-                    },
-                    variable.phrase
-                ))
+            m("div.ba.pa1",
+                this.domain.world.variables
+                    .filter((variable: TSVariable) => variable.hasUseagesForField(this.browseBy))
+                    .sort((a: TSVariable, b: TSVariable) => a.phrase.localeCompare(b.phrase)) 
+                    .map((variable: TSVariable) => m("div.ma1" + (variable === this.selectedVariable ? ".ba" : ""), 
+                        {
+                            onclick: () => this.selectedVariable = variable
+                        },
+                        variable.phrase
+                    ))
+            )
         )
     }
     
@@ -74,9 +76,11 @@ export class RuleBrowserView {
 
         return m("div",
             caption,
-            rules.map(rule => m("div",
-                rule.variableForField(displayFieldType).phrase
-            ))
+            m("div.ba.pa1",
+                rules.map(rule => m("div.ma1",
+                    rule.variableForField(displayFieldType).phrase
+                ))
+            )
         )
     }
 
@@ -325,19 +329,17 @@ export class RuleBrowserView {
     }
 
     view() {
-        return m("TTabSheet.TabSheetBrowse.TTabSheet",
-            {
-            },
-            "Browser",
-            m("div.PanelLists.TPanel",
+        return m("div.flex.flex-row",
+            m("div.w-30",
+                this.viewFirstListBox(),
+            ),
+            /*
+            m("div.SplitterLists.TSplitter",
                 {
                 },
-                "PanelLists",
-                this.viewFirstListBox(),
-                m("div.SplitterLists.TSplitter",
-                    {
-                    },
-                ),
+            ),
+            */
+            m("div.w-70",
                 this.viewSecondListBox(),
             ),
         )
