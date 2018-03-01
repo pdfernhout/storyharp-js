@@ -1,7 +1,10 @@
 import * as m from "mithril"
+import { TSRuleField } from "./TSRule"
+import { Glyph } from "./VariablesView"
 
 export class RuleBrowserView {
     domain: any
+    browseBy = TSRuleField.kRuleContext
 
     constructor(vnode: m.Vnode) {
         this.domain = (<any>vnode.attrs).domain
@@ -33,11 +36,11 @@ export class RuleBrowserView {
         let selectedItemString: string
         
         this.SecondListBox.Clear()
-        if (this.organizeByField === usworld.kRuleCommand) {
-            displayFieldType = usworld.kRuleContext
+        if (this.organizeByField === TSRuleField.kRuleCommand) {
+            displayFieldType = TSRuleField.kRuleContext
             this.SecondListBoxImage.Picture.Bitmap = this.ContextSpeedButton.Glyph
         } else {
-            displayFieldType = usworld.kRuleCommand
+            displayFieldType = TSRuleField.kRuleCommand
             this.SecondListBoxImage.Picture.Bitmap = this.CommandSpeedButton.Glyph
         }
         selectedItemString = lowercase(usworld.TSRule.headerForField(this.organizeByField))
@@ -97,10 +100,10 @@ export class RuleBrowserView {
         rule = UNRESOLVED.TObject(this.SecondListBox.Items.Objects[index])
         selected = rule.selected
         focused = rule === this.rule
-        if (this.organizeByField === usworld.kRuleCommand) {
-            displayFieldType = usworld.kRuleContext
+        if (this.organizeByField === TSRuleField.kRuleCommand) {
+            displayFieldType = TSRuleField.kRuleContext
         } else {
-            displayFieldType = usworld.kRuleCommand
+            displayFieldType = TSRuleField.kRuleCommand
         }
         displayString = rule.variableForField(displayFieldType).phrase
         this.drawBrowserListBoxItem(this.SecondListBox, displayString, index, Rect, selected, focused)
@@ -189,63 +192,6 @@ export class RuleBrowserView {
         this.SecondListBox.Invalidate()
     }
     
-    setOrganizeByField(newValue: int): void {
-        let variable: TSVariable
-        
-        if ((newValue < 0) || (newValue > usworld.kLastRuleField)) {
-            return
-        }
-        usdomain.domain.options.browseBy = newValue
-        this.MenuBrowseByContext.checked = newValue === usworld.kRuleContext
-        this.MenuBrowseByCommand.checked = newValue === usworld.kRuleCommand
-        this.MenuBrowseByMove.checked = newValue === usworld.kRuleMove
-        this.MenuBrowseByRequirements.checked = newValue === usworld.kRuleRequirements
-        this.MenuBrowseByChanges.checked = newValue === usworld.kRuleChanges
-        if (newValue === usworld.kRuleContext) {
-            this.firstListBoxImage.Picture.Bitmap = usconsoleform.ConsoleForm.ContextButton.Glyph
-        }
-        if (newValue === usworld.kRuleCommand) {
-            this.firstListBoxImage.Picture.Bitmap = usconsoleform.ConsoleForm.CommandButton.Glyph
-        }
-        if (newValue === usworld.kRuleMove) {
-            this.firstListBoxImage.Picture.Bitmap = usconsoleform.ConsoleForm.MoveButton.Glyph
-        }
-        if (newValue === usworld.kRuleRequirements) {
-            this.firstListBoxImage.Picture.Bitmap = usconsoleform.ConsoleForm.RequirementsButton.Glyph
-        }
-        if (newValue === usworld.kRuleChanges) {
-            this.firstListBoxImage.Picture.Bitmap = usconsoleform.ConsoleForm.ChangesButton.Glyph
-        }
-        // if organizeByField <> newValue then
-        this.organizeByField = newValue
-        this.loadFirstListBox()
-        if (this.rule !== null) {
-            variable = this.rule.variableForFieldWithSelections(this.organizeByField, this.RequirementsListBox.ItemIndex, this.ChangesListBox.ItemIndex)
-            this.FirstListBox.ItemIndex = this.FirstListBox.Items.IndexOfObject(variable)
-        }
-        this.loadSecondListBox()
-        this.SecondListBox.ItemIndex = this.SecondListBox.Items.IndexOfObject(this.rule)
-    }
-    
-    firstListBoxImageClick(Sender: TObject): void {
-        switch (this.organizeByField) {
-            case usworld.kRuleContext:
-                this.setOrganizeByField(usworld.kRuleCommand)
-                break
-            case usworld.kRuleCommand:
-                this.setOrganizeByField(usworld.kRuleMove)
-                break
-            case usworld.kRuleMove:
-                this.setOrganizeByField(usworld.kRuleRequirements)
-                break
-            case usworld.kRuleRequirements:
-                this.setOrganizeByField(usworld.kRuleChanges)
-                break
-            case usworld.kRuleChanges:
-                this.setOrganizeByField(usworld.kRuleContext)
-                break
-    }
-    
     fillListBox(listBox: TListBox, list: TList): void {
         let i: int
         let wrapper: TSDesiredStateVariableWrapper
@@ -285,7 +231,71 @@ export class RuleBrowserView {
     */
 
     firstListBoxImageClick() {
-        console.log("firstListBoxImageClick")
+        switch (this.browseBy) {
+            // A circle of changes
+            case TSRuleField.kRuleContext:
+                this.setOrganizeByField(TSRuleField.kRuleCommand)
+                break
+            case TSRuleField.kRuleCommand:
+                this.setOrganizeByField(TSRuleField.kRuleMove)
+                break
+            case TSRuleField.kRuleMove:
+                this.setOrganizeByField(TSRuleField.kRuleRequirements)
+                break
+            case TSRuleField.kRuleRequirements:
+                this.setOrganizeByField(TSRuleField.kRuleChanges)
+                break
+            case TSRuleField.kRuleChanges:
+                this.setOrganizeByField(TSRuleField.kRuleContext)
+                break
+            default:
+                throw new Error("Unexpected default: " + this.browseBy)
+        }
+    }
+
+    setOrganizeByField(newValue: TSRuleField): void {
+        if ((newValue < 0) || (newValue > TSRuleField.kLastRuleField)) {
+            throw new Error("unexpectd value for organizeByField: " + newValue)
+        }
+
+        /*
+        usdomain.domain.options.browseBy = newValue
+        this.MenuBrowseByContext.checked = newValue === TSRuleField.kRuleContext
+        this.MenuBrowseByCommand.checked = newValue === TSRuleField.kRuleCommand
+        this.MenuBrowseByMove.checked = newValue === TSRuleField.kRuleMove
+        this.MenuBrowseByRequirements.checked = newValue === TSRuleField.kRuleRequirements
+        this.MenuBrowseByChanges.checked = newValue === TSRuleField.kRuleChanges
+        */
+
+        // if organizeByField <> newValue then
+        this.browseBy = newValue
+
+        /*
+        this.loadFirstListBox()
+        if (this.rule !== null) {
+            const variable: TSVariable = this.rule.variableForFieldWithSelections(this.organizeByField, this.RequirementsListBox.ItemIndex, this.ChangesListBox.ItemIndex)
+            this.FirstListBox.ItemIndex = this.FirstListBox.Items.IndexOfObject(variable)
+        }
+        this.loadSecondListBox()
+        this.SecondListBox.ItemIndex = this.SecondListBox.Items.IndexOfObject(this.rule)
+        */
+    }
+
+    glyphForBrowseBy() {
+        switch(this.browseBy) {
+            case TSRuleField.kRuleContext:
+                return Glyph.context
+            case TSRuleField.kRuleCommand:
+                return Glyph.command
+            case TSRuleField.kRuleMove:
+                return Glyph.move
+            case TSRuleField.kRuleRequirements:
+                return Glyph.requirements
+            case TSRuleField.kRuleChanges:
+                return Glyph.changes
+            default:
+                throw new Error("unexpected case")
+        }
     }
 
     view() {
@@ -301,10 +311,11 @@ export class RuleBrowserView {
                     {
                     },
                     m("Group.Group.g00000002",
-                        m("img.firstListBoxImage.TImage",
+                        m("firstListBoxImage.TImage",
                             {
                                 onclick: () => this.firstListBoxImageClick(),
                             },
+                            this.glyphForBrowseBy()
                         ),
                         m("div.firstListBoxLabel.TLabel",
                             {
