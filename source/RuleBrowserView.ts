@@ -23,7 +23,7 @@ export class RuleBrowserView {
             label += "s"
         }
 
-        return m("div",
+        return m("div.h-100.overflow-hidden",
             m("div",
                 {
                     onclick: () => this.firstListBoxImageClick(),
@@ -32,7 +32,7 @@ export class RuleBrowserView {
                 " All ",
                 label
             ),
-            m("div.ba.pa1",
+            m("div.ba.pa1.h-100.overflow-auto",
                 this.domain.world.variables
                     .filter((variable: TSVariable) => variable.hasUseagesForField(this.browseBy))
                     .sort((a: TSVariable, b: TSVariable) => a.phrase.localeCompare(b.phrase)) 
@@ -93,9 +93,9 @@ export class RuleBrowserView {
 
         this.ruleSubset = rules
 
-        return m("div",
+        return m("div.h-100.overflow-hidden",
             caption,
-            m("div.ba.pa1",
+            m("div.ba.pa1.h-100.overflow-auto",
                 rules.map((rule, index) => m("div" + this.styleForSelected(rule),
                     {
                         style: "user-select: none",
@@ -257,7 +257,7 @@ export class RuleBrowserView {
     }
 
     view() {
-        return m(".RuleBrowserView.div.flex.flex-row",
+        return m(".RuleBrowserView.div.flex.flex-row.h-100.overflow-hidden",
             m("div.w-30",
                 this.viewFirstListBox(),
             ),
