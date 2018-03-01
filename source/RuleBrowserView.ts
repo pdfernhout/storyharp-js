@@ -257,7 +257,7 @@ export class RuleBrowserView {
     }
 
     view() {
-        return m("div.flex.flex-row",
+        return m(".RuleBrowserView.div.flex.flex-row",
             m("div.w-30",
                 this.viewFirstListBox(),
             ),

@@ -8,6 +8,6 @@ export class CommandWizardView {
     }
 
     view() {
-        return m("div", "Unfinished CommandWizardView")
+        return m(".CommandWizardView", "Unfinished CommandWizardView")
     }
 }

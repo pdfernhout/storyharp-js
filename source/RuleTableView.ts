@@ -61,7 +61,7 @@ export class RuleTableView {
         function color(rule: TSRule, row: number): string { return rule === editedRule ? ".bg-light-blue" : (row % 2 == 0) ? ".bg-washed-green" : "" }
         function styleForSelected(rule: TSRule): string { return rule.selected ? (rule === editedRule ? ".ba.bw2" : ".ba.bw2") : "" }
 
-        return m("div",
+        return m(".RuleTableView",
             m("table.collapse",
                 m("tr",
                     m("th.w-10", "context"),

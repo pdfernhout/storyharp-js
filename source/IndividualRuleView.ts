@@ -260,7 +260,7 @@ export class IndividualRuleView {
             worldCommandList.ruleFieldChange(ruleEditorForm, changeLogForm, consoleForm, rule, TSRuleField.kRuleChanges, event.target.value)
         }
 
-        return m("div.IndividualRuleView.ba.bg-light-gray.w-100.pa1",
+        return m(".IndividualRuleView.ba.bg-light-gray.w-100.pa1",
             m("div", {
                 onclick: () => this.expanded = !this.expanded
                 }, "Rule Viewer " + (this.expanded ? "▲" : "▼")

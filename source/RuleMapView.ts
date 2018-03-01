@@ -8,6 +8,6 @@ export class RuleMapView {
     }
 
     view() {
-        return m("div", "Unfinished RuleMapForm")
+        return m(".RuleMapView", "Unfinished RuleMapForm")
     }
 }

@@ -193,7 +193,7 @@ export class ContextWizardView {
     view() {
         function caption(text: string) { return text }
         
-        return m("ContextWizardForm.TContextWizardForm",
+        return m(".ContextWizardView",
             {
             },
             m("button.helpButton.TButton",

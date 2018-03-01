@@ -8,6 +8,6 @@ export class LinkWizardView {
     }
 
     view() {
-        return m("div", "Unfinished LinkWizardView")
+        return m(".LinkWizardView", "Unfinished LinkWizardView")
     }
 }
