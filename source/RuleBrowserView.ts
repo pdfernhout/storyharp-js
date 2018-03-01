@@ -32,7 +32,8 @@ export class RuleBrowserView {
                 " All ",
                 label
             ),
-            m("div.ba.pa1.h-100.overflow-auto",
+            m("div.ba.pa1.overflow-auto",
+                { style: "height: calc(100% - 1rem)" },
                 this.domain.world.variables
                     .filter((variable: TSVariable) => variable.hasUseagesForField(this.browseBy))
                     .sort((a: TSVariable, b: TSVariable) => a.phrase.localeCompare(b.phrase)) 
@@ -94,8 +95,9 @@ export class RuleBrowserView {
         this.ruleSubset = rules
 
         return m("div.h-100.overflow-hidden",
-            caption,
-            m("div.ba.pa1.h-100.overflow-auto",
+            m("div", caption),
+            m("div.ba.pa1.overflow-auto",
+                { style: "height: calc(100% - 1rem)" },
                 rules.map((rule, index) => m("div" + this.styleForSelected(rule),
                     {
                         style: "user-select: none",
@@ -258,7 +260,7 @@ export class RuleBrowserView {
 
     view() {
         return m(".RuleBrowserView.div.flex.flex-row.h-100.overflow-hidden",
-            m("div.w-30",
+            m("div.w-30.h-100.overflow-hidden",
                 this.viewFirstListBox(),
             ),
             /*
@@ -267,7 +269,7 @@ export class RuleBrowserView {
                 },
             ),
             */
-            m("div.w-70",
+            m("div.w-70.h-100.overflow-hidden",
                 this.viewSecondListBox(),
             ),
         )
