@@ -7,7 +7,63 @@ export class RuleBrowserView {
         this.domain = (<any>vnode.attrs).domain
     }
 
+    firstListBoxImageClick() {
+        console.log("firstListBoxImageClick")
+    }
+
     view() {
-        return m("div", "Unfinished RuleBrowserForm")
+        return m("TTabSheet.TabSheetBrowse.TTabSheet",
+            {
+            },
+            "Browser",
+            m("div.PanelLists.TPanel",
+                {
+                },
+                "PanelLists",
+                m("div.PanelFirstList.TPanel",
+                    {
+                    },
+                    m("Group.Group.g00000002",
+                        m("img.firstListBoxImage.TImage",
+                            {
+                                onclick: () => this.firstListBoxImageClick(),
+                            },
+                        ),
+                        m("div.firstListBoxLabel.TLabel",
+                            {
+                            },
+                            "Contexts",
+                        ),
+                    ),
+                    m("TListBox.FirstListBox.TListBox",
+                        {
+                        },
+                    ),
+                ),
+                m("div.SplitterLists.TSplitter",
+                    {
+                    },
+                ),
+                m("div.PanelSecondList.TPanel",
+                    {
+                    },
+                    m("Group.Group.g00000002",
+                        m("img.SecondListBoxImage.TImage",
+                            {
+                            },
+                        ),
+                        m("div.SecondListBoxLabel.TLabel",
+                            {
+                            },
+                            "Commands",
+                        ),
+                    ),
+                    m("TListBox.SecondListBox.TListBox",
+                        {
+                        },
+                    ),
+                ),
+            ),
+        )
     }
 }
