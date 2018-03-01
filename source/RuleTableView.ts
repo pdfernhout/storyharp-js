@@ -57,9 +57,9 @@ export class RuleTableView {
         const editedRule: TSRule = this.domain.editedRule
         let row = 0
 
-        function color(row: number): string { return (row % 2 == 0) ? ".bg-washed-green" : "." }
         function ellipsis(text: string): string { return text.length > 58 ? text.substring(0, 58) + "..." : text }
-        function selected(rule: TSRule): string { return rule.selected ? (rule === editedRule ? ".ba.bw2" : ".ba.bw1") : "" }
+        function color(rule: TSRule, row: number): string { return rule === editedRule ? ".bg-light-blue" : (row % 2 == 0) ? ".bg-washed-green" : "" }
+        function styleForSelected(rule: TSRule): string { return rule.selected ? (rule === editedRule ? ".ba.bw2" : ".ba.bw2") : "" }
 
         return m("div",
             m("table.collapse",
@@ -72,7 +72,7 @@ export class RuleTableView {
                     m("th.w-20", "changes"),
                 ),
                 world.rules.map(rule => 
-                    m("tr" + color(row++) + selected(rule),
+                    m("tr" + color(rule, row++) + styleForSelected(rule),
                         {
                             onclick: (event: any) => this.ruleClicked(event, rule)
                         },
