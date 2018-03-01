@@ -8,7 +8,8 @@ export class RuleBrowserView {
     domain: any
     browseBy = TSRuleField.kRuleContext
     selectedVariable: TSVariable | null = null
-    selectedRule: TSRule | null
+    lastBrowserSingleRuleIndex = 0
+    ruleSubset: TSRule[] = []
 
     constructor(vnode: m.Vnode) {
         this.domain = (<any>vnode.attrs).domain
@@ -34,7 +35,7 @@ export class RuleBrowserView {
                 this.domain.world.variables
                     .filter((variable: TSVariable) => variable.hasUseagesForField(this.browseBy))
                     .sort((a: TSVariable, b: TSVariable) => a.phrase.localeCompare(b.phrase)) 
-                    .map((variable: TSVariable) => m("div.ma1" + (variable === this.selectedVariable ? ".bg-light-blue" : ""), 
+                    .map((variable: TSVariable) => m("div.mt1" + (variable === this.selectedVariable ? ".bg-light-blue" : ""), 
                         {
                             onclick: () => this.selectedVariable = variable
                         },
@@ -48,6 +49,16 @@ export class RuleBrowserView {
         )
     }
     
+    styleForSelected(rule: TSRule): string {
+        return rule.selected 
+            ? (rule === this.domain.editedRule 
+                ? ".ba.bw2.bg-light-blue" 
+                : ".ba.bw2")
+            : (rule === this.domain.editedRule 
+                ? ".ba.bw2.b--white.bg-light-blue" 
+                : ".ba.bw2.b--white")
+    }
+
     viewSecondListBox() {
         let displayFieldType: int
         let glyph: string
@@ -79,15 +90,15 @@ export class RuleBrowserView {
             }
         }
 
+        this.ruleSubset = rules
+
         return m("div",
             caption,
             m("div.ba.pa1",
-                rules.map(rule => m("div.ma1" + (rule === this.selectedRule ? ".bg-light-blue" : ""),
+                rules.map((rule, index) => m("div" + this.styleForSelected(rule),
                     {
-                        onclick: () => {
-                            this.selectedRule = rule
-                            this.domain.editedRule = rule
-                        }
+                        style: "user-select: none",
+                        onclick: (event: MouseEvent) => this.ruleClicked(event, rule, index)
                     },
                     rule.variableForField(displayFieldType).phrase
                 ))
@@ -95,63 +106,50 @@ export class RuleBrowserView {
         )
     }
 
-    /*
-    
-    SecondListBoxMouseDown(Sender: TObject, Button: TMouseButton, Shift: TShiftState, X: int, Y: int): void {
-        let rule: TSRule
-        let shiftRule: TSRule
-        let index: int
-        let i: int
-        
-        if (this.SecondListBox.ItemIndex < 0) {
-            return
-        }
-        index = this.SecondListBox.ItemAtPos(Point(X, Y), true)
-        if (index < 0) {
-            usdomain.domain.world.deselectAllExcept(null)
-            this.FirstListBox.Invalidate()
-            this.SecondListBox.Invalidate()
-            return
-        }
-        rule = UNRESOLVED.TObject(this.SecondListBox.Items.Objects[this.SecondListBox.ItemIndex])
-        if (rule === null) {
-            return
-        }
-        if ((delphi_compatability.TShiftStateEnum.ssShift in Shift)) {
-            if ((this.lastBrowserSingleRuleIndex >= 0) && (this.lastBrowserSingleRuleIndex <= this.SecondListBox.Items.Count - 1) && (this.lastSingleRuleIndex !== index)) {
+    ruleClicked(event: MouseEvent, rule: TSRule, index: int): any {
+        if (event.shiftKey) {
+            console.log("shift clicked", this.lastBrowserSingleRuleIndex, this.ruleSubset.length, index)
+            if ((this.lastBrowserSingleRuleIndex >= 0)
+                && (this.lastBrowserSingleRuleIndex < this.ruleSubset.length)
+                // Was bug in Delphi version where used lastBrowserSingleRuleIndex !== index instead
+                && (this.lastBrowserSingleRuleIndex !== index)
+            ) {
                 // shift
-                usdomain.domain.world.deselectAllExcept(rule)
+                this.domain.world.deselectAllExcept(rule)
                 if (this.lastBrowserSingleRuleIndex < index) {
-                    for (i = this.lastBrowserSingleRuleIndex; i <= index; i++) {
-                        shiftRule = UNRESOLVED.TObject(this.SecondListBox.Items.Objects[i])
+                    for (let i = this.lastBrowserSingleRuleIndex; i <= index; i++) {
+                        const shiftRule: TSRule = this.ruleSubset[i]
                         shiftRule.selected = true
                     }
                 } else if (this.lastBrowserSingleRuleIndex > index) {
-                    for (i = this.lastBrowserSingleRuleIndex; i >= index; i--) {
-                        shiftRule = UNRESOLVED.TObject(this.SecondListBox.Items.Objects[i])
+                    for (let i = this.lastBrowserSingleRuleIndex; i >= index; i--) {
+                        const shiftRule: TSRule = this.ruleSubset[i]
                         shiftRule.selected = true
                     }
                 }
+            } else {
+                console.log("skipped")
             }
-            // control
-        } else if ((delphi_compatability.TShiftStateEnum.ssCtrl in Shift)) {
-            // just click
+        } else if (event.ctrlKey) {
             rule.selected = !rule.selected
         } else {
+            // plain click
             if (!rule.selected) {
-                usdomain.domain.world.deselectAllExcept(rule)
+                this.domain.world.deselectAllExcept(rule)
                 rule.selected = true
                 this.lastBrowserSingleRuleIndex = index
             } else {
                 // do nothing except maybe drag...
             }
         }
-        if (rule.selected && (this.rule !== rule) && !(delphi_compatability.TShiftStateEnum.ssCtrl in Shift) && !(delphi_compatability.TShiftStateEnum.ssShift in Shift)) {
-            this.editRule(rule)
+        if (rule.selected && (this.domain.editedRule !== rule) && !(event.ctrlKey) && !(event.shiftKey)) {
+            // this.editRule(rule)
+            this.domain.editedRule = rule
         }
-        this.FirstListBox.Invalidate()
-        this.SecondListBox.Invalidate()
     }
+
+
+    /*
     
     fillListBox(listBox: TListBox, list: TList): void {
         let i: int
@@ -219,7 +217,7 @@ export class RuleBrowserView {
             throw new Error("unexpectd value for organizeByField: " + newValue)
         }
 
-        /*
+        /* TODO or remove
         usdomain.domain.options.browseBy = newValue
         this.MenuBrowseByContext.checked = newValue === TSRuleField.kRuleContext
         this.MenuBrowseByCommand.checked = newValue === TSRuleField.kRuleCommand
@@ -234,6 +232,7 @@ export class RuleBrowserView {
         if (this.domain.editedRule !== null) {
             const variable: TSVariable = this.domain.editedRule.variableForFieldWithSelections(
                 this.browseBy,
+                // TODO -- maybe move back to lists for requirments and changes?
                 0, /* TODO: this.RequirementsListBox.ItemIndex, */
                 0, /* TODO: this.ChangesListBox.ItemIndex */
             )
@@ -242,10 +241,7 @@ export class RuleBrowserView {
             this.selectedVariable = null
         }
 
-        /*
-        this.loadSecondListBox()
-        this.SecondListBox.ItemIndex = this.SecondListBox.Items.IndexOfObject(this.rule)
-        */
+        this.lastBrowserSingleRuleIndex = 0
     }
 
     glyphForBrowseBy() {
