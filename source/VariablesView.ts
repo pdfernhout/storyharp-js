@@ -1,4 +1,5 @@
 import * as m from "mithril"
+import { expander } from "./common"
 import { TWorld } from "./TWorld";
 import { TSCommandList } from "./TSCommandList";
 import { TSVariableState } from "./TSVariable";
@@ -132,7 +133,7 @@ export class VariablesView {
 
     view(vnode: m.Vnode) {
         return m(".VariablesView.fixed.ba.right-0.top-0.bg-washed-blue", 
-            m("div", { onclick: () => this.expanded = !this.expanded }, m("span.b", "Variables " + (this.expanded ? "▲" : "▼"))),
+            m("div", { onclick: () => this.expanded = !this.expanded }, m("span.b", "Variables " + expander(this.expanded))),
             !this.expanded
                 ? []
                 : this.viewInterior()

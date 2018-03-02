@@ -1,6 +1,6 @@
 import * as m from "mithril"
 
-import { Color } from "./common"
+import { Color, expander } from "./common"
 import { TWorld } from "./TWorld"
 import { VariablesView } from "./VariablesView"
 import { RuleEditorForm } from "./RuleEditorForm"
@@ -125,7 +125,7 @@ function viewAbout(domain: any) {
             interactive CYOA (choose your own adventure) stories.
         `),
         m("p"),
-        m("div", { onclick: () => showAuthoringHelp = !showAuthoringHelp }, (showAuthoringHelp ? "▲" : "▼ (Click for:) ") + "Authoring help"),
+        m("div", { onclick: () => showAuthoringHelp = !showAuthoringHelp }, expander(showAuthoringHelp, "(Click for:) ") + "Authoring help"),
         showAuthoringHelp ? authoringHelp.split("\n\n").map(text => m("p", text)) : [],
         m("hr"),
         m("p", "StoryHarp 1.0 was originally a stand-alone desktop program. Version 2.0 is web-based."),

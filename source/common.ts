@@ -26,6 +26,12 @@ export function caption(text: string) {
     return text.replace("&", "")
 }
 
+export function expander(expanded: boolean, closedLabel: string = "", openLabel: string = ""): string {
+    return expanded
+        ? "▲" + (openLabel ? " " + openLabel : "")
+        : "▼" + (closedLabel ? " " + closedLabel : "")
+}
+
 /*
 export function ShowMessage(message: string) {
     alert(message)

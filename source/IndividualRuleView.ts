@@ -1,4 +1,5 @@
 import * as m from "mithril"
+import { expander } from "./common"
 import { TWorld } from "./TWorld"
 import { TSRule, TSRuleField } from "./TSRule"
 import { TSCommandList } from "./TSCommandList"
@@ -263,7 +264,7 @@ export class IndividualRuleView {
         return m(".IndividualRuleView.ba.bg-light-gray.w-100.pa1",
             m("div", {
                 onclick: () => this.expanded = !this.expanded
-                }, "Rule Viewer " + (this.expanded ? "▲" : "▼")
+                }, "Rule Viewer " + expander(this.expanded)
             ),
             !this.expanded ? [] : [
                 rule ? [] : m("div",
