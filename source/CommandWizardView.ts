@@ -5,29 +5,23 @@ import { TPoint } from "./TPoint"
 import { TWorld } from "./TWorld"
 import { Glyph } from "./VariablesView"
 
-const exampleOne =`
-cave|You are in a big cave.
-forest|You are in a lively forest.
-spring|You are standing near a burbling spring.`.trim()
+const exampleWithFiveRules = `
+tell Shawn you are angry | Shawn rolls up his cocoon.
+tell Shawn you are happy| Shawn rolls up his cocoon.
 
-const exampleWithNineRules = `    
-well house | You are in a well house for a small spring.
-grate | You are standing above a grate.
-forest | You are wandering around in dense forest.
-forest | It is getting dark and hard to see.
-mossy clearing
-glade | You are in a forest glade.
+   tell Shawn he is wrong |You are sent to the bad place.
+    
+spit at Shawn
+throw a cactus at Shawn | The cactus bounces off of Shawn's cocoon.
+`.trim()
 
-tree tops
-
-path by rock|you are on a path in the forest besides a big rock
-stream | You are walking along a dry stream bed.`.trim()
-
-/*
-the good place | You're in the good place
-the bad place | You're in the  bad place
-mindy st. claire's house | You're in a medium place at Mindy St. Claire's house.
-*/
+// grue pit
+const exampleSequenceWithFourRules = `    
+talk to the grue | The grue won't listen.
+talk to the grue | The grue seems to be getting very agitated.
+talk to the grue | The grue seems about to fly into a rage.
+talk to the grue | The grue devours you (except your bones of course).
+`.trim()
 
 const defaultReply = "There is nothing of interest here."
 
@@ -202,8 +196,8 @@ export class CommandWizardView {
 
                 help("You can also use the same context more than once and later add special requirements (", Glyph.requirements, ") to some of the extra rules"),
 
-                help("Here is an example showing a mix of different entries which generated nine rules:"),
-                showHelp ? m("pre.ba.bw2.pa1.ml2.mr2", exampleWithNineRules) : [],
+                help("Here is an example of a sequence showing a mix of different entries which generates five rules:"),
+                showHelp ? m("pre.ba.bw2.pa1.ml2.mr2", exampleWithFiveRules) : [],
 
                 m("div.ma2", "Command (", Glyph.command, ")", m("span.ml2.mr2.f4.b", "|"), "Reply (", Glyph.reply, ")"),
 
@@ -233,6 +227,9 @@ export class CommandWizardView {
 
                 help("Sequences are useful when the user has to do several things in a certain order, ",
                 "such as steps in an assembly process or parts of a conversation."),
+
+                help("Here is an example of a sequence (see below) which could generate four rules for a \"grue pit\" context each using the same command:"),
+                showHelp ? m("pre.ba.bw2.pa1.ml2.mr2", exampleSequenceWithFourRules) : [],
 
                 help("Creating sequences is an advanced topic; see the help system for details."),
 
