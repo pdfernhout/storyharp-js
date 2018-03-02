@@ -10,11 +10,17 @@ cave|You are in a big cave.
 forest|You are in a lively forest.
 spring|You are standing near a burbling spring.`.trim()
 
-const exampleTwo = `    
+const exampleWithNineRules = `    
 well house | You are in a well house for a small spring.
 grate | You are standing above a grate.
 forest | You are wandering around in dense forest.
+forest | It is getting dark and hard to see.
+mossy clearing
 glade | You are in a forest glade.
+
+tree tops
+
+path by rock|you are on a path in the forest besides a big rock
 stream | You are walking along a dry stream bed.`.trim()
 
 /*
@@ -39,7 +45,7 @@ export class ContextWizardView {
 
     wasGenerateRulesPressed = false
 
-    showExample = false
+    showHelp = true
 
     constructor(vnode: m.Vnode) {
         this.domain = (<any>vnode.attrs).domain
@@ -63,7 +69,10 @@ export class ContextWizardView {
         console.log("generateRules")
 
         this.wasGenerateRulesPressed = true
-        if (this.checkInputForErrors()) return
+        if (this.checkInputForErrors()) {
+            setTimeout(() => alert("Please fix the highlighted issues and try again."), 50)
+            return
+        }
 
         const commandPhrase = this.commandPhrase.trim()
 
@@ -133,38 +142,47 @@ export class ContextWizardView {
 
     view() {
         function caption(text: string) { return text }
+        const showHelp = this.showHelp
+        function help(...args: string[]) {
+            return showHelp ? m("p", ...args) : []
+        }
         
         return m(".ContextWizardView.h-100.overflow-auto",
             {
             },
             m("div",
                 m("h2", "New Contexts Wizard"),
-                m("p", "This wizard will create new rules defining contexts and replies to a common command like \"look\"."),
 
-                m("p", "A command (", Glyph.command, ") is what you say to the computer."),
-                m("p", "A context (", Glyph.context, ") is the single most important requirement to make a command available -- usually a physical location."),
-                m("p", "A reply (", Glyph.reply, ") is what the computer says after you say a command."),
+                m("div", {onclick: () => this.showHelp = !this.showHelp }, "Show help", expander(showHelp, "", "(Click to close help)")),
 
-                m("p", "You can enter a descriptive reply for each new context. ",
+                help("This wizard will create new rules defining contexts and replies to a common command like \"look\"."),
+
+                help("A command (", Glyph.command, ") is what you say to the computer."),
+                help("A context (", Glyph.context, ") is the single most important requirement to make a command available -- usually a physical location."),
+                help("A reply (", Glyph.reply, ") is what the computer says after you say a command."),
+
+                help("You can enter a descriptive reply for each new context. ",
                 "The descriptive replies will be accessed with a common command such as \"look\"."),
 
                 m("h3", "Enter Contexts"),
 
-                m("p", "Enter or paste the contexts you want to create in the area below, ",
+                help("Enter or paste the contexts you want to create in the area below, ",
                 "separating each context from its descriptive reply by a pipe bar."),
-                m("p", "For example, \"house | You are in a house\"."),
+                help("For example, \"house | You are in a house\"."),
  
-                m("p", "Use carriage returns to separate entries -- one entry per line."),
-                m("p", "Replies are optional. It's okay if long replies wrap around in the editor as long as they do not have a carriage return in them."),
+                help("Use carriage returns to separate entries -- one entry per line. Blank lines will be ignored."),
+                help("Replies are optional. It's okay if long replies wrap around in the editor as long as they do not have a carriage return in them."),
 
-                m("p", "If do not enter descriptive reply for a context, the wizard will add a default description of \"" + defaultReply + "\""),
+                help("If do not enter descriptive reply for a context, the wizard will add a default description of \"" + defaultReply + "\""),
 
-                m("div", {onclick: () => this.showExample = !this.showExample}, expander(this.showExample), "Show example input"),
-                this.showExample ? m("pre.ba.bw2.pa1", exampleTwo) : [],
+                help("You can also use the same context more than once and later add special requirements (", Glyph.requirements, ") to some of the extra rules"),
+
+                help("Here is an example showing a mix of different entries which generated nine rules:"),
+                showHelp ? m("pre.ba.bw2.pa1.ml2.mr2", exampleWithNineRules) : [],
 
                 m("div.ma2", "Context (", Glyph.context, ")", m("span.ml2.mr2.f4.b", "|"), "Descriptive Reply (", Glyph.reply, ")"),
 
-                m("textarea" + (this.newContextsTextToParseError ? ".bg-yellow" : ""),
+                m("textarea.ml2" + (this.newContextsTextToParseError ? ".bg-yellow" : ""),
                     {
                         rows: 10,
                         cols: 60,
@@ -176,7 +194,7 @@ export class ContextWizardView {
                     },
                 ),
 
-                this.newContextsTextToParseError ? m("div", this.newContextsTextToParseError) : [],
+                this.newContextsTextToParseError ? m("div.i.bg-yellow", this.newContextsTextToParseError) : [],
 
                 m("h3", "Generate Descriptions"),
 
@@ -191,24 +209,24 @@ export class ContextWizardView {
                     },
                 ),
 
-                this.commandPhraseError ? m("div", this.commandPhraseError) : [],
+                this.commandPhraseError ? m("div.i.bg-yellow", this.commandPhraseError) : [],
 
-                m("p", "Some generic examples are:"),
+                help("Some generic examples are: \"look\", \"listen\", \"smell\", \"feel\", \"taste\", and \"sense\"."),
 
-                m("p.ml2", "\"look\", \"listen\", \"smell\", \"feel\", \"taste\", and \"sense\"."),
-
-                m("p", "You should stick with \"look\" unless you are doing something special. ",
+                help("You should stick with \"look\" unless you are doing something special. ",
                 "You can change individual commands later (in the editor) to deal with specific situations."),
 
                 m("p", "Click the \"Generate Rules\" button to create the new rules and clear the wizard."),
+                
+                m("div.ml2", 
+                    m("button", {
+                        onclick: () => this.generateRules()
+                    }, "Generate rules"),
+                ),
 
-                m("button", {
-                    onclick: () => this.generateRules()
-                }, "Generate rules"),
-
-                m("p", "After you have generated new rules, if you change your mind, you can choose Undo from the Edit menu to remove your new rules."),
-                m("p", "The new rules will also initally be selected in the rules table."),
-                m("p", "The text you entered here to generate rules will also be saved in the log file if you need to recover it later."),
+                help("After you have generated new rules, if you change your mind, you can choose Undo from the Edit menu to remove your new rules."),
+                help("The new rules will also initally be selected in the rules table."),
+                help("The text you entered here to generate rules will also be saved in the log file if you need to recover it later."),
             ),
         )
     }
