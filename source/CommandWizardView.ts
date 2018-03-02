@@ -29,7 +29,6 @@ the bad place | You're in the  bad place
 mindy st. claire's house | You're in a medium place at Mindy St. Claire's house.
 */
 
-const defaultCommand = "look"
 const defaultReply = "There is nothing of interest here."
 
 export class CommandWizardView {
@@ -39,7 +38,7 @@ export class CommandWizardView {
     newContextsTextToParseError: string = "";
     newContextsTextToParseLastGenerated: string = "";
 
-    commandPhrase = defaultCommand;
+    commandPhrase = "";
     commandPhraseError: string = "";
     commandPhraseLastGenerated: string = "";
 
@@ -147,28 +146,54 @@ export class CommandWizardView {
             return showHelp ? m("p", ...args) : []
         }
         
-        return m(".ContextWizardView.h-100.overflow-auto",
+        return m(".CommandWizardView.h-100.overflow-auto",
             {
             },
             m("div",
-                m("h2", "New Contexts Wizard"),
+                m("h2", "New Commands Wizard"),
 
                 m("div", {onclick: () => this.showHelp = !this.showHelp }, "Show help", expander(showHelp, "", "(Click to close help)")),
 
-                help("This wizard will create new rules defining contexts and replies to a common command like \"look\"."),
-
+                help("This wizard will create a set of new rules based on one context and a list of commands you enter."),
+                help("You can enter a reply for each command."),
+                
                 help("A command (", Glyph.command, ") is what you say to the computer."),
                 help("A context (", Glyph.context, ") is the single most important requirement to make a command available -- usually a physical location."),
                 help("A reply (", Glyph.reply, ") is what the computer says after you say a command."),
 
-                help("You can enter a descriptive reply for each new context. ",
-                "The descriptive replies will be accessed with a common command such as \"look\"."),
+                help("You can also link your new commands in a sequence so that only one command is available at any time. ",
+                "This is done by generating requirements and changes."),
 
-                m("h3", "Enter Contexts"),
+                help("A requirement (", Glyph.requirements, ") is variable state necessary for a command to be available. Variables can be true or false."),
+                help("A change (", Glyph.changes, ") is a new variable state resulting from a command."),
 
-                help("Enter or paste the contexts you want to create in the area below, ",
-                "separating each context from its descriptive reply by a pipe bar."),
-                help("For example, \"house | You are in a house\"."),
+                help("You can add extra requirements or changes later using the editor."),
+
+                m("h3", "Context"),
+
+                m("p", "What context (", Glyph.context, ") do you want your new commands to use?"),
+                // TODO: Drop down or scrolling list of existing contexts
+                m("input.ml2" + (this.commandPhraseError ? ".bg-yellow" : ""),
+                    {
+                        value: this.commandPhrase,
+                        onchange: (event: { target: HTMLInputElement }) => {
+                            this.commandPhrase = event.target.value
+                            if (this.wasGenerateRulesPressed) this.checkInputForErrors()
+                        }
+                    },
+                ),
+
+                this.commandPhraseError ? m("div.i.bg-yellow", this.commandPhraseError) : [],
+
+                help("Some generic examples of a context are: \"cave\", \"forest\", and \"inside house\"."),
+
+                m("h3", "Commands"),
+
+                // TODO: "New commands for: context",
+
+                help("Enter or paste the commands you want to create in the area below, ",
+                "separating each command from its reply by a pipe bar."),
+                help("For example, \"open the door | You open the rusty door.\"."),
  
                 help("Use carriage returns to separate entries -- one entry per line. Blank lines will be ignored."),
                 help("Replies are optional. It's okay if long replies wrap around in the editor as long as they do not have a carriage return in them."),
@@ -180,7 +205,7 @@ export class CommandWizardView {
                 help("Here is an example showing a mix of different entries which generated nine rules:"),
                 showHelp ? m("pre.ba.bw2.pa1.ml2.mr2", exampleWithNineRules) : [],
 
-                m("div.ma2", "Context (", Glyph.context, ")", m("span.ml2.mr2.f4.b", "|"), "Descriptive Reply (", Glyph.reply, ")"),
+                m("div.ma2", "Command (", Glyph.command, ")", m("span.ml2.mr2.f4.b", "|"), "Reply (", Glyph.reply, ")"),
 
                 m("textarea.ml2" + (this.newContextsTextToParseError ? ".bg-yellow" : ""),
                     {
@@ -196,25 +221,52 @@ export class CommandWizardView {
 
                 this.newContextsTextToParseError ? m("div.i.bg-yellow", this.newContextsTextToParseError) : [],
 
-                m("h3", "Generate Descriptions"),
+                m("h3", "Sequence"),
 
-                m("p", "What command (", Glyph.command, ") should the user to say to access these descriptive replies?"),
-                m("input.ml2" + (this.commandPhraseError ? ".bg-yellow" : ""),
+                m("div", "Do you want to link your new commands in sequence, so that each becomes available only after the previous one is said?"),
+
+                m("input[type=checkbox]", {
+                    value: "TODO",
+                    onclick: () => alert("Unfinished")
+                }),
+                m("span", "Yes, link the commands in a sequence."),
+
+                help("Sequences are useful when the user has to do several things in a certain order, ",
+                "such as steps in an assembly process or parts of a conversation."),
+
+                help("Creating sequences is an advanced topic; see the help system for details."),
+
+                m("p", " What prefix do you want to use for the requirements that create the sequence?"),
+
+                // TODO
+                m("input"),
+                help("Examples are: \"talking to sailor\", \"in boarding house\". By default the prefix is the same as the context."),
+
+                // TODO img.sequenceEndArrow.TImage
+                m("p", "When the last command has been said,"),
+
+                // TODO -- fix variable
+                m("input[type=radio].endSequenceLoopToFirst.TRadioButton",
                     {
-                        value: this.commandPhrase,
-                        onchange: (event: { target: HTMLInputElement }) => {
-                            this.commandPhrase = event.target.value
-                            if (this.wasGenerateRulesPressed) this.checkInputForErrors()
-                        }
                     },
                 ),
+                "loop to the first command in the sequence",
+                m("br"),
+                m("input[type=radio].endSequenceLeaveLastCommand.TRadioButton",
+                    {
+                    },
+                    
+                ),
+                "leave the last command available",
+                m("br"),
+                m("input[type=radio].endSequenceRemoveTheLastCommand.TRadioButton",
+                    {
+                    },
+                ),
+                "remove the last command",
+                m("br"),
 
-                this.commandPhraseError ? m("div.i.bg-yellow", this.commandPhraseError) : [],
-
-                help("Some generic examples are: \"look\", \"listen\", \"smell\", \"feel\", \"taste\", and \"sense\"."),
-
-                help("You should stick with \"look\" unless you are doing something special. ",
-                "You can change individual commands later (in the editor) to deal with specific situations."),
+                m("h3", "Generate Rules"),
 
                 m("p", "Click the \"Generate Rules\" button to create the new rules and clear the wizard."),
                 
@@ -226,7 +278,7 @@ export class CommandWizardView {
 
                 help("After you have generated new rules, if you change your mind, you can choose Undo from the Edit menu to remove your new rules."),
                 help("The new rules will also initally be selected in the rules table."),
-                help("The text you entered here to generate rules will also be saved in the log file if you need to recover it later."),
+                help("The command and reply text you entered here to generate rules will also be saved in the log file if you need to recover it later."),
             ),
         )
     }
