@@ -28,8 +28,8 @@ export function caption(text: string) {
 
 export function expander(expanded: boolean, closedLabel: string = "", openLabel: string = ""): string {
     return expanded
-        ? "▲" + (openLabel ? " " + openLabel : "")
-        : "▼" + (closedLabel ? " " + closedLabel : "")
+        ? "▲" + openLabel
+        : "▼" + closedLabel
 }
 
 /*
