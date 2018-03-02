@@ -54,11 +54,11 @@ export class RuleBrowserView {
     styleForSelected(rule: TSRule): string {
         return rule.selected 
             ? (rule === this.domain.editedRule 
-                ? ".ba.bw2.bg-light-blue" 
-                : ".ba.bw2")
+                ? ".ba.bw1.bg-light-blue" 
+                : ".ba.bw1")
             : (rule === this.domain.editedRule 
-                ? ".ba.bw2.b--white.bg-light-blue" 
-                : ".ba.bw2.b--white")
+                ? ".ba.bw1.b--white.bg-light-blue" 
+                : ".ba.bw1.b--white")
     }
 
     viewSecondListBox() {
