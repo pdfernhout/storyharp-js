@@ -8,6 +8,7 @@ import { TWorld } from "../source/TWorld"
 import { TSCommandList } from "../source/TSCommandList"
 import { Color } from "../source/common"
 import { TSRuleField } from "../source/TSRule"
+import { TPoint } from "../source/TPoint"
 
 const world = new TWorld()
 const sessionCommandList = new TSCommandList(world)
@@ -45,6 +46,7 @@ const fakeDomain = {
         },
         updateRuleNumberLabel: () => null,
         editRule: (rule: any) => null,
+        goodPosition: () => new TPoint(0, 0)
     },
     changeLogForm: {
         addToLog: (text: string) => null
