@@ -139,7 +139,7 @@ export class ContextWizardView {
             },
             m("div",
                 m("h2", "New Contexts Wizard"),
-                m("p", "This wizard will help you quickly create a set of new rules based on contexts you enter."),
+                m("p", "This wizard will create new rules defining contexts and replies to a common command like \"look\"."),
 
                 m("p", "A command (", Glyph.command, ") is what you say to the computer."),
                 m("p", "A context (", Glyph.context, ") is the single most important requirement to make a command available -- usually a physical location."),
@@ -157,10 +157,12 @@ export class ContextWizardView {
                 m("p", "Use carriage returns to separate entries -- one entry per line."),
                 m("p", "Replies are optional. It's okay if long replies wrap around in the editor as long as they do not have a carriage return in them."),
 
+                m("p", "If do not enter descriptive reply for a context, the wizard will add a default description of \"" + defaultReply + "\""),
+
                 m("div", {onclick: () => this.showExample = !this.showExample}, expander(this.showExample), "Show example input"),
                 this.showExample ? m("pre.ba.bw2.pa1", exampleTwo) : [],
 
-                m("div.ma2", "Context | Descriptive Reply"),
+                m("div.ma2", "Context (", Glyph.context, ")", m("span.ml2.mr2.f4.b", "|"), "Descriptive Reply (", Glyph.reply, ")"),
 
                 m("textarea" + (this.newContextsTextToParseError ? ".bg-yellow" : ""),
                     {
@@ -178,8 +180,8 @@ export class ContextWizardView {
 
                 m("h3", "Generate Descriptions"),
 
-                "What command should the user to say to access these descriptive replies?",
-                m("input" + (this.commandPhraseError ? ".bg-yellow" : ""),
+                m("p", "What command (", Glyph.command, ") should the user to say to access these descriptive replies?"),
+                m("input.ml2" + (this.commandPhraseError ? ".bg-yellow" : ""),
                     {
                         value: this.commandPhrase,
                         onchange: (event: { target: HTMLInputElement }) => {
@@ -191,31 +193,22 @@ export class ContextWizardView {
 
                 this.commandPhraseError ? m("div", this.commandPhraseError) : [],
 
-                "Some generic examples are:",
+                m("p", "Some generic examples are:"),
 
-                "\"look\", \"listen\", \"smell\", \"feel\", \"taste\", and \"sense\".",
+                m("p.ml2", "\"look\", \"listen\", \"smell\", \"feel\", \"taste\", and \"sense\"."),
 
-                "You should stick with \"look\" unless you are doing something special.",
-                "You can change individual commands later (in the editor) to deal with specific situations.",
+                m("p", "You should stick with \"look\" unless you are doing something special. ",
+                "You can change individual commands later (in the editor) to deal with specific situations."),
 
-
-                "If you have not entered a description for a context, the wizard will add a default description of 'There is nothing of interest here.' ",
-
-                "Congratulations!",
-
-                "You have completed the information the wizard needs to generate a new set of rules based on your the contexts and descriptions you have entered.",
-
-                "The text you entered here will also be saved in the log file (even if you cancel using the wizard).",
-
-                "Click Finish to create the new rules and close the wizard.",
+                m("p", "Click the \"Generate Rules\" button to create the new rules and clear the wizard."),
 
                 m("button", {
                     onclick: () => this.generateRules()
                 }, "Generate rules"),
 
-                "After you finish the wizard, you can choose Undo from the Edit menu to remove your new rules.",
-
-                "Click Cancel to close the wizard without making any new rules.",
+                m("p", "After you have generated new rules, if you change your mind, you can choose Undo from the Edit menu to remove your new rules."),
+                m("p", "The new rules will also initally be selected in the rules table."),
+                m("p", "The text you entered here to generate rules will also be saved in the log file if you need to recover it later."),
             ),
         )
     }
