@@ -1,7 +1,9 @@
 import * as m from "mithril"
+import { expander } from "./common"
 import { TSNewRulesCommand } from "./TSNewRulesCommand"
 import { TPoint } from "./TPoint"
 import { TWorld } from "./TWorld"
+import { Glyph } from "./VariablesView"
 
 const exampleOne =`
 cave|You are in a big cave.
@@ -14,6 +16,12 @@ grate | You are standing above a grate.
 forest | You are wandering around in dense forest.
 glade | You are in a forest glade.
 stream | You are walking along a dry stream bed.`.trim()
+
+/*
+the good place | You're in the good place
+the bad place | You're in the  bad place
+mindy st. claire's house | You're in a medium place at Mindy St. Claire's house.
+*/
 
 const defaultCommand = "look"
 const defaultReply = "There is nothing of interest here."
@@ -30,6 +38,8 @@ export class ContextWizardView {
     commandPhraseLastGenerated: string = "";
 
     wasGenerateRulesPressed = false
+
+    showExample = false
 
     constructor(vnode: m.Vnode) {
         this.domain = (<any>vnode.attrs).domain
@@ -124,34 +134,38 @@ export class ContextWizardView {
     view() {
         function caption(text: string) { return text }
         
-        return m(".ContextWizardView",
+        return m(".ContextWizardView.h-100.scroll-auto",
             {
             },
             m("div",
-                "Welcome to the New Contexts Wizard!",
-                "This wizard will help you quickly create a set of new rules based on contexts you enter.",
-                "A command is what you say to the computer.",
-                "A context is the single most important requirement for the user of a command, usually a physical location.",
-                "A reply is what the computer says after you say a command.",
+                m("h2", "New Contexts Wizard"),
+                m("p", "This wizard will help you quickly create a set of new rules based on contexts you enter."),
 
-                "You can enter a descriptive reply for each new context you enter here.",
-                "The descriptive replies will be accessed with a common command such as \"look\".",
+                m("p", "A command (", Glyph.command, ") is what you say to the computer."),
+                m("p", "A context (", Glyph.context, ") is the single most important requirement to make a command available -- usually a physical location."),
+                m("p", "A reply (", Glyph.reply, ") is what the computer says after you say a command."),
 
-                // "You can click Cancel at any time to close the wizard without making any new rules.",
+                m("p", "You can enter a descriptive reply for each new context. ",
+                "The descriptive replies will be accessed with a common command such as \"look\"."),
 
-                m("h1", "Enter Contexts"),
+                m("h3", "Enter Contexts"),
 
-                "Enter or paste the contexts you want to create in the area below,",
-                "separating each context from its descriptive reply by a pipe bar.",
-                "For example, \"house | You are in a house\".",
+                m("p", "Enter or paste the contexts you want to create in the area below, ",
+                "separating each context from its descriptive reply by a pipe bar."),
+                m("p", "For example, \"house | You are in a house\"."),
  
-                "Descriptions are optional. It's okay to wrap entries on more than one line.",
-                "Use carriage returns to separate entries.",
+                m("p", "Use carriage returns to separate entries -- one entry per line."),
+                m("p", "Replies are optional. It's okay if long replies wrap around in the editor as long as they do not have a carriage return in them."),
 
-                "Context | Descriptive Reply",
+                m("div", {onclick: () => this.showExample = !this.showExample}, expander(this.showExample), "Show example input"),
+                this.showExample ? m("pre.ba.bw2.pa1", exampleTwo) : [],
+
+                m("div.ma2", "Context | Descriptive Reply"),
 
                 m("textarea" + (this.newContextsTextToParseError ? ".bg-yellow" : ""),
                     {
+                        rows: 10,
+                        cols: 60,
                         value: this.newContextsTextToParse,
                         onchange: (event: { target: HTMLInputElement }) => {
                             this.newContextsTextToParse = event.target.value
@@ -162,7 +176,7 @@ export class ContextWizardView {
 
                 this.newContextsTextToParseError ? m("div", this.newContextsTextToParseError) : [],
 
-                m("h1", "Generate Descriptions"),
+                m("h3", "Generate Descriptions"),
 
                 "What command should the user to say to access these descriptive replies?",
                 m("input" + (this.commandPhraseError ? ".bg-yellow" : ""),
@@ -175,7 +189,7 @@ export class ContextWizardView {
                     },
                 ),
 
-                this.commandPhraseError ? m("div", this.commandPhraseError) : []
+                this.commandPhraseError ? m("div", this.commandPhraseError) : [],
 
                 "Some generic examples are:",
 
