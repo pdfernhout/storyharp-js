@@ -22,6 +22,7 @@ export enum Glyph {
     requirements = "🔒",
     changes = "⚿",
     command = "！",
+    reply = "💬",
 
     spacer = " ",
 }
