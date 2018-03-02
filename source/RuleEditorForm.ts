@@ -34,14 +34,14 @@ export class RuleEditorForm {
             return "button.ml2.w4" + (currentWizard === selection ? ".bg-light-blue" : "")
         }
 
-        return m("div",
+        return m("div.flex-auto.h-100.overflow-hidden",
             m("div.mt2",
                 "Wizard:",
                 m(wizardButtonWithHighlight("context"), { onclick: () => this.setCurrentWizard("context") }, "Context"),
                 m(wizardButtonWithHighlight("command"),  { onclick: () => this.setCurrentWizard("command") }, "Command"),
                 m(wizardButtonWithHighlight("link"),  { onclick: () => this.setCurrentWizard("link") }, "Link"),
             ),
-            m("div.mt2",
+            m("div.WizardHolder.mt2", { style: "height: calc(100% - 2rem)" },
                 currentWizard === "context" ? m(ContextWizardView, <any>{domain: domain}) : [],
                 currentWizard === "command" ? m(CommandWizardView, <any>{domain: domain}) : [],
                 currentWizard === "link" ? m(LinkWizardView, <any>{domain: domain}) : [],
@@ -81,16 +81,18 @@ export class RuleEditorForm {
                 }, "Redo"),
             ),
             // TODO: Probably should wrap these with hidden divs so the component state is preserved
-            currentView === "wizards" ? this.viewWizards() : [
-                m("div.mt2.flex-auto.h-100.overflow-hidden",
-                    currentView === "table" ? m(RuleTableView, <any>{domain: domain}) : [],
-                    currentView === "map" ? m(RuleMapView, <any>{domain: domain}) : [],
-                    currentView === "browser" ? m(RuleBrowserView, <any>{domain: domain}) : [],
-                ),
-                m("div.flex-none",
-                    m(IndividualRuleView, <any>{domain: domain})
-                )
-            ],
+            currentView === "wizards"
+                ? this.viewWizards() 
+                : [
+                    m("div.mt2.flex-auto.h-100.overflow-hidden",
+                        currentView === "table" ? m(RuleTableView, <any>{domain: domain}) : [],
+                        currentView === "map" ? m(RuleMapView, <any>{domain: domain}) : [],
+                        currentView === "browser" ? m(RuleBrowserView, <any>{domain: domain}) : [],
+                    ),
+                    m("div.flex-none",
+                        m(IndividualRuleView, <any>{domain: domain})
+                    )
+                ],
         )
     }
 }

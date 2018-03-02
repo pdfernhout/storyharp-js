@@ -134,7 +134,7 @@ export class ContextWizardView {
     view() {
         function caption(text: string) { return text }
         
-        return m(".ContextWizardView.h-100.scroll-auto",
+        return m(".ContextWizardView.h-100.overflow-auto",
             {
             },
             m("div",
