@@ -8,6 +8,7 @@ import { Color } from "../source/common"
 import { TSRuleField } from "../source/TSRule"
 import { TPoint } from "../source/TPoint"
 import { TSMapView } from "../source/TSMapView"
+import { TRect } from "../source/TRect"
 
 const world = new TWorld()
 const sessionCommandList = new TSCommandList(world)
@@ -108,6 +109,17 @@ async function loadTestWorld(worldFileName: string) {
 
 const mapDrawer = new TSMapView()
 
+function drawRect(context: CanvasRenderingContext2D, rect: TRect) {
+    context.beginPath()
+    context.moveTo(rect.Left, rect.Top)
+    context.lineTo(rect.Left, rect.Bottom)
+    context.lineTo(rect.Right, rect.Bottom)
+    context.lineTo(rect.Right, rect.Top)
+    context.closePath()
+    context.strokeStyle = "#00FFFF"
+    context.stroke()
+}
+
 const MyComponent = { 
     view: () => m("div", 
         m("canvas.ba", {
@@ -123,6 +135,18 @@ const MyComponent = {
                 context.stroke()
 
                 mapDrawer.drawArrowhead(context, new TPoint(100, 40), new TPoint(120, 40))
+
+                context.strokeStyle = "#00FF00"
+                const r1 = new TRect(10, 110, 30, 130)
+                const r2 = new TRect(70, 120, 90, 140)
+                const r3 = new TRect(170, 20, 190, 40)
+                drawRect(context, r1)
+                drawRect(context, r2)
+                drawRect(context, r3)
+
+                mapDrawer.drawArrowFromRectEdgeToRectEdge(context, r1, r2)
+                mapDrawer.drawArrowFromRectEdgeToRectEdge(context, r2, r3)
+                mapDrawer.drawArrowFromRectEdgeToRectEdge(context, r3, r1)
             }
         }),
         m("div", "There should be a canvas above with a line from top left most of the way towards the bottom middle."),

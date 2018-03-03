@@ -135,41 +135,52 @@ export class TSMapView {
         //arrow head
         this.drawArrowhead(canvas, startPoint, endPoint)
     }
+    */
     
-    drawArrowFromRectEdgeToRectEdge(canvas: TCanvas, originRect: TRect, destRect: TRect): void {
-        let startPoint: TPoint
-        let endPoint: TPoint
-        let intersectPoint: TPoint
-        let origin: TPoint
-        let dest: TPoint
-        let scrolledOriginRect: TRect
-        
+    drawArrowFromRectEdgeToRectEdge(context: CanvasRenderingContext2D, originRect: TRect, destRect: TRect): void {
         //theRect: TRect;
         //IntersectRect(theRect, originRect, destRect);
         //if not IsEmptyRect(theRect) then exit;
+
+        // TODO: InflateRect modifies the original rect, which we csan get away with as it is bounds copy, but worriesome
+
         // add some to prevent cutting off arrow heads in certain cases for long words
         InflateRect(destRect, arrowwidth, arrowwidth)
         InflateRect(originRect, arrowwidth, arrowwidth)
-        origin = new TPoint((originRect.Left + originRect.Right) / 2, (originRect.Top + originRect.Bottom) / 2)
-        dest = new TPoint((destRect.Left + destRect.Right) / 2, (destRect.Top + destRect.Bottom) / 2)
-        intersectPoint = IntersectionPointForLineAndRectangle(origin, destRect)
-        endPoint = new TPoint(intersectPoint.X + this.scroll.X, intersectPoint.Y + this.scroll.Y)
-        startPoint = IntersectionPointForLineAndRectangle(dest, originRect)
+
+        // Draw from the middle of one rect to the mdidle of the other
+        
+        const origin = new TPoint((originRect.Left + originRect.Right) / 2, (originRect.Top + originRect.Bottom) / 2)
+
+        const dest = new TPoint((destRect.Left + destRect.Right) / 2, (destRect.Top + destRect.Bottom) / 2)
+
+        const intersectPoint = IntersectionPointForLineAndRectangle(origin, destRect)
+
+        const endPoint = new TPoint(intersectPoint.X + this.scroll.X, intersectPoint.Y + this.scroll.Y)
+
+        const startPoint = IntersectionPointForLineAndRectangle(dest, originRect)
         startPoint.X = startPoint.X + this.scroll.X
         startPoint.Y = startPoint.Y + this.scroll.Y
-        //clipp arrow if it would end up beind drawn incorrectly
-        scrolledOriginRect = originRect
+
+        // clip arrow if it would end up being drawn incorrectly
+        // TODO: scrolledOriginRect is either unneeeded or really has to make a copy
+        const scrolledOriginRect = originRect
         OffsetRect(scrolledOriginRect, this.scroll.X, this.scroll.Y)
         if (scrolledOriginRect.contains(endPoint)) {
             return
         }
-        canvas.Pen.Style = delphi_compatability.TFPPenStyle.psSolid
-        canvas.MoveTo(startPoint.X, startPoint.Y)
-        canvas.LineTo(endPoint.X, endPoint.Y)
+
+        // TODO: use or remove: canvas.Pen.Style = delphi_compatability.TFPPenStyle.psSolid
+        context.beginPath()
+        context.moveTo(startPoint.X, startPoint.Y)
+        context.lineTo(endPoint.X, endPoint.Y)
+        context.stroke()
+
         //arrow head
-        this.drawArrowhead(canvas, startPoint, endPoint)
+        this.drawArrowhead(context, startPoint, endPoint)
     }
     
+    /*
     drawLineFromRectEdgeToRectEdge(canvas: TCanvas, originRect: TRect, destRect: TRect): void {
         let startPoint: TPoint
         let endPoint: TPoint
