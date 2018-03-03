@@ -105,6 +105,7 @@ function IntersectionPointForLineAndRectangle(origin: TPoint, destRect: TRect): 
 export class TSMapView {
     scroll: TPoint = new TPoint()
     
+    /*
     // TSMapView ---------------------------------------- 
     drawBogusArrow(canvas: TCanvas, a: TPoint, b: TPoint): void {
         //midPoint1: TPoint;
@@ -190,8 +191,9 @@ export class TSMapView {
         canvas.MoveTo(startPoint.X, startPoint.Y)
         canvas.LineTo(endPoint.X, endPoint.Y)
     }
-    
-    drawArrowhead(canvas: TCanvas, p1: TPoint, p2: TPoint): void {
+    */
+
+    drawArrowhead(context: CanvasRenderingContext2D, p1: TPoint, p2: TPoint): void {
         //Code translated from C++ posted:
         //	Subject:      Re: calculation for drawing arrow heads
         //	From:         "Jesper Hansen" <jesperh@edit.se>
@@ -230,17 +232,24 @@ export class TSMapView {
 
         const outerOne = new TPoint(x2 + x1, y2 + y1)
         const outerTwo = new TPoint(x2 - x1, y2 - y1)
-        let Points: TPoint[] = Array(3)
-        Points[0] = p2
-        Points[1] = outerOne
-        Points[2] = outerTwo
-        canvas.Pen.Style = delphi_compatability.TFPPenStyle.psSolid
-        canvas.Polygon(Points)
+
+        // TODO use or remove:
+        // canvas.Pen.Style = delphi_compatability.TFPPenStyle.psSolid
+
+        context.beginPath()
+        context.moveTo(p2.X, p2.Y)
+        context.lineTo(outerOne.X, outerOne.Y)
+        context.lineTo(outerTwo.X, outerTwo.Y)
+        context.closePath()
+        context.fill()
+
         //canvas.moveTo(p2.x, p2.y);
         //  canvas.LineTo(outerOne.x, outerOne.y);
         //  canvas.moveTo(p2.x, p2.y);
         //  canvas.LineTo(outerTwo.x, outerTwo.y); 
     }
+
+    /*
     
     // procedure drawArrow(canvas: TCanvas; a, b: TPoint);
     drawArrowToRect(canvas: TCanvas, origin: TPoint, destRect: TRect): void {
@@ -401,5 +410,5 @@ export class TSMapView {
         canvas.Rectangle(drawRect.Left, drawRect.Top, drawRect.Right, drawRect.Bottom)
         canvas.TextOut(textPoint.X, textPoint.Y, text)
     }
-    
+    */
 }

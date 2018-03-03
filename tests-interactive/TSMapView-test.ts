@@ -7,6 +7,7 @@ import { TSCommandList } from "../source/TSCommandList"
 import { Color } from "../source/common"
 import { TSRuleField } from "../source/TSRule"
 import { TPoint } from "../source/TPoint"
+import { TSMapView } from "../source/TSMapView"
 
 const world = new TWorld()
 const sessionCommandList = new TSCommandList(world)
@@ -105,6 +106,7 @@ async function loadTestWorld(worldFileName: string) {
     m.mount(document.body, MyComponent)
 }
 
+const mapDrawer = new TSMapView()
 
 const MyComponent = { 
     view: () => m("div", 
@@ -119,6 +121,8 @@ const MyComponent = {
                 context.closePath()
                 context.strokeStyle = "#00FFFF"
                 context.stroke()
+
+                mapDrawer.drawArrowhead(context, new TPoint(100, 40), new TPoint(120, 40))
             }
         }),
         m("div", "There should be a canvas above with a line from top left most of the way towards the bottom middle."),
