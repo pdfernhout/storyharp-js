@@ -149,7 +149,7 @@ export class TSMapView {
         InflateRect(originRect, arrowwidth, arrowwidth)
 
         // Draw from the middle of one rect to the mdidle of the other
-        
+
         const origin = new TPoint((originRect.Left + originRect.Right) / 2, (originRect.Top + originRect.Bottom) / 2)
 
         const dest = new TPoint((destRect.Left + destRect.Right) / 2, (destRect.Top + destRect.Bottom) / 2)
@@ -403,7 +403,10 @@ export class TSMapView {
         }
     }
     
-    drawCommandOrContext(canvas: TCanvas, text: string, bounds: TRect, position: TPoint, selected: boolean, focused: boolean, isCommand: boolean): void {
+    */
+
+    // TODO: psotion parameter is unused -- remove it
+    drawCommandOrContext(context: CanvasRenderingContext2D, text: string, bounds: TRect, position: TPoint, selected: boolean, focused: boolean, isCommand: boolean): void {
         let drawRect: TRect = new TRect()  
         drawRect.Left = bounds.Left - 2 + this.scroll.X
         drawRect.Top = bounds.Top - 1 + this.scroll.Y
@@ -412,14 +415,27 @@ export class TSMapView {
 
         const textPoint = new TPoint(bounds.Left + this.scroll.X, bounds.Top + this.scroll.Y)
 
+        /* TODO: Use or remove
         usruleeditorform.setCanvasColorsForSelection(canvas, selected, focused, isCommand)
         if (selected) {
             canvas.Pen.Style = delphi_compatability.TFPPenStyle.psSolid
         } else {
             canvas.Pen.Style = delphi_compatability.TFPPenStyle.psClear
         }
-        canvas.Rectangle(drawRect.Left, drawRect.Top, drawRect.Right, drawRect.Bottom)
-        canvas.TextOut(textPoint.X, textPoint.Y, text)
+        */
+
+        this.drawRect(context, drawRect)
+        context.fillText(text, textPoint.X, textPoint.Y)
     }
-    */
+
+
+    drawRect(context: CanvasRenderingContext2D, rect: TRect) {
+        context.beginPath()
+        context.moveTo(rect.Left, rect.Top)
+        context.lineTo(rect.Left, rect.Bottom)
+        context.lineTo(rect.Right, rect.Bottom)
+        context.lineTo(rect.Right, rect.Top)
+        context.closePath()
+        context.stroke()
+    }
 }

@@ -109,17 +109,6 @@ async function loadTestWorld(worldFileName: string) {
 
 const mapDrawer = new TSMapView()
 
-function drawRect(context: CanvasRenderingContext2D, rect: TRect) {
-    context.beginPath()
-    context.moveTo(rect.Left, rect.Top)
-    context.lineTo(rect.Left, rect.Bottom)
-    context.lineTo(rect.Right, rect.Bottom)
-    context.lineTo(rect.Right, rect.Top)
-    context.closePath()
-    context.strokeStyle = "#00FFFF"
-    context.stroke()
-}
-
 const MyComponent = { 
     view: () => m("div", 
         m("canvas.ba", {
@@ -140,13 +129,16 @@ const MyComponent = {
                 const r1 = new TRect(10, 110, 30, 130)
                 const r2 = new TRect(70, 120, 90, 140)
                 const r3 = new TRect(170, 20, 190, 40)
-                drawRect(context, r1)
-                drawRect(context, r2)
-                drawRect(context, r3)
+                mapDrawer.drawRect(context, r1)
+                mapDrawer.drawRect(context, r2)
+                mapDrawer.drawRect(context, r3)
 
                 mapDrawer.drawArrowFromRectEdgeToRectEdge(context, r1, r2)
                 mapDrawer.drawArrowFromRectEdgeToRectEdge(context, r2, r3)
                 mapDrawer.drawArrowFromRectEdgeToRectEdge(context, r3, r1)
+
+                const p1 = new TPoint(r3.Left, r3.Top)
+                mapDrawer.drawCommandOrContext(context, "Hello, world!", r3, p1, false, false, false)
             }
         }),
         m("div", "There should be a canvas above with a line from top left most of the way towards the bottom middle."),
