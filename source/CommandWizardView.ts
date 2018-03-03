@@ -4,6 +4,7 @@ import { TSNewRulesCommand } from "./TSNewRulesCommand"
 import { TPoint } from "./TPoint"
 import { TWorld } from "./TWorld"
 import { Glyph } from "./VariablesView"
+import { TSRule } from "./TSRule"
 
 const exampleWithFiveRules = `
 tell Shawn you are angry | Shawn rolls up his cocoon.
@@ -12,7 +13,7 @@ tell Shawn you are happy| Shawn rolls up his cocoon.
    tell Shawn he is wrong |You are sent to the bad place.
     
 spit at Shawn
-throw a cactus at Shawn | The cactus bounces off of Shawn's cocoon.
+throw a cactus at Shawn | The cactus bounces off Shawn's quickly-rolled-up cocoon.
 `.trim()
 
 // grue pit
@@ -23,7 +24,7 @@ talk to the grue | The grue seems about to fly into a rage.
 talk to the grue | The grue devours you (except your bones of course).
 `.trim()
 
-const defaultReply = "There is nothing of interest here."
+const defaultReply = "Nothing happens."
 
 // TODO Application.HelpJump("Making_new_rules_using_the_new_commands_wizard")
 
@@ -71,7 +72,7 @@ export class CommandWizardView {
             this.newCommandsTextToParseError = ""
         }
         if (!this.contextName.trim()) {
-            this.contextNameError = "You must enter a context to be used to enable these commands."
+            this.contextNameError = "You must enter a context to be used with these commands."
         } else {
             this.contextNameError = ""
         }
@@ -81,10 +82,10 @@ export class CommandWizardView {
             } else {
                 this.prefixError = ""
             }
-            if (this.endSequence = EndSequence.noSelection) {
-                this.contextNameError = "You must select an option to end the sequence."
+            if (this.endSequence === EndSequence.noSelection) {
+                this.endSequenceError = "You must select an option to end the sequence."
             } else {
-                this.contextNameError = ""
+                this.endSequenceError = ""
             }
         } else {
             this.prefixError = ""
@@ -103,17 +104,21 @@ export class CommandWizardView {
         }
 
         const contextName = this.contextName.trim()
+        const prefix = this.prefix.trim()
 
         const world: TWorld = this.domain.world
         const ruleEditorForm = this.domain.ruleEditorForm
-        
+
         // TODO: save text to log
         // uschangelog.ChangeLogForm.addToLog(this.newCommandsMemo.Text)
 
         const newRulesCommand = new TSNewRulesCommand(world, ruleEditorForm)
-        newRulesCommand.creator = "new context wizard"
+        newRulesCommand.creator = "command sequence wizard"
 
         const lines = this.newCommandsTextToParse.split(/\r\n|\r|\n/)
+
+        let index = 1
+        let newRule: TSRule | null = null
 
         for (let line of lines) {
             line = line.trim()
@@ -121,28 +126,63 @@ export class CommandWizardView {
             console.log("line", line)
 
             const pipeBarLocation = line.indexOf("|")
-            let context
+            let command
             let reply
             if (pipeBarLocation === -1) {
-                context = line
+                command = line
                 reply = defaultReply
             } else {
-                context = line.substring(0, pipeBarLocation).trim() || ("missing context " + Math.random())
+                command = line.substring(0, pipeBarLocation).trim() || ("missing command " + Math.random())
                 reply =  line.substring(pipeBarLocation + 1).trim() || defaultReply
             }
 
             const position: TPoint = ruleEditorForm.goodPosition()
 
-            const newRule = world.newRule()
+            newRule = world.newRule()
             newRule.position = position
-            newRule.setContext(context)
-            newRule.setCommand(contextName)
+            newRule.setContext(this.contextName)
+            newRule.setCommand(command)
             newRule.setReply(reply)
             newRule.selected = true
 
             newRulesCommand.addRule(newRule)
             ruleEditorForm.lastChoice = newRule
             this.domain.editedRule = newRule
+
+            if (this.doSequence && (prefix !== "")) {
+                let requirements
+                let changes
+                // Add zero at end of index to provide room for adding things in between liek BASIC line numbers
+                if (index === 1) {
+                    requirements = "~" + prefix + " started"
+                    changes = prefix + " started & " + prefix + " " + index + "0"
+                } else {
+                    requirements = prefix + " " + (index - 1) + "0"
+                    changes = "~" + prefix + " " + (index - 1) + "0 & " + prefix + " " + index + "0"
+                }
+                newRule.setRequirements(requirements)
+                newRule.setChanges(changes)
+            }
+
+            index += 1
+
+            // TODO: use or remove
+            // position.Y = position.Y + 60
+        }
+
+        if (this.doSequence && (prefix !== "") && (newRule !== null) && (index > 2)) {
+            // cleanup for last rule
+            let changes = newRule.changesString
+            if (this.endSequence === EndSequence.loopToFirst) {
+                changes = "~" + prefix + " " + (index - 2) + "0 & " + "~" + prefix + " started"
+            } else if (this.endSequence === EndSequence.leaveLastCommand) {
+                changes = ""
+            } else if (this.endSequence === EndSequence.removeLastCommand) {
+                changes = "~" + prefix + " " + (index - 2) + "0"
+            } else {
+                throw new Error("unexpected case")
+            }
+            newRule.setChanges(changes)
         }
 
         if (newRulesCommand.rules.length > 0) {
@@ -169,6 +209,20 @@ export class CommandWizardView {
     // Application.HelpJump("Making_new_rules_using_the_new_contexts_wizard")
 
     // the good place | You're in the good place
+
+    // TODO use or remove:
+
+    // usdomain.domain.world.addContextsToListBox(this.ContextBox)
+    
+    // "You must create at least one context before using the command wizard."
+    
+    // this.lastFloodedContextPrefix = ""
+    // goNextClick(Sender: TObject): void {
+    // } else if (this.notebook.PageIndex === kContextPage) {
+    // this.lastFloodedContextPrefix = this.ContextBox.Items[this.ContextBox.ItemIndex]
+    
+    // usdomain.domain.world.variables
+    // if (this.ContextBox.Items[j] === variable.phrase) {
 
     view() {
         function caption(text: string) { return text }
@@ -261,11 +315,14 @@ export class CommandWizardView {
 
                 m("div", "Do you want to link your new commands in sequence, so that each becomes available only after the previous one is said?"),
 
-                m("input[type=checkbox]", {
+                m("input[type=checkbox].ma1.ml1", {
                     checked: doSequence || undefined,
-                    onchange: (event: { target: HTMLInputElement }) => { this.doSequence = event.target.checked }
+                    onchange: (event: { target: HTMLInputElement }) => { 
+                        this.doSequence = event.target.checked 
+                        if (this.wasGenerateRulesPressed) this.checkInputForErrors()
+                    }
                 }),
-                m("span", "Yes, link the commands in a sequence."),
+                m("span.ml1", "Yes, link the commands in a sequence."),
 
                 help("Here is an example of a sequence (see below) which could generate four rules for a \"grue pit\" context each using the same command:"),
                 showHelp ? m("pre.ba.bw2.pa1.ml2.mr2", exampleSequenceWithFourRules) : [],
@@ -276,7 +333,10 @@ export class CommandWizardView {
 
                 m("input", {
                     value: this.prefix,
-                    onchange: (event: { target: HTMLInputElement }) => this.prefix = event.target.value,
+                    onchange: (event: { target: HTMLInputElement }) => {
+                        this.prefix = event.target.value
+                        if (this.wasGenerateRulesPressed) this.checkInputForErrors()
+                    },
                     disabled: !doSequence || null,
                 }),
                 this.prefixError ? m("div.i.bg-yellow", this.prefixError) : [],
@@ -291,7 +351,10 @@ export class CommandWizardView {
                         name: "endSequence",
                         value: EndSequence.loopToFirst,
                         checked: this.endSequence === EndSequence.loopToFirst,
-                        onchange: () => { this.endSequence = EndSequence.loopToFirst },
+                        onchange: () => { 
+                            this.endSequence = EndSequence.loopToFirst
+                            if (this.wasGenerateRulesPressed) this.checkInputForErrors()
+                        },
                         disabled: !doSequence || null,
                     },
                 ),
@@ -302,7 +365,10 @@ export class CommandWizardView {
                         name: "endSequence",
                         value: EndSequence.leaveLastCommand,
                         checked: this.endSequence === EndSequence.leaveLastCommand,
-                        onchange: () => { this.endSequence = EndSequence.leaveLastCommand },
+                        onchange: () => { 
+                            this.endSequence = EndSequence.leaveLastCommand 
+                            if (this.wasGenerateRulesPressed) this.checkInputForErrors()
+                        },
                         disabled: !doSequence || null,
                     },
                     
@@ -314,7 +380,10 @@ export class CommandWizardView {
                         name: "endSequence",
                         value: EndSequence.removeLastCommand,
                         checked: this.endSequence === EndSequence.removeLastCommand,
-                        onchange: () => { this.endSequence = EndSequence.removeLastCommand },
+                        onchange: () => { 
+                            this.endSequence = EndSequence.removeLastCommand 
+                            if (this.wasGenerateRulesPressed) this.checkInputForErrors()
+                        },
                         disabled: !doSequence || null,
                     },
                 ),
