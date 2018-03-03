@@ -30,13 +30,13 @@ const defaultReply = "There is nothing of interest here."
 export class CommandWizardView {
     domain: any
 
-    newContextsTextToParse: string = "";
-    newContextsTextToParseError: string = "";
-    newContextsTextToParseLastGenerated: string = "";
+    newCommandsTextToParse: string = "";
+    newCommandsTextToParseError: string = "";
+    newCommandsTextToParseLastGenerated: string = "";
 
-    commandPhrase = "";
-    commandPhraseError: string = "";
-    commandPhraseLastGenerated: string = "";
+    contextName = "";
+    contextNameError: string = "";
+    contextNameLastGenerated: string = "";
 
     doSequence = false
 
@@ -49,17 +49,17 @@ export class CommandWizardView {
     }
     
     checkInputForErrors() {
-        if (!this.newContextsTextToParse.trim()) {
-            this.newContextsTextToParseError = "You must enter one or more contexts to generate rules."
+        if (!this.newCommandsTextToParse.trim()) {
+            this.newCommandsTextToParseError = "You must enter one or more commands to generate rules."
         } else {
-            this.newContextsTextToParseError = ""
+            this.newCommandsTextToParseError = ""
         }
-        if (!this.commandPhrase.trim()) {
-            this.commandPhraseError = "You must enter a command to be used to describe these contexts."
+        if (!this.contextName.trim()) {
+            this.contextNameError = "You must enter a context to be used to enable these commands."
         } else {
-            this.commandPhraseError = ""
+            this.contextNameError = ""
         }
-        return this.newContextsTextToParseError || this.commandPhraseError
+        return this.newCommandsTextToParseError || this.contextNameError
     }
     
     generateRules(): void {
@@ -71,18 +71,18 @@ export class CommandWizardView {
             return
         }
 
-        const commandPhrase = this.commandPhrase.trim()
+        const contextName = this.contextName.trim()
 
         const world: TWorld = this.domain.world
         const ruleEditorForm = this.domain.ruleEditorForm
         
         // TODO: save text to log
-        // uschangelog.ChangeLogForm.addToLog(this.NewContextsMemo.Text)
+        // uschangelog.ChangeLogForm.addToLog(this.newCommandsMemo.Text)
 
         const newRulesCommand = new TSNewRulesCommand(world, ruleEditorForm)
         newRulesCommand.creator = "new context wizard"
 
-        const lines = this.newContextsTextToParse.split(/\r\n|\r|\n/)
+        const lines = this.newCommandsTextToParse.split(/\r\n|\r|\n/)
 
         for (let line of lines) {
             line = line.trim()
@@ -105,7 +105,7 @@ export class CommandWizardView {
             const newRule = world.newRule()
             newRule.position = position
             newRule.setContext(context)
-            newRule.setCommand(commandPhrase)
+            newRule.setCommand(contextName)
             newRule.setReply(reply)
             newRule.selected = true
 
@@ -125,14 +125,14 @@ export class CommandWizardView {
             return
         }
 
-        this.newContextsTextToParseLastGenerated = this.newContextsTextToParse
-        this.commandPhraseLastGenerated = this.commandPhrase
-        this.newContextsTextToParse = ""
+        this.newCommandsTextToParseLastGenerated = this.newCommandsTextToParse
+        this.contextNameLastGenerated = this.contextName
+        this.newCommandsTextToParse = ""
         this.wasGenerateRulesPressed = false
     }
     
     // TODO:
-    // uschangelog.ChangeLogForm.addToLog(this.NewContextsMemo.Text)
+    // uschangelog.ChangeLogForm.addToLog(this.newCommandsMemo.Text)
     // Application.HelpJump("Making_new_rules_using_the_new_contexts_wizard")
 
     // the good place | You're in the good place
@@ -172,17 +172,17 @@ export class CommandWizardView {
 
                 m("p", "What context (", Glyph.context, ") do you want your new commands to use?"),
                 // TODO: Drop down or scrolling list of existing contexts
-                m("input.ml2" + (this.commandPhraseError ? ".bg-yellow" : ""),
+                m("input.ml2" + (this.contextNameError ? ".bg-yellow" : ""),
                     {
-                        value: this.commandPhrase,
+                        value: this.contextName,
                         onchange: (event: { target: HTMLInputElement }) => {
-                            this.commandPhrase = event.target.value
+                            this.contextName = event.target.value
                             if (this.wasGenerateRulesPressed) this.checkInputForErrors()
                         }
                     },
                 ),
 
-                this.commandPhraseError ? m("div.i.bg-yellow", this.commandPhraseError) : [],
+                this.contextNameError ? m("div.i.bg-yellow", this.contextNameError) : [],
 
                 help("Some generic examples of a context are: \"cave\", \"forest\", and \"inside house\"."),
 
@@ -206,19 +206,19 @@ export class CommandWizardView {
 
                 m("div.ma2", "Command (", Glyph.command, ")", m("span.ml2.mr2.f4.b", "|"), "Reply (", Glyph.reply, ")"),
 
-                m("textarea.ml2" + (this.newContextsTextToParseError ? ".bg-yellow" : ""),
+                m("textarea.ml2" + (this.newCommandsTextToParseError ? ".bg-yellow" : ""),
                     {
                         rows: 10,
                         cols: 60,
-                        value: this.newContextsTextToParse,
+                        value: this.newCommandsTextToParse,
                         onchange: (event: { target: HTMLInputElement }) => {
-                            this.newContextsTextToParse = event.target.value
+                            this.newCommandsTextToParse = event.target.value
                             if (this.wasGenerateRulesPressed) this.checkInputForErrors()
                         }
                     },
                 ),
 
-                this.newContextsTextToParseError ? m("div.i.bg-yellow", this.newContextsTextToParseError) : [],
+                this.newCommandsTextToParseError ? m("div.i.bg-yellow", this.newCommandsTextToParseError) : [],
 
                 m("h3", "Sequence"),
 
