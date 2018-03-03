@@ -1,4 +1,5 @@
 import { int } from "./common"
+import { TPoint } from "./TPoint"
 
 export class TRect {
     Left: int
@@ -13,15 +14,13 @@ export class TRect {
         this.Bottom = Math.round(Bottom)
     }
 
-    /*
-    width(): int {
+    get width(): int {
         return this.Right - this.Left
     }
 
-    height(): int {
-        return this.Bottom - this.Top()
+    get height(): int {
+        return this.Bottom - this.Top
     }
-    */
 
     intersects(otherRect: TRect): boolean {
         // Wondering if this should use <= ?
@@ -29,5 +28,13 @@ export class TRect {
             && this.Right > otherRect.Left 
             && this.Top < otherRect.Bottom
             && this.Bottom > otherRect.Top
+    }
+
+    contains(point: TPoint): boolean {
+        // Wondering if this should use <= ?
+        return this.Left < point.X 
+            && this.Right > point.X 
+            && this.Top < point.Y
+            && this.Bottom > point.Y 
     }
 }
