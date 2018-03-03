@@ -26,7 +26,14 @@ talk to the grue | The grue devours you (except your bones of course).
 const defaultReply = "There is nothing of interest here."
 
 // TODO Application.HelpJump("Making_new_rules_using_the_new_commands_wizard")
- 
+
+enum EndSequence {
+    noSelection = "noSelection",
+    loopToFirst = "loopToFirst",
+    leaveLastCommand = "leaveLastCommand",
+    removeLastCommand = "removeLastCommand"
+}
+
 export class CommandWizardView {
     domain: any
 
@@ -37,6 +44,15 @@ export class CommandWizardView {
     contextName = "";
     contextNameError: string = "";
     contextNameLastGenerated: string = "";
+
+    prefix = "";
+    prefixError: string = "";
+    prefixLastGenerated: string = "";
+
+    // TODO: set to undefined
+    endSequence = EndSequence.noSelection;
+    endSequenceError: string = "";
+    endSequenceGenerated: string = "";
 
     doSequence = false
 
@@ -59,11 +75,26 @@ export class CommandWizardView {
         } else {
             this.contextNameError = ""
         }
-        return this.newCommandsTextToParseError || this.contextNameError
+        if (this.doSequence) {
+            if (!this.prefix.trim()) {
+                this.prefixError = "You must enter a prefix."
+            } else {
+                this.prefixError = ""
+            }
+            if (this.endSequence = EndSequence.noSelection) {
+                this.contextNameError = "You must select an option to end the sequence."
+            } else {
+                this.contextNameError = ""
+            }
+        } else {
+            this.prefixError = ""
+            this.endSequenceError = ""
+        }
+        return this.newCommandsTextToParseError || this.contextNameError || this.prefixError || this.endSequenceError
     }
     
     generateRules(): void {
-        console.log("generateRules")
+        console.log("generateRules", this.endSequence)
 
         this.wasGenerateRulesPressed = true
         if (this.checkInputForErrors()) {
@@ -127,6 +158,8 @@ export class CommandWizardView {
 
         this.newCommandsTextToParseLastGenerated = this.newCommandsTextToParse
         this.contextNameLastGenerated = this.contextName
+        this.prefixLastGenerated = this.prefix
+        this.endSequenceGenerated = this.endSequence
         this.newCommandsTextToParse = ""
         this.wasGenerateRulesPressed = false
     }
@@ -206,6 +239,7 @@ export class CommandWizardView {
 
                 m("div.ma2", "Command (", Glyph.command, ")", m("span.ml2.mr2.f4.b", "|"), "Reply (", Glyph.reply, ")"),
 
+                m("div.b", "New commands ", this.contextName ? "for: " + this.contextName : ""),
                 m("textarea.ml2" + (this.newCommandsTextToParseError ? ".bg-yellow" : ""),
                     {
                         rows: 10,
@@ -229,47 +263,65 @@ export class CommandWizardView {
 
                 m("input[type=checkbox]", {
                     checked: doSequence || undefined,
-                    onclick: (event: { target: HTMLInputElement }) => { this.doSequence = event.target.checked }
+                    onchange: (event: { target: HTMLInputElement }) => { this.doSequence = event.target.checked }
                 }),
                 m("span", "Yes, link the commands in a sequence."),
 
-                // Might want to just disable items instead?
-                doSequence ? [
-                    help("Here is an example of a sequence (see below) which could generate four rules for a \"grue pit\" context each using the same command:"),
-                    showHelp ? m("pre.ba.bw2.pa1.ml2.mr2", exampleSequenceWithFourRules) : [],
-    
-                    help("Creating sequences is an advanced topic; see the help system for details."),
-    
-                    m("p", " What prefix do you want to use for the requirements that create the sequence?"),
+                help("Here is an example of a sequence (see below) which could generate four rules for a \"grue pit\" context each using the same command:"),
+                showHelp ? m("pre.ba.bw2.pa1.ml2.mr2", exampleSequenceWithFourRules) : [],
 
-                    // TODO
-                    m("input"),
-                    help("Examples are: \"talking to sailor\", \"in boarding house\". By default the prefix is the same as the context."),
+                help("Creating sequences is an advanced topic; see the help system for details."),
 
-                    // TODO img.sequenceEndArrow.TImage
-                    m("p", "When the last command has been said,"),
+                m("p", " What prefix do you want to use for the requirements that create the sequence?"),
 
-                    // TODO -- fix variable
-                    m("input[type=radio].endSequenceLoopToFirst.TRadioButton",
-                        {
-                        },
-                    ),
-                    "loop to the first command in the sequence",
-                    m("br"),
-                    m("input[type=radio].endSequenceLeaveLastCommand.TRadioButton",
-                        {
-                        },
-                        
-                    ),
-                    "leave the last command available",
-                    m("br"),
-                    m("input[type=radio].endSequenceRemoveTheLastCommand.TRadioButton",
-                        {
-                        },
-                    ),
-                    "remove the last command",
-                    m("br"),
-                ] : [],
+                m("input", {
+                    value: this.prefix,
+                    onchange: (event: { target: HTMLInputElement }) => this.prefix = event.target.value,
+                    disabled: !doSequence || null,
+                }),
+                this.prefixError ? m("div.i.bg-yellow", this.prefixError) : [],
+
+                help("Examples are: \"talking to sailor\", \"in boarding house\". By default the prefix is the same as the context."),
+
+                // TODO img.sequenceEndArrow.TImage
+                m("p", "When the last command has been said,"),
+
+                m("input[type=radio]",
+                    {
+                        name: "endSequence",
+                        value: EndSequence.loopToFirst,
+                        checked: this.endSequence === EndSequence.loopToFirst,
+                        onchange: () => { this.endSequence = EndSequence.loopToFirst },
+                        disabled: !doSequence || null,
+                    },
+                ),
+                "loop to the first command in the sequence",
+                m("br"),
+                m("input[type=radio]",
+                    {
+                        name: "endSequence",
+                        value: EndSequence.leaveLastCommand,
+                        checked: this.endSequence === EndSequence.leaveLastCommand,
+                        onchange: () => { this.endSequence = EndSequence.leaveLastCommand },
+                        disabled: !doSequence || null,
+                    },
+                    
+                ),
+                "leave the last command available",
+                m("br"),
+                m("input[type=radio]",
+                    {
+                        name: "endSequence",
+                        value: EndSequence.removeLastCommand,
+                        checked: this.endSequence === EndSequence.removeLastCommand,
+                        onchange: () => { this.endSequence = EndSequence.removeLastCommand },
+                        disabled: !doSequence || null,
+                    },
+                ),
+                "remove the last command",
+                m("br"),
+
+                this.endSequenceError ? m("div.i.bg-yellow", this.endSequenceError) : [],
 
                 m("h3", "Generate Rules"),
 
