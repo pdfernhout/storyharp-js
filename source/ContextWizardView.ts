@@ -130,7 +130,7 @@ export class ContextWizardView {
 
         this.newContextsTextToParseLastGenerated = this.newContextsTextToParse
         this.commandPhraseLastGenerated = this.commandPhrase
-        this.newContextsTextToParse = ""
+        // this.newContextsTextToParse = ""
         this.wasGenerateRulesPressed = false
     }
     
@@ -216,7 +216,7 @@ export class ContextWizardView {
                 help("You should stick with \"look\" unless you are doing something special. ",
                 "You can change individual commands later (in the editor) to deal with specific situations."),
 
-                m("p", "Click the \"Generate Rules\" button to create the new rules and clear the wizard."),
+                m("p", "Click the \"Generate Rules\" button to create the new rules."),
                 
                 m("div.ml2", 
                     m("button", {

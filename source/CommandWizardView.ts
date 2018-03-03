@@ -200,7 +200,7 @@ export class CommandWizardView {
         this.contextNameLastGenerated = this.contextName
         this.prefixLastGenerated = this.prefix
         this.endSequenceGenerated = this.endSequence
-        this.newCommandsTextToParse = ""
+        // this.newCommandsTextToParse = ""
         this.wasGenerateRulesPressed = false
     }
     
@@ -391,7 +391,7 @@ export class CommandWizardView {
 
                 m("h3", "Generate Rules"),
 
-                m("p", "Click the \"Generate Rules\" button to create the new rules and clear the wizard."),
+                m("p", "Click the \"Generate Rules\" button to create the new rules."),
                 
                 m("div.ml2", 
                     m("button", {
