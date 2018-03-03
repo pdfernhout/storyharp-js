@@ -25,6 +25,8 @@ talk to the grue | The grue devours you (except your bones of course).
 
 const defaultReply = "There is nothing of interest here."
 
+// TODO Application.HelpJump("Making_new_rules_using_the_new_commands_wizard")
+ 
 export class CommandWizardView {
     domain: any
 
@@ -35,6 +37,8 @@ export class CommandWizardView {
     commandPhrase = "";
     commandPhraseError: string = "";
     commandPhraseLastGenerated: string = "";
+
+    doSequence = false
 
     wasGenerateRulesPressed = false
 
@@ -139,7 +143,8 @@ export class CommandWizardView {
         function help(...args: string[]) {
             return showHelp ? m("p", ...args) : []
         }
-        
+        const doSequence = this.doSequence
+
         return m(".CommandWizardView.h-100.overflow-auto",
             {
             },
@@ -217,51 +222,54 @@ export class CommandWizardView {
 
                 m("h3", "Sequence"),
 
-                m("div", "Do you want to link your new commands in sequence, so that each becomes available only after the previous one is said?"),
-
-                m("input[type=checkbox]", {
-                    value: "TODO",
-                    onclick: () => alert("Unfinished")
-                }),
-                m("span", "Yes, link the commands in a sequence."),
-
                 help("Sequences are useful when the user has to do several things in a certain order, ",
                 "such as steps in an assembly process or parts of a conversation."),
 
-                help("Here is an example of a sequence (see below) which could generate four rules for a \"grue pit\" context each using the same command:"),
-                showHelp ? m("pre.ba.bw2.pa1.ml2.mr2", exampleSequenceWithFourRules) : [],
+                m("div", "Do you want to link your new commands in sequence, so that each becomes available only after the previous one is said?"),
 
-                help("Creating sequences is an advanced topic; see the help system for details."),
+                m("input[type=checkbox]", {
+                    checked: doSequence || undefined,
+                    onclick: (event: { target: HTMLInputElement }) => { this.doSequence = event.target.checked }
+                }),
+                m("span", "Yes, link the commands in a sequence."),
 
-                m("p", " What prefix do you want to use for the requirements that create the sequence?"),
+                // Might want to just disable items instead?
+                doSequence ? [
+                    help("Here is an example of a sequence (see below) which could generate four rules for a \"grue pit\" context each using the same command:"),
+                    showHelp ? m("pre.ba.bw2.pa1.ml2.mr2", exampleSequenceWithFourRules) : [],
+    
+                    help("Creating sequences is an advanced topic; see the help system for details."),
+    
+                    m("p", " What prefix do you want to use for the requirements that create the sequence?"),
 
-                // TODO
-                m("input"),
-                help("Examples are: \"talking to sailor\", \"in boarding house\". By default the prefix is the same as the context."),
+                    // TODO
+                    m("input"),
+                    help("Examples are: \"talking to sailor\", \"in boarding house\". By default the prefix is the same as the context."),
 
-                // TODO img.sequenceEndArrow.TImage
-                m("p", "When the last command has been said,"),
+                    // TODO img.sequenceEndArrow.TImage
+                    m("p", "When the last command has been said,"),
 
-                // TODO -- fix variable
-                m("input[type=radio].endSequenceLoopToFirst.TRadioButton",
-                    {
-                    },
-                ),
-                "loop to the first command in the sequence",
-                m("br"),
-                m("input[type=radio].endSequenceLeaveLastCommand.TRadioButton",
-                    {
-                    },
-                    
-                ),
-                "leave the last command available",
-                m("br"),
-                m("input[type=radio].endSequenceRemoveTheLastCommand.TRadioButton",
-                    {
-                    },
-                ),
-                "remove the last command",
-                m("br"),
+                    // TODO -- fix variable
+                    m("input[type=radio].endSequenceLoopToFirst.TRadioButton",
+                        {
+                        },
+                    ),
+                    "loop to the first command in the sequence",
+                    m("br"),
+                    m("input[type=radio].endSequenceLeaveLastCommand.TRadioButton",
+                        {
+                        },
+                        
+                    ),
+                    "leave the last command available",
+                    m("br"),
+                    m("input[type=radio].endSequenceRemoveTheLastCommand.TRadioButton",
+                        {
+                        },
+                    ),
+                    "remove the last command",
+                    m("br"),
+                ] : [],
 
                 m("h3", "Generate Rules"),
 
