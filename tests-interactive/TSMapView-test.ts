@@ -108,8 +108,20 @@ async function loadTestWorld(worldFileName: string) {
 
 const MyComponent = { 
     view: () => m("div", 
-        m("canvas.ba"),
-        m("div", "There shoule be a canvas above."),
+        m("canvas.ba", {
+            onupdate(vnode: m.VnodeDOM) {
+                const canvas = <HTMLCanvasElement>vnode.dom
+                const context = canvas.getContext("2d")
+                if (!context) return
+                context.beginPath()
+                context.moveTo(0, 0)
+                context.lineTo(100, 100)
+                context.closePath()
+                context.strokeStyle = "#00FFFF"
+                context.stroke()
+            }
+        }),
+        m("div", "There should be a canvas above with a line from top left most of the way towards the bottom middle."),
     )
 }
 
