@@ -6,6 +6,7 @@ import { TWorld } from "./TWorld"
 import { Glyph } from "./VariablesView"
 import { TSRule } from "./TSRule"
 
+// the good place
 const exampleWithFiveRules = `
 tell Shawn you are angry | Shawn rolls up his cocoon.
 tell Shawn you are happy| Shawn rolls up his cocoon.
@@ -16,7 +17,7 @@ spit at Shawn
 throw a cactus at Shawn | The cactus bounces off Shawn's quickly-rolled-up cocoon.
 `.trim()
 
-// grue pit
+// the grue place
 const exampleSequenceWithFourRules = `    
 talk to the grue | The grue won't listen.
 talk to the grue | The grue seems to be getting very agitated.
@@ -50,7 +51,6 @@ export class CommandWizardView {
     prefixError: string = "";
     prefixLastGenerated: string = "";
 
-    // TODO: set to undefined
     endSequence = EndSequence.noSelection;
     endSequenceError: string = "";
     endSequenceGenerated: string = "";
@@ -204,12 +204,6 @@ export class CommandWizardView {
         this.wasGenerateRulesPressed = false
     }
     
-    // TODO:
-    // uschangelog.ChangeLogForm.addToLog(this.newCommandsMemo.Text)
-    // Application.HelpJump("Making_new_rules_using_the_new_contexts_wizard")
-
-    // the good place | You're in the good place
-
     // TODO use or remove:
 
     // usdomain.domain.world.addContextsToListBox(this.ContextBox)
@@ -274,8 +268,6 @@ export class CommandWizardView {
                 help("Some generic examples of a context are: \"cave\", \"forest\", and \"inside house\"."),
 
                 m("h3", "Commands"),
-
-                // TODO: "New commands for: context",
 
                 help("Enter or paste the commands you want to create in the area below, ",
                 "separating each command from its reply by a pipe bar."),
