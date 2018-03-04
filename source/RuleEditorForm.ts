@@ -84,7 +84,7 @@ export class RuleEditorForm {
             currentView === "wizards"
                 ? this.viewWizards() 
                 : [
-                    m("div.mt2.flex-auto.h-100.overflow-hidden",
+                    m("div.mt2.flex-auto.h-100.w-100.overflow-hidden",
                         currentView === "table" ? m(RuleTableView, <any>{domain: domain}) : [],
                         currentView === "map" ? m(RuleMapView, <any>{domain: domain}) : [],
                         currentView === "browser" ? m(RuleBrowserView, <any>{domain: domain}) : [],

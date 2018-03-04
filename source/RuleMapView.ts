@@ -1,7 +1,11 @@
 import * as m from "mithril"
+import { TSRuleField } from "./TSRule"
+import { TSMapView } from "./TSMapView"
 
 export class RuleMapView {
     domain: any
+    canvas: HTMLCanvasElement
+    mapDrawer = new TSMapView()
 
     constructor(vnode: m.Vnode) {
         this.domain = (<any>vnode.attrs).domain
@@ -446,6 +450,35 @@ export class RuleMapView {
     */
 
     view() {
-        return m(".RuleMapView", "Unfinished RuleMapForm")
+        const world = this.domain.world
+
+        const drawWorld = () => {
+            const canvas = this.canvas
+            // Clear the canvas
+            canvas.width = canvas.width
+
+            const context = canvas.getContext("2d")
+            if (!context) return
+            const displayOptions = []
+            displayOptions[TSRuleField.kRuleContext] = true
+            displayOptions[TSRuleField.kRuleCommand] = true
+            console.log("about to draw world")
+            this.mapDrawer.displayOn(context, displayOptions, null, null, world, null)
+        }
+
+        return m(".RuleMapView.h-100.w-100.overflow-hidden",
+            m("canvas.ba.h-100.w-100.overflow-hidden", {
+                oncreate: (vnode: m.VnodeDOM) => {
+                    console.log("oncreate")              
+                    this.canvas = <HTMLCanvasElement>vnode.dom
+                    drawWorld()
+                },
+                onclick: () => {
+                    console.log("onclick scrolling")
+                    this.mapDrawer.scroll.X += 20
+                    drawWorld()
+                },
+            }),
+        )
     }
 }
