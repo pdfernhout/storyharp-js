@@ -104,10 +104,7 @@ export class ContextWizardView {
                 reply =  line.substring(pipeBarLocation + 1).trim() || defaultReply
             }
 
-            const position: TPoint = ruleEditorForm.goodPosition()
-
             const newRule = world.newRule()
-            newRule.position = position
             newRule.setContext(context)
             newRule.setCommand(commandPhrase)
             newRule.setReply(reply)

@@ -137,10 +137,7 @@ export class CommandWizardView {
                 reply =  line.substring(pipeBarLocation + 1).trim() || defaultReply
             }
 
-            const position: TPoint = ruleEditorForm.goodPosition()
-
             newRule = world.newRule()
-            newRule.position = position
             newRule.setContext(this.contextName)
             newRule.setCommand(command)
             newRule.setReply(reply)
