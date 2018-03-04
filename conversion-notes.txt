@@ -174,3 +174,7 @@ Should also use the general label functionality.
 
 Watch out for checks for null in Delphi where in JavaScript they might also be undefined if not initialized.
 A fix is to initialize the value to null -- or to change the test.
+
+When working on a big file you are subdividing into other class files like, say, the rule editor,
+it would be best to copy the original files into the main source directory and then delete parts as you use them.
+This will make it easier to see what remains to be implemented -- or eventually discarded.
