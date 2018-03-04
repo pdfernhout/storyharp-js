@@ -114,6 +114,10 @@ const MyComponent = {
         m("canvas.ba", {
             onupdate(vnode: m.VnodeDOM) {
                 const canvas = <HTMLCanvasElement>vnode.dom
+
+                // Clear the canvas
+                canvas.width = canvas.width
+
                 const context = canvas.getContext("2d")
                 if (!context) return
                 context.beginPath()
@@ -139,7 +143,8 @@ const MyComponent = {
 
                 const p1 = new TPoint(r3.Left, r3.Top)
                 mapDrawer.drawCommandOrContext(context, "Hello, world!", r3, p1, false, false, false)
-            }
+            },
+            onclick: () => mapDrawer.scroll.X -= 20,
         }),
         m("div", "There should be a canvas above with a line from top left most of the way towards the bottom middle."),
         m("canvas.ba.ma4", {
@@ -147,13 +152,18 @@ const MyComponent = {
             height: 500,
             onupdate(vnode: m.VnodeDOM) {
                 const canvas = <HTMLCanvasElement>vnode.dom
+
+                // Clear the canvas
+                canvas.width = canvas.width
+
                 const context = canvas.getContext("2d")
                 if (!context) return
                 const displayOptions = []
                 displayOptions[TSRuleField.kRuleContext] = true
                 displayOptions[TSRuleField.kRuleCommand] = true
                 mapDrawer.displayOn(context, displayOptions, null, null, world, null)
-            }
+            },
+            onclick: () => mapDrawer.scroll.X += 20,
         }),
     )
 }
