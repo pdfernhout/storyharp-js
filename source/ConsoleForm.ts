@@ -6,6 +6,7 @@ import { VariablesView } from "./VariablesView"
 import { RuleEditorForm } from "./RuleEditorForm"
 import { FileUtils } from "./FileUtils"
 import { authoringHelp } from "./authoringHelp"
+import { TSDomain } from "./TSDomain"
 
 const firstRiddleAnswer = "say an answer for a riddle"
 
@@ -30,7 +31,7 @@ function availableCommands(world: TWorld, showRiddleAnswers=false): string[] {
     return result
 }
 
-function doCommand(domain: any, commandPhrase: string) {
+function doCommand(domain: TSDomain, commandPhrase: string) {
     // console.log("doCommand", commandPhrase)
     if (commandPhrase === firstRiddleAnswer) {
         // for riddles - need to be reassembled into command string first
@@ -63,7 +64,7 @@ function scrollIntoView() {
     if (buttons) buttons.scrollIntoView()
 }
 
-function viewChoices(domain: any) {
+function viewChoices(domain: TSDomain) {
     const commands = availableCommands(domain.world)
     Promise.resolve().then(scrollIntoView)
     return m("div", 
@@ -100,7 +101,7 @@ function color(color: Color) {
     }
 }
 
-function viewFiles(domain: any) {
+function viewFiles(domain: TSDomain) {
     return m("div",
         "Choose a demo world file to load:",
         m("br"),
@@ -118,7 +119,7 @@ function viewFiles(domain: any) {
 
 let showAuthoringHelp = false
 
-function viewAbout(domain: any) {
+function viewAbout(domain: TSDomain) {
     return m("div.overflow-auto", { style: "height: calc(100% - 7rem)" },
         m("p", `
             StoryHarp is an interactive environment for playing and creating
@@ -136,7 +137,7 @@ function viewAbout(domain: any) {
 }
 
 
-function viewConsole(domain: any) {
+function viewConsole(domain: TSDomain) {
     return m("div.overflow-auto", { style: "height: calc(100% - 5rem)" },
         m("div",
             domain.transcript.map((item: any) => m("div.mw6" + color(item.color), item.text)),
@@ -146,7 +147,7 @@ function viewConsole(domain: any) {
     )
 }
 
-function resetConsole(domain: any) {
+function resetConsole(domain: TSDomain) {
     if (!confirm("Are you sure you want to restart the world?")) return
     domain.world.newSession()
     domain.sessionCommandList.clear()
@@ -154,7 +155,7 @@ function resetConsole(domain: any) {
     domain.transcript.push({text: "Starting: " + domain.loadedFileName, color: Color.clGreen})
 }
 
-function loadWorld(domain: any) {
+function loadWorld(domain: TSDomain) {
     const world: TWorld = domain.world
     FileUtils.loadFromFile(false, (fileName: string, contents: string) => {
         console.log("chose", fileName)
@@ -172,7 +173,7 @@ function loadWorld(domain: any) {
     })
 }
 
-function saveWorld(domain: any) {
+function saveWorld(domain: TSDomain) {
     const world: TWorld = domain.world
     const fileName = domain.loadedFileName
     FileUtils.saveToFile(fileName, world.saveWorldToFileContents(false), ".wld", (fileName: string) => {
@@ -182,7 +183,7 @@ function saveWorld(domain: any) {
     })
 }
 
-function newWorld(domain: any) {
+function newWorld(domain: TSDomain) {
     const fileName = prompt("What would you like to call your new world?")
     if (!fileName) return
     domain.loadedFileName = fileName
@@ -197,7 +198,7 @@ function newWorld(domain: any) {
     domain.transcript.push({text: "Starting: " + domain.loadedFileName, color: Color.clGreen})
 }
 
-export function viewConsoleForm(domain: any) {
+export function viewConsoleForm(domain: TSDomain) {
 
     function buttonWithHighlight(selection: FormName) {
         return "button.ml2" + (activeForm === selection ? ".bg-light-blue" : "")

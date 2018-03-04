@@ -4,6 +4,7 @@ import { TSNewRulesCommand } from "./TSNewRulesCommand"
 import { TPoint } from "./TPoint"
 import { TWorld } from "./TWorld"
 import { Glyph } from "./VariablesView"
+import { TSDomain } from "./TSDomain"
 
 const exampleOne =`
 cave|You are in a big cave.
@@ -33,7 +34,7 @@ const defaultCommand = "look"
 const defaultReply = "There is nothing of interest here."
 
 export class ContextWizardView {
-    domain: any
+    domain: TSDomain
 
     newContextsTextToParse: string = "";
     newContextsTextToParseError: string = "";

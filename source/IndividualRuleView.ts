@@ -4,6 +4,7 @@ import { TWorld } from "./TWorld"
 import { TSRule, TSRuleField } from "./TSRule"
 import { TSCommandList } from "./TSCommandList"
 import { TSNewRulesCommand } from "./TSNewRulesCommand"
+import { TSDomain } from "./TSDomain"
 
 /* Decided not to use and to edit a rule directly
 // Similar to TSRule:
@@ -28,7 +29,7 @@ ruleShadow: TSRuleShadow = {
 
 // TODO: Change capitalization on some method names
 export class IndividualRuleView {
-    domain: any
+    domain: TSDomain
     expanded = true
 
     constructor(vnode: m.Vnode) {
@@ -121,7 +122,7 @@ export class IndividualRuleView {
 
    RuleNewClick(): void {
         const world: TWorld = this.domain.world
-        const rule: TSRule = this.domain.editedRule
+        const rule: TSRule | null = this.domain.editedRule
         const worldCommandList: TSCommandList = this.domain.worldCommandList
 
         const newRulesCommand = new TSNewRulesCommand(world, this.domain.ruleEditorForm)
@@ -165,7 +166,7 @@ export class IndividualRuleView {
 
     RuleDuplicateClick(): void {
         const world: TWorld = this.domain.world
-        const rule: TSRule = this.domain.editedRule
+        const rule: TSRule | null = this.domain.editedRule
         const worldCommandList: TSCommandList = this.domain.worldCommandList
 
         if (rule === null) {
@@ -188,7 +189,7 @@ export class IndividualRuleView {
     }
 
     RuleDeleteClick(): void {
-        const rule: TSRule = this.domain.editedRule
+        const rule: TSRule | null = this.domain.editedRule
         const worldCommandList: TSCommandList = this.domain.worldCommandList
 
         if ((rule !== null) && (rule.selected)) {
@@ -226,7 +227,7 @@ export class IndividualRuleView {
     view() {
         const world: TWorld = this.domain.world
         const worldCommandList: TSCommandList = this.domain.worldCommandList
-        const rule: TSRule = this.domain.editedRule
+        const rule: TSRule | null = this.domain.editedRule
 
         // TODO: Fix all these
         const ruleEditorForm: any = this.domain.ruleEditorForm
@@ -238,26 +239,32 @@ export class IndividualRuleView {
         function InsertSoundClick() { console.log("insertSoundClick") }
 
         function contextChange(event: { target: HTMLInputElement }) {
+            if (!rule) throw new Error("Rule must be defined first")
             worldCommandList.ruleFieldChange(ruleEditorForm, changeLogForm, consoleForm, rule, TSRuleField.kRuleContext, event.target.value)
         }
 
         function commandChange(event: { target: HTMLInputElement }) {
+            if (!rule) throw new Error("Rule must be defined first")
             worldCommandList.ruleFieldChange(ruleEditorForm, changeLogForm, consoleForm, rule, TSRuleField.kRuleCommand, event.target.value)
         }
 
         function replyChange(event: { target: HTMLTextAreaElement }) {
+            if (!rule) throw new Error("Rule must be defined first")
             worldCommandList.ruleFieldChange(ruleEditorForm, changeLogForm, consoleForm, rule, TSRuleField.kRuleReply, event.target.value)
         }
 
         function moveChange(event: { target: HTMLInputElement }) {
+            if (!rule) throw new Error("Rule must be defined first")
             worldCommandList.ruleFieldChange(ruleEditorForm, changeLogForm, consoleForm, rule, TSRuleField.kRuleMove, event.target.value)
         }
 
         function requirementsChange(event: { target: HTMLInputElement }) {
+            if (!rule) throw new Error("Rule must be defined first")
             worldCommandList.ruleFieldChange(ruleEditorForm, changeLogForm, consoleForm, rule, TSRuleField.kRuleRequirements, event.target.value)
         }
 
         function changesChange(event: { target: HTMLInputElement }) {
+            if (!rule) throw new Error("Rule must be defined first")
             worldCommandList.ruleFieldChange(ruleEditorForm, changeLogForm, consoleForm, rule, TSRuleField.kRuleChanges, event.target.value)
         }
 

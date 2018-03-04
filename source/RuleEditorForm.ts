@@ -2,12 +2,13 @@ import * as m from "mithril"
 import { FileUtils } from "./FileUtils"
 import { TWorld } from "./TWorld"
 import { IndividualRuleView } from "./IndividualRuleView"
-import { RuleTableView } from "./RuleTableView";
+import { RuleTableView } from "./RuleTableView"
 import { RuleMapView } from "./RuleMapView"
 import { RuleBrowserView } from "./RuleBrowserView"
 import { ContextWizardView } from "./ContextWizardView"
 import { CommandWizardView } from "./CommandWizardView"
 import { LinkWizardView } from "./LinkWizardView"
+import { TSDomain } from "./TSDomain"
 
 type ViewName = "table" | "map" | "browser" | "wizards"
 type WizardName = "context" | "command" | "link"
@@ -16,7 +17,7 @@ type WizardName = "context" | "command" | "link"
 // TODO: Should variables be deleted when they are no longer used by a rule?
 
 export class RuleEditorForm {
-    domain: any
+    domain: TSDomain
 
     constructor(vnode: m.Vnode) {
         this.domain = (<any>vnode.attrs).domain

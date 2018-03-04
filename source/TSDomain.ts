@@ -1,3 +1,8 @@
+import { TWorld } from "./TWorld"
+import { TSCommandList } from "./TSCommandList";
+import { TSRule, TSRuleField } from "./TSRule";
+import { Color } from "./common";
+
 // unit usdomain
 
 /*
@@ -162,16 +167,76 @@ function hexUnencode(encodedString: string): string {
 
 */
 
+export interface TranscriptLine {
+    text: string
+    color: Color
+}
+
 // Make a seperate interface for testability
 export interface TSDomain {
+    world: TWorld
+    sessionCommandList: TSCommandList
+    worldCommandList: TSCommandList
+
+    editedRule: TSRule | null
+    lastSingleRuleIndex: number
+
+    currentEditorView: string
+    currentEditorWizard: string
+
+    setOrganizeByField: (newValue: TSRuleField) => null
+
+    transcript: TranscriptLine[]
+
+    loadedFileName: string
+
+    // TODO: Rename this to indicate these are demo world files
+    availableWorldFiles: string[]
+
+    loadTestWorld: (name: string) => void
+
+    // TODO: See if any of these can be changed to a callback:
+    consoleForm: any
+    ruleEditorForm: any
+    changeLogForm: any
 }
 
 export class TSApplication implements TSDomain {
+    world: TWorld
+    sessionCommandList: TSCommandList
+    worldCommandList: TSCommandList
+
+    editedRule: TSRule | null = null
+    lastSingleRuleIndex = 0
+
+    currentEditorView = "table"
+    currentEditorWizard = "context"
+
+    setOrganizeByField: (newValue: TSRuleField) => null
+
+    transcript = []
+
+    loadedFileName = ""
+
+    availableWorldFiles = []
+
+    // TODO: Fix these
+    consoleForm = null
+    ruleEditorForm = null
+    changeLogForm = null
+
+    constructor() {
+        this.world = new TWorld()
+        this.sessionCommandList = new TSCommandList(this.world)
+        this.worldCommandList = new TSCommandList(this.world)
+    }
+
+    loadTestWorld(name: string): void {
+        console.log("FIXME")
+    }
 
     /*
-    world: TWorld = new TWorld()
-    sessionCommandList: TSCommandList = new TSCommandList()
-    worldCommandList: TSCommandList = new TSCommandList()
+
     sessionFileName: string = ""
     worldFileName: string = ""
     sessionChangeCount: int = 0

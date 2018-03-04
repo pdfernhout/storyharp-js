@@ -3,9 +3,10 @@ import { int } from "./common"
 import { TSVariable } from "./TSVariable"
 import { TSRuleField, TSRule } from "./TSRule"
 import { Glyph } from "./VariablesView"
+import { TSDomain } from "./TSDomain"
 
 export class RuleBrowserView {
-    domain: any
+    domain: TSDomain
     browseBy = TSRuleField.kRuleContext
     selectedVariable: TSVariable | null = null
     lastBrowserSingleRuleIndex = 0

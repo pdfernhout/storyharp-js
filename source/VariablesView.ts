@@ -1,8 +1,9 @@
 import * as m from "mithril"
 import { expander } from "./common"
-import { TWorld } from "./TWorld";
-import { TSCommandList } from "./TSCommandList";
-import { TSVariableState } from "./TSVariable";
+import { TWorld } from "./TWorld"
+import { TSCommandList } from "./TSCommandList"
+import { TSVariableState } from "./TSVariable"
+import { TSDomain } from "./TSDomain"
 
 interface ButtonState {
     present: boolean;
@@ -28,7 +29,7 @@ export enum Glyph {
 }
 
 export class VariablesView {
-    domain: any
+    domain: TSDomain
 
     expanded = false
 

@@ -5,6 +5,7 @@ import { TPoint } from "./TPoint"
 import { TWorld } from "./TWorld"
 import { Glyph } from "./VariablesView"
 import { TSRule } from "./TSRule"
+import { TSDomain } from "./TSDomain"
 
 // the good place
 const exampleWithFiveRules = `
@@ -37,7 +38,7 @@ enum EndSequence {
 }
 
 export class CommandWizardView {
-    domain: any
+    domain: TSDomain
 
     newCommandsTextToParse: string = "";
     newCommandsTextToParseError: string = "";
@@ -387,7 +388,7 @@ export class CommandWizardView {
                     m("br"),
 
                     this.endSequenceError ? m("div.i.bg-yellow", this.endSequenceError) : [],
-                )
+                ),
 
                 m("h3", "Generate Rules"),
 

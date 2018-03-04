@@ -1,9 +1,10 @@
 import * as m from "mithril"
-import { TWorld } from "./TWorld";
-import { TSRule } from "./TSRule";
+import { TWorld } from "./TWorld"
+import { TSRule } from "./TSRule"
+import { TSDomain } from "./TSDomain"
 
 export class RuleTableView {
-    domain: any
+    domain: TSDomain
 
     constructor(vnode: m.Vnode) {
         this.domain = (<any>vnode.attrs).domain
@@ -12,7 +13,7 @@ export class RuleTableView {
     ruleClicked(event: MouseEvent, rule: TSRule): void {
         const world: TWorld = this.domain.world
         const index = world.rules.indexOf(rule)
-        const editedRule: TSRule = this.domain.editedRule
+        const editedRule: TSRule | null = this.domain.editedRule
         const lastSingleRuleIndex: number = this.domain.lastSingleRuleIndex
 
         const isShiftClick = event.shiftKey
@@ -54,7 +55,7 @@ export class RuleTableView {
 
     view() {
         const world: TWorld = this.domain.world
-        const editedRule: TSRule = this.domain.editedRule
+        const editedRule: TSRule | null = this.domain.editedRule
         let row = 0
 
         function ellipsis(text: string): string { return text.length > 58 ? text.substring(0, 58) + "..." : text }

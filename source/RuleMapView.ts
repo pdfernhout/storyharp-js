@@ -1,17 +1,18 @@
 import * as m from "mithril"
 import { TSRule, TSRuleField } from "./TSRule"
 import { TSMapView } from "./TSMapView"
-import { TRect } from "./TRect";
+import { TRect } from "./TRect"
 import { TPoint } from "./TPoint"
 import { TWorld } from "./TWorld"
 import { TSDraggableObject } from "./TSDraggableObject"
 import { TSCommandList } from "./TSCommandList"
 import { TSMapDragCommand } from "./TSMapDragCommand"
 import { KfCommand, KfCommandChangeType } from "./KfCommand"
-import { TSVariableDisplayOptions } from "./TSVariable";
+import { TSVariableDisplayOptions } from "./TSVariable"
+import { TSDomain } from "./TSDomain";
 
 export class RuleMapView {
-    domain: any
+    domain: TSDomain
     world: TWorld
     worldCommandList: TSCommandList
     
@@ -303,7 +304,7 @@ export class RuleMapView {
             return
         }
         if (this.lastChoice instanceof TSRule) {
-            this.domain.editRule(this.lastChoice)
+            this.domain.editedRule = this.lastChoice
         }
         //
         //  else

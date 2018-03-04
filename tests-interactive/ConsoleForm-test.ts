@@ -71,7 +71,6 @@ const fakeDomain = {
     loadedFileName: "",
     loadTestWorld: null,
     editedRule: null,
-    editRule(rule: TSRule | null) { (<any>fakeDomain).editedRule = rule },
     lastSingleRuleIndex: 0,
     currentEditorView:"table",
     currentEditorWizard: "context",
