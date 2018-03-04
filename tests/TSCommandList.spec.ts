@@ -49,7 +49,6 @@ o.spec("TSCommandList", () => {
 
     o("say command in GarTrek", () => {
         const world = new TWorld()
-        world.reportModeCallback = function() {}
         world.loadWorldFromFileContents(GarTrekWorldContents)
         world.loadSessionFromFile("GarTrek.wld", GarTrekSessionContents)
 

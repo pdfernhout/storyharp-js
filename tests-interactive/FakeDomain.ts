@@ -20,8 +20,6 @@ async function loadTestWorld(worldFileName: string) {
 
     const worldContent = await m.request("../data/" + worldFileName + ".wld", {deserialize: (text) => text})
 
-    domain.world.reportModeCallback = function(text: string) { /* domain.transcript.push(text) */ }
-
     world.resetVariablesAndRules()
     const loaded = domain.world.loadWorldFromFileContents(worldContent)
     if (!loaded) throw new Error("Failed to load")

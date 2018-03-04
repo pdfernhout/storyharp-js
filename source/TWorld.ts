@@ -8,7 +8,6 @@ import { TSDraggableObject } from "./TSDraggableObject"
 
 /* External dependencies that need to be defined in app:
   // These can be set at World creation
-  TWorld instance reportModeCallback
   TWorld instance goodPositionCallback
   // showCommandPrefixInMap needs to track the UI changes
   TSRule.showCommandPrefixInMap
@@ -35,8 +34,6 @@ function swapIntegers(a: int, b: int): int[] {
 }
 
 export class TWorld {
-    // TODO: reportModeCallback needs to be set by user
-    reportModeCallback = console.log
     // TODO: goodPosition needs to be set by user
     goodPositionCallback = function() { return new TPoint(0, 0) }
 
@@ -143,61 +140,57 @@ export class TWorld {
             return !lines.length
         }
         
-        this.reportModeCallback("Loading")
-        try {
-            // done by caller to allow merges
-            // this.resetVariablesAndRules()
-            let count = 0
-            // unfinished - need better error checking
-            const header = readln()
-            if ((header !== "; world file version 1.0") && (header !== "; StoryHarp world file version 1.3")) {
-               throw new Error("File header for world file is not correct")
-            }
-            while (!eof()) {
-                let value = readln()
-                if ((value !== "") && (value[0] === ";")) {
-                    continue
-                }
-                if (value !== "====================") {
-                    return false
-                }
-                if (count === 0) {
-                    // context
-                    value = readln()
-                    // command
-                    value = readln()
-                    // reply
-                    value = readln()
-                    // move to
-                    value = readln()
-                    // extra changes
-                    value = readln()
-                    // extra requirements
-                    value = readln()
-                    // map positions
-                    value = readln()
-                } else {
-                    const rule: TSRule = this.newRule()
-                    value = readln()
-                    rule.setContext(value.trim())
-                    value = readln()
-                    rule.setCommand(value.trim())
-                    value = readln()
-                    rule.setReply(value.trim())
-                    value = readln()
-                    rule.setMove(value.trim())
-                    value = readln()
-                    rule.setChanges(value.trim())
-                    value = readln()
-                    rule.setRequirements(value.trim())
-                    value = readln()
-                    rule.setPosition(value.trim())
-                }
-                count = count + 1
-            }
-        } finally {
-            this.reportModeCallback("Running")
+        // done by caller to allow merges
+        // this.resetVariablesAndRules()
+        let count = 0
+        // unfinished - need better error checking
+        const header = readln()
+        if ((header !== "; world file version 1.0") && (header !== "; StoryHarp world file version 1.3")) {
+            throw new Error("File header for world file is not correct")
         }
+        while (!eof()) {
+            let value = readln()
+            if ((value !== "") && (value[0] === ";")) {
+                continue
+            }
+            if (value !== "====================") {
+                return false
+            }
+            if (count === 0) {
+                // context
+                value = readln()
+                // command
+                value = readln()
+                // reply
+                value = readln()
+                // move to
+                value = readln()
+                // extra changes
+                value = readln()
+                // extra requirements
+                value = readln()
+                // map positions
+                value = readln()
+            } else {
+                const rule: TSRule = this.newRule()
+                value = readln()
+                rule.setContext(value.trim())
+                value = readln()
+                rule.setCommand(value.trim())
+                value = readln()
+                rule.setReply(value.trim())
+                value = readln()
+                rule.setMove(value.trim())
+                value = readln()
+                rule.setChanges(value.trim())
+                value = readln()
+                rule.setRequirements(value.trim())
+                value = readln()
+                rule.setPosition(value.trim())
+            }
+            count = count + 1
+        }
+
         return true
     }
 
@@ -209,32 +202,27 @@ export class TWorld {
             lines.push(sections.join(""))
         }
 
-        this.reportModeCallback("Saving")
-        try {
-            // 1.0 had all lower case
-            // 1.3 supports mixed case
-            writeln("; StoryHarp world file version 1.3")
+        // 1.0 had all lower case
+        // 1.3 supports mixed case
+        writeln("; StoryHarp world file version 1.3")
+        writeln("====================")
+        for (let i = 0; i < 6; i++) {
+            writeln(TSRule.headerForField(i))
+        }
+        writeln("map positions")
+        for (let i = 0; i < this.rules.length; i++) {
+            const rule: TSRule = this.rules[i]
+            if (saveOnlySelectedRules && !rule.selected) {
+                continue
+            }
             writeln("====================")
-            for (let i = 0; i < 6; i++) {
-                writeln(TSRule.headerForField(i))
-            }
-            writeln("map positions")
-            for (let i = 0; i < this.rules.length; i++) {
-                const rule: TSRule = this.rules[i]
-                if (saveOnlySelectedRules && !rule.selected) {
-                    continue
-                }
-                writeln("====================")
-                writeln(rule.context.phrase)
-                writeln(rule.command.phrase)
-                writeln(rule.reply)
-                writeln(rule.move.phrase)
-                writeln(rule.changesString)
-                writeln(rule.requirementsString)
-                writeln(rule.position.X, ",", rule.position.Y, "|", rule.context.position.X, ",", rule.context.position.Y, "|", rule.move.position.X, ",", rule.move.position.Y)
-            }
-        } finally {
-            this.reportModeCallback("Running")
+            writeln(rule.context.phrase)
+            writeln(rule.command.phrase)
+            writeln(rule.reply)
+            writeln(rule.move.phrase)
+            writeln(rule.changesString)
+            writeln(rule.requirementsString)
+            writeln(rule.position.X, ",", rule.position.Y, "|", rule.context.position.X, ",", rule.context.position.Y, "|", rule.move.position.X, ",", rule.move.position.Y)
         }
 
         return lines.join("\n") + "\n"

@@ -19,7 +19,6 @@ o.spec("usworld", () => {
 
         o("load world with missing contents", () => {
             const world = new TWorld()
-            world.reportModeCallback = function() {}
             try {
                 const loaded = world.loadWorldFromFileContents("")
                 o(loaded).equals(true)
@@ -30,7 +29,6 @@ o.spec("usworld", () => {
 
         o("load world with bad contents", () => {
             const world = new TWorld()
-            world.reportModeCallback = function() {}
             try {
                 const loaded = world.loadWorldFromFileContents("Not a robot")
                 o(loaded).equals(true)
@@ -41,14 +39,12 @@ o.spec("usworld", () => {
 
         o("load world for GarTrek", () => {
             const world = new TWorld()
-            world.reportModeCallback = function() {}
             const loaded = world.loadWorldFromFileContents(GarTrekWorldContents)
             o(loaded).equals(true)
         })
 
         o("save world for java1", () => {
             const world = new TWorld()
-            world.reportModeCallback = function() {}
             const loaded = world.loadWorldFromFileContents(Java1WorldContents)
             o(loaded).equals(true)
             const contents = world.saveWorldToFileContents(false)
@@ -57,7 +53,6 @@ o.spec("usworld", () => {
 
         o("load session for GarTrek", () => {
             const world = new TWorld()
-            world.reportModeCallback = function() {}
             const loadedWorld = world.loadWorldFromFileContents(GarTrekWorldContents)
             o(loadedWorld).equals(true)
             o(world.focus).equals(null)
@@ -70,7 +65,6 @@ o.spec("usworld", () => {
         o("saying phrase in GarTrek", () => {
             // can't easily do this without commands
             const world = new TWorld()
-            world.reportModeCallback = function() {}
             world.loadWorldFromFileContents(GarTrekWorldContents)
             world.loadSessionFromFile("GarTrek.wld", GarTrekSessionContents)
             if (!world.focus) throw "focus is null"
