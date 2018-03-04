@@ -448,14 +448,20 @@ export class RuleMapView {
 
         return m(".RuleMapView.h-100.w-100.overflow-hidden",
             m("canvas.ba.h-100.w-100.overflow-hidden", {
+                // set tabindex to make canvas focusable
+                tabindex: 0,
+
                 oncreate: (vnode: m.VnodeDOM) => {       
                     this.canvas = <HTMLCanvasElement>vnode.dom
                     drawWorld()
                 },
+
                 onupdate: (vnode: m.VnodeDOM) => {
                     drawWorld()
                 },
+
                 onmousedown: (event: MouseEvent) => {
+                    this.canvas.focus()
                     /* TODO: Fix scrolling
                     this.isDragging = true
                     ;(<any>event).redraw = false
@@ -464,6 +470,7 @@ export class RuleMapView {
                     this.MapImageMouseDown(event)
                     return false
                 },
+
                 onmousemove: (event: MouseEvent) => {
                     /* TODO: Fix scrolling
                     if (this.isDragging) {
@@ -476,6 +483,7 @@ export class RuleMapView {
                     */
                    this.MapImageMouseMove(event)
                 },
+
                 onmouseup: (event: MouseEvent) => {
                     /* TODO: Fix scrolling
                     this.isDragging = false
@@ -483,6 +491,32 @@ export class RuleMapView {
                     */
                    this.MapImageMouseUp(event)
                 },
+
+                onkeydown: (event: KeyboardEvent) => {
+                    // Support scrollinf map with arrow keys or WASD
+                    const scrollDelta = 100
+                    switch(event.keyCode) {
+                    case 37: // left arrow
+                    case 65: // a
+                        this.mapDrawer.scroll.X += scrollDelta
+                        break;
+                    case 38: // up arrow
+                    case 87: // w
+                        this.mapDrawer.scroll.Y += scrollDelta
+                        break;
+                    case 39: // right arrow
+                    case 68: // d
+                        this.mapDrawer.scroll.X -= scrollDelta
+                        break;
+                    case 40: // down arrow
+                    case 83: // s
+                        this.mapDrawer.scroll.Y -= scrollDelta
+                        break;
+                    default:
+                        (<any>event).redraw = false
+                        break
+                    }
+                }
             }),
         )
     }
