@@ -281,18 +281,6 @@ export class TSApplication implements TSDomain {
         this.justRegistered = false
     }
     
-    destroy(): void {
-        this.mapView.free
-        this.mapView = null
-        this.sessionCommandList.free
-        this.sessionCommandList = null
-        this.worldCommandList.free
-        this.worldCommandList = null
-        this.world.free
-        this.world = null
-        TObject.prototype.destroy.call(this)
-    }
-    
     readCommandLine(): void {
         let i: int
         
