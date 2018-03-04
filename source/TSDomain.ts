@@ -1,5 +1,6 @@
 // unit usdomain
 
+/*
 from conversion_common import *
 import uregistersupport
 import ufilesupport
@@ -11,7 +12,10 @@ import usworld
 import delphi_compatability
 
 // files
-// record
+
+*/
+
+/*
 export interface DomainOptionsStructure {
     extraMediaDirectory: string
     logFileName: string
@@ -57,6 +61,10 @@ export interface DomainOptionsStructure {
     editorPanelFirstListWidth: int
     pictureWindowRect: TRect
 }
+
+*/
+
+/*
 
 // const
 const kMinWidthOnScreen = 40
@@ -151,7 +159,12 @@ function hexUnencode(encodedString: string): string {
 // Agent
 // editor
 // windows
+
+*/
+
 export class TSDomain {
+
+    /*
     world: TWorld = new TWorld()
     sessionCommandList: TSCommandList = new TSCommandList()
     worldCommandList: TSCommandList = new TSCommandList()
@@ -502,7 +515,7 @@ export class TSDomain {
     
     windowsDirectory(): string {
         let result = ""
-        let cString: char[] /* 255 + 1 */
+        let cString: char[] // 255 + 1
         
         result = ""
         UNRESOLVED.getWindowsDirectory(cString, 256)
@@ -641,5 +654,6 @@ export class TSDomain {
         usruleeditorform.RuleEditorForm.updateMenus()
     }
     
+    */
 }
 
