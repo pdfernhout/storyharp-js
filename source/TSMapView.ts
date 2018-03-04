@@ -435,18 +435,35 @@ export class TSMapView {
 
         /* TODO: Use or remove
         usruleeditorform.setCanvasColorsForSelection(canvas, selected, focused, isCommand)
-        if (selected) {
-            canvas.Pen.Style = delphi_compatability.TFPPenStyle.psSolid
-        } else {
-            canvas.Pen.Style = delphi_compatability.TFPPenStyle.psClear
-        }
         */
 
+        if (selected) {
+            context.strokeStyle = "rgb(0, 0, 0)"
+            context.setLineDash([]);
+        } else {
+            if (isCommand) {
+                context.strokeStyle = "rgb(255, 255, 255)"
+                context.setLineDash([]);
+            } else {
+                context.strokeStyle = "rgb(0, 0, 0)"
+                context.setLineDash([1, 1]);
+            }
+        }
+
+        if (focused) {
+            context.fillStyle = "#96ccff" // light-blue
+        } else {
+            context.fillStyle = "rgb(255, 255, 255)"
+        }
         this.drawRect(context, drawRect, false, true)
+
+        context.fillStyle = "rgb(0, 0, 0)"
         context.fillText(text, textPoint.X, textPoint.Y)
+
+        context.setLineDash([]);
     }
 
-    drawRect(context: CanvasRenderingContext2D, rect: TRect, scrolled = false, clear = false) {
+    drawRect(context: CanvasRenderingContext2D, rect: TRect, scrolled = false, fill = false) {
         if (scrolled) rect = OffsetRect(rect, this.scroll.X, this.scroll.Y)
         context.beginPath()
         context.moveTo(rect.Left, rect.Top)
@@ -454,11 +471,8 @@ export class TSMapView {
         context.lineTo(rect.Right, rect.Bottom)
         context.lineTo(rect.Right, rect.Top)
         context.closePath()
-        if (clear) {
-            const oldFillStyle = context.fillStyle 
-            context.fillStyle = "rgb(255, 255, 255)"
+        if (fill) {
             context.fill()
-            context.fillStyle = oldFillStyle
         }
         context.stroke()
     }
