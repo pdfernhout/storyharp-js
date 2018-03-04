@@ -13,7 +13,7 @@ export class KfCommandList {
 	commandList: KfCommand[]
 	lastDoneCommandIndex: longint
     undoLimit: longint
-    mouseCommand: KfCommand | null
+    mouseCommand: KfCommand | null = null
     anchorPoint: TPoint
     previousPoint: TPoint
     rightButtonDown: boolean;
@@ -119,7 +119,7 @@ export class KfCommandList {
 
         nextMouseCommand = this.mouseCommand
         this.mouseCommand = null
-        if (nextMouseCommand !== null){
+        if (nextMouseCommand !== null) {
             mouseDidMove = 
                 (Math.abs(point.X - this.anchorPoint.X) > kMinMouseMoveDistance) ||
                 (Math.abs(point.Y - this.anchorPoint.Y) > kMinMouseMoveDistance)

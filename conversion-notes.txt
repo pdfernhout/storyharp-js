@@ -171,3 +171,6 @@ May require application design changes.
 Radio button generation is messed up. The button text is not displayed.
 The label text needs to be after the entire radio button input.
 Should also use the general label functionality.
+
+Watch out for checks for null in Delphi where in JavaScript they might also be undefined if not initialized.
+A fix is to initialize the value to null -- or to change the test.
