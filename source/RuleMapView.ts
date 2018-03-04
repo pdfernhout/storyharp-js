@@ -6,6 +6,7 @@ export class RuleMapView {
     domain: any
     canvas: HTMLCanvasElement
     mapDrawer = new TSMapView()
+    isDragging = false
 
     constructor(vnode: m.Vnode) {
         this.domain = (<any>vnode.attrs).domain
@@ -468,15 +469,34 @@ export class RuleMapView {
 
         return m(".RuleMapView.h-100.w-100.overflow-hidden",
             m("canvas.ba.h-100.w-100.overflow-hidden", {
+                //{
+                //    width: ????,
+                //    height: ????,
+                //},
                 oncreate: (vnode: m.VnodeDOM) => {
                     console.log("oncreate")              
                     this.canvas = <HTMLCanvasElement>vnode.dom
                     drawWorld()
                 },
+                /*
                 onclick: () => {
                     console.log("onclick scrolling")
                     this.mapDrawer.scroll.X += 20
                     drawWorld()
+                },
+                */
+                onmousedown: (event: MouseEvent) => {
+                    this.isDragging = true
+                },
+                onmousemove: (event: MouseEvent) => {
+                    if (this.isDragging) {
+                        this.mapDrawer.scroll.X += event.movementX;
+                        this.mapDrawer.scroll.Y += event.movementY;
+                        drawWorld()
+                    }
+                },
+                onmouseup: (event: MouseEvent) => {
+                    this.isDragging = false
                 },
             }),
         )
