@@ -86,6 +86,7 @@ export const FakeDomain: TSDomain = {
     lastSingleRuleIndex: 0,
     currentEditorView:"table",
     currentEditorWizard: "context",
+    showCommandPrefixInMap: false,
     // set by the browser as callback
     setOrganizeByField: (newValue: TSRuleField) => null,
 }

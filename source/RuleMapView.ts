@@ -440,7 +440,7 @@ export class RuleMapView {
             displayOptions[TSRuleField.kRuleCommand] = true
             context.setLineDash([]);
             context.lineDashOffset = 0
-            this.mapDrawer.displayOn(context, displayOptions, null, null, world, this.domain.editedRule)
+            this.mapDrawer.displayOn(context, displayOptions, null, null, world, this.domain.editedRule, this.domain.showCommandPrefixInMap)
             context.strokeStyle = "rgb(0, 0, 0)"
             context.setLineDash([4, 16]);
             context.lineDashOffset = 2;

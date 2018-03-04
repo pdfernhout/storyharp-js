@@ -9,8 +9,6 @@ import { TSDraggableObject } from "./TSDraggableObject"
 /* External dependencies that need to be defined in app:
   // These can be set at World creation
   TWorld instance goodPositionCallback
-  // showCommandPrefixInMap needs to track the UI changes
-  TSRule.showCommandPrefixInMap
 */
 
 /* TODO: FIX: this is used by loadSessionFromFile and needs to be rethought

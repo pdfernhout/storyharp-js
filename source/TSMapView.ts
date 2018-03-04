@@ -358,11 +358,12 @@ export class TSMapView {
         lastChoice: TSDraggableObject | null, 
         previousChoice: TSDraggableObject | null,
         world: TWorld,
-        editedRule: TSRule | null
+        editedRule: TSRule | null,
+        showCommandPrefix: boolean
     ): void {
         context.textAlign = "start"
         context.textBaseline = "top"
-
+        
         // calculate bounds for text boxes
         // TODO: canvas.Pen.Color = delphi_compatability.clBlack
         for (let i = 0; i < world.rules.length; i++) {
@@ -373,10 +374,10 @@ export class TSMapView {
             if (rule === editedRule) {
                 // update bounds -- optimize for case where rule is selected
                 // TODO: canvas.Font.Style = {UNRESOLVED.fsBold, }
-                textSize = TextExtent(context, rule.displayName())
+                textSize = TextExtent(context, rule.displayNamePrefixed(showCommandPrefix))
                 // TODO: canvas.Font.Style = {}
             } else {
-                textSize = TextExtent(context, rule.displayName())
+                textSize = TextExtent(context, rule.displayNamePrefixed(showCommandPrefix))
             }
             rule.extent.X = textSize.cx
             rule.extent.Y = textSize.cy
@@ -412,7 +413,7 @@ export class TSMapView {
             for (let i = 0; i < world.rules.length; i++) {
                 // draw rectangles and text
                 const rule: TSRule = world.rules[i]
-                this.drawCommandOrContext(context, rule.displayName(), rule.bounds(), rule.position, rule.selected, rule === editedRule, kDrawCommand)
+                this.drawCommandOrContext(context, rule.displayNamePrefixed(showCommandPrefix), rule.bounds(), rule.position, rule.selected, rule === editedRule, kDrawCommand)
             }
         }
         for (let i = 0; i < world.variables.length; i++) {

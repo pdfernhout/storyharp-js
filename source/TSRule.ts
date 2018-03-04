@@ -18,8 +18,6 @@ export enum TSRuleField {
 }
 
 export class TSRule extends TSDraggableObject {
-    // TODO FIX: Needs to track: usdomain.domain.options.showCommandPrefixInMap
-    static showCommandPrefixInMap: boolean = false;
     world: TWorld
     context: TSVariable
     requirements: TSDesiredStateVariableWrapper[] = []
@@ -34,9 +32,13 @@ export class TSRule extends TSDraggableObject {
     useagesRemoved: boolean = false
  
     displayName(): string {
+        return this.command.phrase
+    }
+
+    displayNamePrefixed(showPrefix: boolean): string {
         let result = ""
-        if (TSRule.showCommandPrefixInMap) {
-            result = result + "> "
+        if (showPrefix) {
+            result = "> "
         }
         result = result + this.command.phrase
         return result

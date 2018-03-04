@@ -59,7 +59,7 @@ const MyComponent = {
                 const displayOptions = []
                 displayOptions[TSRuleField.kRuleContext] = true
                 displayOptions[TSRuleField.kRuleCommand] = true
-                mapDrawer.displayOn(context, displayOptions, null, null, FakeDomain.world, null)
+                mapDrawer.displayOn(context, displayOptions, null, null, FakeDomain.world, null, FakeDomain.showCommandPrefixInMap)
             },
             onclick: () => mapDrawer.scroll.X += 20,
         }),

@@ -199,6 +199,9 @@ export interface TSDomain {
 
     loadTestWorld: (name: string) => Promise<void>
 
+    // "> "
+    showCommandPrefixInMap: boolean
+
     // TODO: See if any of these can be changed to a callback:
     consoleForm: any
     ruleEditorForm: any
@@ -223,6 +226,8 @@ export class TSApplication implements TSDomain {
     loadedFileName = ""
 
     demoConfig: DemoConfig
+
+    showCommandPrefixInMap = false
 
     // TODO: Fix these
     consoleForm = null
