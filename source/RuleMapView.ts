@@ -1,12 +1,15 @@
 import * as m from "mithril"
 import { TSRuleField } from "./TSRule"
 import { TSMapView } from "./TSMapView"
+import { TRect } from "./TRect";
+import { TPoint } from "./TPoint"
 
 export class RuleMapView {
     domain: any
     canvas: HTMLCanvasElement
     mapDrawer = new TSMapView()
     isDragging = false
+    lastMouseLocation = new TPoint(0, 0)
 
     constructor(vnode: m.Vnode) {
         this.domain = (<any>vnode.attrs).domain
@@ -455,48 +458,45 @@ export class RuleMapView {
 
         const drawWorld = () => {
             const canvas = this.canvas
-            // Clear the canvas
-            canvas.width = canvas.width
+            // Canvas is cleared by resizing in update
+            this.canvas.width = this.canvas.scrollWidth
+            this.canvas.height = this.canvas.scrollHeight
 
             const context = canvas.getContext("2d")
             if (!context) return
             const displayOptions = []
             displayOptions[TSRuleField.kRuleContext] = true
             displayOptions[TSRuleField.kRuleCommand] = true
-            console.log("about to draw world")
             this.mapDrawer.displayOn(context, displayOptions, null, null, world, null)
         }
 
         return m(".RuleMapView.h-100.w-100.overflow-hidden",
             m("canvas.ba.h-100.w-100.overflow-hidden", {
-                //{
-                //    width: ????,
-                //    height: ????,
-                //},
-                oncreate: (vnode: m.VnodeDOM) => {
-                    console.log("oncreate")              
+                oncreate: (vnode: m.VnodeDOM) => {       
                     this.canvas = <HTMLCanvasElement>vnode.dom
                     drawWorld()
                 },
-                /*
-                onclick: () => {
-                    console.log("onclick scrolling")
-                    this.mapDrawer.scroll.X += 20
+                onupdate: (vnode: m.VnodeDOM) => {
                     drawWorld()
                 },
-                */
                 onmousedown: (event: MouseEvent) => {
                     this.isDragging = true
+                    ;(<any>event).redraw = false
+                    this.lastMouseLocation = new TPoint(event.offsetX, event.offsetY)
+                    return false
                 },
                 onmousemove: (event: MouseEvent) => {
                     if (this.isDragging) {
-                        this.mapDrawer.scroll.X += event.movementX;
-                        this.mapDrawer.scroll.Y += event.movementY;
-                        drawWorld()
+                        this.mapDrawer.scroll.X += (event.offsetX - this.lastMouseLocation.X)
+                        this.mapDrawer.scroll.Y += (event.offsetY - this.lastMouseLocation.Y)
+                        this.lastMouseLocation = new TPoint(event.offsetX, event.offsetY)
+                    } else {
+                        (<any>event).redraw = false
                     }
                 },
                 onmouseup: (event: MouseEvent) => {
                     this.isDragging = false
+                    ;(<any>event).redraw = false
                 },
             }),
         )

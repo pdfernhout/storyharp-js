@@ -114,3 +114,6 @@ fakeDomain.loadTestWorld = <any>loadTestWorld
 
 // loadTestWorld("GarTrek")
 loadTestWorld("House and Yard")
+
+// Add resize listener so canvas will get updated in RuleMapView
+window.addEventListener("resize", () => m.redraw())
