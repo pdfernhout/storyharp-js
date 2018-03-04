@@ -7,7 +7,7 @@ import { viewConsoleForm } from "../source/ConsoleForm"
 import { TWorld } from "../source/TWorld"
 import { TSCommandList } from "../source/TSCommandList"
 import { Color } from "../source/common"
-import { TSRuleField } from "../source/TSRule"
+import { TSRuleField, TSRule } from "../source/TSRule"
 import { TPoint } from "../source/TPoint"
 
 const world = new TWorld()
@@ -71,6 +71,7 @@ const fakeDomain = {
     loadedFileName: "",
     loadTestWorld: null,
     editedRule: null,
+    editRule(rule: TSRule | null) { (<any>fakeDomain).editedRule = rule },
     lastSingleRuleIndex: 0,
     currentEditorView:"table",
     currentEditorWizard: "context",

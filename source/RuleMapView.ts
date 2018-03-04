@@ -1,19 +1,40 @@
 import * as m from "mithril"
-import { TSRuleField } from "./TSRule"
+import { TSRule, TSRuleField } from "./TSRule"
 import { TSMapView } from "./TSMapView"
 import { TRect } from "./TRect";
 import { TPoint } from "./TPoint"
 import { TWorld } from "./TWorld"
+import { TSDraggableObject } from "./TSDraggableObject"
+import { TSCommandList } from "./TSCommandList"
+import { TSMapDragCommand } from "./TSMapDragCommand"
+import { KfCommand, KfCommandChangeType } from "./KfCommand"
+import { TSVariableDisplayOptions } from "./TSVariable";
 
 export class RuleMapView {
     domain: any
+    world: TWorld
+    worldCommandList: TSCommandList
+    
     canvas: HTMLCanvasElement
     mapDrawer = new TSMapView()
+
     isDragging = false
     lastMouseLocation = new TPoint(0, 0)
 
+    previousChoice: TSDraggableObject | null
+    lastChoice: TSDraggableObject | null 
+
+    actionInProgress: boolean = false
+    mapSelectionInProgress: boolean = false
+
+    mapSelectionRect: TRect = new TRect()
+    lastMapMouseDownPosition: TPoint = new TPoint()
+
     constructor(vnode: m.Vnode) {
-        this.domain = (<any>vnode.attrs).domain
+        const domain = (<any>vnode.attrs).domain
+        this.domain = domain
+        this.world = domain.world
+        this.worldCommandList = domain.worldCommandList
     }
 
     /*
@@ -36,26 +57,19 @@ export class RuleMapView {
         }
     }    
 
-    currentGraphView(): TSMapView {
-        let result = new TSMapView()
-        result = usdomain.domain.mapView
-        return result
-    }
-    
+    */
+
     mapChangedNotification(command: KfCommand, state: KfCommandChangeType): void {
         this.MapPaintBoxChanged()
     }
+
+    /*
     
     MapPaintBoxChanged(): void {
-        let mapView: TSMapView
         let displayOptions: TSVariableDisplayOptions
         let i: int
         
         if (this.ListPages.ActivePage !== this.TabSheetMap) {
-            return
-        }
-        mapView = this.currentGraphView()
-        if (mapView === null) {
             return
         }
         for (i = 0; i <= 5; i++) {
@@ -67,8 +81,8 @@ export class RuleMapView {
         // clBtnFace;
         this.MapImage.Picture.Bitmap.Canvas.Brush.Color = delphi_compatability.clWhite
         this.MapImage.Picture.Bitmap.Canvas.FillRect(Rect(0, 0, this.MapImage.Picture.Bitmap.Width, this.MapImage.Picture.Bitmap.Height))
-        mapView.scroll = Point(-this.MapScrollBarHorizontal.Position, -this.MapScrollBarVertical.Position)
-        mapView.displayOn(this.MapImage.Picture.Bitmap.Canvas, displayOptions, this.lastChoice, this.previousChoice)
+        this.mapDrawer.scroll = new TPoint(-this.mapDrawer.scroll.X, -this.mapDrawer.scroll.Y)
+        this.mapDrawer.displayOn(this.MapImage.Picture.Bitmap.Canvas, displayOptions, this.lastChoice, this.previousChoice)
         this.MapImage.Invalidate()
     }
     
@@ -98,7 +112,9 @@ export class RuleMapView {
         return result
     }
     
-    makeChoice(choice: TSDraggableObject, multiSelect: boolean): boolean {
+    */
+
+    makeChoice(choice: TSDraggableObject | null, multiSelect: boolean): boolean {
         let result = false
         //whether must redraw
         result = false
@@ -109,7 +125,7 @@ export class RuleMapView {
             result = true
         } else {
             if ((choice === null) || !choice.selected) {
-                result = usdomain.domain.world.deselectAllExcept(choice)
+                result = this.world.deselectAllExcept(choice)
                 if (choice !== null) {
                     choice.selected = true
                 }
@@ -124,10 +140,10 @@ export class RuleMapView {
         if ((choice !== null) && choice.selected) {
             this.previousChoice = this.lastChoice
             this.lastChoice = choice
-            if (this.previousChoice instanceof usworld.TSRule) {
+            if (this.previousChoice instanceof TSRule) {
                 this.previousChoice = choice
             }
-            if (this.lastChoice instanceof usworld.TSRule) {
+            if (this.lastChoice instanceof TSRule) {
                 this.previousChoice = choice
             }
         } else if ((choice !== null) && !choice.selected) {
@@ -140,6 +156,8 @@ export class RuleMapView {
         }
         return result
     }
+
+    /*
     
     XorRect(canvas: TCanvas, rect: TRect): void {
         let oldMode: TPenMode
@@ -156,109 +174,126 @@ export class RuleMapView {
         canvas.Pen.Mode = oldMode
         canvas.Pen.Style = delphi_compatability.TFPPenStyle.psSolid
     }
+
+    */
     
-    MapImageMouseDown(Sender: TObject, Button: TMouseButton, Shift: TShiftState, X: int, Y: int): void {
-        let newCommand: TSMapDragCommand
-        let draggedNode: TSDraggableObject
-        let mapView: TSMapView
-        let displayOptions: TSVariableDisplayOptions
-        let i: int
-        let multipleSelect: boolean
-        let showString: string
-        let textSize: TPoint
-        let centerPosition: TPoint
-        
-        if (delphi_compatability.Application.terminated) {
-            return
-        }
-        this.commitChangesToRule()
-        this.lastMapMouseDownPosition = Point(X + this.MapScrollBarHorizontal.Position, Y + this.MapScrollBarVertical.Position)
-        mapView = this.currentGraphView()
-        if (mapView === null) {
-            return
-        }
-        this.FocusControl(this.PanelMap)
-        for (i = 0; i <= 5; i++) {
+    MapImageMouseDown(event: MouseEvent): void {
+        this.lastMapMouseDownPosition = new TPoint(event.offsetX + this.mapDrawer.scroll.X, event.offsetY + this.mapDrawer.scroll.Y)
+
+        // TODO: use or remove: this.FocusControl(this.PanelMap)
+
+        const displayOptions: TSVariableDisplayOptions = []
+        for (let i = 0; i <= 5; i++) {
             displayOptions[i] = false
         }
-        displayOptions[usworld.kRuleContext] = true
-        displayOptions[usworld.kRuleMove] = true
-        displayOptions[usworld.kRuleCommand] = this.MenuMapsShowCommands.checked
-        draggedNode = mapView.nearestNode(Point(X + this.MapScrollBarHorizontal.Position, Y + this.MapScrollBarVertical.Position), displayOptions)
+        displayOptions[TSRuleField.kRuleContext] = true
+        displayOptions[TSRuleField.kRuleMove] = true
+        // TODO replace below with: displayOptions[TSRuleField.kRuleCommand] = this.MenuMapsShowCommands.checked
+        displayOptions[TSRuleField.kRuleCommand] = true
+
+        const draggedNode: TSDraggableObject | null = this.mapDrawer.nearestNode(new TPoint(
+            event.offsetX + this.mapDrawer.scroll.X,
+            event.offsetY + this.mapDrawer.scroll.Y
+        ), displayOptions, this.world)
+
+        /* TODO: use or remove -- for making a new item
         if (Button === delphi_compatability.TMouseButton.mbRight) {
+            let showString: string
+            let centerPosition: TPoint
             if (draggedNode !== null) {
                 showString = draggedNode.displayName()
-                centerPosition = Point(draggedNode.center().X - this.MapScrollBarHorizontal.Position, draggedNode.center().Y - this.MapScrollBarVertical.Position)
+                centerPosition = new TPoint(draggedNode.center().X - this.mapDrawer.scroll.X, draggedNode.center().Y - this.mapDrawer.scroll.Y)
             } else {
                 showString = "new item"
-                centerPosition = Point(X, Y)
+                centerPosition = new TPoint(event.offsetX, event.offsetY)
             }
             this.MapImage.Canvas.Brush.Color = delphi_compatability.clAqua
             this.MapImage.Canvas.Pen.Style = delphi_compatability.TFPPenStyle.psSolid
             this.MapImage.Canvas.Font.Style = {UNRESOLVED.fsBold, }
-            textSize = Point(this.MapImage.Canvas.TextWidth(showString), this.MapImage.Canvas.TextHeight("W"))
-            this.MapImage.Canvas.Rectangle(centerPosition.X - textSize.X / 2 - 2, centerPosition.Y - textSize.Y / 2 - 2, centerPosition.X + textSize.X / 2 + 2, centerPosition.Y + textSize.Y / 2 + 2)
+            const textSize = new TPoint(this.MapImage.Canvas.TextWidth(showString), this.MapImage.Canvas.TextHeight("W"))
+            this.MapImage.Canvas.Rectangle(
+                centerPosition.X - textSize.X / 2 - 2,
+                centerPosition.Y - textSize.Y / 2 - 2,
+                centerPosition.X + textSize.X / 2 + 2,
+                centerPosition.Y + textSize.Y / 2 + 2
+            )
             this.MapImage.Canvas.TextOut(centerPosition.X - textSize.X / 2, centerPosition.Y - textSize.Y / 2, showString)
             this.MapImage.Canvas.Font.Style = {}
         }
         if (Button !== delphi_compatability.TMouseButton.mbLeft) {
             return
         }
-        multipleSelect = (delphi_compatability.TShiftStateEnum.ssShift in Shift)
+        */
+
+        const multipleSelect: boolean = event.shiftKey
         this.mapSelectionInProgress = false
         if (draggedNode === null) {
             this.makeChoice(null, multipleSelect)
-            this.mapSelectionRect = Rect(X, Y, X, Y)
-            this.XorRect(this.MapImage.Canvas, this.mapSelectionRect)
+            this.mapSelectionRect = new TRect(event.offsetX, event.offsetY, event.offsetX, event.offsetY)
+            // TODO use or remove: this.XorRect(this.MapImage.Canvas, this.mapSelectionRect)
             this.mapSelectionInProgress = true
             return
         }
         //MapPaintBoxChanged;
         this.makeChoice(draggedNode, multipleSelect)
-        if ((delphi_compatability.TShiftStateEnum.ssCtrl in Shift)) {
+        if (event.ctrlKey) {
             this.MapPaintBoxChanged()
-            this.MapImage.BeginDrag(true)
+            // TODO use or remove: this.MapImage.BeginDrag(true)
             return
         }
+        
+        // TODO: MapImageDblClick seems badly named at this point
         if (!multipleSelect) {
-            this.MapImageDblClick(Sender)
+            this.MapImageDblClick()
         }
+
         this.MapPaintBoxChanged()
         // finds selected nodes in domain
-        newCommand = uscommands.TSMapDragCommand().create()
-        newCommand.notifyProcedure = this.mapChangedNotification
-        this.actionInProgress = usdomain.domain.worldCommandList.mouseDown(newCommand, Point(X, Y))
+        const newCommand = new TSMapDragCommand(this.world)
+        // TODO: This notification may be unneeded -- check after converted design working
+        newCommand.notifyProcedure = this.mapChangedNotification.bind(this)
+        this.actionInProgress = this.worldCommandList.mouseDown(newCommand, new TPoint(event.offsetX, event.offsetY))
     }
     
-    MapImageMouseMove(Sender: TObject, Shift: TShiftState, X: int, Y: int): void {
+    MapImageMouseMove(event: MouseEvent): void {
         if (this.actionInProgress) {
-            usdomain.domain.worldCommandList.mouseMove(Point(X, Y))
+            this.worldCommandList.mouseMove(new TPoint(event.offsetX, event.offsetY))
         } else if (this.mapSelectionInProgress) {
-            this.XorRect(this.MapImage.Canvas, this.mapSelectionRect)
-            this.mapSelectionRect.Right = X
-            this.mapSelectionRect.Bottom = Y
-            this.XorRect(this.MapImage.Canvas, this.mapSelectionRect)
+            // TODO use or remove: this.XorRect(this.MapImage.Canvas, this.mapSelectionRect)
+            this.mapSelectionRect.Right = event.offsetX
+            this.mapSelectionRect.Bottom = event.offsetY
+            // TODO use or remove: this.XorRect(this.MapImage.Canvas, this.mapSelectionRect)
         }
     }
     
-    MapImageMouseUp(Sender: TObject, Button: TMouseButton, Shift: TShiftState, X: int, Y: int): void {
+    MapImageMouseUp(event: MouseEvent): void {
         if (this.actionInProgress) {
-            usdomain.domain.worldCommandList.mouseUp(Point(X, Y))
+            this.worldCommandList.mouseUp(new TPoint(event.offsetX, event.offsetY))
             this.actionInProgress = false
-            this.adjustScrollBars()
+            // TODO use or remove: this.adjustScrollBars()
         } else if (this.mapSelectionInProgress) {
-            this.XorRect(this.MapImage.Canvas, this.mapSelectionRect)
+            // TODO use or remove: this.XorRect(this.MapImage.Canvas, this.mapSelectionRect)
             this.mapSelectionInProgress = false
-            if (!(delphi_compatability.TShiftStateEnum.ssCtrl in Shift)) {
-                usdomain.domain.world.deselectAllExcept(null)
+            if (!(event.ctrlKey)) {
+                this.world.deselectAllExcept(null)
             }
-            this.mapSelectionRect = Rect(this.mapSelectionRect.Left + this.MapScrollBarHorizontal.Position, this.mapSelectionRect.Top + this.MapScrollBarVertical.Position, this.mapSelectionRect.Right + this.MapScrollBarHorizontal.Position, this.mapSelectionRect.Bottom + this.MapScrollBarVertical.Position)
-            usdomain.domain.world.selectInRectangle(this.mapSelectionRect)
+            this.mapSelectionRect = new TRect(
+                this.mapSelectionRect.Left + this.mapDrawer.scroll.X,
+                this.mapSelectionRect.Top + this.mapDrawer.scroll.Y,
+                this.mapSelectionRect.Right + this.mapDrawer.scroll.X,
+                this.mapSelectionRect.Bottom + this.mapDrawer.scroll.Y
+            )
+            this.world.selectInRectangle(this.mapSelectionRect)
             this.MapPaintBoxChanged()
         }
     }
-    
-    MapImageDblClick(Sender: TObject): void {
+
+    MapPaintBoxChanged(): void {
+        // TODO: placeholder for now; may be removed
+    }
+
+    // TODO: MapImageDblClick seems badly named at this point
+    MapImageDblClick(): void {
         if (this.lastChoice === null) {
             //var
             //row: integer;
@@ -267,8 +302,8 @@ export class RuleMapView {
             //ruleIndex: integer; 
             return
         }
-        if (this.lastChoice instanceof usworld.TSRule) {
-            this.editRule(this.lastChoice)
+        if (this.lastChoice instanceof TSRule) {
+            this.domain.editRule(this.lastChoice)
         }
         //
         //  else
@@ -292,6 +327,8 @@ export class RuleMapView {
         //    end;
         //    
     }
+
+    /*
     
     searchForAndSelectRule(aText: string, ignoreCase: boolean, goDown: boolean): void {
         let row: int
@@ -335,7 +372,8 @@ export class RuleMapView {
         }
         ShowMessage("Search string \"" + aText + "\" not found.")
     }
-    
+    */
+
     goodPosition(): TPoint {
         let result = new TPoint()
         if (this.lastChoice !== null) {
@@ -343,18 +381,18 @@ export class RuleMapView {
                 //var
                 //  	mapBoundsRect: TRect;
                 //    selection: TSDraggableObject; 
-                result = Point((this.previousChoice.position.X + this.lastChoice.position.X) / 2, (this.previousChoice.position.Y + this.lastChoice.position.Y) / 2 + 30)
+                result = new TPoint((this.previousChoice.position.X + this.lastChoice.position.X) / 2, (this.previousChoice.position.Y + this.lastChoice.position.Y) / 2 + 30)
             } else {
-                result = Point(this.lastChoice.position.X, this.lastChoice.position.Y + 30)
+                result = new TPoint(this.lastChoice.position.X, this.lastChoice.position.Y + 30)
             }
         } else {
             // mapBoundsRect := domain.world.boundsRect;
             //    result.x := (mapBoundsRect.left - mapBoundsRect.right) div 2;
             //    result.y := mapBoundsRect.bottom + 30;  
-            result = Point(this.MapScrollBarHorizontal.Position + this.MapImage.Width / 2, this.MapScrollBarVertical.Position + this.MapImage.Height / 2)
+            result = new TPoint(this.mapDrawer.scroll.X + this.canvas.width / 2, this.mapDrawer.scroll.Y + this.canvas.height / 2)
         }
-        result.X = result.X + UNRESOLVED.random(200) - 100
-        result.Y = result.Y + UNRESOLVED.random(200) - 100
+        result.X = result.X + Math.round(Math.random() * 200) - 100
+        result.Y = result.Y + Math.round(Math.random() * 200) - 100
         //if (domain <> nil) and (domain.world <> nil) then
         //    begin
         //    selection := domain.world.firstSelectedObject;
@@ -381,10 +419,9 @@ export class RuleMapView {
         //  result.y := result.y + random(200) - 100;   
         return result
     }
-    */
 
     view() {
-        const world: TWorld = this.domain.world
+        const world: TWorld = this.world
 
         const drawWorld = () => {
             const canvas = this.canvas
@@ -403,6 +440,10 @@ export class RuleMapView {
             context.setLineDash([4, 16]);
             context.lineDashOffset = 2;
             this.mapDrawer.drawRect(context, world.boundsRect(), true)
+            if (this.mapSelectionInProgress) {
+                // TODO: Was XOR rectangle
+                this.mapDrawer.drawRect(context, this.mapSelectionRect)
+            }
         }
 
         return m(".RuleMapView.h-100.w-100.overflow-hidden",
@@ -415,12 +456,16 @@ export class RuleMapView {
                     drawWorld()
                 },
                 onmousedown: (event: MouseEvent) => {
+                    /* TODO: Fix scrolling
                     this.isDragging = true
                     ;(<any>event).redraw = false
                     this.lastMouseLocation = new TPoint(event.offsetX, event.offsetY)
+                    */
+                    this.MapImageMouseDown(event)
                     return false
                 },
                 onmousemove: (event: MouseEvent) => {
+                    /* TODO: Fix scrolling
                     if (this.isDragging) {
                         this.mapDrawer.scroll.X += (event.offsetX - this.lastMouseLocation.X)
                         this.mapDrawer.scroll.Y += (event.offsetY - this.lastMouseLocation.Y)
@@ -428,10 +473,15 @@ export class RuleMapView {
                     } else {
                         (<any>event).redraw = false
                     }
+                    */
+                   this.MapImageMouseMove(event)
                 },
                 onmouseup: (event: MouseEvent) => {
+                    /* TODO: Fix scrolling
                     this.isDragging = false
                     ;(<any>event).redraw = false
+                    */
+                   this.MapImageMouseUp(event)
                 },
             }),
         )
