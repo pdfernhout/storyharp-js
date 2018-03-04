@@ -1,7 +1,7 @@
 import { TPoint } from "./TPoint";
 import { TRect } from "./TRect";
 import { TSDraggableObject } from "./TSDraggableObject"
-import { TSVariable } from "./TSVariable";
+import { TSVariable, TSVariableDisplayOptions } from "./TSVariable";
 import { TSRule, TSRuleField } from "./TSRule"
 import { TWorld } from "./TWorld"
 
@@ -15,6 +15,19 @@ const arrowwidth = 4
 
 type double = number
 type int = number
+
+interface TSize {
+    cx: number,
+    cy: number,
+}
+
+function TextExtent(context: CanvasRenderingContext2D, text: string): TSize {
+    return {
+        cx: Math.ceil(context.measureText(text).width),
+        // The width of the letter M approximates the line height
+        cy: Math.ceil(context.measureText("M").width),
+    }
+}
 
 function intround(value: number) {
     return Math.round(value)
@@ -142,11 +155,13 @@ export class TSMapView {
         //IntersectRect(theRect, originRect, destRect);
         //if not IsEmptyRect(theRect) then exit;
 
-        // TODO: InflateRect modifies the original rect, which we csan get away with as it is bounds copy, but worriesome
+        // InflateRect modifies the original rect, so we make a defensive copy
+        originRect = originRect.copy()
+        destRect = destRect.copy()
 
         // add some to prevent cutting off arrow heads in certain cases for long words
-        InflateRect(destRect, arrowwidth, arrowwidth)
         InflateRect(originRect, arrowwidth, arrowwidth)
+        InflateRect(destRect, arrowwidth, arrowwidth)
 
         // Draw from the middle of one rect to the mdidle of the other
 
@@ -180,29 +195,36 @@ export class TSMapView {
         this.drawArrowhead(context, startPoint, endPoint)
     }
     
-    /*
-    drawLineFromRectEdgeToRectEdge(canvas: TCanvas, originRect: TRect, destRect: TRect): void {
-        let startPoint: TPoint
-        let endPoint: TPoint
-        let intersectPoint: TPoint
-        let origin: TPoint
-        let dest: TPoint
-        
+    drawLineFromRectEdgeToRectEdge(context: CanvasRenderingContext2D, originRect: TRect, destRect: TRect): void {
+        // InflateRect changes these rectangles -- so make a defensive copy
+        originRect = originRect.copy()
+        destRect = destRect.copy()
+
         // add some to prevent cutting off arrow heads in certain cases for long words
-        InflateRect(destRect, arrowwidth, arrowwidth)
         InflateRect(originRect, arrowwidth, arrowwidth)
-        origin = new TPoint((originRect.Left + originRect.Right) / 2, (originRect.Top + originRect.Bottom) / 2)
-        dest = new TPoint((destRect.Left + destRect.Right) / 2, (destRect.Top + destRect.Bottom) / 2)
-        intersectPoint = IntersectionPointForLineAndRectangle(origin, destRect)
-        endPoint = new TPoint(intersectPoint.X + this.scroll.X, intersectPoint.Y + this.scroll.Y)
-        startPoint = IntersectionPointForLineAndRectangle(dest, originRect)
+        InflateRect(destRect, arrowwidth, arrowwidth)
+
+        const origin = new TPoint((originRect.Left + originRect.Right) / 2, (originRect.Top + originRect.Bottom) / 2)
+
+        const dest = new TPoint((destRect.Left + destRect.Right) / 2, (destRect.Top + destRect.Bottom) / 2)
+
+        const intersectPoint = IntersectionPointForLineAndRectangle(origin, destRect)
+
+        const endPoint = new TPoint(intersectPoint.X + this.scroll.X, intersectPoint.Y + this.scroll.Y)
+        
+        const startPoint = IntersectionPointForLineAndRectangle(dest, originRect)
         startPoint.X = startPoint.X + this.scroll.X
         startPoint.Y = startPoint.Y + this.scroll.Y
-        canvas.Pen.Style = delphi_compatability.TFPPenStyle.psSolid
-        canvas.MoveTo(startPoint.X, startPoint.Y)
-        canvas.LineTo(endPoint.X, endPoint.Y)
+        
+        // TODO use or remove:
+        // canvas.Pen.Style = delphi_compatability.TFPPenStyle.psSolid
+
+        context.beginPath()
+        context.moveTo(startPoint.X, startPoint.Y)
+        context.lineTo(endPoint.X, endPoint.Y)
+        context.stroke()
+
     }
-    */
 
     drawArrowhead(context: CanvasRenderingContext2D, p1: TPoint, p2: TPoint): void {
         //Code translated from C++ posted:
@@ -336,27 +358,33 @@ export class TSMapView {
         //result := nearestNode;
         return result
     }
-    
-    displayOn(canvas: TCanvas, displayOptions: TSVariableDisplayOptions, lastChoice: TSDraggableObject, previousChoice: TSDraggableObject): void {
-        let textSize: TSize
-        let oldColor: TColor
+    */
 
-        const world: TWorld = domain.world
-        
+    // TODO lastChoice and previousChoice are not used
+    displayOn(
+        context: CanvasRenderingContext2D, 
+        displayOptions: TSVariableDisplayOptions, 
+        lastChoice: TSDraggableObject | null, 
+        previousChoice: TSDraggableObject | null,
+        world: TWorld,
+        editedRule: TSRule | null
+    ): void {
+
         // calculate bounds for text boxes
-        UNRESOLVED.SetTextAlign(canvas.Handle, delphi_compatability.TA_LEFT || delphi_compatability.TA_TOP)
-        canvas.Pen.Color = delphi_compatability.clBlack
+        // TODO: UNRESOLVED.SetTextAlign(canvas.Handle, delphi_compatability.TA_LEFT || delphi_compatability.TA_TOP)
+        // TODO: canvas.Pen.Color = delphi_compatability.clBlack
         for (let i = 0; i < world.rules.length; i++) {
             // need to compute these first - because they are referenced
             // could be optimized out - only do if change text...
             const rule: TSRule = world.rules[i]
-            if (rule === usruleeditorform.RuleEditorForm.rule) {
+            let textSize: TSize
+            if (rule === editedRule) {
                 // update bounds -- optimize for case where rule is selected
-                canvas.Font.Style = {UNRESOLVED.fsBold, }
-                textSize = canvas.TextExtent(rule.displayName())
-                canvas.Font.Style = {}
+                // TODO: canvas.Font.Style = {UNRESOLVED.fsBold, }
+                textSize = TextExtent(context, rule.displayName())
+                // TODO: canvas.Font.Style = {}
             } else {
-                textSize = canvas.TextExtent(rule.displayName())
+                textSize = TextExtent(context, rule.displayName())
             }
             rule.extent.X = textSize.cx
             rule.extent.Y = textSize.cy
@@ -364,48 +392,46 @@ export class TSMapView {
         for (let i = 0; i < world.variables.length; i++) {
             const variable: TSVariable = world.variables[i]
             if (variable.meetsDisplayOptions(displayOptions)) {
-                textSize = canvas.TextExtent(variable.displayName())
+                const textSize: TSize = TextExtent(context, variable.displayName())
                 variable.extent.X = textSize.cx
                 variable.extent.Y = textSize.cy
             }
         }
-        oldColor = canvas.Brush.Color
+        // TODO: const oldColor = canvas.Brush.Color
         // draw lines and arrows
-        canvas.Brush.Color = delphi_compatability.clBlack
+        // TODO: canvas.Brush.Color = delphi_compatability.clBlack
         for (let i = 0; i < world.rules.length; i++) {
             const rule: TSRule = world.rules[i]
             if (displayOptions[TSRuleField.kRuleCommand]) {
                 if (rule.context !== world.emptyEntry) {
-                    this.drawLineFromRectEdgeToRectEdge(canvas, rule.context.bounds(), rule.bounds())
+                    this.drawLineFromRectEdgeToRectEdge(context, rule.context.bounds(), rule.bounds())
                 }
                 if (rule.move !== world.emptyEntry) {
-                    this.drawArrowFromRectEdgeToRectEdge(canvas, rule.bounds(), rule.move.bounds())
+                    this.drawArrowFromRectEdgeToRectEdge(context, rule.bounds(), rule.move.bounds())
                 }
             } else {
                 if ((rule.context !== world.emptyEntry) && (rule.move !== world.emptyEntry)) {
-                    this.drawArrowFromRectEdgeToRectEdge(canvas, rule.context.bounds(), rule.move.bounds())
+                    this.drawArrowFromRectEdgeToRectEdge(context, rule.context.bounds(), rule.move.bounds())
                 }
             }
         }
-        canvas.Brush.Color = oldColor
+        // TODO: canvas.Brush.Color = oldColor
         if (displayOptions[TSRuleField.kRuleCommand]) {
             for (let i = 0; i < world.rules.length; i++) {
                 // draw rectangles and text
                 const rule: TSRule = world.rules[i]
-                this.drawCommandOrContext(canvas, rule.displayName(), rule.bounds(), rule.position, rule.selected, rule === usruleeditorform.RuleEditorForm.rule, kDrawCommand)
+                this.drawCommandOrContext(context, rule.displayName(), rule.bounds(), rule.position, rule.selected, rule === editedRule, kDrawCommand)
             }
         }
         for (let i = 0; i < world.variables.length; i++) {
             const variable: TSVariable = world.variables[i]
             if (variable.meetsDisplayOptions(displayOptions)) {
-                this.drawCommandOrContext(canvas, variable.displayName(), variable.bounds(), variable.position, variable.selected, false, kDrawContext)
+                this.drawCommandOrContext(context, variable.displayName(), variable.bounds(), variable.position, variable.selected, false, kDrawContext)
             }
         }
     }
-    
-    */
 
-    // TODO: psotion parameter is unused -- remove it
+    // TODO: position parameter is unused -- remove it
     drawCommandOrContext(context: CanvasRenderingContext2D, text: string, bounds: TRect, position: TPoint, selected: boolean, focused: boolean, isCommand: boolean): void {
         let drawRect: TRect = new TRect()  
         drawRect.Left = bounds.Left - 2 + this.scroll.X

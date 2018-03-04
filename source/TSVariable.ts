@@ -5,7 +5,7 @@ import { TSRuleField } from "./TSRule"
 
 export enum TSVariableState { kPresent, kAbsent }
 
-type TSVariableDisplayOptions = boolean[] /* 5 + 1 */
+export type TSVariableDisplayOptions = boolean[] /* 5 + 1 */
 
 export class TSVariable extends TSDraggableObject {
     phrase: string = ""

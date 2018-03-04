@@ -37,4 +37,8 @@ export class TRect {
             && this.Top < point.Y
             && this.Bottom > point.Y 
     }
+
+    copy(): TRect {
+        return new TRect(this.Left, this.Top, this.Right, this.Bottom)
+    }
 }
