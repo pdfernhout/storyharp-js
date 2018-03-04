@@ -151,6 +151,7 @@ const MyComponent = {
                 if (!context) return
                 const displayOptions = []
                 displayOptions[TSRuleField.kRuleContext] = true
+                displayOptions[TSRuleField.kRuleCommand] = true
                 mapDrawer.displayOn(context, displayOptions, null, null, world, null)
             }
         }),
