@@ -442,11 +442,11 @@ export class TSMapView {
         }
         */
 
-        this.drawRect(context, drawRect)
+        this.drawRect(context, drawRect, false, true)
         context.fillText(text, textPoint.X, textPoint.Y)
     }
 
-    drawRect(context: CanvasRenderingContext2D, rect: TRect, scrolled = false) {
+    drawRect(context: CanvasRenderingContext2D, rect: TRect, scrolled = false, clear = false) {
         if (scrolled) rect = OffsetRect(rect, this.scroll.X, this.scroll.Y)
         context.beginPath()
         context.moveTo(rect.Left, rect.Top)
@@ -454,6 +454,12 @@ export class TSMapView {
         context.lineTo(rect.Right, rect.Bottom)
         context.lineTo(rect.Right, rect.Top)
         context.closePath()
+        if (clear) {
+            const oldFillStyle = context.fillStyle 
+            context.fillStyle = "rgb(255, 255, 255)"
+            context.fill()
+            context.fillStyle = oldFillStyle
+        }
         context.stroke()
     }
 }
