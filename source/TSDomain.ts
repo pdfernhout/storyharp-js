@@ -1,7 +1,7 @@
 import { TWorld } from "./TWorld"
-import { TSCommandList } from "./TSCommandList";
-import { TSRule, TSRuleField } from "./TSRule";
-import { Color } from "./common";
+import { TSCommandList } from "./TSCommandList"
+import { TSRule, TSRuleField } from "./TSRule"
+import { Color } from "./common"
 
 // unit usdomain
 
@@ -193,7 +193,7 @@ export interface TSDomain {
     // TODO: Rename this to indicate these are demo world files
     availableWorldFiles: string[]
 
-    loadTestWorld: (name: string) => void
+    loadTestWorld: (name: string) => Promise<void>
 
     // TODO: See if any of these can be changed to a callback:
     consoleForm: any
@@ -231,8 +231,9 @@ export class TSApplication implements TSDomain {
         this.worldCommandList = new TSCommandList(this.world)
     }
 
-    loadTestWorld(name: string): void {
+    loadTestWorld(name: string): Promise<void> {
         console.log("FIXME")
+        return Promise.resolve()
     }
 
     /*
