@@ -512,11 +512,22 @@ export class RuleMapView {
                     case 83: // s
                         this.mapDrawer.scroll.Y -= scrollDelta
                         break;
+                    case 67: // c 
+                        // center map
+                        const boundsCenter = this.world.boundsRect().center()
+                        this.mapDrawer.scroll.X = Math.round(this.canvas.width / 2) - boundsCenter.X
+                        this.mapDrawer.scroll.Y = Math.round(this.canvas.height / 2) - boundsCenter.Y
+                        break
                     default:
                         (<any>event).redraw = false
                         break
                     }
-                }
+                },
+
+                onmousewheel: (event: MouseWheelEvent) => {
+                    this.mapDrawer.scroll.X += event.deltaX
+                    this.mapDrawer.scroll.Y += event.deltaY
+                },
             }),
         )
     }

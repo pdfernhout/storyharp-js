@@ -22,6 +22,13 @@ export class TRect {
         return this.Bottom - this.Top
     }
 
+    center(): TPoint {
+        return new TPoint(
+            Math.round(this.Left + this.width / 2),
+            Math.round(this.Top + this.height / 2)
+        )
+    }
+
     intersects(otherRect: TRect): boolean {
         // Wondering if this should use <= ?
         return this.Left < otherRect.Right 
