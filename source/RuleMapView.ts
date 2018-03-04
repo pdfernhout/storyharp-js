@@ -336,69 +336,6 @@ export class RuleMapView {
         ShowMessage("Search string \"" + aText + "\" not found.")
     }
     
-    // accomodates growth
-    // accomodates growth
-    adjustScrollBars(): void {
-        let top: int
-        let bottom: int
-        let left: int
-        let right: int
-        let graphView: TSMapView
-        let xPosition: int
-        let yPosition: int
-        let mapBoundsRect: TRect
-        
-        graphView = this.currentGraphView()
-        if (graphView !== null) {
-            mapBoundsRect = usdomain.domain.world.boundsRect()
-            top = mapBoundsRect.Top
-            left = mapBoundsRect.Left
-            bottom = mapBoundsRect.Bottom
-            right = mapBoundsRect.Right
-            if (bottom < this.MapImage.Height) {
-                bottom = this.MapImage.Height
-            }
-            if (right < this.MapImage.Width) {
-                right = this.MapImage.Width
-            }
-        } else {
-            top = 0
-            bottom = this.MapImage.Height
-            left = 0
-            right = this.MapImage.Width
-        }
-        left = left - kLeftRightBorderSize
-        right = right + kLeftRightBorderSize
-        top = top - kTopBottomBorderSize
-        bottom = bottom + kTopBottomBorderSize
-        right = right - this.MapImage.Width
-        bottom = bottom - this.MapImage.Height
-        xPosition = this.MapScrollBarHorizontal.Position
-        yPosition = this.MapScrollBarVertical.Position
-        if (xPosition < left) {
-            //if xPosition < left then xPosition := left;
-            //  if xPosition > right then xPosition := right;
-            //  if yPosition < top then yPosition := top;
-            //  if yPosition > bottom then yPosition := bottom;
-            left = xPosition
-        }
-        if (xPosition > right) {
-            right = xPosition
-        }
-        if (yPosition < top) {
-            top = yPosition
-        }
-        if (yPosition > bottom) {
-            bottom = yPosition
-        }
-        this.MapScrollBarHorizontal.SetParams(xPosition, left, right)
-        this.MapScrollBarHorizontal.LargeChange = this.MapImage.Width
-        //LocalIntMax(1, LocalIntMin((right - left) div 10, MapPaintBox.width));
-        this.MapScrollBarVertical.SetParams(yPosition, top, bottom)
-        this.MapScrollBarVertical.LargeChange = this.MapImage.Height
-        //LocalIntMax(1, LocalIntMin((bottom - top) div 10, MapPaintBox.height));
-    }
-    
     goodPosition(): TPoint {
         let result = new TPoint()
         if (this.lastChoice !== null) {
