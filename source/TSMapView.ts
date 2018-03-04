@@ -10,8 +10,8 @@ const kDrawCommand = true
 const kDrawContext = false
 
 // const
-const arrowlength = 10
-const arrowwidth = 4
+const arrowLength = 10
+const arrowWidth = 4
 
 type double = number
 type int = number
@@ -117,9 +117,9 @@ function IntersectionPointForLineAndRectangle(origin: TPoint, destRect: TRect): 
 
 export class TSMapView {
     scroll: TPoint = new TPoint()
-    
-    /*
-    // TSMapView ---------------------------------------- 
+
+    /* TODO: this code is not used
+
     drawBogusArrow(canvas: TCanvas, a: TPoint, b: TPoint): void {
         //midPoint1: TPoint;
         //midPoint1 := Point(a.x + (b.x - a.x) div 3, a.y + (b.y - a.y) div 3);
@@ -148,6 +148,7 @@ export class TSMapView {
         //arrow head
         this.drawArrowhead(canvas, startPoint, endPoint)
     }
+
     */
     
     drawArrowFromRectEdgeToRectEdge(context: CanvasRenderingContext2D, originRect: TRect, destRect: TRect): void {
@@ -156,8 +157,8 @@ export class TSMapView {
         //if not IsEmptyRect(theRect) then exit;
 
         // add some to prevent cutting off arrow heads in certain cases for long words
-        originRect = InflateRect(originRect, arrowwidth, arrowwidth)
-        destRect = InflateRect(destRect, arrowwidth, arrowwidth)
+        originRect = InflateRect(originRect, arrowWidth, arrowWidth)
+        destRect = InflateRect(destRect, arrowWidth, arrowWidth)
 
         // Draw from the middle of one rect to the mdidle of the other
 
@@ -191,8 +192,8 @@ export class TSMapView {
     
     drawLineFromRectEdgeToRectEdge(context: CanvasRenderingContext2D, originRect: TRect, destRect: TRect): void {
         // add some to prevent cutting off arrow heads in certain cases for long words
-        originRect = InflateRect(originRect, arrowwidth, arrowwidth)
-        destRect = InflateRect(destRect, arrowwidth, arrowwidth)
+        originRect = InflateRect(originRect, arrowWidth, arrowWidth)
+        destRect = InflateRect(destRect, arrowWidth, arrowWidth)
 
         const origin = new TPoint((originRect.Left + originRect.Right) / 2, (originRect.Top + originRect.Bottom) / 2)
 
@@ -243,10 +244,10 @@ export class TSMapView {
             // relationship comes from tan(angle)
             // relation 10:5 is 45 degrees (2*22.5)
             //
-            x2 = p2.X + intround(xstep * arrowlength)
-            y2 = p2.Y + intround(ystep * arrowlength)
-            y1 = -intround(xstep * arrowwidth)
-            x1 = intround(ystep * arrowwidth)
+            x2 = p2.X + intround(xstep * arrowLength)
+            y2 = p2.Y + intround(ystep * arrowLength)
+            y1 = -intround(xstep * arrowWidth)
+            x1 = intround(ystep * arrowWidth)
         } catch (e) {
             // TODO: What can cause an exception here?
             console.log("numerical exception in drawArrowhead", e) 
@@ -272,8 +273,8 @@ export class TSMapView {
         //  canvas.LineTo(outerTwo.x, outerTwo.y); 
     }
 
-    /*
-    
+    /* TODO: This code is not used
+
     // procedure drawArrow(canvas: TCanvas; a, b: TPoint);
     drawArrowToRect(canvas: TCanvas, origin: TPoint, destRect: TRect): void {
         let center: TPoint
@@ -300,11 +301,12 @@ export class TSMapView {
         // 	canvas.moveTo(middlePoint.x + scroll.x, middlePoint.y + scroll.y);
         // 	canvas.lineTo(middlePoint.x + scroll.x + , middlePoint.y + scroll.y + ); 
     }
-    
-    nearestNode(location: TPoint, displayOptions: TSVariableDisplayOptions): TSDraggableObject | null { 
+
+    */
+
+    nearestNode(location: TPoint, displayOptions: TSVariableDisplayOptions, world: TWorld): TSDraggableObject | null { 
         //nearestNode: TSDraggableObject;
         //distance, nearestDistance: integer;
-        const world: TWorld = domain.world
         
         let result: TSDraggableObject | null = null
         for (let i = world.variables.length - 1; i >= 0; i--) {
@@ -348,7 +350,6 @@ export class TSMapView {
         //result := nearestNode;
         return result
     }
-    */
 
     // TODO lastChoice and previousChoice are not used
     displayOn(
@@ -444,7 +445,6 @@ export class TSMapView {
         this.drawRect(context, drawRect)
         context.fillText(text, textPoint.X, textPoint.Y)
     }
-
 
     drawRect(context: CanvasRenderingContext2D, rect: TRect) {
         context.beginPath()
