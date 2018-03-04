@@ -494,7 +494,7 @@ export class RuleMapView {
 
                 onkeydown: (event: KeyboardEvent) => {
                     // Support scrollinf map with arrow keys or WASD
-                    const scrollDelta = 100
+                    const scrollDelta = 50
                     switch(event.keyCode) {
                     case 37: // left arrow
                     case 65: // a
