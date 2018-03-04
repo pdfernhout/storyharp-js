@@ -162,7 +162,11 @@ function hexUnencode(encodedString: string): string {
 
 */
 
-export class TSDomain {
+// Make a seperate interface for testability
+export interface TSDomain {
+}
+
+export class TSApplication implements TSDomain {
 
     /*
     world: TWorld = new TWorld()
