@@ -24,8 +24,8 @@ interface TSize {
 function TextExtent(context: CanvasRenderingContext2D, text: string): TSize {
     return {
         cx: Math.ceil(context.measureText(text).width),
-        // The width of the letter M approximates the line height
-        cy: Math.ceil(context.measureText("M").width),
+        // The width of the letter M plus a bit for exclamation approximates the line height
+        cy: Math.ceil(context.measureText("M!").width),
     }
 }
 
@@ -34,11 +34,11 @@ function intround(value: number) {
 }
 
 function InflateRect(rect: TRect, extraWidth: int, extraHeight: int): TRect {
-    return new TRect(rect.Left - extraWidth, rect.Top - extraHeight, rect.width + extraWidth, rect.height + extraHeight);
+    return new TRect(rect.Left - extraWidth, rect.Top - extraHeight, rect.Right + extraWidth, rect.Bottom + extraHeight);
 }
 
 function OffsetRect(rect: TRect, x: int, y: int): TRect {
-    return new TRect(rect.Left + x, rect.Top + y, rect.width, rect.height);
+    return new TRect(rect.Left + x, rect.Top + y, rect.Right + x, rect.Bottom + y);
 }
 
 //needs to have rectangle with center of 0,0 and origin adjusted to that coordinate system
@@ -138,7 +138,7 @@ export class TSMapView {
     
     drawArrowToRectEdge(canvas: TCanvas, origin: TPoint, destRect: TRect): void {
         // add some to prevent cutting off arrow heads in certain cases for long words
-        InflateRect(destRect, arrowwidth, arrowwidth)
+        destRect = InflateRect(destRect, arrowwidth, arrowwidth)
         const intersectPoint = IntersectionPointForLineAndRectangle(origin, destRect)
         const endPoint = new TPoint(intersectPoint.X + this.scroll.X, intersectPoint.Y + this.scroll.Y)
         const startPoint = new TPoint(origin.X + this.scroll.X, origin.Y + this.scroll.Y)
@@ -155,13 +155,9 @@ export class TSMapView {
         //IntersectRect(theRect, originRect, destRect);
         //if not IsEmptyRect(theRect) then exit;
 
-        // InflateRect modifies the original rect, so we make a defensive copy
-        originRect = originRect.copy()
-        destRect = destRect.copy()
-
         // add some to prevent cutting off arrow heads in certain cases for long words
-        InflateRect(originRect, arrowwidth, arrowwidth)
-        InflateRect(destRect, arrowwidth, arrowwidth)
+        originRect = InflateRect(originRect, arrowwidth, arrowwidth)
+        destRect = InflateRect(destRect, arrowwidth, arrowwidth)
 
         // Draw from the middle of one rect to the mdidle of the other
 
@@ -178,9 +174,7 @@ export class TSMapView {
         startPoint.Y = startPoint.Y + this.scroll.Y
 
         // clip arrow if it would end up being drawn incorrectly
-        // TODO: scrolledOriginRect is either unneeeded or really has to make a copy
-        const scrolledOriginRect = originRect
-        OffsetRect(scrolledOriginRect, this.scroll.X, this.scroll.Y)
+        const scrolledOriginRect = OffsetRect(originRect, this.scroll.X, this.scroll.Y)
         if (scrolledOriginRect.contains(endPoint)) {
             return
         }
@@ -196,13 +190,9 @@ export class TSMapView {
     }
     
     drawLineFromRectEdgeToRectEdge(context: CanvasRenderingContext2D, originRect: TRect, destRect: TRect): void {
-        // InflateRect changes these rectangles -- so make a defensive copy
-        originRect = originRect.copy()
-        destRect = destRect.copy()
-
         // add some to prevent cutting off arrow heads in certain cases for long words
-        InflateRect(originRect, arrowwidth, arrowwidth)
-        InflateRect(destRect, arrowwidth, arrowwidth)
+        originRect = InflateRect(originRect, arrowwidth, arrowwidth)
+        destRect = InflateRect(destRect, arrowwidth, arrowwidth)
 
         const origin = new TPoint((originRect.Left + originRect.Right) / 2, (originRect.Top + originRect.Bottom) / 2)
 
@@ -291,7 +281,7 @@ export class TSMapView {
         let startPoint: TPoint
         
         // add some to prevent cutting off arrow heads in certain cases for long words
-        InflateRect(destRect, arrowwidth, arrowwidth)
+        destRect = InflateRect(destRect, arrowwidth, arrowwidth)
         center = new TPoint((destRect.Left + destRect.Right) / 2, (destRect.Top + destRect.Bottom) / 2)
         //middlePoint := Point((origin.x + center.x) div 2 + scroll.x, (origin.y + center.y) div 2 + scroll.y); 
         //middlePoint := Point((origin.x + center.x) div 2 + scroll.x, (origin.y + center.y) div 2 + scroll.y);  
@@ -369,9 +359,10 @@ export class TSMapView {
         world: TWorld,
         editedRule: TSRule | null
     ): void {
+        context.textAlign = "start"
+        context.textBaseline = "top"
 
         // calculate bounds for text boxes
-        // TODO: UNRESOLVED.SetTextAlign(canvas.Handle, delphi_compatability.TA_LEFT || delphi_compatability.TA_TOP)
         // TODO: canvas.Pen.Color = delphi_compatability.clBlack
         for (let i = 0; i < world.rules.length; i++) {
             // need to compute these first - because they are referenced
