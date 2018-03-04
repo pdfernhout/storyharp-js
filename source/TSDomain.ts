@@ -172,6 +172,11 @@ export interface TranscriptLine {
     color: Color
 }
 
+
+export interface DemoConfig {
+    demoWorldFiles: string[]
+}
+
 // Make a seperate interface for testability
 export interface TSDomain {
     world: TWorld
@@ -190,8 +195,7 @@ export interface TSDomain {
 
     loadedFileName: string
 
-    // TODO: Rename this to indicate these are demo world files
-    availableWorldFiles: string[]
+    demoConfig: DemoConfig
 
     loadTestWorld: (name: string) => Promise<void>
 
@@ -218,7 +222,7 @@ export class TSApplication implements TSDomain {
 
     loadedFileName = ""
 
-    availableWorldFiles = []
+    demoConfig: DemoConfig
 
     // TODO: Fix these
     consoleForm = null

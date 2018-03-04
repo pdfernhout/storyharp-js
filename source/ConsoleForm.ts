@@ -106,7 +106,7 @@ function viewFiles(domain: TSDomain) {
         "Choose a demo world file to load:",
         m("br"),
         m("br"),
-        domain.availableWorldFiles.map((name: string) => 
+        domain.demoConfig.demoWorldFiles.map((name: string) => 
             m("div.mt1.ml2", 
                 { onclick: () => {
                 domain.loadTestWorld(name)

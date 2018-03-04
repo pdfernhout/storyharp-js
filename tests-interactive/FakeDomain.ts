@@ -2,7 +2,7 @@ import * as m from "mithril"
 import { TWorld } from "../source/TWorld"
 import { TSCommandList } from "../source/TSCommandList"
 import { TSRuleField } from "../source/TSRule"
-import { TSDomain } from "../source/TSDomain"
+import { TSDomain, DemoConfig } from "../source/TSDomain"
 import { TPoint } from "../source/TPoint"
 import { Color } from "../source/common";
 
@@ -13,6 +13,10 @@ const transcript: {text: string, color: number}[] = []
 
 async function loadTestWorld(worldFileName: string) {
     const domain = FakeDomain
+
+    if (!domain.demoConfig.demoWorldFiles.length) {
+        domain.demoConfig = <DemoConfig>await m.request("../data/demoConfig.json")
+    }
 
     const worldContent = await m.request("../data/" + worldFileName + ".wld", {deserialize: (text) => text})
 
@@ -75,23 +79,9 @@ export const FakeDomain: TSDomain = {
     changeLogForm: {
         addToLog: (text: string) => null
     },
-    availableWorldFiles: [
-        "Astronomy Test",
-        "GarTrek",
-        "Grue Pit",
-        "House and Yard",
-        "insurance",
-        "interview",
-        "Intro",
-        "java1",
-        "java2",
-        "Max the Computer",
-        "prompter",
-        "testing",
-        "Tutorial Basic",
-        "Tutorial Intermediate",
-        "Tutorial Advanced",
-    ],
+    demoConfig: {
+        demoWorldFiles: []
+    },
     loadedFileName: "",
     loadTestWorld,
     editedRule: null,
