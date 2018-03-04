@@ -129,9 +129,9 @@ function viewAbout(domain: TSDomain) {
         m("div", { onclick: () => showAuthoringHelp = !showAuthoringHelp }, expander(showAuthoringHelp, "(Click for:) ") + "Authoring help"),
         showAuthoringHelp ? authoringHelp.split("\n\n").map(text => m("p", text)) : [],
         m("hr"),
-        m("p", "StoryHarp 1.0 was originally a stand-alone desktop program. Version 2.0 is web-based."),
+        m("p", "StoryHarp 1.0 was originally a stand-alone desktop program in Delphi. Version 2.0 was in Java but was not released. Version 3.0 is web-based."),
         m("p"),
-        m("p", "StoryHarp 2.0 Copyright Paul D. Fernhout and Cynthia F. Kurtz 1998-2008"),
+        m("p", "StoryHarp 3.0 Copyright Paul D. Fernhout and Cynthia F. Kurtz 1998-2008"),
         m("p", "StoryHarp is a trademark of Paul D. Fernhout and Cynthia F. Kurtz")
     )
 }
@@ -206,7 +206,7 @@ export function viewConsoleForm(domain: TSDomain) {
 
     return m(".ConsoleForm.ml3.h-100.overflow-hidden",
         m("div.mt1.mb2",
-            m("span.f5.b.mr3.dib", "StoryHarp 2.0 CYOA Player and Editor"),
+            m("span.f5.b.mr3.dib", "StoryHarp 3.0 CYOA Player and Editor"),
             m("span", "World: "),
             m("span.i", "" + domain.loadedFileName),
         ),
