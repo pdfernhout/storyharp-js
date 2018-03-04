@@ -178,7 +178,7 @@ export class RuleMapView {
     */
     
     MapImageMouseDown(event: MouseEvent): void {
-        this.lastMapMouseDownPosition = new TPoint(event.offsetX + this.mapDrawer.scroll.X, event.offsetY + this.mapDrawer.scroll.Y)
+        this.lastMapMouseDownPosition = new TPoint(event.offsetX - this.mapDrawer.scroll.X, event.offsetY - this.mapDrawer.scroll.Y)
 
         // TODO: use or remove: this.FocusControl(this.PanelMap)
 
@@ -192,8 +192,8 @@ export class RuleMapView {
         displayOptions[TSRuleField.kRuleCommand] = true
 
         const draggedNode: TSDraggableObject | null = this.mapDrawer.nearestNode(new TPoint(
-            event.offsetX + this.mapDrawer.scroll.X,
-            event.offsetY + this.mapDrawer.scroll.Y
+            event.offsetX - this.mapDrawer.scroll.X,
+            event.offsetY - this.mapDrawer.scroll.Y
         ), displayOptions, this.world)
 
         /* TODO: use or remove -- for making a new item
@@ -278,10 +278,10 @@ export class RuleMapView {
                 this.world.deselectAllExcept(null)
             }
             this.mapSelectionRect = new TRect(
-                this.mapSelectionRect.Left + this.mapDrawer.scroll.X,
-                this.mapSelectionRect.Top + this.mapDrawer.scroll.Y,
-                this.mapSelectionRect.Right + this.mapDrawer.scroll.X,
-                this.mapSelectionRect.Bottom + this.mapDrawer.scroll.Y
+                this.mapSelectionRect.Left - this.mapDrawer.scroll.X,
+                this.mapSelectionRect.Top - this.mapDrawer.scroll.Y,
+                this.mapSelectionRect.Right - this.mapDrawer.scroll.X,
+                this.mapSelectionRect.Bottom - this.mapDrawer.scroll.Y
             )
             this.world.selectInRectangle(this.mapSelectionRect)
             this.MapPaintBoxChanged()
@@ -389,7 +389,10 @@ export class RuleMapView {
             // mapBoundsRect := domain.world.boundsRect;
             //    result.x := (mapBoundsRect.left - mapBoundsRect.right) div 2;
             //    result.y := mapBoundsRect.bottom + 30;  
-            result = new TPoint(this.mapDrawer.scroll.X + this.canvas.width / 2, this.mapDrawer.scroll.Y + this.canvas.height / 2)
+            result = new TPoint(
+                Math.round(this.canvas.width / 2 - this.mapDrawer.scroll.X),
+                Math.round(this.canvas.height / 2 - this.mapDrawer.scroll.Y)
+            )
         }
         result.X = result.X + Math.round(Math.random() * 200) - 100
         result.Y = result.Y + Math.round(Math.random() * 200) - 100
@@ -450,6 +453,14 @@ export class RuleMapView {
             m("canvas.ba.h-100.w-100.overflow-hidden", {
                 // set tabindex to make canvas focusable
                 tabindex: 0,
+
+                /* Experiment that does not work to know when canvas has focus:
+                style: {
+                    "border-color": (this.canvas && this.canvas === document.activeElement)
+                        ? "black"
+                        : "gray"
+                },
+                */
 
                 oncreate: (vnode: m.VnodeDOM) => {       
                     this.canvas = <HTMLCanvasElement>vnode.dom
@@ -525,8 +536,8 @@ export class RuleMapView {
                 },
 
                 onmousewheel: (event: MouseWheelEvent) => {
-                    this.mapDrawer.scroll.X += event.deltaX
-                    this.mapDrawer.scroll.Y += event.deltaY
+                    this.mapDrawer.scroll.X -= event.deltaX
+                    this.mapDrawer.scroll.Y -= event.deltaY
                 },
             }),
         )

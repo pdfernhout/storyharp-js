@@ -428,11 +428,13 @@ export class TWorld {
         let rule: TSRule
         let variable: TSVariable
         
+        // Make a copy of rect in case swap values
+        rect = rect.copy()
         if (rect.Right < rect.Left) {
             [rect.Left, rect.Right] = swapIntegers(rect.Left, rect.Right)
         }
         if (rect.Bottom < rect.Top) {
-            [rect.Top, rect.Bottom]= swapIntegers(rect.Top, rect.Bottom)
+            [rect.Top, rect.Bottom] = swapIntegers(rect.Top, rect.Bottom)
         }
         for (let i = 0; i < this.rules.length; i++) {
             const rule:TSRule = this.rules[i]
