@@ -3,6 +3,7 @@ import { TSRuleField } from "./TSRule"
 import { TSMapView } from "./TSMapView"
 import { TRect } from "./TRect";
 import { TPoint } from "./TPoint"
+import { TWorld } from "./TWorld"
 
 export class RuleMapView {
     domain: any
@@ -398,14 +399,6 @@ export class RuleMapView {
         //LocalIntMax(1, LocalIntMin((bottom - top) div 10, MapPaintBox.height));
     }
     
-    MapScrollBarVerticalChange(Sender: TObject): void {
-        this.MapPaintBoxChanged()
-    }
-    
-    MapScrollBarHorizontalChange(Sender: TObject): void {
-        this.MapPaintBoxChanged()
-    }
-    
     goodPosition(): TPoint {
         let result = new TPoint()
         if (this.lastChoice !== null) {
@@ -454,7 +447,7 @@ export class RuleMapView {
     */
 
     view() {
-        const world = this.domain.world
+        const world: TWorld = this.domain.world
 
         const drawWorld = () => {
             const canvas = this.canvas
@@ -467,7 +460,12 @@ export class RuleMapView {
             const displayOptions = []
             displayOptions[TSRuleField.kRuleContext] = true
             displayOptions[TSRuleField.kRuleCommand] = true
+            context.setLineDash([]);
+            context.lineDashOffset = 0
             this.mapDrawer.displayOn(context, displayOptions, null, null, world, null)
+            context.setLineDash([4, 16]);
+            context.lineDashOffset = 2;
+            this.mapDrawer.drawRect(context, world.boundsRect(), true)
         }
 
         return m(".RuleMapView.h-100.w-100.overflow-hidden",

@@ -501,37 +501,31 @@ export class TWorld {
         // this is not a true bounds rect but one including the origin
         let result = new TRect(0, 0, 0, 0)
 
+        function addToBounds(rect: TRect) {
+            if (result.Left > rect.Left) {
+                result.Left = rect.Left
+            }
+            if (result.Right < rect.Right) {
+                result.Right = rect.Right
+            }
+            if (result.Top > rect.Top) {
+                result.Top = rect.Top
+            }
+            if (result.Bottom < rect.Bottom) {
+                result.Bottom = rect.Bottom
+            }
+        }
+
         for (let i = 0; i < this.variables.length; i++) {
             const node = this.variables[i]
-            if (result.Left > node.position.X) {
-                result.Left = node.position.X
-            }
-            if (result.Right < node.position.X + node.extent.X) {
-                result.Right = node.position.X + node.extent.X
-            }
-            if (result.Top > node.position.Y) {
-                result.Top = node.position.Y
-            }
-            if (result.Bottom < node.position.Y + node.extent.Y) {
-                result.Bottom = node.position.Y + node.extent.Y
-            }
+            addToBounds(node.bounds())
         }
         for (let i = 0; i < this.rules.length; i++) {
             const node = this.rules[i]
-            if (result.Left > node.position.X) {
-                result.Left = node.position.X
-            }
-            if (result.Right < node.position.X + node.extent.X) {
-                result.Right = node.position.X + node.extent.X
-            }
-            if (result.Top > node.position.Y) {
-                result.Top = node.position.Y
-            }
-            if (result.Bottom < node.position.Y + node.extent.Y) {
-                result.Bottom = node.position.Y + node.extent.Y
-            }
+            addToBounds(node.bounds())
         }
-        return result
+        const inflate = 10
+        return new TRect(result.Left - inflate, result.Top - inflate, result.Right + inflate, result.Bottom + inflate)
     }
     
     updateVariablesForIndexInVariables(): void {

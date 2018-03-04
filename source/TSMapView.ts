@@ -446,7 +446,8 @@ export class TSMapView {
         context.fillText(text, textPoint.X, textPoint.Y)
     }
 
-    drawRect(context: CanvasRenderingContext2D, rect: TRect) {
+    drawRect(context: CanvasRenderingContext2D, rect: TRect, scrolled = false) {
+        if (scrolled) rect = OffsetRect(rect, this.scroll.X, this.scroll.Y)
         context.beginPath()
         context.moveTo(rect.Left, rect.Top)
         context.lineTo(rect.Left, rect.Bottom)
