@@ -21,6 +21,8 @@ interface TSize {
     cy: number,
 }
 
+export const defaultScale = 1.5
+
 function TextExtent(context: CanvasRenderingContext2D, text: string): TSize {
     return {
         cx: Math.ceil(context.measureText(text).width),
@@ -117,6 +119,7 @@ function IntersectionPointForLineAndRectangle(origin: TPoint, destRect: TRect): 
 
 export class TSMapView {
     scroll: TPoint = new TPoint()
+    scale: number = defaultScale
 
     /* TODO: this code is not used
 
@@ -363,6 +366,7 @@ export class TSMapView {
     ): void {
         context.textAlign = "start"
         context.textBaseline = "top"
+        context.scale(this.scale, this.scale)
         
         // calculate bounds for text boxes
         // TODO: canvas.Pen.Color = delphi_compatability.clBlack

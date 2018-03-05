@@ -1,6 +1,6 @@
 import * as m from "mithril"
 import { TSRule, TSRuleField } from "./TSRule"
-import { TSMapView } from "./TSMapView"
+import { TSMapView, defaultScale } from "./TSMapView"
 import { TRect } from "./TRect"
 import { TPoint } from "./TPoint"
 import { TWorld } from "./TWorld"
@@ -191,8 +191,8 @@ export class RuleMapView {
         displayOptions[TSRuleField.kRuleCommand] = true
 
         const draggedNode: TSDraggableObject | null = this.mapDrawer.nearestNode(new TPoint(
-            event.offsetX - this.mapDrawer.scroll.X,
-            event.offsetY - this.mapDrawer.scroll.Y
+            event.offsetX / this.mapDrawer.scale - this.mapDrawer.scroll.X,
+            event.offsetY / this.mapDrawer.scale - this.mapDrawer.scroll.Y
         ), displayOptions, this.world)
 
         /* TODO: use or remove -- for making a new item
@@ -276,10 +276,10 @@ export class RuleMapView {
                 this.world.deselectAllExcept(null)
             }
             this.mapSelectionRect = new TRect(
-                this.mapSelectionRect.Left - this.mapDrawer.scroll.X,
-                this.mapSelectionRect.Top - this.mapDrawer.scroll.Y,
-                this.mapSelectionRect.Right - this.mapDrawer.scroll.X,
-                this.mapSelectionRect.Bottom - this.mapDrawer.scroll.Y
+                this.mapSelectionRect.Left / this.mapDrawer.scale - this.mapDrawer.scroll.X,
+                this.mapSelectionRect.Top / this.mapDrawer.scale - this.mapDrawer.scroll.Y,
+                this.mapSelectionRect.Right / this.mapDrawer.scale - this.mapDrawer.scroll.X,
+                this.mapSelectionRect.Bottom / this.mapDrawer.scale - this.mapDrawer.scroll.Y
             )
             this.world.selectInRectangle(this.mapSelectionRect)
             this.MapPaintBoxChanged()
@@ -443,7 +443,7 @@ export class RuleMapView {
             this.mapDrawer.drawRect(context, world.boundsRect(), true)
             if (this.mapSelectionInProgress) {
                 // TODO: Was XOR rectangle
-                this.mapDrawer.drawRect(context, this.mapSelectionRect)
+                this.mapDrawer.drawRect(context, this.mapSelectionRect.scale(1 / this.mapDrawer.scale))
             }
         }
 
@@ -524,8 +524,19 @@ export class RuleMapView {
                     case 67: // c 
                         // center map
                         const boundsCenter = this.world.boundsRect().center()
-                        this.mapDrawer.scroll.X = Math.round(this.canvas.width / 2) - boundsCenter.X
-                        this.mapDrawer.scroll.Y = Math.round(this.canvas.height / 2) - boundsCenter.Y
+                        this.mapDrawer.scroll.X = Math.round(this.canvas.width / 2 / this.mapDrawer.scale) - boundsCenter.X
+                        this.mapDrawer.scroll.Y = Math.round(this.canvas.height / 2 / this.mapDrawer.scale) - boundsCenter.Y
+                        break
+                    case 187: // plus +
+                        this.mapDrawer.scale = this.mapDrawer.scale * 1.2
+                        break
+                    case 189: // minus -
+                        this.mapDrawer.scale = this.mapDrawer.scale / 1.2
+                        break
+                    case 82: // r to reset
+                        this.mapDrawer.scroll.X = 0
+                        this.mapDrawer.scroll.Y = 0
+                        this.mapDrawer.scale = defaultScale
                         break
                     default:
                         (<any>event).redraw = false
@@ -534,8 +545,8 @@ export class RuleMapView {
                 },
 
                 onmousewheel: (event: MouseWheelEvent) => {
-                    this.mapDrawer.scroll.X -= event.deltaX
-                    this.mapDrawer.scroll.Y -= event.deltaY
+                    this.mapDrawer.scroll.X -= (event.deltaX / this.mapDrawer.scale)
+                    this.mapDrawer.scroll.Y -= (event.deltaY / this.mapDrawer.scale)
                 },
             }),
         )

@@ -48,4 +48,8 @@ export class TRect {
     copy(): TRect {
         return new TRect(this.Left, this.Top, this.Right, this.Bottom)
     }
+
+    scale(scale: number) {
+        return new TRect(this.Left * scale, this.Top * scale, this.Right * scale, this.Bottom * scale)
+    }
 }
