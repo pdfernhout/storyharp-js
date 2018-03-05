@@ -7,6 +7,7 @@ import { RuleEditorForm } from "./RuleEditorForm"
 import { FileUtils } from "./FileUtils"
 import { authoringHelp } from "./authoringHelp"
 import { TSDomain, DemoEntry } from "./TSDomain"
+import { storyHarpVersion } from "./version"
 
 const firstRiddleAnswer = "say an answer for a riddle"
 
@@ -225,7 +226,7 @@ export function viewConsoleForm(domain: TSDomain) {
 
     return m(".ConsoleForm.ml3.h-100.overflow-hidden",
         m("div.mt1.mb2",
-            m("span.f5.b.mr3.dib", "StoryHarp 3.0 CYOA Player and Editor"),
+            m("span.f5.b.mr3.dib", "StoryHarp " + storyHarpVersion + " CYOA Player and Editor"),
             m("span", "World: "),
             m("span.i", "" + domain.loadedFileName),
         ),
