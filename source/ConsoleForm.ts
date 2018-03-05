@@ -6,7 +6,7 @@ import { VariablesView } from "./VariablesView"
 import { RuleEditorForm } from "./RuleEditorForm"
 import { FileUtils } from "./FileUtils"
 import { authoringHelp } from "./authoringHelp"
-import { TSDomain } from "./TSDomain"
+import { TSDomain, DemoEntry } from "./TSDomain"
 
 const firstRiddleAnswer = "say an answer for a riddle"
 
@@ -110,17 +110,25 @@ function color(color: Color) {
 }
 
 function viewFiles(domain: TSDomain) {
-    return m("div",
-        "Choose a demo world file to load:",
+    return m("div.overflow-auto", { style: "height: calc(100% - 7rem)" },
+        m("div", "Choose a demo world file to load:"),
         m("br"),
-        m("br"),
-        domain.demoConfig.demoWorldFiles.map((name: string) => 
-            m("div.mt1.ml2", 
-                { onclick: () => {
-                domain.loadTestWorld(name)
-                activeForm = "console"
-                }
-            }, name)
+        m("table.ml2", { style: "border-spacing: 0.5rem" },
+            m("tr",
+                m("th", "Name"),
+                m("th.ml2", "Description")
+            ),
+            domain.demoConfig.demoWorldFiles.map((entry: DemoEntry) => 
+                m("tr.mt1", 
+                    { onclick: () => {
+                    domain.loadTestWorld(entry.name)
+                    activeForm = "console"
+                    }
+                },
+                    m("td.nowrap.tr.f4", entry.name),
+                    m("td.ml2.i", entry.description)
+                )
+            )
         )
     )
 }

@@ -174,8 +174,13 @@ export interface TranscriptLine {
     color: Color
 }
 
+export interface DemoEntry {
+    name: string
+    description: string
+}
+
 export interface DemoConfig {
-    demoWorldFiles: string[]
+    demoWorldFiles: DemoEntry[]
 }
 
 export interface ConsoleFormAPI {

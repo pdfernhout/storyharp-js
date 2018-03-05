@@ -1,20 +1,20 @@
 {
     "demoWorldFiles": [
-        "Astronomy Test",
-        "GarTrek",
-        "Grue Pit",
-        "House and Yard",
-        "House and Yard original",
-        "insurance",
-        "interview",
-        "Intro",
-        "java1",
-        "java2",
-        "Max the Computer",
-        "prompter",
-        "testing",
-        "Tutorial Basic",
-        "Tutorial Intermediate",
-        "Tutorial Advanced"
+        { "name": "Astronomy Test", "description": "Multiple choice test"},
+        { "name": "GarTrek", "description": "Kitchen sink demo merging Intro, Grue Pit, Tutorial Advanced and extra material"},
+        { "name": "Grue Pit", "description": "Cautionary tale as a sequence of commands"},
+        { "name": "House and Yard", "description": "Awesome things can come in small packages. Imaginitive writing makes all the difference."},
+        { "name": "House and Yard original", "description": "The original House and Yard without requirements to slow down progress towards resolving a mystery. Play the other one first."},
+        { "name": "insurance", "description": "Multiple choice about the insurance industry"},
+        { "name": "interview", "description": "Mockup of a training exercise for insurance phone interviewers"},
+        { "name": "Intro", "description": "Riddle example with various hints"},
+        { "name": "java1", "description": "Four simple rules"},
+        { "name": "java2", "description": "Five simple rules"},
+        { "name": "Max the Computer", "description": "Converse with an AI who knows a secret"},
+        { "name": "prompter", "description": "Simpler version of interview with just prompts"},
+        { "name": "testing", "description": "Contexts and commands only accessible via the debugging variables panel"},
+        { "name": "Tutorial Basic", "description": "Some connected contexts in a forest leading to a treehouse"},
+        { "name": "Tutorial Intermediate", "description": "Blocking access to the treehouse as a result of user actions breaking the vine bridge"},
+        { "name": "Tutorial Advanced", "description": "Adding inventory and interactive characters to the forest world"}
     ]
 }
