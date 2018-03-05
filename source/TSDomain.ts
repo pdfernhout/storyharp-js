@@ -297,12 +297,26 @@ export class TSApplication implements TSDomain {
         }
     }
 
+    // TODO: consolidate world loading
     async loadTestWorld(worldFileName: string) {
         if (!this.demoConfig) {
             this.demoConfig = <DemoConfig>await m.request("./data/demoConfig.json")
+                .catch(error => {
+                    console.log("error loading demoConfig.json", error)
+                    alert("Something went wrong loading demoConfig.json from the server")
+                    const result: DemoConfig = { demoWorldFiles: [] }
+                    return result
+                })
         }
     
         const worldContent = await m.request("./data/" + worldFileName + ".wld", {deserialize: (text) => text})
+            .catch(error => {
+                console.log("error loading a world file", worldFileName, error)
+                alert("Something went wrong loading the world file \"" + worldFileName + "\" from the server")
+                return ""
+            })
+
+        if (!worldContent) return
     
         this.world.resetVariablesAndRules()
         const loaded = this.world.loadWorldFromFileContents(worldContent)
