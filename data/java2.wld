@@ -1,4 +1,4 @@
-; world file version 1.0
+; StoryHarp world file version 1.3
 ====================
 Context
 Command
@@ -8,14 +8,6 @@ Requirements
 Changes
 map positions
 ====================
-second
-look
-This is a really pretty second location.
-
-
-
-132,199|137,142|0,0
-====================
 first
 look
 This is a nondescript first location.
@@ -23,14 +15,6 @@ This is a nondescript first location.
 
 
 320,154|279,149|0,0
-====================
-second
-move to first
-You move to first.
-first
-
-
-209,102|137,142|279,149
 ====================
 first
 move to second
@@ -47,3 +31,19 @@ You can hear the wind in the willows.
 
 
 303,196|279,149|0,0
+====================
+second
+look
+This is a really pretty second location.
+
+
+
+132,199|137,142|0,0
+====================
+second
+move to first
+You move to first.
+first
+
+
+209,102|137,142|279,149
