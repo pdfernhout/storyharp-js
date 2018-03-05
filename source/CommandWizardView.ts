@@ -40,21 +40,21 @@ enum EndSequence {
 export class CommandWizardView {
     domain: TSDomain
 
-    newCommandsTextToParse: string = "";
-    newCommandsTextToParseError: string = "";
-    newCommandsTextToParseLastGenerated: string = "";
+    newCommandsTextToParse: string = ""
+    newCommandsTextToParseError: string = ""
+    newCommandsTextToParseLastGenerated: string = ""
 
-    contextName = "";
-    contextNameError: string = "";
-    contextNameLastGenerated: string = "";
+    contextName = ""
+    contextNameError: string = ""
+    contextNameLastGenerated: string = ""
 
-    prefix = "";
-    prefixError: string = "";
-    prefixLastGenerated: string = "";
+    prefix = ""
+    prefixError: string = ""
+    prefixLastGenerated: string = ""
 
     endSequence = EndSequence.noSelection;
-    endSequenceError: string = "";
-    endSequenceGenerated: string = "";
+    endSequenceError: string = ""
+    endSequenceGenerated: string = ""
 
     doSequence = false
 

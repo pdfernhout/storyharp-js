@@ -1,7 +1,7 @@
 import { TWorld } from "./TWorld"
 import { TSVariable, TSVariableState } from "./TSVariable"
 import { KfCommand } from "./KfCommand"
-import { TSDomain } from "./TSDomain";
+import { TSDomain } from "./TSDomain"
 
 // need to have abstract base so TSDoCommandPhraseCommand can defer updating till after changes
 export class TSAbstractMoveFocusCommand extends KfCommand {

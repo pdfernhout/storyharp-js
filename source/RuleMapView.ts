@@ -9,7 +9,7 @@ import { TSCommandList } from "./TSCommandList"
 import { TSMapDragCommand } from "./TSMapDragCommand"
 import { KfCommand, KfCommandChangeType } from "./KfCommand"
 import { TSVariableDisplayOptions } from "./TSVariable"
-import { TSDomain } from "./TSDomain";
+import { TSDomain } from "./TSDomain"
 
 export class RuleMapView {
     domain: TSDomain

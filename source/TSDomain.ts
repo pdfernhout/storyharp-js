@@ -2,7 +2,7 @@ import { TWorld } from "./TWorld"
 import { TSCommandList } from "./TSCommandList"
 import { TSRule, TSRuleField } from "./TSRule"
 import { Color, ScrollIntoViewDirection } from "./common"
-import { TSDraggableObject } from "./TSDraggableObject";
+import { TSDraggableObject } from "./TSDraggableObject"
 
 // unit usdomain
 

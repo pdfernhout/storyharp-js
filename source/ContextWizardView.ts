@@ -36,13 +36,13 @@ const defaultReply = "There is nothing of interest here."
 export class ContextWizardView {
     domain: TSDomain
 
-    newContextsTextToParse: string = "";
-    newContextsTextToParseError: string = "";
-    newContextsTextToParseLastGenerated: string = "";
+    newContextsTextToParse: string = ""
+    newContextsTextToParseError: string = ""
+    newContextsTextToParseLastGenerated: string = ""
 
     commandPhrase = defaultCommand;
-    commandPhraseError: string = "";
-    commandPhraseLastGenerated: string = "";
+    commandPhraseError: string = ""
+    commandPhraseLastGenerated: string = ""
 
     wasGenerateRulesPressed = false
 

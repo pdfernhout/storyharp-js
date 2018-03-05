@@ -2,7 +2,7 @@ import { KfCommand, TCommandEvent, KfCommandChangeType, TrackPhase } from "./KfC
 import { TWorld } from "./TWorld"
 import { TSDragRecord } from "./TSDragRecord"
 import { TPoint } from "./TPoint"
-import { TSDomain } from "./TSDomain";
+import { TSDomain } from "./TSDomain"
 
 export class TSMapDragCommand extends KfCommand {
     domain: TSDomain

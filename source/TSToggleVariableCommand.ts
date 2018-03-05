@@ -1,7 +1,7 @@
 import { TWorld } from "./TWorld"
 import { KfCommand } from "./KfCommand"
 import { TSVariable, TSVariableState } from "./TSVariable"
-import { TSDomain } from "./TSDomain";
+import { TSDomain } from "./TSDomain"
 
 export class TSToggleVariableCommand extends KfCommand {
     domain: TSDomain

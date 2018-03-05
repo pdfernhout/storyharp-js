@@ -4,7 +4,7 @@ import { int, compareTextIgnoreCase, Color } from "./common"
 import { TWorld } from "./TWorld"
 import { TSRule } from "./TSRule"
 import { TSVariableState } from "./TSVariable"
-import { TSDomain } from "./TSDomain";
+import { TSDomain } from "./TSDomain"
 
 export class TSDoCommandPhraseCommand extends TSAbstractMoveFocusCommand {
     commandPhrase: string

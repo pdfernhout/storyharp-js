@@ -1,7 +1,7 @@
-import { TPoint } from "./TPoint";
-import { TRect } from "./TRect";
+import { TPoint } from "./TPoint"
+import { TRect } from "./TRect"
 import { TSDraggableObject } from "./TSDraggableObject"
-import { TSVariable, TSVariableDisplayOptions } from "./TSVariable";
+import { TSVariable, TSVariableDisplayOptions } from "./TSVariable"
 import { TSRule, TSRuleField } from "./TSRule"
 import { TWorld } from "./TWorld"
 

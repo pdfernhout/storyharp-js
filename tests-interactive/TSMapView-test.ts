@@ -1,9 +1,9 @@
 import * as m from "mithril"
-import { TSMapView } from "../source/TSMapView";
-import { TPoint } from "../source/TPoint";
-import { TRect } from "../source/TRect";
-import { TSRuleField } from "../source/TSRule";
-import { FakeDomain } from "./FakeDomain";
+import { TSMapView } from "../source/TSMapView"
+import { TPoint } from "../source/TPoint"
+import { TRect } from "../source/TRect"
+import { TSRuleField } from "../source/TSRule"
+import { FakeDomain } from "./FakeDomain"
 
 const mapDrawer = new TSMapView()
 

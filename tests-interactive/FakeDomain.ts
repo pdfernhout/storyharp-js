@@ -4,7 +4,7 @@ import { TSCommandList } from "../source/TSCommandList"
 import { TSRuleField } from "../source/TSRule"
 import { TSDomain, DemoConfig } from "../source/TSDomain"
 import { TPoint } from "../source/TPoint"
-import { Color } from "../source/common";
+import { Color } from "../source/common"
 
 const world = new TWorld()
 
