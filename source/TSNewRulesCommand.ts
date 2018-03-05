@@ -1,21 +1,17 @@
-import { arrayRemove } from "./common"
+import { arrayRemove, ScrollIntoViewDirection } from "./common"
 import { KfCommand } from "./KfCommand"
 import { TWorld } from "./TWorld"
 import { TSRule } from "./TSRule"
-
-// TODO: Fix these imports
-import { RuleEditorForm, ScrollIntoViewDirection } from "./fixTypes"
+import { TSDomain } from "./TSDomain"
 
 export class TSNewRulesCommand extends KfCommand {
-    world: TWorld
-    ruleEditorForm: RuleEditorForm
+    domain: TSDomain
     rules: TSRule[] = []
     creator: string = ""
 
-    constructor(world: TWorld, ruleEditorForm: RuleEditorForm) {
+    constructor(domain: TSDomain) {
         super()
-        this.world = world
-        this.ruleEditorForm = ruleEditorForm 
+        this.domain = domain
     }
     
     addRule(rule: TSRule): void {
@@ -25,35 +21,35 @@ export class TSNewRulesCommand extends KfCommand {
     doCommand(): void {
         //already added at start
         super.doCommand()
-        this.ruleEditorForm.updateForRuleChange()
-        this.ruleEditorForm.scrollGridSelectionsIntoView(ScrollIntoViewDirection.kFromBottom)
+        this.domain.ruleEditorForm.scrollGridSelectionsIntoView(ScrollIntoViewDirection.kFromBottom)
     }
     
     undoCommand(): void {
         for (let i = 0; i < this.rules.length; i++) {
             const rule: TSRule = this.rules[i]
-            arrayRemove(this.world.rules, rule)
+            arrayRemove(this.domain.world.rules, rule)
             rule.selected = false
             rule.removeUseages()
         }
         super.undoCommand()
-        if (this.rules.indexOf(this.ruleEditorForm.rule) >= 0) {
-            this.ruleEditorForm.editRule(null)
+        // TODO: A little uncertain about this extra guard check added for TS for a null current editedRule
+        if (this.domain.editedRule) {
+            if (this.rules.indexOf(this.domain.editedRule) >= 0) {
+                this.domain.editedRule = null
+            }
         }
-        this.ruleEditorForm.updateForRuleChange()
     }
     
     redoCommand(): void {
-        this.world.deselectAllExcept(null)
+        this.domain.world.deselectAllExcept(null)
         for (let i = 0; i < this.rules.length; i++) {
             const rule: TSRule = this.rules[i]
             rule.selected = true
-            this.world.rules.push(rule)
+            this.domain.world.rules.push(rule)
             rule.addUseages()
         }
         super.doCommand()
-        this.ruleEditorForm.updateForRuleChange()
-        this.ruleEditorForm.scrollGridSelectionsIntoView(ScrollIntoViewDirection.kFromBottom)
+        this.domain.ruleEditorForm.scrollGridSelectionsIntoView(ScrollIntoViewDirection.kFromBottom)
         //if rules.count > 0 then
         //  RuleEditorForm.editRule(rules[rules.count - 1]);
     }

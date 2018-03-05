@@ -85,7 +85,7 @@ export class VariablesView {
                         if ((newFocus === world.focus) && (newFocus.getState() === TSVariableState.kPresent)) {
                             return
                         }
-                        sessionCommandList.moveFocus(this.domain.consoleForm, newFocus)
+                        sessionCommandList.moveFocus(newFocus)
 
                     }
                 },
@@ -117,7 +117,7 @@ export class VariablesView {
                 shownVariables.map(variable => 
                     m("div.nowrap",
                         m("span.blue.w1", {
-                            onclick: () => sessionCommandList.toggleVariable(this.domain.consoleForm, variable)
+                            onclick: () => sessionCommandList.toggleVariable(variable)
                         }, variable.getState() === TSVariableState.kPresent ? Glyph.present : Glyph.absent),
                         m("span.ml1.mw5.truncate.dib", { title: variable.phrase }, variable.phrase),
                         m("div.nowrap.ml1.fr",

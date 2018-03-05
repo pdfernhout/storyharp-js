@@ -113,7 +113,7 @@ export class CommandWizardView {
         // TODO: save text to log
         // uschangelog.ChangeLogForm.addToLog(this.newCommandsMemo.Text)
 
-        const newRulesCommand = new TSNewRulesCommand(world, ruleEditorForm)
+        const newRulesCommand = new TSNewRulesCommand(this.domain)
         newRulesCommand.creator = "command sequence wizard"
 
         const lines = this.newCommandsTextToParse.split(/\r\n|\r|\n/)
@@ -185,8 +185,6 @@ export class CommandWizardView {
 
         if (newRulesCommand.rules.length > 0) {
             this.domain.worldCommandList.doCommand(newRulesCommand)
-            // ruleEditorForm.updateForRuleChange()
-            // ruleEditorForm.adjustScrollBars()
             const plural = newRulesCommand.rules.length === 1 ? "" : "s"
             alert("A total of " + newRulesCommand.rules.length + " new rule" + plural + " were generated")
         } else {

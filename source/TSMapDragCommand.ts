@@ -2,16 +2,17 @@ import { KfCommand, TCommandEvent, KfCommandChangeType, TrackPhase } from "./KfC
 import { TWorld } from "./TWorld"
 import { TSDragRecord } from "./TSDragRecord"
 import { TPoint } from "./TPoint"
+import { TSDomain } from "./TSDomain";
 
 export class TSMapDragCommand extends KfCommand {
-    world: TWorld
+    domain: TSDomain
     dragRecords: TSDragRecord[] = []
     notifyProcedure: TCommandEvent
     
-    constructor(world: TWorld) {
+    constructor(domain: TSDomain) {
         super()
-        this.world = world
-        this.world.addDragRecordsToList(this.dragRecords)
+        this.domain = domain
+        this.domain.world.addDragRecordsToList(this.dragRecords)
     }
     
     doCommand(): void {
@@ -25,7 +26,7 @@ export class TSMapDragCommand extends KfCommand {
     }
     
     undoCommand(): void {
-        this.world.deselectAllExcept(null)
+        this.domain.world.deselectAllExcept(null)
         for (let i = 0; i < this.dragRecords.length; i++) {
             this.dragRecords[i].draggedNode.selected = true
             this.dragRecords[i].undoDrag()
@@ -37,7 +38,7 @@ export class TSMapDragCommand extends KfCommand {
     }
     
     redoCommand(): void {
-        this.world.deselectAllExcept(null)
+        this.domain.world.deselectAllExcept(null)
         for (let i = 0; i < this.dragRecords.length; i++) {
             this.dragRecords[i].draggedNode.selected = true
             this.dragRecords[i].doDrag()

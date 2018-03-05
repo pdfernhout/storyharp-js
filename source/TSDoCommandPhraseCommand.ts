@@ -4,9 +4,7 @@ import { int, compareTextIgnoreCase, Color } from "./common"
 import { TWorld } from "./TWorld"
 import { TSRule } from "./TSRule"
 import { TSVariableState } from "./TSVariable"
-
-// TODO: Fix these as imports
-import { ConsoleForm, RuleEditorForm } from "./fixTypes"
+import { TSDomain } from "./TSDomain";
 
 export class TSDoCommandPhraseCommand extends TSAbstractMoveFocusCommand {
     commandPhrase: string
@@ -16,20 +14,21 @@ export class TSDoCommandPhraseCommand extends TSAbstractMoveFocusCommand {
     oldFirstCommandDoneForLastCommandPhrase: int
     newFirstCommandDoneForLastCommandPhrase: int
     
-    constructor(world: TWorld, consoleForm: ConsoleForm, ruleEditorForm: RuleEditorForm, commandPhrase: string) {
+    constructor(domain: TSDomain, commandPhrase: string) {
         // determine what would need to change - including new focus and all variables
         // Reorganized with temporary variables to work around TypeScript limitation
         // of no access to this before super constructor called.
+        const world = domain.world
         const changedVariables: TSChangedVariableWrapper[] = []
         let newFocus = world.emptyEntry
-        const oldLastSaidTextWithMacros = consoleForm.speechSystem.lastSaidTextWithMacros
+        const oldLastSaidTextWithMacros = domain.speechSystem.lastSaidTextWithMacros
         let newLastSaidTextWithMacros = ""
         const oldFirstCommandDoneForLastCommandPhrase = world.firstCommandDoneForLastCommandPhrase
         let newFirstCommandDoneForLastCommandPhrase = -1
         for (let i = 0; i < world.rules.length; i++) {
             const rule: TSRule = world.rules[i]
             if (rule.available && compareTextIgnoreCase(rule.command.phrase, commandPhrase)) {
-                ruleEditorForm.lastCommand = rule
+                domain.ruleEditorForm.lastCommand = rule
                 if (newFirstCommandDoneForLastCommandPhrase === -1) {
                     newFirstCommandDoneForLastCommandPhrase = i
                 }
@@ -46,7 +45,7 @@ export class TSDoCommandPhraseCommand extends TSAbstractMoveFocusCommand {
             commandPhrase = commandPhrase.substring(1)
         }
 
-        super(world, consoleForm, newFocus)
+        super(domain, newFocus)
 
         this.newFocus = newFocus
         this.oldLastSaidTextWithMacros = oldLastSaidTextWithMacros
@@ -60,23 +59,23 @@ export class TSDoCommandPhraseCommand extends TSAbstractMoveFocusCommand {
     doCommand(): void {
         let i: int
         
-        this.consoleForm.addLineToTranscript("> " + this.commandPhrase, Color.clBlue)
-        this.consoleForm.addLineToTranscript(this.consoleForm.speechSystem.stripMacros(this.newLastSaidTextWithMacros), Color.clBlack)
-        this.consoleForm.scrollTranscriptEndIntoView()
-        this.consoleForm.speechSystem.sayTextWithMacros(this.newLastSaidTextWithMacros)
+        this.domain.consoleForm.addLineToTranscript("> " + this.commandPhrase, Color.clBlue)
+        this.domain.consoleForm.addLineToTranscript(this.domain.speechSystem.stripMacros(this.newLastSaidTextWithMacros), Color.clBlack)
+        this.domain.consoleForm.scrollTranscriptEndIntoView()
+        this.domain.speechSystem.sayTextWithMacros(this.newLastSaidTextWithMacros)
         //common with undo
-        this.consoleForm.speechSystem.lastSaidTextWithMacros = this.newLastSaidTextWithMacros
-        this.world.firstCommandDoneForLastCommandPhrase = this.newFirstCommandDoneForLastCommandPhrase
-        if (this.newFocus !== this.world.emptyEntry) {
+        this.domain.speechSystem.lastSaidTextWithMacros = this.newLastSaidTextWithMacros
+        this.domain.world.firstCommandDoneForLastCommandPhrase = this.newFirstCommandDoneForLastCommandPhrase
+        if (this.newFocus !== this.domain.world.emptyEntry) {
             this.oldFocus.setState(TSVariableState.kAbsent)
-            this.world.focus = this.newFocus
+            this.domain.world.focus = this.newFocus
             this.newFocus.setState(TSVariableState.kPresent)
         }
         for (i = 0; i < this.changedVariables.length; i++) {
             this.changedVariables[i].doChange()
         }
         this.updateForChanges()
-        this.consoleForm.speechSystem.checkForSayOptionsMacro()
+        this.domain.speechSystem.checkForSayOptionsMacro()
         super.doCommand()
     }
     
@@ -84,20 +83,20 @@ export class TSDoCommandPhraseCommand extends TSAbstractMoveFocusCommand {
         let i: int
         let undoPhrase: string
         
-        this.consoleForm.addLineToTranscript("> undo", Color.clBlue)
+        this.domain.consoleForm.addLineToTranscript("> undo", Color.clBlue)
         //  undoPhrase := 'It is as if "' + commandPhrase + '" had never been said.';
         undoPhrase = "(You decide not to say \"" + this.commandPhrase + "\")"
-        this.consoleForm.addLineToTranscript(undoPhrase, Color.clBlue)
-        this.consoleForm.scrollTranscriptEndIntoView()
-        this.consoleForm.speechSystem.speakText(undoPhrase)
-        this.consoleForm.speechSystem.lastSaidTextWithMacros = this.oldLastSaidTextWithMacros
-        this.world.firstCommandDoneForLastCommandPhrase = this.oldFirstCommandDoneForLastCommandPhrase
+        this.domain.consoleForm.addLineToTranscript(undoPhrase, Color.clBlue)
+        this.domain.consoleForm.scrollTranscriptEndIntoView()
+        this.domain.speechSystem.speakText(undoPhrase)
+        this.domain.speechSystem.lastSaidTextWithMacros = this.oldLastSaidTextWithMacros
+        this.domain.world.firstCommandDoneForLastCommandPhrase = this.oldFirstCommandDoneForLastCommandPhrase
         for (let i = this.changedVariables.length - 1; i >= 0; i--) {
             this.changedVariables[i].undoChange()
         }
-        if (this.newFocus !== this.world.emptyEntry) {
+        if (this.newFocus !== this.domain.world.emptyEntry) {
             this.newFocus.setState(this.newFocusOldState)
-            this.world.focus = this.oldFocus
+            this.domain.world.focus = this.oldFocus
             this.oldFocus.setState(this.oldFocusOldState)
         }
         this.updateForChanges()
@@ -105,17 +104,17 @@ export class TSDoCommandPhraseCommand extends TSAbstractMoveFocusCommand {
     }
     
     redoCommand(): void { 
-        this.consoleForm.addLineToTranscript("> redo", Color.clBlue)
+        this.domain.consoleForm.addLineToTranscript("> redo", Color.clBlue)
         const redoPhrase = "(You decide to say \"" + this.commandPhrase + "\" anyway)"
-        this.consoleForm.addLineToTranscript(redoPhrase, Color.clBlue)
-        this.consoleForm.scrollTranscriptEndIntoView()
-        this.consoleForm.speechSystem.speakText(redoPhrase)
+        this.domain.consoleForm.addLineToTranscript(redoPhrase, Color.clBlue)
+        this.domain.consoleForm.scrollTranscriptEndIntoView()
+        this.domain.speechSystem.speakText(redoPhrase)
         //common with do
-        this.consoleForm.speechSystem.lastSaidTextWithMacros = this.newLastSaidTextWithMacros
-        this.world.firstCommandDoneForLastCommandPhrase = this.newFirstCommandDoneForLastCommandPhrase
-        if (this.newFocus !== this.world.emptyEntry) {
+        this.domain.speechSystem.lastSaidTextWithMacros = this.newLastSaidTextWithMacros
+        this.domain.world.firstCommandDoneForLastCommandPhrase = this.newFirstCommandDoneForLastCommandPhrase
+        if (this.newFocus !== this.domain.world.emptyEntry) {
             this.oldFocus.setState(TSVariableState.kAbsent)
-            this.world.focus = this.newFocus
+            this.domain.world.focus = this.newFocus
             this.newFocus.setState(TSVariableState.kPresent)
         }
         for (let i = 0; i < this.changedVariables.length; i++) {

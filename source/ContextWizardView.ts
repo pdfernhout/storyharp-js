@@ -83,7 +83,7 @@ export class ContextWizardView {
         // TODO: save text to log
         // uschangelog.ChangeLogForm.addToLog(this.NewContextsMemo.Text)
 
-        const newRulesCommand = new TSNewRulesCommand(world, ruleEditorForm)
+        const newRulesCommand = new TSNewRulesCommand(this.domain)
         newRulesCommand.creator = "new context wizard"
 
         const lines = this.newContextsTextToParse.split(/\r\n|\r|\n/)
@@ -117,8 +117,6 @@ export class ContextWizardView {
 
         if (newRulesCommand.rules.length > 0) {
             this.domain.worldCommandList.doCommand(newRulesCommand)
-            // ruleEditorForm.updateForRuleChange()
-            // ruleEditorForm.adjustScrollBars()
             const plural = newRulesCommand.rules.length === 1 ? "" : "s"
             alert("A total of " + newRulesCommand.rules.length + " new rule" + plural + " were generated")
         } else {

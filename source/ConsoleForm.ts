@@ -56,7 +56,15 @@ function doCommand(domain: TSDomain, commandPhrase: string) {
         domain.consoleForm.addLineToTranscript("That accomplishes nothing.", Color.clBlack)
         return
     }   
-    domain.sessionCommandList.doCommandPhrase(domain.consoleForm, domain.ruleEditorForm, commandPhraseModified)
+    domain.sessionCommandList.doCommandPhrase(commandPhraseModified)
+
+    // TODO: Track last command where editor switches the edited rule
+    /*
+    if domain.options.updateEditorAfterCommandDone then
+        RuleEditorForm.trackLastCommand;
+        end;
+    */
+
 }
 
 function scrollIntoView() {

@@ -1,21 +1,17 @@
 import { TWorld } from "./TWorld"
 import { KfCommand } from "./KfCommand"
 import { TSVariable, TSVariableState } from "./TSVariable"
-
-// TODO: Fix these as imports
-import { ConsoleForm } from "./fixTypes"
+import { TSDomain } from "./TSDomain";
 
 export class TSToggleVariableCommand extends KfCommand {
-    world: TWorld
-    consoleForm: ConsoleForm
+    domain: TSDomain
     variable: TSVariable = new TSVariable()
     oldState: TSVariableState
     newState: TSVariableState
     
-    constructor(world: TWorld, consoleForm: ConsoleForm, variable: TSVariable) {
+    constructor(domain: TSDomain, variable: TSVariable) {
         super()
-        this.world = world
-        this.consoleForm = consoleForm
+        this.domain = domain
         this.variable = variable
         this.oldState = variable.getState()
         if (this.oldState === TSVariableState.kPresent) {
@@ -27,15 +23,13 @@ export class TSToggleVariableCommand extends KfCommand {
     
     setVariableStateWithUpdate(state: TSVariableState): void {
         this.variable.setState(state)
-        if (this.consoleForm.ShowOnlyTrueVariablesButton.Down) {
-            this.consoleForm.updateVariables()
-            this.consoleForm.VariablesListBox.ItemIndex = this.consoleForm.VariablesListBox.Items.IndexOfObject(this.variable)
-            this.consoleForm.VariablesListBox.Invalidate()
-        } else {
-            this.consoleForm.VariablesListBox.Invalidate()
+        /* TODO: Is this still needed? Seems to select ina list box, but not using that approach right now
+        if (this.domain.consoleForm.ShowOnlyTrueVariablesButton.Down) {
+            this.domain.consoleForm.VariablesListBox.ItemIndex = this.domain.consoleForm.VariablesListBox.Items.IndexOfObject(this.variable)
         }
-        this.world.updateAvailable()
-        this.consoleForm.speechSystem.listenForAvailableCommands()
+        */
+        this.domain.world.updateAvailable()
+        this.domain.speechSystem.listenForAvailableCommands()
     }
     
     doCommand(): void {

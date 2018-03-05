@@ -1,4 +1,5 @@
 import { int } from "./common"
+import { TWorld } from "./TWorld"
 import { KfCommandList } from "./KfCommandList"
 import { TSVariable } from "./TSVariable"
 import { TSToggleVariableCommand } from "./TSToggleVariableCommand"
@@ -6,58 +7,55 @@ import { TSMoveFocusCommand } from "./TSMoveFocusCommand"
 import { TSDoCommandPhraseCommand } from "./TSDoCommandPhraseCommand"
 import { TSRule, TSRuleField } from "./TSRule"
 import { TSRuleFieldChangeCommand } from "./TSRuleFieldChangeCommand"
-import { TWorld } from "./TWorld"
-
-// TODO: Fix these as imports
-import { RuleEditorForm, ChangeLogForm, ConsoleForm } from "./fixTypes"
-import { TSDeleteRulesCommand } from "./TSDeleteRulesCommand";
-import { TSMoveRulesCommand } from "./TSMoveRulesCommand";
+import { TSDeleteRulesCommand } from "./TSDeleteRulesCommand"
+import { TSMoveRulesCommand } from "./TSMoveRulesCommand"
+import { TSDomain } from "./TSDomain"
 
 export class TSCommandList extends KfCommandList {
-    world: TWorld
+    domain: TSDomain
 
-    constructor(world: TWorld) {
+    constructor(domain: TSDomain) {
         super()
-        this.world = world
+        this.domain = domain
     }
     
-    toggleVariable(consoleForm: ConsoleForm, variable: TSVariable): TSToggleVariableCommand {
-        const result = new TSToggleVariableCommand(this.world, consoleForm, variable)
+    toggleVariable(variable: TSVariable): TSToggleVariableCommand {
+        const result = new TSToggleVariableCommand(this.domain, variable)
         this.doCommand(result)
         return result
     }
     
-    moveFocus(consoleForm: ConsoleForm, newFocus: TSVariable): TSMoveFocusCommand {
-        const result = new TSMoveFocusCommand(this.world, consoleForm, newFocus)
+    moveFocus(newFocus: TSVariable): TSMoveFocusCommand {
+        const result = new TSMoveFocusCommand(this.domain, newFocus)
         this.doCommand(result)
         return result
     }
     
-    doCommandPhrase(consoleForm: ConsoleForm, ruleEditorForm: RuleEditorForm, commandPhrase: string): TSDoCommandPhraseCommand {
-        const result = new TSDoCommandPhraseCommand(this.world, consoleForm, ruleEditorForm, commandPhrase)
+    doCommandPhrase(commandPhrase: string): TSDoCommandPhraseCommand {
+        const result = new TSDoCommandPhraseCommand(this.domain, commandPhrase)
         this.doCommand(result)
         return result
     }
     
-    ruleFieldChange(ruleEditorForm: RuleEditorForm, changeLogForm: ChangeLogForm, consoleForm: ConsoleForm, rule: TSRule, field: int, newValue: string): TSRuleFieldChangeCommand {
+    ruleFieldChange(rule: TSRule, field: TSRuleField, newValue: string): TSRuleFieldChangeCommand {
         if ((field === TSRuleField.kRuleContext) || (field === TSRuleField.kRuleMove)) {
             if (rule.getTextForField(field).startsWith("new context ")) {
-                if (this.world.findVariable(newValue) === null) {
-                    const newContextOrMove: TSVariable = this.world.findOrCreateVariable(newValue, false)
+                if (this.domain.world.findVariable(newValue) === null) {
+                    const newContextOrMove: TSVariable = this.domain.world.findOrCreateVariable(newValue, false)
                     newContextOrMove.position = rule.context.position
                 }
             }
         }
-        const result = new TSRuleFieldChangeCommand(this.world, ruleEditorForm, changeLogForm, consoleForm, rule, field, newValue)
+        const result = new TSRuleFieldChangeCommand(this.domain, rule, field, newValue)
         this.doCommand(result)
         return result
     }
     
-    deleteSelectedRules(ruleEditorForm: RuleEditorForm): void {
-        const command: TSDeleteRulesCommand = new TSDeleteRulesCommand(this.world, ruleEditorForm)
+    deleteSelectedRules(): void {
+        const command: TSDeleteRulesCommand = new TSDeleteRulesCommand(this.domain)
         
-        for (let i = 0; i < this.world.rules.length; i++) {
-            const rule: TSRule = this.world.rules[i]
+        for (let i = 0; i < this.domain.world.rules.length; i++) {
+            const rule: TSRule = this.domain.world.rules[i]
             if (rule.selected) {
                 command.addRule(rule, -1)
             }
@@ -67,17 +65,17 @@ export class TSCommandList extends KfCommandList {
         }
     }
     
-    raiseSelectedRules(ruleEditorForm: RuleEditorForm): void {
-        const command: TSMoveRulesCommand = new TSMoveRulesCommand(this.world, ruleEditorForm)
+    raiseSelectedRules(): void {
+        const command: TSMoveRulesCommand = new TSMoveRulesCommand(this.domain)
 
         command.action = "raise"
         let moving = false
-        for (let i = 1; i < this.world.rules.length; i++) {
+        for (let i = 1; i < this.domain.world.rules.length; i++) {
             //skip first
-            const rule: TSRule = this.world.rules[i]
+            const rule: TSRule = this.domain.world.rules[i]
             if (rule.selected) {
                 if (!moving) {
-                    const higherRule: TSRule = this.world.rules[i - 1]
+                    const higherRule: TSRule = this.domain.world.rules[i - 1]
                     if (!higherRule.selected) {
                         moving = true
                     }
@@ -94,17 +92,17 @@ export class TSCommandList extends KfCommandList {
         }
     }
     
-    lowerSelectedRules(ruleEditorForm: RuleEditorForm): void {
-        const command = new TSMoveRulesCommand(this.world, ruleEditorForm)
+    lowerSelectedRules(): void {
+        const command = new TSMoveRulesCommand(this.domain)
 
         command.action = "lower"
         let moving = false
-        for (let i = this.world.rules.length - 2; i >= 0; i--) {
+        for (let i = this.domain.world.rules.length - 2; i >= 0; i--) {
             //skip first
-            const rule: TSRule = this.world.rules[i]
+            const rule: TSRule = this.domain.world.rules[i]
             if (rule.selected) {
                 if (!moving) {
-                    const lowerRule: TSRule = this.world.rules[i + 1]
+                    const lowerRule: TSRule = this.domain.world.rules[i + 1]
                     if (!lowerRule.selected) {
                         moving = true
                     }

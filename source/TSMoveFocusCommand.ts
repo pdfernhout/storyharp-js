@@ -5,7 +5,7 @@ export class TSMoveFocusCommand extends TSAbstractMoveFocusCommand {
     
     doCommand(): void {
         this.oldFocus.setState(TSVariableState.kAbsent)
-        this.world.focus = this.newFocus
+        this.domain.world.focus = this.newFocus
         this.newFocus.setState(TSVariableState.kPresent)
         this.updateForChanges()
         TSAbstractMoveFocusCommand.prototype.doCommand.call(this)
@@ -13,7 +13,7 @@ export class TSMoveFocusCommand extends TSAbstractMoveFocusCommand {
     
     undoCommand(): void {
         this.newFocus.setState(this.newFocusOldState)
-        this.world.focus = this.oldFocus
+        this.domain.world.focus = this.oldFocus
         this.oldFocus.setState(this.oldFocusOldState)
         this.updateForChanges()
         TSAbstractMoveFocusCommand.prototype.undoCommand.call(this)

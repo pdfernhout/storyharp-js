@@ -37,32 +37,6 @@ export class IndividualRuleView {
     }
 
     /*
-    commitChangesToRule(): void {
-        // this.RequirementsEdit.Hide()
-        // this.ChangesEdit.Hide()
-        if (this.rule === null) {
-            return
-        }
-        
-        if (this.ContextEdit.Text !== this.rule.context.phrase) {
-            usdomain.domain.worldCommandList.ruleFieldChange(this.rule, usworld.kRuleContext, this.ContextEdit.Text)
-        }
-        if (this.CommandEdit.Text !== this.rule.command.phrase) {
-            usdomain.domain.worldCommandList.ruleFieldChange(this.rule, usworld.kRuleCommand, this.CommandEdit.Text)
-        }
-        if (this.ReplyMemo.Text !== this.rule.reply) {
-            usdomain.domain.worldCommandList.ruleFieldChange(this.rule, usworld.kRuleReply, this.ReplyMemo.Text)
-        }
-        if (this.MoveEdit.Text !== this.rule.move.phrase) {
-            usdomain.domain.worldCommandList.ruleFieldChange(this.rule, usworld.kRuleMove, this.MoveEdit.Text)
-        }
-        if (this.logicalStatementForListBox(this.RequirementsListBox) !== this.rule.decompileRequirements()) {
-            usdomain.domain.worldCommandList.ruleFieldChange(this.rule, usworld.kRuleRequirements, this.logicalStatementForListBox(this.RequirementsListBox))
-        }
-        if (this.logicalStatementForListBox(this.ChangesListBox) !== this.rule.decompileChanges()) {
-            usdomain.domain.worldCommandList.ruleFieldChange(this.rule, usworld.kRuleChanges, this.logicalStatementForListBox(this.ChangesListBox))
-        }
-    }
 
     logicalStatementForListBox(listBox: TListBox): string {
         let result = ""
@@ -125,7 +99,7 @@ export class IndividualRuleView {
         const rule: TSRule | null = this.domain.editedRule
         const worldCommandList: TSCommandList = this.domain.worldCommandList
 
-        const newRulesCommand = new TSNewRulesCommand(world, this.domain.ruleEditorForm)
+        const newRulesCommand = new TSNewRulesCommand(this.domain)
         const newRule = world.newRule()
         newRulesCommand.addRule(newRule)
         // TODO: Remove this or use it to set context
@@ -172,7 +146,7 @@ export class IndividualRuleView {
         if (rule === null) {
             return
         }
-        const newRulesCommand = new TSNewRulesCommand(world, this.domain.ruleEditorForm)
+        const newRulesCommand = new TSNewRulesCommand(this.domain)
         newRulesCommand.creator = "duplicating"
         const newRule: TSRule = world.newRule()
         newRulesCommand.addRule(newRule)
@@ -195,7 +169,7 @@ export class IndividualRuleView {
         if ((rule !== null) && (rule.selected)) {
             this.editRule(null)
         }
-        worldCommandList.deleteSelectedRules(this.domain.ruleEditorForm)
+        worldCommandList.deleteSelectedRules()
         /* TODO: Remove or implement -- used in map
         this.previousChoice = null
         this.lastChoice = null
@@ -206,13 +180,13 @@ export class IndividualRuleView {
     MoveDownClick() {
         const worldCommandList: TSCommandList = this.domain.worldCommandList
         const ruleEditorForm: any = this.domain.ruleEditorForm
-        worldCommandList.lowerSelectedRules(ruleEditorForm)
+        worldCommandList.lowerSelectedRules()
     }
 
     MoveUpClick() {
         const worldCommandList: TSCommandList = this.domain.worldCommandList
         const ruleEditorForm: any = this.domain.ruleEditorForm
-        worldCommandList.raiseSelectedRules(ruleEditorForm)
+        worldCommandList.raiseSelectedRules()
     }
 
     editRule(rule: TSRule | null): void {
@@ -240,32 +214,32 @@ export class IndividualRuleView {
 
         function contextChange(event: { target: HTMLInputElement }) {
             if (!rule) throw new Error("Rule must be defined first")
-            worldCommandList.ruleFieldChange(ruleEditorForm, changeLogForm, consoleForm, rule, TSRuleField.kRuleContext, event.target.value)
+            worldCommandList.ruleFieldChange(rule, TSRuleField.kRuleContext, event.target.value)
         }
 
         function commandChange(event: { target: HTMLInputElement }) {
             if (!rule) throw new Error("Rule must be defined first")
-            worldCommandList.ruleFieldChange(ruleEditorForm, changeLogForm, consoleForm, rule, TSRuleField.kRuleCommand, event.target.value)
+            worldCommandList.ruleFieldChange(rule, TSRuleField.kRuleCommand, event.target.value)
         }
 
         function replyChange(event: { target: HTMLTextAreaElement }) {
             if (!rule) throw new Error("Rule must be defined first")
-            worldCommandList.ruleFieldChange(ruleEditorForm, changeLogForm, consoleForm, rule, TSRuleField.kRuleReply, event.target.value)
+            worldCommandList.ruleFieldChange(rule, TSRuleField.kRuleReply, event.target.value)
         }
 
         function moveChange(event: { target: HTMLInputElement }) {
             if (!rule) throw new Error("Rule must be defined first")
-            worldCommandList.ruleFieldChange(ruleEditorForm, changeLogForm, consoleForm, rule, TSRuleField.kRuleMove, event.target.value)
+            worldCommandList.ruleFieldChange(rule, TSRuleField.kRuleMove, event.target.value)
         }
 
         function requirementsChange(event: { target: HTMLInputElement }) {
             if (!rule) throw new Error("Rule must be defined first")
-            worldCommandList.ruleFieldChange(ruleEditorForm, changeLogForm, consoleForm, rule, TSRuleField.kRuleRequirements, event.target.value)
+            worldCommandList.ruleFieldChange(rule, TSRuleField.kRuleRequirements, event.target.value)
         }
 
         function changesChange(event: { target: HTMLInputElement }) {
             if (!rule) throw new Error("Rule must be defined first")
-            worldCommandList.ruleFieldChange(ruleEditorForm, changeLogForm, consoleForm, rule, TSRuleField.kRuleChanges, event.target.value)
+            worldCommandList.ruleFieldChange(rule, TSRuleField.kRuleChanges, event.target.value)
         }
 
         return m(".IndividualRuleView.ba.bg-light-gray.w-100.pa1",

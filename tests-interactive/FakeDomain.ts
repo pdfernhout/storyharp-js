@@ -7,8 +7,11 @@ import { TPoint } from "../source/TPoint"
 import { Color } from "../source/common";
 
 const world = new TWorld()
-const sessionCommandList = new TSCommandList(world)
-const worldCommandList = new TSCommandList(world)
+
+// A cicularity here means the domain needs to be initialized later
+const sessionCommandList = new TSCommandList(<any>null)
+const worldCommandList = new TSCommandList(<any>null)
+
 const transcript: {text: string, color: number}[] = []
 
 async function loadTestWorld(worldFileName: string) {
@@ -47,35 +50,25 @@ export const FakeDomain: TSDomain = {
     worldCommandList,
     transcript,
     consoleForm: {
-        speechSystem: {
-            lastSaidTextWithMacros: "TEST",
-            stripMacros: (text: string) => text,
-            sayTextWithMacros: (text: string) => null,
-            listenForAvailableCommands: () => null,
-            checkForSayOptionsMacro: () => null,
-            speakText: (text: string) => null,
-        },
         addLineToTranscript: (text: string, color: number) => FakeDomain.transcript.push({text, color}),
         scrollTranscriptEndIntoView: () => null,
-        updateVariables: () => null,
-        VariablesListBox: {
-            Invalidate: () => null
-        },
-        ShowOnlyTrueVariablesButton: {}
     },
     ruleEditorForm: {
         selectEditorField: (fieldIndex: number) => null,
-        updateForRuleChange: () => null,
         scrollGridSelectionsIntoView: () => null,
-        RuleGrid: {
-            Invalidate: () => null
-        },
-        updateRuleNumberLabel: () => null,
-        editRule: (rule: any) => null,
-        goodPosition: () => new TPoint(0, 0)
+        lastChoice: null,
+        lastCommand: null
     },
     changeLogForm: {
         addToLog: (text: string) => null
+    },
+    speechSystem: {
+        lastSaidTextWithMacros: "TEST",
+        stripMacros: (text: string) => text,
+        sayTextWithMacros: (text: string) => null,
+        listenForAvailableCommands: () => null,
+        checkForSayOptionsMacro: () => null,
+        speakText: (text: string) => null,
     },
     demoConfig: {
         demoWorldFiles: []
@@ -90,3 +83,7 @@ export const FakeDomain: TSDomain = {
     // set by the browser as callback
     setOrganizeByField: (newValue: TSRuleField) => null,
 }
+
+// Fixup the references to the domain due to circularity
+sessionCommandList.domain = FakeDomain
+worldCommandList.domain = FakeDomain

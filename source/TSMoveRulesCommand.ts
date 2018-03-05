@@ -1,22 +1,18 @@
-import { int } from "./common"
+import { int, ScrollIntoViewDirection } from "./common"
 import { KfCommand } from "./KfCommand"
 import { TWorld } from "./TWorld"
 import { TSIndexChangeRuleWrapper } from "./TSIndexChangeRuleWrapper"
 import { TSRule } from "./TSRule"
-
-// TODO: Fix these imports
-import { RuleEditorForm, ScrollIntoViewDirection } from "./fixTypes"
+import { TSDomain } from "./TSDomain"
 
 export class TSMoveRulesCommand extends KfCommand {
-    world: TWorld
-    ruleEditorForm: RuleEditorForm
+    domain: TSDomain
     ruleWrappers: TSIndexChangeRuleWrapper[] = []
     action: string = ""
 
-    constructor(world: TWorld, ruleEditorForm: RuleEditorForm) {
+    constructor(domain: TSDomain) {
         super()
-        this.world = world
-        this.ruleEditorForm = ruleEditorForm
+        this.domain = domain
     }
     
     addRule(rule: TSRule, newIndex: int): void {
@@ -30,47 +26,41 @@ export class TSMoveRulesCommand extends KfCommand {
             wrapper.doChange()
         }
         super.doCommand()
-        this.ruleEditorForm.RuleGrid.Invalidate()
         if (this.action === "raise") {
-            this.ruleEditorForm.scrollGridSelectionsIntoView(ScrollIntoViewDirection.kFromTop)
+            this.domain.ruleEditorForm.scrollGridSelectionsIntoView(ScrollIntoViewDirection.kFromTop)
         } else {
-            this.ruleEditorForm.scrollGridSelectionsIntoView(ScrollIntoViewDirection.kFromBottom)
+            this.domain.ruleEditorForm.scrollGridSelectionsIntoView(ScrollIntoViewDirection.kFromBottom)
         }
-        this.ruleEditorForm.updateRuleNumberLabel()
     }
     
     undoCommand(): void {
-        this.world.deselectAllExcept(null)
+        this.domain.world.deselectAllExcept(null)
         for (let i = this.ruleWrappers.length - 1; i >= 0; i--) {
             const wrapper: TSIndexChangeRuleWrapper = this.ruleWrappers[i]
             wrapper.rule.selected = true
             wrapper.undoChange()
         }
         super.undoCommand()
-        this.ruleEditorForm.RuleGrid.Invalidate()
         if (this.action === "raise") {
-            this.ruleEditorForm.scrollGridSelectionsIntoView(ScrollIntoViewDirection.kFromBottom)
+            this.domain.ruleEditorForm.scrollGridSelectionsIntoView(ScrollIntoViewDirection.kFromBottom)
         } else {
-            this.ruleEditorForm.scrollGridSelectionsIntoView(ScrollIntoViewDirection.kFromTop)
+            this.domain.ruleEditorForm.scrollGridSelectionsIntoView(ScrollIntoViewDirection.kFromTop)
         }
-        this.ruleEditorForm.updateRuleNumberLabel()
     }
     
     redoCommand(): void {
-        this.world.deselectAllExcept(null)
+        this.domain.world.deselectAllExcept(null)
         for (let i = 0; i < this.ruleWrappers.length; i++) {
             const wrapper: TSIndexChangeRuleWrapper = this.ruleWrappers[i]
             wrapper.rule.selected = true
             wrapper.doChange()
         }
         super.doCommand()
-        this.ruleEditorForm.RuleGrid.Invalidate()
         if (this.action === "raise") {
-            this.ruleEditorForm.scrollGridSelectionsIntoView(ScrollIntoViewDirection.kFromTop)
+            this.domain.ruleEditorForm.scrollGridSelectionsIntoView(ScrollIntoViewDirection.kFromTop)
         } else {
-            this.ruleEditorForm.scrollGridSelectionsIntoView(ScrollIntoViewDirection.kFromBottom)
+            this.domain.ruleEditorForm.scrollGridSelectionsIntoView(ScrollIntoViewDirection.kFromBottom)
         }
-        this.ruleEditorForm.updateRuleNumberLabel()
     }
     
     description(): string {

@@ -56,29 +56,34 @@ o.spec("TSCommandList", () => {
         const transcript: string[] = []
         const said: string[] = []
         const consoleForm = {
-            speechSystem: {
-                lastSaidTextWithMacros: "TEST",
-                stripMacros: (text: string) => text,
-                sayTextWithMacros: (text: string) => said.push(text),
-                listenForAvailableCommands: () => null,
-                checkForSayOptionsMacro: () => null,
-                speakText: (text: string) => said.push(text),
-            },
             addLineToTranscript: (text: string) => transcript.push(text),
             scrollTranscriptEndIntoView: () => null,
-            updateVariables: () => null,
-            VariablesListBox: {
-                Invalidate: () => null
-            }
         }
+        const speechSystem = {
+            lastSaidTextWithMacros: "TEST",
+            stripMacros: (text: string) => text,
+            sayTextWithMacros: (text: string) => said.push(text),
+            listenForAvailableCommands: () => null,
+            checkForSayOptionsMacro: () => null,
+            speakText: (text: string) => said.push(text),
+        }
+
         const ruleEditorForm = {}
 
-        const commandList = new TSCommandList(world)
+        const domain = {
+            world,
+            transcript,
+            consoleForm,
+            speechSystem,
+            ruleEditorForm,
+        }
+
+        const commandList = new TSCommandList(<any>domain)
 
         if (!world.focus) throw "focus is null"
         o(world.focus.phrase).equals("<sphinx>")
 
-        commandList.doCommandPhrase(consoleForm, ruleEditorForm, "$answer herring")
+        commandList.doCommandPhrase("$answer herring")
 
         o(world.focus.phrase).equals("nether regions")
 

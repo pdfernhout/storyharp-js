@@ -84,7 +84,6 @@ export class RuleMapView {
         this.MapImage.Picture.Bitmap.Canvas.FillRect(Rect(0, 0, this.MapImage.Picture.Bitmap.Width, this.MapImage.Picture.Bitmap.Height))
         this.mapDrawer.scroll = new TPoint(-this.mapDrawer.scroll.X, -this.mapDrawer.scroll.Y)
         this.mapDrawer.displayOn(this.MapImage.Picture.Bitmap.Canvas, displayOptions, this.lastChoice, this.previousChoice)
-        this.MapImage.Invalidate()
     }
     
     ListPagesDragOver(Sender: TObject, Source: TObject, X: int, Y: int, State: TDragState, Accept: boolean): void {
@@ -96,7 +95,6 @@ export class RuleMapView {
         this.lastChoice = null
         this.previousChoice = null
         this.MapPaintBoxChanged()
-        this.adjustScrollBars()
     }
     
     lastChoiceText(): string {
@@ -250,7 +248,7 @@ export class RuleMapView {
 
         this.MapPaintBoxChanged()
         // finds selected nodes in domain
-        const newCommand = new TSMapDragCommand(this.world)
+        const newCommand = new TSMapDragCommand(this.domain)
         // TODO: This notification may be unneeded -- check after converted design working
         newCommand.notifyProcedure = this.mapChangedNotification.bind(this)
         this.actionInProgress = this.worldCommandList.mouseDown(newCommand, new TPoint(event.offsetX, event.offsetY))
@@ -271,7 +269,6 @@ export class RuleMapView {
         if (this.actionInProgress) {
             this.worldCommandList.mouseUp(new TPoint(event.offsetX, event.offsetY))
             this.actionInProgress = false
-            // TODO use or remove: this.adjustScrollBars()
         } else if (this.mapSelectionInProgress) {
             // TODO use or remove: this.XorRect(this.MapImage.Canvas, this.mapSelectionRect)
             this.mapSelectionInProgress = false
@@ -362,7 +359,6 @@ export class RuleMapView {
             if (match) {
                 usdomain.domain.world.deselectAllExcept(rule)
                 this.editRule(rule)
-                this.updateForRuleChange()
                 rule.selected = true
                 this.scrollGridSelectionsIntoView(kFromBottom)
                 this.MapPaintBoxChanged()

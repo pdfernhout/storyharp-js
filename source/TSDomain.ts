@@ -1,7 +1,8 @@
 import { TWorld } from "./TWorld"
 import { TSCommandList } from "./TSCommandList"
 import { TSRule, TSRuleField } from "./TSRule"
-import { Color } from "./common"
+import { Color, ScrollIntoViewDirection } from "./common"
+import { TSDraggableObject } from "./TSDraggableObject";
 
 // unit usdomain
 
@@ -172,9 +173,33 @@ export interface TranscriptLine {
     color: Color
 }
 
-
 export interface DemoConfig {
     demoWorldFiles: string[]
+}
+
+export interface ConsoleFormAPI {
+    addLineToTranscript: (text: string, color: Color) => void
+    scrollTranscriptEndIntoView: () => void
+}
+
+export interface RuleEditorAPI {
+    scrollGridSelectionsIntoView: (direction: ScrollIntoViewDirection) => void
+    selectEditorField: (field: TSRuleField) => void
+    lastChoice: TSDraggableObject | null
+    lastCommand: TSRule | null
+}
+
+export interface ChangeLogAPI {
+    addToLog: (text: string) => void
+}
+
+export interface SpeechSystemAPI {
+    lastSaidTextWithMacros: string
+    speakText: (text: string) => void
+    sayTextWithMacros: (text: string) => void
+    checkForSayOptionsMacro: () => void
+    listenForAvailableCommands: () => void
+    stripMacros: (textWithMacros: string) => string
 }
 
 // Make a seperate interface for testability
@@ -199,13 +224,12 @@ export interface TSDomain {
 
     loadTestWorld: (name: string) => Promise<void>
 
-    // "> "
     showCommandPrefixInMap: boolean
 
-    // TODO: See if any of these can be changed to a callback:
-    consoleForm: any
-    ruleEditorForm: any
-    changeLogForm: any
+    consoleForm: ConsoleFormAPI
+    ruleEditorForm: RuleEditorAPI
+    changeLogForm: ChangeLogAPI
+    speechSystem: SpeechSystemAPI
 }
 
 export class TSApplication implements TSDomain {
@@ -230,14 +254,15 @@ export class TSApplication implements TSDomain {
     showCommandPrefixInMap = false
 
     // TODO: Fix these
-    consoleForm = null
-    ruleEditorForm = null
-    changeLogForm = null
+    consoleForm: ConsoleFormAPI
+    ruleEditorForm: RuleEditorAPI
+    changeLogForm: ChangeLogAPI
+    speechSystem: SpeechSystemAPI
 
     constructor() {
         this.world = new TWorld()
-        this.sessionCommandList = new TSCommandList(this.world)
-        this.worldCommandList = new TSCommandList(this.world)
+        this.sessionCommandList = new TSCommandList(this)
+        this.worldCommandList = new TSCommandList(this)
     }
 
     loadTestWorld(name: string): Promise<void> {
@@ -361,9 +386,7 @@ export class TSApplication implements TSDomain {
         }
         usconsoleform.ConsoleForm.updateForRegistrationChange()
         usconsoleform.ConsoleForm.updateTitles()
-        usruleeditorform.RuleEditorForm.updateForRuleChange()
         usruleeditorform.RuleEditorForm.MapPaintBoxChanged()
-        usruleeditorform.RuleEditorForm.adjustScrollBars()
         usruleeditorform.RuleEditorForm.updateViews()
         usruleeditorform.RuleEditorForm.editRule(null)
         UNRESOLVED.DecodeDate(UNRESOLVED.Now, Year, Month, Day)

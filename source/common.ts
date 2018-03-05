@@ -37,3 +37,5 @@ export function ShowMessage(message: string) {
     alert(message)
 }
 */
+
+export enum ScrollIntoViewDirection { kFromBottom, kFromTop }
