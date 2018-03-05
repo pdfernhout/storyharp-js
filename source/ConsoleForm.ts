@@ -163,6 +163,7 @@ function resetConsole(domain: TSDomain) {
     domain.transcript.push({text: "Starting: " + domain.loadedFileName, color: Color.clGreen})
 }
 
+// TODO: Remove all this redundancy of file loading
 function loadWorld(domain: TSDomain) {
     const world: TWorld = domain.world
     FileUtils.loadFromFile(false, (fileName: string, contents: string) => {
@@ -173,10 +174,12 @@ function loadWorld(domain: TSDomain) {
         if (fileName.endsWith(".wld")) fileName = fileName.substring(0, fileName.length - 4)
         domain.loadedFileName = fileName
         domain.world.newSession()
+        domain.transcript.length = 0
         domain.sessionCommandList.clear()
         domain.worldCommandList.clear()
         domain.editedRule = null
         domain.lastSingleRuleIndex = 0
+        domain.transcript.push({text: "Starting: " + domain.loadedFileName, color: Color.clGreen})
         m.redraw()
     })
 }
