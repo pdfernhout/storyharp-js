@@ -1,4 +1,4 @@
-; world file version 1.0
+; StoryHarp world file version 1.3
 ====================
 Context
 Command
@@ -10,7 +10,7 @@ map positions
 ====================
 house
 look
-You are in a sturdy brick house, a flavorful house, a cheery house. You live here. It's a warm bright day, you're wearing your favorite purple bathrobe, you've just had a big breakfast, and you've just finished reading the paper.
+You are in a sturdy brick house, a flavorful house, a cheery house. You live here. It's a warm bright day, you're wearing your favorite purple bathrobe, you've just had a big breakfast, and you've just finished reading the paper. It's a wonderful life -- but it takes work.
 
 
 
@@ -61,7 +61,7 @@ go out to the yard
 You open the screen door and walk outside, humming a silly tune.
 yard
 
-
+found red piece
 290,160|368,151|201,172
 ====================
 house
@@ -74,7 +74,7 @@ worked on puzzle
 ====================
 house
 work on the puzzle some more
-Aha! There's the red piece you thought Harold ate! The stinker, he just hid it over by the windowsill. You put it on the pile of red and off-red pieces on the table. But the puzzle seems a little boring right now so you don't work on it any more.
+Aha! There's the red piece you thought Harold ate! The stinker, he just hid it over by the windowsill. You put it on the pile of red and off-red pieces on the table. But the puzzle seems a little boring right now so you don't work on it any more. Your thoughts turn towards fresh air and sunshine.
 
 found red piece
 worked on puzzle & ~found red piece
@@ -117,7 +117,7 @@ where is harold?
 Oh, he's around here somewhere.
 
 
-
+~saw harold
 176,311|201,172|0,0
 ====================
 yard
@@ -149,7 +149,7 @@ look at the sky some more
 The sky is still the same. Except for the pterodactyl circling, nothing much is happening. You're glad Harold is getting some exercise in the good weather. Maybe he'll stop chewing on the bedpost.
 
 saw harold
-looked at sky & ~saw harold
+looked at sky & ~saw harold & found toy
 255,359|201,172|0,0
 ====================
 yard
@@ -194,7 +194,7 @@ looked at the herb garden
 ====================
 yard
 poke around in the herb garden
-The ground is still pretty cold. Fantastic planting schemes appear in your mind, juxtaposed with the fiasco last year's fantastic planting scheme created. Maybe you should stick to simple plants this year, and no geometric pattern. 
+The ground is still pretty cold. Fantastic planting schemes appear in your mind, juxtaposed with the fiasco last year's fantastic planting scheme created. Maybe you should stick to simple plants this year, and no geometric pattern.
 
 poked around in the herb garden
 ~poked around in the herb garden & looked at the herb garden
@@ -202,7 +202,7 @@ poked around in the herb garden
 ====================
 yard
 turn over the herb garden
-You think about turning over the herb garden, maybe just a little of it, right now. Why not? It's a beautiful day, Harold is busy, and you've got the time. You go and get your trowel. What's this? Oh, Harold's been out here hiding his toys again. Here's one of his diamond rings. Where does he get these things?
+You think about turning over the herb garden, maybe just a little of it, right now. Why not? It's a beautiful day, Harold is busy, and you've got the time. You go and get your trowel. What's this? Oh, Harold's been out here hiding his toys again. Here's one of his diamond rings. Where does he get these things? The ring's sparkle dims for a moment as a shadow passes by from above.
 
 found toy
 poked around in the herb garden & ~found toy
