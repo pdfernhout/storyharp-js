@@ -226,7 +226,7 @@ export function viewConsoleForm(domain: TSDomain) {
 
     return m(".ConsoleForm.ml3.h-100.overflow-hidden",
         m("div.mt1.mb2",
-            m("span.f5.b.mr3.dib", "StoryHarp " + storyHarpVersion + " CYOA Player and Editor"),
+            m("span.f5.b.mr3.dib", "StoryHarp CYOA Player and Editor v" + storyHarpVersion),
             m("span", "World: "),
             m("span.i", "" + domain.loadedFileName),
         ),
