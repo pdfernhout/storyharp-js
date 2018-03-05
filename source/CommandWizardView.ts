@@ -52,7 +52,7 @@ export class CommandWizardView {
     prefixError: string = ""
     prefixLastGenerated: string = ""
 
-    endSequence = EndSequence.noSelection;
+    endSequence = EndSequence.noSelection
     endSequenceError: string = ""
     endSequenceGenerated: string = ""
 

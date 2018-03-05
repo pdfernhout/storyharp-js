@@ -84,7 +84,7 @@ export class TSDoCommandPhraseCommand extends TSAbstractMoveFocusCommand {
         let undoPhrase: string
         
         this.domain.consoleForm.addLineToTranscript("> undo", Color.clBlue)
-        //  undoPhrase := 'It is as if "' + commandPhrase + '" had never been said.';
+        //  undoPhrase := 'It is as if "' + commandPhrase + '" had never been said.'
         undoPhrase = "(You decide not to say \"" + this.commandPhrase + "\")"
         this.domain.consoleForm.addLineToTranscript(undoPhrase, Color.clBlue)
         this.domain.consoleForm.scrollTranscriptEndIntoView()

@@ -6,7 +6,7 @@ import { TPoint } from "./TPoint"
 type longint = number
 type integer = number
 
-const kMinMouseMoveDistance = 2;
+const kMinMouseMoveDistance = 2
 
 export class KfCommandList {
     notifyProcedure: TCommandEvent
@@ -16,7 +16,7 @@ export class KfCommandList {
     mouseCommand: KfCommand | null = null
     anchorPoint: TPoint
     previousPoint: TPoint
-    rightButtonDown: boolean;
+    rightButtonDown: boolean
 
     constructor () {
         this.commandList = []

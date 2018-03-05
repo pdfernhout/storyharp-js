@@ -116,8 +116,8 @@ export class IndividualRuleView {
         //  	if lastChoice is TSVariable then
         //    	newRule.setContext(TSVariable(lastChoice).phrase)
         //  	else if lastChoice is TSRule then
-        //    	newRule.setContext(TSRule(lastChoice).context.phrase);
-        //    end;
+        //    	newRule.setContext(TSRule(lastChoice).context.phrase)
+        //    end
         //    
         const variable = world.firstSelectedVariable()
         if (variable !== null) {

@@ -34,11 +34,11 @@ function intround(value: number) {
 }
 
 function InflateRect(rect: TRect, extraWidth: int, extraHeight: int): TRect {
-    return new TRect(rect.Left - extraWidth, rect.Top - extraHeight, rect.Right + extraWidth, rect.Bottom + extraHeight);
+    return new TRect(rect.Left - extraWidth, rect.Top - extraHeight, rect.Right + extraWidth, rect.Bottom + extraHeight)
 }
 
 function OffsetRect(rect: TRect, x: int, y: int): TRect {
-    return new TRect(rect.Left + x, rect.Top + y, rect.Right + x, rect.Bottom + y);
+    return new TRect(rect.Left + x, rect.Top + y, rect.Right + x, rect.Bottom + y)
 }
 
 //needs to have rectangle with center of 0,0 and origin adjusted to that coordinate system
@@ -121,16 +121,16 @@ export class TSMapView {
     /* TODO: this code is not used
 
     drawBogusArrow(canvas: TCanvas, a: TPoint, b: TPoint): void {
-        //midPoint1: TPoint;
-        //midPoint1 := Point(a.x + (b.x - a.x) div 3, a.y + (b.y - a.y) div 3);
+        //midPoint1: TPoint
+        //midPoint1 := Point(a.x + (b.x - a.x) div 3, a.y + (b.y - a.y) div 3)
         const midPoint2 = new TPoint(a.X + (b.X - a.X) / 3, a.Y + (b.Y - a.Y) / 3)
-        //midPoint2 := Point(b.x - (b.x - a.x) mod 2, b.y - (b.y - a.y) div 5);
+        //midPoint2 := Point(b.x - (b.x - a.x) mod 2, b.y - (b.y - a.y) div 5)
         canvas.Pen.Style = delphi_compatability.TFPPenStyle.psSolid
         canvas.MoveTo(a.X + this.scroll.X, a.Y + this.scroll.Y)
         canvas.LineTo(b.X + this.scroll.X, b.Y + this.scroll.Y)
         const oldColor = canvas.Brush.Color
-        //canvas.brush.color := clGreen;
-        //canvas.Ellipse(midPoint1.x-4, midPoint1.y-4,midPoint1.x+4, midPoint1.y+4);
+        //canvas.brush.color := clGreen
+        //canvas.Ellipse(midPoint1.x-4, midPoint1.y-4,midPoint1.x+4, midPoint1.y+4)
         canvas.Brush.Color = delphi_compatability.clBlue
         canvas.Ellipse(midPoint2.X - 4 + this.scroll.X, midPoint2.Y - 4 + this.scroll.Y, midPoint2.X + 4 + this.scroll.X, midPoint2.Y + 4 + this.scroll.Y)
         canvas.Brush.Color = oldColor
@@ -152,9 +152,9 @@ export class TSMapView {
     */
     
     drawArrowFromRectEdgeToRectEdge(context: CanvasRenderingContext2D, originRect: TRect, destRect: TRect): void {
-        //theRect: TRect;
-        //IntersectRect(theRect, originRect, destRect);
-        //if not IsEmptyRect(theRect) then exit;
+        //theRect: TRect
+        //IntersectRect(theRect, originRect, destRect)
+        //if not IsEmptyRect(theRect) then exit
 
         // add some to prevent cutting off arrow heads in certain cases for long words
         originRect = InflateRect(originRect, arrowWidth, arrowWidth)
@@ -267,15 +267,15 @@ export class TSMapView {
         context.closePath()
         context.fill()
 
-        //canvas.moveTo(p2.x, p2.y);
-        //  canvas.LineTo(outerOne.x, outerOne.y);
-        //  canvas.moveTo(p2.x, p2.y);
+        //canvas.moveTo(p2.x, p2.y)
+        //  canvas.LineTo(outerOne.x, outerOne.y)
+        //  canvas.moveTo(p2.x, p2.y)
         //  canvas.LineTo(outerTwo.x, outerTwo.y); 
     }
 
     /* TODO: This code is not used
 
-    // procedure drawArrow(canvas: TCanvas; a, b: TPoint);
+    // procedure drawArrow(canvas: TCanvas; a, b: TPoint)
     drawArrowToRect(canvas: TCanvas, origin: TPoint, destRect: TRect): void {
         let center: TPoint
         let endPoint: TPoint
@@ -287,7 +287,7 @@ export class TSMapView {
         //middlePoint := Point((origin.x + center.x) div 2 + scroll.x, (origin.y + center.y) div 2 + scroll.y); 
         //middlePoint := Point((origin.x + center.x) div 2 + scroll.x, (origin.y + center.y) div 2 + scroll.y);  
         endPoint = new TPoint(center.X + (origin.X - center.X) / 5 + this.scroll.X, center.Y + (origin.Y - center.Y) / 5 + this.scroll.Y)
-        //startPoint := Point(origin.x + (center.x - origin.x) div 5 + scroll.x, origin.y + (center.y - origin.y) div 5 + scroll.y);
+        //startPoint := Point(origin.x + (center.x - origin.x) div 5 + scroll.x, origin.y + (center.y - origin.y) div 5 + scroll.y)
         //  
         startPoint = new TPoint(origin.X + this.scroll.X, origin.Y + this.scroll.Y)
         canvas.Pen.Style = delphi_compatability.TFPPenStyle.psSolid
@@ -295,23 +295,23 @@ export class TSMapView {
         canvas.LineTo(endPoint.X, endPoint.Y)
         //arrow head
         this.drawArrowhead(canvas, startPoint, endPoint)
-        //self.DrawArrowhead(canvas, Point(origin.x + scroll.x, origin.y + scroll.y), Point(center.x + scroll.x, center.y + scroll.y));
-        //	canvas.moveTo(middlePoint.x + scroll.x, middlePoint.y + scroll.y);
-        // 	canvas.lineTo(middlePoint.x + scroll.x + , middlePoint.y + scroll.y + );
-        // 	canvas.moveTo(middlePoint.x + scroll.x, middlePoint.y + scroll.y);
+        //self.DrawArrowhead(canvas, Point(origin.x + scroll.x, origin.y + scroll.y), Point(center.x + scroll.x, center.y + scroll.y))
+        //	canvas.moveTo(middlePoint.x + scroll.x, middlePoint.y + scroll.y)
+        // 	canvas.lineTo(middlePoint.x + scroll.x + , middlePoint.y + scroll.y + )
+        // 	canvas.moveTo(middlePoint.x + scroll.x, middlePoint.y + scroll.y)
         // 	canvas.lineTo(middlePoint.x + scroll.x + , middlePoint.y + scroll.y + ); 
     }
 
     */
 
     nearestNode(location: TPoint, displayOptions: TSVariableDisplayOptions, world: TWorld): TSDraggableObject | null { 
-        //nearestNode: TSDraggableObject;
-        //distance, nearestDistance: integer;
+        //nearestNode: TSDraggableObject
+        //distance, nearestDistance: integer
         
         let result: TSDraggableObject | null = null
         for (let i = world.variables.length - 1; i >= 0; i--) {
-            //nearestDistance := -1;
-            //nearestNode := nil;
+            //nearestDistance := -1
+            //nearestNode := nil
             const variable: TSVariable = world.variables[i]
             const showNode = variable.meetsDisplayOptions(displayOptions)
             if (!showNode) {
@@ -319,35 +319,35 @@ export class TSMapView {
             }
             if (variable.bounds().contains(location)) {
                 //distance := (variable.position.x - location.x) * (variable.position.x - location.x) +
-                //		(variable.position.y - location.y) * (variable.position.y - location.y);
+                //		(variable.position.y - location.y) * (variable.position.y - location.y)
                 //if (nearestDistance = -1) or (distance < nearestDistance) then
                 //  begin
-                //  nearestDistance := distance;
-                //  nearestNode := variable;
-                //  end;
+                //  nearestDistance := distance
+                //  nearestNode := variable
+                //  end
                 result = variable
                 return result
             }
         }
         if (!displayOptions[TSRuleField.kRuleCommand]) {
-            //result := nearestNode;
+            //result := nearestNode
             return result
         }
         for (let i = world.rules.length - 1; i >= 0; i--) {
             const rule: TSRule = world.rules[i]
             if (rule.bounds().contains(location)) {
                 //distance := (rule.position.x - location.x) * (rule.position.x - location.x) +
-                //	(rule.position.y - location.y) * (rule.position.y - location.y);
+                //	(rule.position.y - location.y) * (rule.position.y - location.y)
                 //if (nearestDistance = -1) or (distance < nearestDistance) then
                 //  begin
-                //  nearestDistance := distance;
-                //  nearestNode := rule;
-                //  end;
+                //  nearestDistance := distance
+                //  nearestNode := rule
+                //  end
                 result = rule
                 return result
             }
         }
-        //result := nearestNode;
+        //result := nearestNode
         return result
     }
 
@@ -440,14 +440,14 @@ export class TSMapView {
 
         if (selected) {
             context.strokeStyle = "rgb(0, 0, 0)"
-            context.setLineDash([]);
+            context.setLineDash([])
         } else {
             if (isCommand) {
                 context.strokeStyle = "rgb(255, 255, 255)"
-                context.setLineDash([]);
+                context.setLineDash([])
             } else {
                 context.strokeStyle = "rgb(0, 0, 0)"
-                context.setLineDash([1, 1]);
+                context.setLineDash([1, 1])
             }
         }
 
@@ -461,7 +461,7 @@ export class TSMapView {
         context.fillStyle = "rgb(0, 0, 0)"
         context.fillText(text, textPoint.X, textPoint.Y)
 
-        context.setLineDash([]);
+        context.setLineDash([])
     }
 
     drawRect(context: CanvasRenderingContext2D, rect: TRect, scrolled = false, fill = false) {

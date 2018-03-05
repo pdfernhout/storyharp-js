@@ -2,9 +2,9 @@ import { TPoint } from "./TPoint"
 import { TSDraggableObject } from "./TSDraggableObject"
 
 export class TSDragRecord {
-    draggedNode: TSDraggableObject;
-    originalLocation: TPoint;
-    newLocation: TPoint;
+    draggedNode: TSDraggableObject
+    originalLocation: TPoint
+    newLocation: TPoint
     
     constructor(node: TSDraggableObject) {
         this.draggedNode = node

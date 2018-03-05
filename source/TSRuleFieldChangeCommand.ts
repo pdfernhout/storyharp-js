@@ -71,7 +71,7 @@ export class TSRuleFieldChangeCommand extends KfCommand {
     
     description(): string {
         let result = ""
-        //  result := 'rule ' + IntToStr(domain.world.rules.indexOf(rule) + 1) + ' change of ' + TSRule.headerForField(field);
+        //  result := 'rule ' + IntToStr(domain.world.rules.indexOf(rule) + 1) + ' change of ' + TSRule.headerForField(field)
         result = "Change " + TSRule.headerForField(this.field) + " For Rule " + (this.domain.world.rules.indexOf(this.rule) + 1)
         return result
     }

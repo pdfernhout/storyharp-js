@@ -51,7 +51,7 @@ function doCommand(domain: TSDomain, commandPhrase: string) {
             // elimitate leading $
             commandPhrase = commandPhrase.substring(1)
         }
-        domain.consoleForm.addLineToTranscript("> " + commandPhrase, Color.clBlue);
+        domain.consoleForm.addLineToTranscript("> " + commandPhrase, Color.clBlue)
         // bug - or bad riddle answer.
         domain.consoleForm.addLineToTranscript("That accomplishes nothing.", Color.clBlack)
         return
@@ -61,8 +61,8 @@ function doCommand(domain: TSDomain, commandPhrase: string) {
     // TODO: Track last command where editor switches the edited rule
     /*
     if domain.options.updateEditorAfterCommandDone then
-        RuleEditorForm.trackLastCommand;
-        end;
+        RuleEditorForm.trackLastCommand
+        end
     */
 
 }

@@ -79,7 +79,7 @@ export class RuleMapView {
         displayOptions[usworld.kRuleContext] = true
         displayOptions[usworld.kRuleMove] = true
         displayOptions[usworld.kRuleCommand] = this.MenuMapsShowCommands.checked
-        // clBtnFace;
+        // clBtnFace
         this.MapImage.Picture.Bitmap.Canvas.Brush.Color = delphi_compatability.clWhite
         this.MapImage.Picture.Bitmap.Canvas.FillRect(Rect(0, 0, this.MapImage.Picture.Bitmap.Width, this.MapImage.Picture.Bitmap.Height))
         this.mapDrawer.scroll = new TPoint(-this.mapDrawer.scroll.X, -this.mapDrawer.scroll.Y)
@@ -167,9 +167,9 @@ export class RuleMapView {
         canvas.Pen.Color = delphi_compatability.clWhite
         canvas.Pen.Style = delphi_compatability.TFPPenStyle.psDot
         //FIX unresolved WITH expression: Rect
-        //canvas.Pen.width := 2;
+        //canvas.Pen.width := 2
         canvas.Rectangle(this.Left, this.Top, UNRESOLVED.right, UNRESOLVED.bottom)
-        //canvas.Pen.width := 1;
+        //canvas.Pen.width := 1
         canvas.Pen.Mode = oldMode
         canvas.Pen.Style = delphi_compatability.TFPPenStyle.psSolid
     }
@@ -233,7 +233,7 @@ export class RuleMapView {
             this.mapSelectionInProgress = true
             return
         }
-        //MapPaintBoxChanged;
+        //MapPaintBoxChanged
         this.makeChoice(draggedNode, multipleSelect)
         if (event.ctrlKey) {
             this.MapPaintBoxChanged()
@@ -294,9 +294,9 @@ export class RuleMapView {
     MapImageDblClick(): void {
         if (this.lastChoice === null) {
             //var
-            //row: integer;
-            //count: integer;
-            //rule: TSRule;
+            //row: integer
+            //count: integer
+            //rule: TSRule
             //ruleIndex: integer; 
             return
         }
@@ -306,23 +306,23 @@ export class RuleMapView {
         //
         //  else
         //    begin
-        //    count := 1;
-        //    ruleIndex := domain.world.rules.indexOf(self.rule);
+        //    count := 1
+        //    ruleIndex := domain.world.rules.indexOf(self.rule)
         //    while (count <= domain.world.rules.count) do
         //      begin
-        //      row := (count + ruleIndex) mod domain.world.rules.count;
-        //      rule := domain.world.rules[row];
+        //      row := (count + ruleIndex) mod domain.world.rules.count
+        //      rule := domain.world.rules[row]
         //      // unfinished - need to check requirements & changes
         //      if (rule.context.phrase = self.lastChoiceText) or
         //      		(rule.command.phrase = self.lastChoiceText) or
         //          (rule.move.phrase = self.lastChoiceText) then
         //        begin
-        //      	self.editRule(rule);
-        //        exit;
-        //        end;
-        //      inc(count);
-        //      end;
-        //    end;
+        //      	self.editRule(rule)
+        //        exit
+        //        end
+        //      inc(count)
+        //      end
+        //    end
         //    
     }
 
@@ -376,15 +376,15 @@ export class RuleMapView {
         if (this.lastChoice !== null) {
             if (this.previousChoice !== null) {
                 //var
-                //  	mapBoundsRect: TRect;
+                //  	mapBoundsRect: TRect
                 //    selection: TSDraggableObject; 
                 result = new TPoint((this.previousChoice.position.X + this.lastChoice.position.X) / 2, (this.previousChoice.position.Y + this.lastChoice.position.Y) / 2 + 30)
             } else {
                 result = new TPoint(this.lastChoice.position.X, this.lastChoice.position.Y + 30)
             }
         } else {
-            // mapBoundsRect := domain.world.boundsRect;
-            //    result.x := (mapBoundsRect.left - mapBoundsRect.right) div 2;
+            // mapBoundsRect := domain.world.boundsRect
+            //    result.x := (mapBoundsRect.left - mapBoundsRect.right) div 2
             //    result.y := mapBoundsRect.bottom + 30;  
             result = new TPoint(
                 Math.round(this.canvas.width / 2 - this.mapDrawer.scroll.X),
@@ -395,27 +395,27 @@ export class RuleMapView {
         result.Y = result.Y + Math.round(Math.random() * 200) - 100
         //if (domain <> nil) and (domain.world <> nil) then
         //    begin
-        //    selection := domain.world.firstSelectedObject;
+        //    selection := domain.world.firstSelectedObject
         //    if selection <> nil then
         //      begin
-        //      result.x := selection.position.x;
-        //      result.y := selection.position.y + 30;
-        //      end;
-        //    end;
-        //  result := Point(MapScrollBarHorizontal.position + MapImage.width div 2, MapScrollBarVertical.position +  MapImage.height div 2);
-        //  //result.x := result.x + random(200) - 100;
-        //  //result.y := result.y + random(200) - 100;
-        //result := Point(MapScrollBarHorizontal.position + MapImage.width div 2, MapScrollBarVertical.position +  MapImage.height div 2);
+        //      result.x := selection.position.x
+        //      result.y := selection.position.y + 30
+        //      end
+        //    end
+        //  result := Point(MapScrollBarHorizontal.position + MapImage.width div 2, MapScrollBarVertical.position +  MapImage.height div 2)
+        //  //result.x := result.x + random(200) - 100
+        //  //result.y := result.y + random(200) - 100
+        //result := Point(MapScrollBarHorizontal.position + MapImage.width div 2, MapScrollBarVertical.position +  MapImage.height div 2)
         //  if (domain <> nil) and (domain.world <> nil) then
         //    begin
-        //    selection := domain.world.firstSelectedObject;
+        //    selection := domain.world.firstSelectedObject
         //    if selection <> nil then
         //      begin
-        //      result.x := selection.position.x;
-        //      result.y := selection.position.y;
-        //      end;
-        //    end;
-        //  result.x := result.x + random(200) - 100;
+        //      result.x := selection.position.x
+        //      result.y := selection.position.y
+        //      end
+        //    end
+        //  result.x := result.x + random(200) - 100
         //  result.y := result.y + random(200) - 100;   
         return result
     }
@@ -434,12 +434,12 @@ export class RuleMapView {
             const displayOptions = []
             displayOptions[TSRuleField.kRuleContext] = true
             displayOptions[TSRuleField.kRuleCommand] = true
-            context.setLineDash([]);
+            context.setLineDash([])
             context.lineDashOffset = 0
             this.mapDrawer.displayOn(context, displayOptions, null, null, world, this.domain.editedRule, this.domain.showCommandPrefixInMap)
             context.strokeStyle = "rgb(0, 0, 0)"
-            context.setLineDash([4, 16]);
-            context.lineDashOffset = 2;
+            context.setLineDash([4, 16])
+            context.lineDashOffset = 2
             this.mapDrawer.drawRect(context, world.boundsRect(), true)
             if (this.mapSelectionInProgress) {
                 // TODO: Was XOR rectangle
@@ -508,19 +508,19 @@ export class RuleMapView {
                     case 37: // left arrow
                     case 65: // a
                         this.mapDrawer.scroll.X += scrollDelta
-                        break;
+                        break
                     case 38: // up arrow
                     case 87: // w
                         this.mapDrawer.scroll.Y += scrollDelta
-                        break;
+                        break
                     case 39: // right arrow
                     case 68: // d
                         this.mapDrawer.scroll.X -= scrollDelta
-                        break;
+                        break
                     case 40: // down arrow
                     case 83: // s
                         this.mapDrawer.scroll.Y -= scrollDelta
-                        break;
+                        break
                     case 67: // c 
                         // center map
                         const boundsCenter = this.world.boundsRect().center()

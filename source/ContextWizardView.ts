@@ -40,7 +40,7 @@ export class ContextWizardView {
     newContextsTextToParseError: string = ""
     newContextsTextToParseLastGenerated: string = ""
 
-    commandPhrase = defaultCommand;
+    commandPhrase = defaultCommand
     commandPhraseError: string = ""
     commandPhraseLastGenerated: string = ""
 

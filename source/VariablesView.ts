@@ -6,12 +6,12 @@ import { TSVariableState } from "./TSVariable"
 import { TSDomain } from "./TSDomain"
 
 interface ButtonState {
-    present: boolean;
-    context: boolean;
-    move: boolean;
-    requirements: boolean;
-    changes: boolean;
-    command: boolean;
+    present: boolean
+    context: boolean
+    move: boolean
+    requirements: boolean
+    changes: boolean
+    command: boolean
 }
 
 export enum Glyph {

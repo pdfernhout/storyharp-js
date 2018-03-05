@@ -51,7 +51,7 @@ export class TSNewRulesCommand extends KfCommand {
         super.doCommand()
         this.domain.ruleEditorForm.scrollGridSelectionsIntoView(ScrollIntoViewDirection.kFromBottom)
         //if rules.count > 0 then
-        //  RuleEditorForm.editRule(rules[rules.count - 1]);
+        //  RuleEditorForm.editRule(rules[rules.count - 1])
     }
     
     description(): string {
