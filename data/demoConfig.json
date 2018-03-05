@@ -1,20 +1,20 @@
 {
     "demoWorldFiles": [
-        { "name": "Astronomy Test", "description": "Multiple choice test"},
-        { "name": "GarTrek", "description": "Kitchen sink demo merging Intro, Grue Pit, Tutorial Advanced and extra material"},
-        { "name": "Grue Pit", "description": "Cautionary tale as a sequence of commands"},
-        { "name": "House and Yard", "description": "Awesome things can come in small packages. Imaginitive writing makes all the difference."},
-        { "name": "House and Yard original", "description": "The original House and Yard without requirements to slow down progress towards resolving a mystery. Play the other one first."},
-        { "name": "insurance", "description": "Multiple choice about the insurance industry"},
-        { "name": "interview", "description": "Mockup of a training exercise for insurance phone interviewers"},
-        { "name": "Intro", "description": "Riddle example with various hints"},
-        { "name": "java1", "description": "Four simple rules"},
-        { "name": "java2", "description": "Five simple rules"},
-        { "name": "Max the Computer", "description": "Converse with an AI who knows a secret"},
-        { "name": "prompter", "description": "Simpler version of interview with just prompts"},
-        { "name": "testing", "description": "Contexts and commands only accessible via the debugging variables panel"},
-        { "name": "Tutorial Basic", "description": "Some connected contexts in a forest leading to a treehouse"},
-        { "name": "Tutorial Intermediate", "description": "Blocking access to the treehouse as a result of user actions breaking the vine bridge"},
-        { "name": "Tutorial Advanced", "description": "Adding inventory and interactive characters to the forest world"}
+        { "name": "Astronomy Test", "description": "Multiple choice test (25 rules)"},
+        { "name": "GarTrek", "description": "Kitchen sink demo merging Intro, Grue Pit, Tutorial Advanced and extra material (244 rules)"},
+        { "name": "Grue Pit", "description": "Cautionary tale as a sequence of commands (8 rules)"},
+        { "name": "House and Yard", "description": "Fun experiences can come in small packages -- imaginitive writing makes all the difference (27 rules)"},
+        { "name": "House and Yard original", "description": "The original House and Yard without requirements to slow down progress towards resolving a mystery -- play the other one first (27 rules)"},
+        { "name": "insurance", "description": "Multiple choice about the insurance industry (10 rules)"},
+        { "name": "interview", "description": "Mockup of a training exercise for insurance phone interviewers (12 rules)"},
+        { "name": "Intro", "description": "Riddle example with various hints (13 rules)"},
+        { "name": "java1", "description": "Simple demo (4 rules)"},
+        { "name": "java2", "description": "Simple demo with better replies and a listen command (5 rules)"},
+        { "name": "Max the Computer", "description": "Converse with an AI who knows a secret (20 rules)"},
+        { "name": "prompter", "description": "Simpler version of interview with just prompts (11 rules)"},
+        { "name": "testing", "description": "Contexts and commands only accessible via the debugging variables panel (11 rules)"},
+        { "name": "Tutorial Basic", "description": "Some connected contexts in a forest leading to a treehouse (11 rules)"},
+        { "name": "Tutorial Intermediate", "description": "Blocking access to the treehouse as a result of user actions breaking the vine bridge (16 rules)"},
+        { "name": "Tutorial Advanced", "description": "Adding inventory and interactive characters to the forest world (61 rules)"}
     ]
 }
