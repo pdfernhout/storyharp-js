@@ -2,8 +2,8 @@
     "demoWorldFiles": [
         { "name": "House and Yard", "description": "Fun experiences can come in small packages -- imaginitive writing makes all the difference (27 rules)"},
         { "name": "House and Yard original", "description": "The original House and Yard without requirements to slow down progress towards resolving a mystery -- play the other one first (27 rules)"},
-        { "name": "java1", "description": "Tiny demo with default replies (4 rules)"},
-        { "name": "java2", "description": "Tiny demo with better replies and a listen command (5 rules)"},
+        { "name": "tiny1", "description": "Tiny demo with default replies (4 rules)"},
+        { "name": "tiny2", "description": "Tiny demo with better replies and a listen command (5 rules)"},
         { "name": "Grue Pit", "description": "Cautionary tale as a sequence of commands -- good thing there is undo (8 rules)"},
         { "name": "Max the Computer", "description": "Converse with an AI who knows a secret (20 rules)"},
         { "name": "Astronomy Test", "description": "Multiple choice test about astronomy (25 rules)"},
