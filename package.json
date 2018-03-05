@@ -6,8 +6,9 @@
   "scripts": {
     "test": "tsc -p tsconfig-test.json && cd dist-test && ../node_modules/ospec/bin/ospec",
     "test-interactive": "tsc --watch & echo \"browse to: http://localhost:8080/tests-interactive/\" && http-server -c-1 && fg",
-    "build": "npm run copy-lib && npm run copy-data && tsc",
-    "copy-lib": "mkdir -p dist/source/lib && cp node_modules/systemjs/dist/system.src.js node_modules/tachyons/css/tachyons.css node_modules/mithril/mithril.js dist/source/lib/ && cp source/storyharp.html dist/source",
+    "build": "npm run copy-lib && npm run copy-data && npm run copy-index && tsc",
+    "copy-lib": "mkdir -p dist/source/lib && cp node_modules/systemjs/dist/system.src.js node_modules/tachyons/css/tachyons.css node_modules/mithril/mithril.js dist/source/lib/",
+    "copy-index": "cp source/index.html dist/source",
     "copy-data": "mkdir -p dist/source/data && cp data/*.wld data/*.json dist/source/data/"
   },
   "author": "Paul D. Fernhout <pdfernhout@kurtz-fernhout.com>",
