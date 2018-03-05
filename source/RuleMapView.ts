@@ -445,6 +445,12 @@ export class RuleMapView {
                 // TODO: Was XOR rectangle
                 this.mapDrawer.drawRect(context, this.mapSelectionRect.scale(1 / this.mapDrawer.scale))
             }
+            if (this.canvas === document.activeElement) {
+                context.scale(defaultScale / this.mapDrawer.scale, defaultScale / this.mapDrawer.scale)
+                context.textBaseline = "top"
+                context.fillStyle = "gray"
+                context.fillText("map controls: wasd arrows +- c r", 2, 2)
+            }
         }
 
         return m(".RuleMapView.h-100.w-100.overflow-hidden",
@@ -456,7 +462,8 @@ export class RuleMapView {
                 style: {
                     "border-color": (this.canvas && this.canvas === document.activeElement)
                         ? "black"
-                        : "gray"
+                        : "white",
+                    // "box-sizing": "border-box",
                 },
                 */
 
@@ -466,6 +473,10 @@ export class RuleMapView {
                 },
 
                 onupdate: (vnode: m.VnodeDOM) => {
+                    drawWorld()
+                },
+
+                onblur: () => {
                     drawWorld()
                 },
 
