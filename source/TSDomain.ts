@@ -1,3 +1,4 @@
+import * as m from "mithril"
 import { TWorld } from "./TWorld"
 import { TSCommandList } from "./TSCommandList"
 import { TSRule, TSRuleField } from "./TSRule"
@@ -245,7 +246,7 @@ export class TSApplication implements TSDomain {
 
     setOrganizeByField: (newValue: TSRuleField) => null
 
-    transcript = []
+    transcript: TranscriptLine[] = []
 
     loadedFileName = ""
 
@@ -263,11 +264,61 @@ export class TSApplication implements TSDomain {
         this.world = new TWorld()
         this.sessionCommandList = new TSCommandList(this)
         this.worldCommandList = new TSCommandList(this)
+
+        // TODO: Fix these
+        this.consoleForm = {
+            addLineToTranscript: (text: string, color: number) => this.transcript.push({text, color}),
+            scrollTranscriptEndIntoView: () => null,
+        }
+
+        this.ruleEditorForm = {
+            selectEditorField: (fieldIndex: number) => null,
+            scrollGridSelectionsIntoView: () => null,
+            lastChoice: null,
+            lastCommand: null
+        }
+
+        this.changeLogForm = {
+            addToLog: (text: string) => null
+        }
+
+        this.speechSystem = {
+            lastSaidTextWithMacros: "TEST",
+            stripMacros: (text: string) => text,
+            sayTextWithMacros: (text: string) => null,
+            listenForAvailableCommands: () => null,
+            checkForSayOptionsMacro: () => null,
+            speakText: (text: string) => null,
+        }
     }
 
-    loadTestWorld(name: string): Promise<void> {
-        console.log("FIXME")
-        return Promise.resolve()
+    async loadTestWorld(worldFileName: string) {
+        if (!this.demoConfig) {
+            this.demoConfig = <DemoConfig>await m.request("./data/demoConfig.json")
+        }
+    
+        const worldContent = await m.request("./data/" + worldFileName + ".wld", {deserialize: (text) => text})
+    
+        this.world.resetVariablesAndRules()
+        const loaded = this.world.loadWorldFromFileContents(worldContent)
+        if (!loaded) throw new Error("Failed to load")
+    
+        this.loadedFileName = worldFileName
+    
+        this.world.newSession()
+        this.sessionCommandList.clear()
+        this.worldCommandList.clear()
+        this.editedRule = null
+        this.lastSingleRuleIndex = 0
+        this.transcript.length = 0
+        this.transcript.push({text: "Starting: " + worldFileName, color: Color.clGreen})
+        /*
+        if (domain.world.rules.length) {
+            domain.transcript.push({text: "> " + domain.world.rules[0].command.phrase, color: Color.clBlue})
+            domain.transcript.push({text: domain.world.rules[0].reply, color: Color.clBlack})
+        }
+        */
+        m.redraw()
     }
 
     /*

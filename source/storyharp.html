@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>TConsoleFormView test</title>
+    <link rel="stylesheet" href="lib/tachyons.css">
+    <script src="lib/system.src.js"></script>
+    <style>
+      html {
+          height: 100%;
+          overflow: hidden;
+      }
+      body {
+          height: 100%;
+          overflow: hidden;
+      }
+    </style>
+  </head>
+  <body>
+    <script>
+        SystemJS.config({
+          packages: {
+            '.': {
+                defaultExtension: 'js'
+            }
+          },
+          map: {
+            mithril: "lib/mithril.js"
+          },
+        });
+        SystemJS.import("main.js");
+    </script>
+  </body>
+</html>
