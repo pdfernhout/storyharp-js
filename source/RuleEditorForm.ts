@@ -42,7 +42,7 @@ export class RuleEditorForm {
                 m(wizardButtonWithHighlight("command"),  { onclick: () => this.setCurrentWizard("command") }, "Command"),
                 m(wizardButtonWithHighlight("link"),  { onclick: () => this.setCurrentWizard("link") }, "Link"),
             ),
-            m("div.WizardHolder.mt2", { style: "height: calc(100% - 2rem)" },
+            m("div.WizardHolder.mt2", { style: "height: calc(100% - 3rem)" },
                 currentWizard === "context" ? m(ContextWizardView, <any>{domain: domain}) : [],
                 currentWizard === "command" ? m(CommandWizardView, <any>{domain: domain}) : [],
                 currentWizard === "link" ? m(LinkWizardView, <any>{domain: domain}) : [],
