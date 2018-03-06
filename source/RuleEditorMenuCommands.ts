@@ -1,7 +1,6 @@
+// TODO: Menu commands -- use or remove
 
 // const
-const kFromBottom = true
-const kFromTop = false
 const kPlaySoundMacroStart = "sound "
 const kPlayMusicMacroStart = "music "
 const kShowPictureMacroStart = "picture "
@@ -23,7 +22,8 @@ const kShowPictureMacroStart = "picture "
 //Map
 //Browser
 //Resizing
-export class TRuleEditorForm {
+export class RuleEditorMenuCommands {
+    /*
     PanelEditor: TPanel = new TPanel()
     WaveFileOpenDialog: TOpenDialog = new TOpenDialog()
     ImageList: TImageList = new TImageList()
@@ -259,7 +259,7 @@ export class TRuleEditorForm {
     }
     
     WMDropFiles(Msg: TWMDropFiles): void {
-        let CFileName: char[] /* MAX_PATH + 1 */
+        let CFileName: char[] // MAX_PATH + 1
         
         try {
             if (UNRESOLVED.DragQueryFile(Msg.Drop, 0, CFileName, UNRESOLVED.MAX_PATH) > 0) {
@@ -1844,6 +1844,5 @@ export class TRuleEditorForm {
         }
         MessageDialog("File " + UNRESOLVED.GetCurrentDir + "\Story.java was written.", mtInformation, {mbOK, }, 0)
     }
-    
+    */  
 }
-
