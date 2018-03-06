@@ -259,6 +259,8 @@ export class TSApplication implements TSDomain {
 
     showCommandPrefixInMap = false
 
+    dataPath = "./data/"
+
     // TODO: Fix these
     consoleForm: ConsoleFormAPI
     ruleEditorForm: RuleEditorAPI
@@ -300,7 +302,7 @@ export class TSApplication implements TSDomain {
     // TODO: consolidate world loading
     async loadTestWorld(worldFileName: string) {
         if (!this.demoConfig) {
-            this.demoConfig = <DemoConfig>await m.request("./data/demoConfig.json")
+            this.demoConfig = <DemoConfig>await m.request(this.dataPath + "demoConfig.json")
                 .catch(error => {
                     console.log("error loading demoConfig.json", error)
                     alert("Something went wrong loading demoConfig.json from the server")
@@ -309,7 +311,7 @@ export class TSApplication implements TSDomain {
                 })
         }
     
-        const worldContent = await m.request("./data/" + worldFileName + ".wld", {deserialize: (text) => text})
+        const worldContent = await m.request(this.dataPath + worldFileName + ".wld", {deserialize: (text) => text})
             .catch(error => {
                 console.log("error loading a world file", worldFileName, error)
                 alert("Something went wrong loading the world file \"" + worldFileName + "\" from the server")

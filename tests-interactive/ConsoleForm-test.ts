@@ -1,13 +1,13 @@
-
-// Exported from: ../../storyharp-js/converted_source/uscontextwizard.lfm
 import * as m from "mithril"
-import { FakeDomain } from "./FakeDomain"
+import { TSApplication } from "../source/TSDomain"
 import { viewConsoleForm } from "../source/ConsoleForm"
 
-const MyComponent = { view: () => viewConsoleForm(FakeDomain) }
+const MyComponent = { view: () => viewConsoleForm(domain) }
 
-// loadTestWorld("GarTrek")
-FakeDomain.loadTestWorld("House and Yard").then(() => {
+const domain = new TSApplication()
+domain.dataPath = "../data/"
+
+domain.loadTestWorld("House and Yard").then(() => {
     m.mount(document.body, MyComponent)
 })
 

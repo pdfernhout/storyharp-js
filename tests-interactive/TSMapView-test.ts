@@ -3,7 +3,7 @@ import { TSMapView } from "../source/TSMapView"
 import { TPoint } from "../source/TPoint"
 import { TRect } from "../source/TRect"
 import { TSRuleField } from "../source/TSRule"
-import { FakeDomain } from "./FakeDomain"
+import { TSApplication } from "../source/TSDomain"
 
 const mapDrawer = new TSMapView()
 
@@ -59,15 +59,17 @@ const MyComponent = {
                 const displayOptions = []
                 displayOptions[TSRuleField.kRuleContext] = true
                 displayOptions[TSRuleField.kRuleCommand] = true
-                mapDrawer.displayOn(context, displayOptions, null, null, FakeDomain.world, null, FakeDomain.showCommandPrefixInMap)
+                mapDrawer.displayOn(context, displayOptions, null, null, domain.world, null, domain.showCommandPrefixInMap)
             },
             onclick: () => mapDrawer.scroll.X += 20,
         }),
     )
 }
 
-// FakeDomain.loadTestWorld("GarTrek")
-FakeDomain.loadTestWorld("House and Yard").then(() => {
+const domain = new TSApplication()
+domain.dataPath = "../data/"
+
+domain.loadTestWorld("House and Yard").then(() => {
     m.mount(document.body, MyComponent)
     // Force a first update
     m.redraw()
