@@ -79,6 +79,13 @@ export class LinkWizardView {
     }
 
     checkInputForErrors() {
+        this.firstContextError = ""
+        this.firstCommandError = ""
+        this.firstReplyError = ""
+        this.secondContextError = ""
+        this.secondCommandError = ""
+        this.secondReplyError = ""
+
         if (this.firstCommand.trim() === this.secondContext.trim()) {
             this.firstContextError = "The two contexts must have different names."
             this.secondContextError = "The two contexts must have different names."
@@ -86,35 +93,23 @@ export class LinkWizardView {
 
         if (!this.firstContext.trim()) {
             this.firstContextError = "Both contexts must be entered to proceed."
-        } else {
-            this.firstContextError = ""
         }
 
         if (!this.secondContext.trim()) {
             this.secondContextError = "Both contexts must be entered to proceed."
-        } else {
-            this.secondContextError = ""
         }
 
         if (!this.firstCommand.trim() && this.firstReply.trim()) {
             this.firstCommandError = "You must enter a command phrase if you enter a reply."
-        } else {
-            this.firstCommandError = ""
         }
 
         if (!this.secondCommand.trim() && this.secondReply.trim()) {
             this.secondCommandError = "You must enter a command phrase if you enter a reply."
-        } else {
-            this.secondCommandError = ""
         }
 
         if (!this.firstCommand.trim() && !this.secondCommand.trim()) {
             this.firstCommandError = "You must enter at least one command to generate a link."
             this.secondCommandError = "You must enter at least one command to generate a link."
-
-        } else {
-            this.firstCommandError = ""
-            this.secondCommandError = ""
         }
 
         return this.firstContextError
@@ -127,8 +122,8 @@ export class LinkWizardView {
 
     makeLink(firstContext: string, secondContext: string, command: string, reply: string): TSRule | null {
         let newRule: TSRule | null = null
-        if (firstContext === "") {
-            return newRule
+        if (!command || !firstContext || !secondContext) {
+            return null
         }
 
         const world: TWorld = this.domain.world
