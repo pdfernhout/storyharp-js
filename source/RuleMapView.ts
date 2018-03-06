@@ -38,7 +38,8 @@ export class RuleMapView {
         this.worldCommandList = domain.worldCommandList
     }
 
-    /*
+    /* TODO: use or remove
+    
     function setCanvasColorsForSelection(canvas: TCanvas, selected: boolean, focused: boolean, isCommandInMap: boolean): void {
         canvas.Brush.Color = delphi_compatability.clWindow
         canvas.Font.Color = UNRESOLVED.clWindowText
@@ -329,48 +330,67 @@ export class RuleMapView {
     }
 
     /*
-    
-    searchForAndSelectRule(aText: string, ignoreCase: boolean, goDown: boolean): void {
-        let row: int
-        let count: int
+
+    scrollMapSelectionIntoView(): void {
+        let intersection: TRect
+        let visibleRect: TRect
         let rule: TSRule
-        let ruleIndex: int
-        let match: boolean
-        let matchText: string
+        let variable: TSVariable
+        let i: int
+        let upperLeftObject: TSDraggableObject
+        let firstContextVariable: TSVariable
         
-        count = 1
-        ruleIndex = usdomain.domain.world.rules.IndexOf(this.rule)
-        if (ignoreCase) {
-            matchText = lowercase(aText)
-        } else {
-            matchText = aText
+        upperLeftObject = null
+        visibleRect.Left = this.MapScrollBarHorizontal.Position
+        visibleRect.Top = this.MapScrollBarVertical.Position
+        visibleRect.Right = visibleRect.Left + this.MapImage.Width
+        visibleRect.Bottom = visibleRect.Top + this.MapImage.Height
+        for (i = 0; i <= usdomain.domain.world.rules.Count - 1; i++) {
+            rule = usworld.TSRule(usdomain.domain.world.rules[i])
+            if (rule.selected) {
+                delphi_compatability.IntersectRect(intersection, rule.bounds(), visibleRect)
+                if (!delphi_compatability.IsRectEmpty(intersection)) {
+                    return
+                }
+                if (upperLeftObject === null) {
+                    upperLeftObject = rule
+                } else if (upperLeftObject.bounds().Top > rule.bounds().Top) {
+                    upperLeftObject = rule
+                } else if (upperLeftObject.bounds().Left > rule.bounds().Left) {
+                    upperLeftObject = rule
+                }
+            }
         }
-        while ((count <= usdomain.domain.world.rules.Count)) {
-            if (goDown) {
-                row = (ruleIndex + count) % usdomain.domain.world.rules.Count
-            } else {
-                row = ((usdomain.domain.world.rules.Count * 2) + (ruleIndex - count)) % usdomain.domain.world.rules.Count
+        firstContextVariable = null
+        for (i = 0; i <= usdomain.domain.world.variables.Count - 1; i++) {
+            variable = usworld.TSVariable(usdomain.domain.world.variables[i])
+            if ((firstContextVariable === null) && (variable.hasUseagesForField(usworld.kRuleContext))) {
+                firstContextVariable = variable
             }
-            rule = usdomain.domain.world.rules[row]
-            if (ignoreCase) {
-                // unfinished - need to check requirements & changes
-                match = (UNRESOLVED.pos(matchText, lowercase(rule.context.phrase)) > 0) || (UNRESOLVED.pos(matchText, lowercase(rule.command.phrase)) > 0) || (UNRESOLVED.pos(matchText, lowercase(rule.reply)) > 0) || (UNRESOLVED.pos(matchText, lowercase(rule.move.phrase)) > 0) || (UNRESOLVED.pos(matchText, lowercase(rule.requirementsString)) > 0) || (UNRESOLVED.pos(matchText, lowercase(rule.changesString)) > 0)
-            } else {
-                match = (UNRESOLVED.pos(matchText, rule.context.phrase) > 0) || (UNRESOLVED.pos(matchText, rule.command.phrase) > 0) || (UNRESOLVED.pos(matchText, rule.reply) > 0) || (UNRESOLVED.pos(matchText, rule.move.phrase) > 0) || (UNRESOLVED.pos(matchText, rule.requirementsString) > 0) || (UNRESOLVED.pos(matchText, rule.changesString) > 0)
+            if (variable.selected) {
+                delphi_compatability.IntersectRect(intersection, variable.bounds(), visibleRect)
+                if (!delphi_compatability.IsRectEmpty(intersection)) {
+                    return
+                }
+                if (upperLeftObject === null) {
+                    upperLeftObject = variable
+                } else if (upperLeftObject.bounds().Top > variable.bounds().Top) {
+                    upperLeftObject = variable
+                } else if (upperLeftObject.bounds().Left > variable.bounds().Left) {
+                    upperLeftObject = variable
+                }
             }
-            if (match) {
-                usdomain.domain.world.deselectAllExcept(rule)
-                this.editRule(rule)
-                rule.selected = true
-                this.scrollGridSelectionsIntoView(kFromBottom)
-                this.MapPaintBoxChanged()
-                this.scrollMapSelectionIntoView()
-                return
-            }
-            count += 1
         }
-        ShowMessage("Search string \"" + aText + "\" not found.")
+        if (upperLeftObject === null) {
+            upperLeftObject = firstContextVariable
+        }
+        if (upperLeftObject === null) {
+            return
+        }
+        this.MapScrollBarHorizontal.Position = localIntMin(localIntMax(upperLeftObject.center().X - this.MapImage.Width / 2, this.MapScrollBarHorizontal.Min), this.MapScrollBarHorizontal.Max)
+        this.MapScrollBarVertical.Position = localIntMin(localIntMax(upperLeftObject.center().Y + -this.MapImage.Height / 2, this.MapScrollBarVertical.Min), this.MapScrollBarVertical.Max)
     }
+
     */
 
     goodPosition(): TPoint {

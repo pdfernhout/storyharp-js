@@ -38,6 +38,21 @@ export class IndividualRuleView {
 
     /*
 
+    fillListBox(listBox: TListBox, list: TList): void {
+        let i: int
+        let wrapper: TSDesiredStateVariableWrapper
+        
+        // OK for requirements because is parent class
+        listBox.Items.Clear()
+        if (this.rule !== null) {
+            for (i = 0; i <= list.Count - 1; i++) {
+                wrapper = list[i]
+                listBox.Items.AddObject(wrapper.displayString(), wrapper)
+            }
+            listBox.Items.Add("")
+        }
+    }
+
     logicalStatementForListBox(listBox: TListBox): string {
         let result = ""
         let i: int
