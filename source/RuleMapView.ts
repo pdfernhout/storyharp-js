@@ -248,7 +248,7 @@ export class RuleMapView {
 
         this.MapPaintBoxChanged()
         // finds selected nodes in domain
-        const newCommand = new TSMapDragCommand(this.domain)
+        const newCommand = new TSMapDragCommand(this.domain, 1 / this.mapDrawer.scale)
         // TODO: This notification may be unneeded -- check after converted design working
         newCommand.notifyProcedure = this.mapChangedNotification.bind(this)
         this.actionInProgress = this.worldCommandList.mouseDown(newCommand, new TPoint(event.offsetX, event.offsetY))

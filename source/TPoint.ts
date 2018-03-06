@@ -12,4 +12,8 @@ export class TPoint {
     copy(): TPoint {
         return new TPoint(this.X, this.Y)
     }
+
+    scale(scale: number): TPoint {
+        return new TPoint(this.X * scale, this.Y * scale)
+    }
 }

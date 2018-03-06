@@ -6,12 +6,14 @@ import { TSDomain } from "./TSDomain"
 
 export class TSMapDragCommand extends KfCommand {
     domain: TSDomain
+    scale: number
     dragRecords: TSDragRecord[] = []
     notifyProcedure: TCommandEvent
     
-    constructor(domain: TSDomain) {
+    constructor(domain: TSDomain, scale: number) {
         super()
         this.domain = domain
+        this.scale = scale
         this.domain.world.addDragRecordsToList(this.dragRecords)
     }
     
@@ -75,7 +77,7 @@ export class TSMapDragCommand extends KfCommand {
                 if (mouseDidMove) {
                     const delta = new TPoint(nextPoint.X - previousPoint.X, nextPoint.Y - previousPoint.Y)
                     for (let i = 0; i < this.dragRecords.length; i++) {
-                        this.dragRecords[i].offset(delta)
+                        this.dragRecords[i].offset(delta.scale(this.scale))
                     }
                     if (this.notifyProcedure) {
                         this.notifyProcedure(this, KfCommandChangeType.commandDone)
@@ -97,7 +99,7 @@ export class TSMapDragCommand extends KfCommand {
                     const delta = new TPoint(nextPoint.X - previousPoint.X, nextPoint.Y - previousPoint.Y)
                     if ((delta.X !== 0) || (delta.Y !== 0)) {
                         for (let i = 0; i < this.dragRecords.length; i++) {
-                            this.dragRecords[i].offset(delta)
+                            this.dragRecords[i].offset(delta.scale(this.scale))
                         }
                         if (this.notifyProcedure) {
                             this.notifyProcedure(this, KfCommandChangeType.commandDone)
