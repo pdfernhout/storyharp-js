@@ -132,9 +132,7 @@ export class LinkWizardView {
     
     // TODO:
     // uschangelog.ChangeLogForm.addToLog(this.NewContextsMemo.Text)
-    // Application.HelpJump("Making_new_rules_using_the_new_contexts_wizard")
-
-    // the good place | You're in the good place
+    // Application.HelpJump("Making_new_rules_using_the_new_moves_wizard")
 
     view() {
         function caption(text: string) { return text }
@@ -143,40 +141,51 @@ export class LinkWizardView {
             return showHelp ? m("p", ...args) : []
         }
         
-        return m(".ContextWizardView.h-100.overflow-auto",
+        return m(".LinkWizardForm.h-100.overflow-auto",
             {
             },
             m("div",
-                m("h2", "New Contexts Wizard"),
+                m("h2", "New Moves Wizard"),
 
                 m("div", {onclick: () => this.showHelp = !this.showHelp }, "Show help", expander(showHelp, "", "(Click to close help)")),
 
-                help("This wizard will create new rules defining contexts and replies to a common command like \"look\"."),
+                help("This wizard will link up two contexts by creating rules with commands to move between them."),
 
                 help("A command (", Glyph.command, ") is what you say to the computer."),
                 help("A context (", Glyph.context, ") is the single most important requirement to make a command available -- usually a physical location."),
                 help("A reply (", Glyph.reply, ") is what the computer says after you say a command."),
 
-                help("You can enter a descriptive reply for each new context. ",
-                "The descriptive replies will be accessed with a common command such as \"look\"."),
+                help("You can enter a reply for each command."),
 
-                m("h3", "Enter Contexts"),
+                m("h3", "Contexts"),
 
-                help("Enter or paste the contexts you want to create in the area below, ",
-                "separating each context from its descriptive reply by a pipe bar."),
-                help("For example, \"house | You are in a house\"."),
+                help("Choose two contexts to move between. The order doesn't matter."),
  
-                help("Use carriage returns to separate entries -- one entry per line. Blank lines will be ignored."),
-                help("Replies are optional. It's okay if long replies wrap around in the editor as long as they do not have a carriage return in them."),
+                // TODO: FirstContextBox
 
-                help("If do not enter descriptive reply for a context, the wizard will add a default description of \"" + defaultReply + "\""),
+                // TODO: SecondContextBox
 
-                help("You can also use the same context more than once and later add special requirements (", Glyph.requirements, ") to some of the extra rules"),
+                help("You can also choose these two contexts by selecting them in the Map (Shift-click to select the second context) before you open the wizard."),
 
-                help("Here is an example showing a mix of different entries which generated nine rules:"),
-                showHelp ? m("pre.ba.bw2.pa1.ml2.mr2", exampleWithNineRules) : [],
+                ///////////////////////////////////////
 
-                m("div.ma2", "Context (", Glyph.context, ")", m("span.ml2.mr2.f4.b", "|"), "Descriptive Reply (", Glyph.reply, ")"),
+                m("h3", "Forward"),
+
+                m("p", "What command (", Glyph.command, ") should the user say to move from: ", TODO:ForwardLabel),
+                m("input.ml2" + (this.commandPhraseError ? ".bg-yellow" : ""),
+                    {
+                        value: this.commandPhrase,
+                        onchange: (event: { target: HTMLInputElement }) => {
+                            this.commandPhrase = event.target.value
+                            if (this.wasGenerateRulesPressed) this.checkInputForErrors()
+                        }
+                    },
+                ),
+                this.newContextsTextToParseError ? m("div.i.bg-yellow", this.newContextsTextToParseError) : [],
+
+                help("Leave this blank if you don't want to move this way. Examples are \"move forward\", \"go east\", \"leap up\", \"enter the building\", and \"activate the transporter\"."),
+
+                m("p", "What should the computer reply (", Glyph.reply, ") after the user says the move command?"),
 
                 m("textarea.ml2" + (this.newContextsTextToParseError ? ".bg-yellow" : ""),
                     {
@@ -192,9 +201,13 @@ export class LinkWizardView {
 
                 this.newContextsTextToParseError ? m("div.i.bg-yellow", this.newContextsTextToParseError) : [],
 
-                m("h3", "Generate Descriptions"),
+                help("Leave this blank to get a default reply of \"You\" plus the command phrase. For example, for \"go east\" the default would be \"You go east\"."),
 
-                m("p", "What command (", Glyph.command, ") should the user to say to access these descriptive replies?"),
+                ///////////////////////////////////////
+
+                m("h3", "Backward"),
+
+                m("p", "What command (", Glyph.command, ") should the user say to move from: ", TODO:BackwardLabel),
                 m("input.ml2" + (this.commandPhraseError ? ".bg-yellow" : ""),
                     {
                         value: this.commandPhrase,
@@ -204,14 +217,38 @@ export class LinkWizardView {
                         }
                     },
                 ),
+                this.newContextsTextToParseError ? m("div.i.bg-yellow", this.newContextsTextToParseError) : [],
 
-                this.commandPhraseError ? m("div.i.bg-yellow", this.commandPhraseError) : [],
+                help("Leave this blank if you don't want to move this way. Examples are \"move forward\", \"go east\", \"leap up\", \"enter the building\", and \"activate the transporter\"."),
 
-                help("Some generic examples are: \"look\", \"listen\", \"smell\", \"feel\", \"taste\", and \"sense\"."),
+                m("p", "What should the computer reply (", Glyph.reply, ") after the user says the move command?"),
 
-                help("You should stick with \"look\" unless you are doing something special. ",
-                "You can change individual commands later (in the editor) to deal with specific situations."),
+                m("textarea.ml2" + (this.newContextsTextToParseError ? ".bg-yellow" : ""),
+                    {
+                        rows: 10,
+                        cols: 60,
+                        value: this.newContextsTextToParse,
+                        onchange: (event: { target: HTMLInputElement }) => {
+                            this.newContextsTextToParse = event.target.value
+                            if (this.wasGenerateRulesPressed) this.checkInputForErrors()
+                        }
+                    },
+                ),
 
+                this.newContextsTextToParseError ? m("div.i.bg-yellow", this.newContextsTextToParseError) : [],
+
+                help("Leave this blank to get a default reply of \"You\" plus the command phrase. For example, for \"go east\" the default would be \"You go east\"."),
+
+                //////////////////////
+
+                m("h3", "Generate Rules"),
+
+                // forwardSummary  "nether regions -> go to elevator -> elevator",
+
+                // backwardSummary  "elevator -> go to nether regions -> nether regions",
+
+                m("p", "You have completed the information the wizard needs to generate two new rules to link the two contexts you have chosen."),
+                
                 m("p", "Click the \"Generate Rules\" button to create the new rules."),
                 
                 m("div.ml2", 
