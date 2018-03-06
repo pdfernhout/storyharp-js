@@ -224,7 +224,7 @@ export class RuleMapView {
         }
         */
 
-        const multipleSelect: boolean = event.shiftKey
+        const multipleSelect: boolean = event.ctrlKey
         this.mapSelectionInProgress = false
         if (draggedNode === null) {
             this.makeChoice(null, multipleSelect)
@@ -235,7 +235,9 @@ export class RuleMapView {
         }
         //MapPaintBoxChanged
         this.makeChoice(draggedNode, multipleSelect)
-        if (event.ctrlKey) {
+        
+        // TODO: Remove this or maybe make shift into drag scrolling?
+        if (event.shiftKey) {
             this.MapPaintBoxChanged()
             // TODO use or remove: this.MapImage.BeginDrag(true)
             return

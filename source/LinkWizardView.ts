@@ -305,7 +305,7 @@ export class LinkWizardView {
                 this.secondContextError ? m("div.i.bg-yellow", this.secondContextError) : [],
 
 
-                help("You can also choose these two contexts by selecting them in the Map (Shift-click to select the second context) before you open the wizard."),
+                help("You can also choose these two contexts by selecting them in the Map (Control-click to select the second context) before you open the wizard."),
 
                 ///////////////////////////////////////
 
