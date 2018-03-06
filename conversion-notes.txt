@@ -178,3 +178,9 @@ A fix is to initialize the value to null -- or to change the test.
 When working on a big file you are subdividing into other class files like, say, the rule editor,
 it would be best to copy the original files into the main source directory and then delete parts as you use them.
 This will make it easier to see what remains to be implemented -- or eventually discarded.
+
+Good idea to create Domain object first and put in stub methods
+if needed. This reduces the need for substantial later re-engineering.
+
+Ideally the top level Domain object should have only data fields -- no behavior.
+If it has pointers to instances of forms or helper classes, those should have all the behavior.
