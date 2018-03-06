@@ -22,7 +22,7 @@ export class RuleTableView {
         // TODO: POSSIBLE BUG: What if deselect the currently edited rule using control click?
         // TODO: POSSIBLE BUG: Seems like might be an issue if first click is a shift click?
         if (isShiftClick) {
-            if ((lastSingleRuleIndex >= 0) && (lastSingleRuleIndex <= world.rules.length - 1) && (lastSingleRuleIndex !== index)) {
+            if ((lastSingleRuleIndex >= 0) && (lastSingleRuleIndex < world.rules.length) && (lastSingleRuleIndex !== index)) {
                 world.deselectAllExcept(rule)
                 if (lastSingleRuleIndex < index) {
                     for (let i = lastSingleRuleIndex; i <= index; i++) {
