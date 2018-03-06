@@ -166,10 +166,7 @@ function viewConsole(domain: TSDomain) {
 
 function resetConsole(domain: TSDomain) {
     if (!confirm("Are you sure you want to restart the world?")) return
-    domain.world.newSession()
-    domain.sessionCommandList.clear()
-    domain.transcript.length = 0
-    domain.transcript.push({text: "Starting: " + domain.loadedFileName, color: Color.clGreen})
+    domain.newSession()
 }
 
 // TODO: Remove all this redundancy of file loading
@@ -177,18 +174,21 @@ function loadWorld(domain: TSDomain) {
     const world: TWorld = domain.world
     FileUtils.loadFromFile(false, (fileName: string, contents: string) => {
         console.log("chose", fileName)
+
         world.resetVariablesAndRules()
+
         const loaded = world.loadWorldFromFileContents(contents)
         console.log("load status", loaded)
+
         if (fileName.endsWith(".wld")) fileName = fileName.substring(0, fileName.length - 4)
+
         domain.loadedFileName = fileName
-        domain.world.newSession()
-        domain.transcript.length = 0
-        domain.sessionCommandList.clear()
         domain.worldCommandList.clear()
         domain.editedRule = null
         domain.lastSingleRuleIndex = 0
-        domain.transcript.push({text: "Starting: " + domain.loadedFileName, color: Color.clGreen})
+
+        domain.newSession()
+
         m.redraw()
     })
 }
@@ -206,16 +206,15 @@ function saveWorld(domain: TSDomain) {
 function newWorld(domain: TSDomain) {
     const fileName = prompt("What would you like to call your new world?")
     if (!fileName) return
+
+    domain.world.resetVariablesAndRules()
+
     domain.loadedFileName = fileName
-    const world: TWorld = domain.world
-    world.resetVariablesAndRules()
-    world.newSession()
-    domain.transcript.length = 0
-    domain.sessionCommandList.clear()
     domain.worldCommandList.clear()
     domain.editedRule = null
     domain.lastSingleRuleIndex = 0
-    domain.transcript.push({text: "Starting: " + domain.loadedFileName, color: Color.clGreen})
+    
+    domain.newSession()
 }
 
 export function viewConsoleForm(domain: TSDomain) {

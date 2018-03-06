@@ -232,6 +232,8 @@ export interface TSDomain {
 
     showCommandPrefixInMap: boolean
 
+    newSession: () => void
+
     consoleForm: ConsoleFormAPI
     ruleEditorForm: RuleEditorAPI
     changeLogForm: ChangeLogAPI
@@ -325,14 +327,12 @@ export class TSApplication implements TSDomain {
         if (!loaded) throw new Error("Failed to load")
     
         this.loadedFileName = worldFileName
-    
-        this.world.newSession()
-        this.sessionCommandList.clear()
         this.worldCommandList.clear()
         this.editedRule = null
         this.lastSingleRuleIndex = 0
-        this.transcript.length = 0
-        this.transcript.push({text: "Starting: " + worldFileName, color: Color.clGreen})
+        
+        this.newSession()
+
         /*
         if (domain.world.rules.length) {
             domain.transcript.push({text: "> " + domain.world.rules[0].command.phrase, color: Color.clBlue})
@@ -725,12 +725,21 @@ export class TSApplication implements TSDomain {
         this.world.newWorld()
     }
     
+    */
+
     newSession(): void {
+        this.world.newSession()
         this.sessionCommandList.clear()
+        this.transcript.length = 0
+        this.transcript.push({text: "Starting: " + this.loadedFileName, color: Color.clGreen})
+
+        /* TODO: user or remove
         this.sessionFileName = kUnsavedSessionFileName + "." + kSessionExtension
         this.sessionChangeCount = 0
-        this.world.newSession()
+        */
     }
+
+    /*
     
     loadSession(fileName: string): void {
         this.sessionCommandList.clear()
