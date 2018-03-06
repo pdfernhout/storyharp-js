@@ -5,44 +5,53 @@ import { TPoint } from "./TPoint"
 import { TWorld } from "./TWorld"
 import { Glyph } from "./VariablesView"
 import { TSDomain } from "./TSDomain"
+import { TSRule } from "./TSRule";
 
-const exampleOne =`
-cave|You are in a big cave.
-forest|You are in a lively forest.
-spring|You are standing near a burbling spring.`.trim()
-
-const exampleWithNineRules = `    
-well house | You are in a well house for a small spring.
-grate | You are standing above a grate.
-forest | You are wandering around in dense forest.
-forest | It is getting dark and hard to see.
-mossy clearing
-glade | You are in a forest glade.
-
-tree tops
-
-path by rock|you are on a path in the forest besides a big rock
-stream | You are walking along a dry stream bed.`.trim()
-
-/*
-the good place | You're in the good place
-the bad place | You're in the  bad place
-mindy st. claire's house | You're in a medium place at Mindy St. Claire's house.
+/* TODO use or remove:
+        if (this.FirstContextBox.Items.Count < 2) {
+            ShowMessage("You must create at least two contexts before using the link wizard.")
+            return result
+        }
 */
 
-const defaultCommand = "look"
-const defaultReply = "There is nothing of interest here."
+/* Example command and reply for house and yard:
+
+house : break through wall
+
+    The wall crumbles and you find yourself outside. Someone is going to have to do lot of work to do to fix this.
+
+yard : burrow inside
+
+   You dig a tunnel and find yourself inside the house.
+
+*/
 
 export class LinkWizardView {
     domain: TSDomain
 
-    newContextsTextToParse: string = ""
-    newContextsTextToParseError: string = ""
-    newContextsTextToParseLastGenerated: string = ""
+    firstContext: string = ""
+    firstContextError: string = ""
+    firstContextLastGenerated: string = ""
 
-    commandPhrase = defaultCommand
-    commandPhraseError: string = ""
-    commandPhraseLastGenerated: string = ""
+    firstCommand: string = ""
+    firstCommandError: string = ""
+    firstCommandLastGenerated: string = ""
+
+    firstReply: string = ""
+    firstReplyError: string = ""
+    firstReplyLastGenerated: string = ""
+
+    secondContext: string = ""
+    secondContextError: string = ""
+    secondContextGenerated: string = ""
+
+    secondCommand: string = ""
+    secondCommandError: string = ""
+    secondCommandLastGenerated: string = ""
+
+    secondReply: string = ""
+    secondReplyError: string = ""
+    secondReplyLastGenerated: string = ""
 
     wasGenerateRulesPressed = false
 
@@ -50,20 +59,119 @@ export class LinkWizardView {
 
     constructor(vnode: m.Vnode) {
         this.domain = (<any>vnode.attrs).domain
+        this.initializeContexts()
     }
-    
+
+    initializeContexts() {
+        const world: TWorld = this.domain.world
+
+        for (let i = 0; i < world.variables.length; i++) {
+            const variable = world.variables[i]
+            if (variable.selected) {
+                if (!this.firstContext) {
+                    this.firstContext = variable.phrase
+                } else {
+                    this.secondContext = variable.phrase
+                    break
+                }
+            }
+        }
+    }
+
     checkInputForErrors() {
-        if (!this.newContextsTextToParse.trim()) {
-            this.newContextsTextToParseError = "You must enter one or more contexts to generate rules."
-        } else {
-            this.newContextsTextToParseError = ""
+        if (this.firstCommand.trim() === this.secondContext.trim()) {
+            this.firstContextError = "The two contexts must have different names."
+            this.secondContextError = "The two contexts must have different names."
         }
-        if (!this.commandPhrase.trim()) {
-            this.commandPhraseError = "You must enter a command to be used to describe these contexts."
+
+        if (!this.firstContext.trim()) {
+            this.firstContextError = "Both contexts must be entered to proceed."
         } else {
-            this.commandPhraseError = ""
+            this.firstContextError = ""
         }
-        return this.newContextsTextToParseError || this.commandPhraseError
+
+        if (!this.secondContext.trim()) {
+            this.secondContextError = "Both contexts must be entered to proceed."
+        } else {
+            this.secondContextError = ""
+        }
+
+        if (!this.firstCommand.trim() && this.firstReply.trim()) {
+            this.firstCommandError = "You must enter a command phrase if you enter a reply."
+        } else {
+            this.firstCommandError = ""
+        }
+
+        if (!this.secondCommand.trim() && this.secondReply.trim()) {
+            this.secondCommandError = "You must enter a command phrase if you enter a reply."
+        } else {
+            this.secondCommandError = ""
+        }
+
+        if (!this.firstCommand.trim() && !this.secondCommand.trim()) {
+            this.firstCommandError = "You must enter at least one command to generate a link."
+            this.secondCommandError = "You must enter at least one command to generate a link."
+
+        } else {
+            this.firstCommandError = ""
+            this.secondCommandError = ""
+        }
+
+        return this.firstContextError
+            || this.firstCommandError
+            || this.firstReplyError
+            || this.secondContextError
+            || this.secondCommandError
+            || this.secondReplyError
+    }
+
+    makeLink(firstContext: string, secondContext: string, command: string, reply: string): TSRule | null {
+        let newRule: TSRule | null = null
+        if (firstContext === "") {
+            return newRule
+        }
+
+        const world: TWorld = this.domain.world
+        const ruleEditorForm = this.domain.ruleEditorForm
+        
+        newRule = world.newRule()
+        ruleEditorForm.lastChoice = newRule
+
+        newRule.setContext(firstContext)
+
+        newRule.setCommand(command)
+
+        if (reply !== "") {
+            newRule.setReply(reply)
+        } else {
+            newRule.setReply("You " + command + ".")
+        }
+
+        newRule.setMove(secondContext)
+
+        newRule.position.X = (newRule.context.position.X + newRule.move.position.X) / 2
+        newRule.position.Y = (newRule.context.position.Y + newRule.move.position.Y) / 2
+
+        // determine offset above or below midpoint between two contexts depending on direction of move
+        const dx = newRule.context.position.X - newRule.move.position.X
+        const dy = newRule.context.position.Y - newRule.move.position.Y
+        if (Math.abs(dy) >= Math.abs(dx)) {
+            if (dy >= 0) {
+                newRule.position.X = newRule.position.X - 100
+            } else {
+                newRule.position.X = newRule.position.X + 100
+            }
+        } else {
+            if (dx < 0) {
+                newRule.position.Y = newRule.position.Y - 30
+            } else {
+                newRule.position.Y = newRule.position.Y + 30
+            }
+        }
+
+        newRule.selected = true
+
+        return newRule
     }
     
     generateRules(): void {
@@ -75,44 +183,21 @@ export class LinkWizardView {
             return
         }
 
-        const commandPhrase = this.commandPhrase.trim()
-
-        const world: TWorld = this.domain.world
-        const ruleEditorForm = this.domain.ruleEditorForm
-        
         // TODO: save text to log
-        // uschangelog.ChangeLogForm.addToLog(this.NewContextsMemo.Text)
+        // uschangelog.ChangeLogForm.addToLog(this.ForwardMemo.Text)
+        // uschangelog.ChangeLogForm.addToLog(this.BackwardMemo.Text)
 
         const newRulesCommand = new TSNewRulesCommand(this.domain)
-        newRulesCommand.creator = "new context wizard"
+        newRulesCommand.creator = "link wizard"
 
-        const lines = this.newContextsTextToParse.split(/\r\n|\r|\n/)
+        const newRule1 = this.makeLink(this.firstContext.trim(), this.secondContext.trim(), this.firstCommand.trim(), this.firstReply.trim())
+        if (newRule1 !== null) {
+            newRulesCommand.addRule(newRule1)
+        }
 
-        for (let line of lines) {
-            line = line.trim()
-            if (!line) continue
-            console.log("line", line)
-
-            const pipeBarLocation = line.indexOf("|")
-            let context
-            let reply
-            if (pipeBarLocation === -1) {
-                context = line
-                reply = defaultReply
-            } else {
-                context = line.substring(0, pipeBarLocation).trim() || ("missing context " + Math.random())
-                reply =  line.substring(pipeBarLocation + 1).trim() || defaultReply
-            }
-
-            const newRule = world.newRule()
-            newRule.setContext(context)
-            newRule.setCommand(commandPhrase)
-            newRule.setReply(reply)
-            newRule.selected = true
-
-            newRulesCommand.addRule(newRule)
-            ruleEditorForm.lastChoice = newRule
-            this.domain.editedRule = newRule
+        const newRule2 = this.makeLink(this.secondContext.trim(), this.firstContext.trim(), this.secondCommand.trim(), this.secondReply.trim())
+        if (newRule2 !== null) {
+            newRulesCommand.addRule(newRule2)
         }
 
         if (newRulesCommand.rules.length > 0) {
@@ -124,15 +209,46 @@ export class LinkWizardView {
             return
         }
 
-        this.newContextsTextToParseLastGenerated = this.newContextsTextToParse
-        this.commandPhraseLastGenerated = this.commandPhrase
+        this.firstContextLastGenerated = this.firstContext
+        this.firstCommandLastGenerated = this.firstCommand
+        this.firstReplyLastGenerated = this.firstReply
+        this.secondContextGenerated = this.secondContext
+        this.secondCommandLastGenerated = this.secondCommand
+        this.secondReplyLastGenerated = this.secondReply
+
+        // TODO: How to clear this out? Maybe add clear button?
         // this.newContextsTextToParse = ""
+
         this.wasGenerateRulesPressed = false
     }
     
     // TODO:
     // uschangelog.ChangeLogForm.addToLog(this.NewContextsMemo.Text)
     // Application.HelpJump("Making_new_rules_using_the_new_moves_wizard")
+
+    /* TODO: enabling/disabling and arrow glyphs
+        ForwardEditChange(Sender: TObject): void {
+            let haveText: boolean
+            
+            haveText = this.ForwardEdit.Text !== ""
+            this.forwardReplyArrow.Visible = haveText
+            this.forwardReplyLabel.Enabled = haveText
+            this.forwardReplyImage.Visible = haveText
+            this.ForwardMemo.Visible = haveText
+            this.forwardReplyNote.Enabled = haveText
+        }
+        
+        BackwardEditChange(Sender: TObject): void {
+            let haveText: boolean
+            
+            haveText = this.BackwardEdit.Text !== ""
+            this.backwardReplyArrow.Visible = haveText
+            this.backwardReplyLabel.Enabled = haveText
+            this.backwardReplyImage.Visible = haveText
+            this.BackwardMemo.Visible = haveText
+            this.backwardReplyNote.Enabled = haveText
+        }
+    */
 
     view() {
         function caption(text: string) { return text }
@@ -145,7 +261,7 @@ export class LinkWizardView {
             {
             },
             m("div",
-                m("h2", "New Moves Wizard"),
+                m("h2", "New Links Wizard"),
 
                 m("div", {onclick: () => this.showHelp = !this.showHelp }, "Show help", expander(showHelp, "", "(Click to close help)")),
 
@@ -157,13 +273,42 @@ export class LinkWizardView {
 
                 help("You can enter a reply for each command."),
 
+                ///////////////////////////////////////
+
                 m("h3", "Contexts"),
 
-                help("Choose two contexts to move between. The order doesn't matter."),
+                help("Choose two contexts to move between."), //  The order doesn't matter."),
  
                 // TODO: FirstContextBox
 
+                m("p", "First context (", Glyph.context, "):"),
+
+                m("input.ml2" + (this.firstContextError ? ".bg-yellow" : ""),
+                    {
+                        value: this.firstContext,
+                        onchange: (event: { target: HTMLInputElement }) => {
+                            this.firstContext = event.target.value
+                            if (this.wasGenerateRulesPressed) this.checkInputForErrors()
+                        }
+                    },
+                ),
+                this.firstContextError ? m("div.i.bg-yellow", this.firstContextError) : [],
+
                 // TODO: SecondContextBox
+
+                m("p", "Second context (", Glyph.context, "):"),
+
+                m("input.ml2" + (this.secondContextError ? ".bg-yellow" : ""),
+                    {
+                        value: this.secondContext,
+                        onchange: (event: { target: HTMLInputElement }) => {
+                            this.secondContext = event.target.value
+                            if (this.wasGenerateRulesPressed) this.checkInputForErrors()
+                        }
+                    },
+                ),
+                this.secondContextError ? m("div.i.bg-yellow", this.secondContextError) : [],
+
 
                 help("You can also choose these two contexts by selecting them in the Map (Shift-click to select the second context) before you open the wizard."),
 
@@ -171,35 +316,35 @@ export class LinkWizardView {
 
                 m("h3", "Forward"),
 
-                m("p", "What command (", Glyph.command, ") should the user say to move from: ", TODO:ForwardLabel),
-                m("input.ml2" + (this.commandPhraseError ? ".bg-yellow" : ""),
+                m("p", "What command (", Glyph.command, ") should the user say to move from ", (this.firstContext || "the first context") + ":"),
+                m("input.ml2" + (this.firstCommandError ? ".bg-yellow" : ""),
                     {
-                        value: this.commandPhrase,
+                        value: this.firstCommand,
                         onchange: (event: { target: HTMLInputElement }) => {
-                            this.commandPhrase = event.target.value
+                            this.firstCommand = event.target.value
                             if (this.wasGenerateRulesPressed) this.checkInputForErrors()
                         }
                     },
                 ),
-                this.newContextsTextToParseError ? m("div.i.bg-yellow", this.newContextsTextToParseError) : [],
+                this.firstCommandError ? m("div.i.bg-yellow", this.firstCommandError) : [],
 
                 help("Leave this blank if you don't want to move this way. Examples are \"move forward\", \"go east\", \"leap up\", \"enter the building\", and \"activate the transporter\"."),
 
-                m("p", "What should the computer reply (", Glyph.reply, ") after the user says the move command?"),
+                m("p", "What should the computer reply (", Glyph.reply, ") after the user says the move command from ", m("i", (this.firstContext || "the first context")), "?"),
 
-                m("textarea.ml2" + (this.newContextsTextToParseError ? ".bg-yellow" : ""),
+                m("textarea.ml2" + (this.firstReplyError ? ".bg-yellow" : ""),
                     {
                         rows: 10,
                         cols: 60,
-                        value: this.newContextsTextToParse,
+                        value: this.firstReply,
                         onchange: (event: { target: HTMLInputElement }) => {
-                            this.newContextsTextToParse = event.target.value
+                            this.firstReply = event.target.value
                             if (this.wasGenerateRulesPressed) this.checkInputForErrors()
                         }
                     },
                 ),
 
-                this.newContextsTextToParseError ? m("div.i.bg-yellow", this.newContextsTextToParseError) : [],
+                this.firstReplyError ? m("div.i.bg-yellow", this.firstReplyError) : [],
 
                 help("Leave this blank to get a default reply of \"You\" plus the command phrase. For example, for \"go east\" the default would be \"You go east\"."),
 
@@ -207,47 +352,60 @@ export class LinkWizardView {
 
                 m("h3", "Backward"),
 
-                m("p", "What command (", Glyph.command, ") should the user say to move from: ", TODO:BackwardLabel),
-                m("input.ml2" + (this.commandPhraseError ? ".bg-yellow" : ""),
+                m("p", "What command (", Glyph.command, ") should the user say to move from ", (this.secondContext || "the second context") + ":"),
+                m("input.ml2" + (this.secondCommandError ? ".bg-yellow" : ""),
                     {
-                        value: this.commandPhrase,
+                        value: this.secondCommand,
                         onchange: (event: { target: HTMLInputElement }) => {
-                            this.commandPhrase = event.target.value
+                            this.secondCommand = event.target.value
                             if (this.wasGenerateRulesPressed) this.checkInputForErrors()
                         }
                     },
                 ),
-                this.newContextsTextToParseError ? m("div.i.bg-yellow", this.newContextsTextToParseError) : [],
+                this.secondCommandError ? m("div.i.bg-yellow", this.secondCommandError) : [],
 
                 help("Leave this blank if you don't want to move this way. Examples are \"move forward\", \"go east\", \"leap up\", \"enter the building\", and \"activate the transporter\"."),
 
-                m("p", "What should the computer reply (", Glyph.reply, ") after the user says the move command?"),
+                m("p", "What should the computer reply (", Glyph.reply, ") after the user says the move command from ", m("i", (this.secondContext || "the second context")), "?"),
 
-                m("textarea.ml2" + (this.newContextsTextToParseError ? ".bg-yellow" : ""),
+                m("textarea.ml2" + (this.secondReplyError ? ".bg-yellow" : ""),
                     {
                         rows: 10,
                         cols: 60,
-                        value: this.newContextsTextToParse,
+                        value: this.secondReply,
                         onchange: (event: { target: HTMLInputElement }) => {
-                            this.newContextsTextToParse = event.target.value
+                            this.secondReply = event.target.value
                             if (this.wasGenerateRulesPressed) this.checkInputForErrors()
                         }
                     },
                 ),
 
-                this.newContextsTextToParseError ? m("div.i.bg-yellow", this.newContextsTextToParseError) : [],
+                this.secondReplyError ? m("div.i.bg-yellow", this.secondReplyError) : [],
 
                 help("Leave this blank to get a default reply of \"You\" plus the command phrase. For example, for \"go east\" the default would be \"You go east\"."),
 
-                //////////////////////
+                ///////////////////////////////////////
 
                 m("h3", "Generate Rules"),
 
-                // forwardSummary  "nether regions -> go to elevator -> elevator",
+                m("div.commandsToGenerate",
+                 
+                    (this.firstCommand || this.secondCommand) 
+                        ? m("p", "Commands to generate:")
+                        : [],
 
-                // backwardSummary  "elevator -> go to nether regions -> nether regions",
+                    m("div.ml3",
+                        (!this.firstCommand)
+                            ? []
+                            : m("p", this.firstContext + "  ---  " + this.firstCommand + "  -->  " + this.secondContext),
 
-                m("p", "You have completed the information the wizard needs to generate two new rules to link the two contexts you have chosen."),
+                        (!this.secondCommand)
+                            ? []
+                            : m("p", this.secondContext + "  ---  " + this.secondCommand + "  -->  " + this.firstContext),
+                    )
+                ),
+    
+                // m("p", "You have completed the information the wizard needs to generate new rules to link the two contexts you have chosen."),
                 
                 m("p", "Click the \"Generate Rules\" button to create the new rules."),
                 
