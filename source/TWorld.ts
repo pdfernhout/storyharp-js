@@ -116,12 +116,6 @@ export class TWorld {
         }
     }
     
-    newWorld(): void {
-        this.resetVariablesAndRules()
-        this.focus = null
-        this.previousFocus = null
-    }
-    
     /* TODO: IMPLEMENT: loadWorldFromFile(name: string) using file */
 
     loadWorldFromFileContents(contents: string): boolean {

@@ -182,12 +182,7 @@ function loadWorld(domain: TSDomain) {
 
         if (fileName.endsWith(".wld")) fileName = fileName.substring(0, fileName.length - 4)
 
-        domain.loadedFileName = fileName
-        domain.worldCommandList.clear()
-        domain.editedRule = null
-        domain.lastSingleRuleIndex = 0
-
-        domain.newSession()
+        domain.updateForNewOrLoadedWorld(fileName, true)
 
         m.redraw()
     })
@@ -195,10 +190,10 @@ function loadWorld(domain: TSDomain) {
 
 function saveWorld(domain: TSDomain) {
     const world: TWorld = domain.world
-    const fileName = domain.loadedFileName
+    const fileName = domain.worldFileName
     FileUtils.saveToFile(fileName, world.saveWorldToFileContents(false), ".wld", (fileName: string) => {
         console.log("written", fileName)
-        domain.loadedFileName = fileName
+        domain.worldFileName = fileName
         m.redraw()
     })
 }
@@ -208,13 +203,7 @@ function newWorld(domain: TSDomain) {
     if (!fileName) return
 
     domain.world.resetVariablesAndRules()
-
-    domain.loadedFileName = fileName
-    domain.worldCommandList.clear()
-    domain.editedRule = null
-    domain.lastSingleRuleIndex = 0
-    
-    domain.newSession()
+    domain.updateForNewOrLoadedWorld(fileName, false)
 }
 
 export function viewConsoleForm(domain: TSDomain) {
@@ -227,7 +216,7 @@ export function viewConsoleForm(domain: TSDomain) {
         m("div.mt1.mb2",
             m("span.f5.b.mr3.dib", "StoryHarp CYOA Player and Editor v" + storyHarpVersion),
             m("span", "World: "),
-            m("span.i", "" + domain.loadedFileName),
+            m("span.i", "" + domain.worldFileName),
         ),
         m("div.mb3",
             m(buttonWithHighlight("about"), { onclick: () => activeForm = "about" }, "About"),

@@ -2,7 +2,7 @@ import * as m from "mithril"
 import { TWorld } from "./TWorld"
 import { TSCommandList } from "./TSCommandList"
 import { TSRule, TSRuleField } from "./TSRule"
-import { Color, ScrollIntoViewDirection } from "./common"
+import { Color, ScrollIntoViewDirection, int } from "./common"
 import { TSDraggableObject } from "./TSDraggableObject"
 
 // unit usdomain
@@ -90,21 +90,15 @@ const kKeyForAccumulatedUnregisteredTime = "Time scale fraction"
 let domain: TSDomain
 
 
+*/
+
 // const
 const kUnsavedWorldFileName = "untitled"
-
-
-// const
 const kUnsavedSessionFileName = "untitled"
-
-
-// const
 const kWorldExtension = "wld"
-
-
-// const
 const kSessionExtension = "ses"
 
+/*
 
 function min(a: float, b: float): float {
     let result = 0.0
@@ -208,11 +202,17 @@ export interface SpeechSystemAPI {
     stripMacros: (textWithMacros: string) => string
 }
 
-// Make a seperate interface for testability
+// This is a seperate interface for testability
 export interface TSDomain {
     world: TWorld
     sessionCommandList: TSCommandList
     worldCommandList: TSCommandList
+
+    sessionChangeCount: int
+    worldChangeCount: int
+    isWorldFileLoaded: boolean
+
+    updateForNewOrLoadedWorld(fileName: string, isWorldFileLoaded: boolean): void;
 
     editedRule: TSRule | null
     lastSingleRuleIndex: number
@@ -224,7 +224,8 @@ export interface TSDomain {
 
     transcript: TranscriptLine[]
 
-    loadedFileName: string
+    worldFileName: string
+    sessionFileName: string
 
     demoConfig: DemoConfig
 
@@ -245,6 +246,10 @@ export class TSApplication implements TSDomain {
     sessionCommandList: TSCommandList
     worldCommandList: TSCommandList
 
+    sessionChangeCount = 0
+    worldChangeCount = 0
+    isWorldFileLoaded = false
+
     editedRule: TSRule | null = null
     lastSingleRuleIndex = 0
 
@@ -255,7 +260,8 @@ export class TSApplication implements TSDomain {
 
     transcript: TranscriptLine[] = []
 
-    loadedFileName = ""
+    worldFileName = ""
+    sessionFileName = ""
 
     demoConfig: DemoConfig
 
@@ -302,7 +308,7 @@ export class TSApplication implements TSDomain {
     }
 
     // TODO: consolidate world loading
-    async loadTestWorld(worldFileName: string) {
+    async loadTestWorld(fileName: string) {
         if (!this.demoConfig) {
             this.demoConfig = <DemoConfig>await m.request(this.dataPath + "demoConfig.json")
                 .catch(error => {
@@ -313,10 +319,10 @@ export class TSApplication implements TSDomain {
                 })
         }
     
-        const worldContent = await m.request(this.dataPath + worldFileName + ".wld", {deserialize: (text) => text})
+        const worldContent = await m.request(this.dataPath + fileName + ".wld", {deserialize: (text) => text})
             .catch(error => {
-                console.log("error loading a world file", worldFileName, error)
-                alert("Something went wrong loading the world file \"" + worldFileName + "\" from the server")
+                console.log("error loading a world file", fileName, error)
+                alert("Something went wrong loading the world file \"" + fileName + "\" from the server")
                 return ""
             })
 
@@ -325,15 +331,10 @@ export class TSApplication implements TSDomain {
         this.world.resetVariablesAndRules()
         const loaded = this.world.loadWorldFromFileContents(worldContent)
         if (!loaded) throw new Error("Failed to load")
-    
-        this.loadedFileName = worldFileName
-        this.worldCommandList.clear()
-        this.editedRule = null
-        this.lastSingleRuleIndex = 0
-        
-        this.newSession()
 
-        /*
+        this.updateForNewOrLoadedWorld(fileName, true)
+
+        /* Thinking about running first rule on startup -- but this is not good enough in any case:
         if (domain.world.rules.length) {
             domain.transcript.push({text: "> " + domain.world.rules[0].command.phrase, color: Color.clBlue})
             domain.transcript.push({text: domain.world.rules[0].reply, color: Color.clBlack})
@@ -343,25 +344,15 @@ export class TSApplication implements TSDomain {
     }
 
     /*
-
-    sessionFileName: string = ""
-    worldFileName: string = ""
-    sessionChangeCount: int = 0
-    worldChangeCount: int = 0
-    isWorldFileLoaded: boolean = false
     mapView: TSMapView = new TSMapView()
-    changeLock: int = 0
     options: DomainOptionsStructure = new DomainOptionsStructure()
     iniFileName: string = ""
     sessionOrWorldStartupFileName: string = ""
     playerOnly: boolean = false
     useIniFile: boolean = false
-    registrationName: string = ""
-    registrationCode: string = ""
-    registered: boolean = false
+
     startTimeThisSession: TDateTime = new TDateTime()
     accumulatedUnregisteredTime: TDateTime = new TDateTime()
-    justRegistered: boolean = false
     
     create(): void {
         TObject.prototype.create.call(this)
@@ -714,29 +705,32 @@ export class TSApplication implements TSDomain {
         }
     }
     
-    newWorld(): void {
-        this.sessionCommandList.clear()
-        this.sessionFileName = kUnsavedSessionFileName + "." + kSessionExtension
-        this.sessionChangeCount = 0
-        this.worldCommandList.clear()
-        this.worldFileName = kUnsavedWorldFileName + "." + kWorldExtension
-        this.worldChangeCount = 0
-        this.isWorldFileLoaded = false
-        this.world.newWorld()
-    }
-    
     */
+
+    updateForNewOrLoadedWorld(fileName: string, isWorldFileLoaded: boolean): void {
+        this.worldCommandList.clear()
+        if (fileName) {
+            this.worldFileName = fileName
+        } else {
+            this.worldFileName = kUnsavedWorldFileName + "." + kWorldExtension
+        }
+        this.worldChangeCount = 0
+        this.isWorldFileLoaded = isWorldFileLoaded
+
+        this.editedRule = null
+        this.lastSingleRuleIndex = 0
+
+        this.newSession()
+    }
 
     newSession(): void {
         this.world.newSession()
         this.sessionCommandList.clear()
         this.transcript.length = 0
-        this.transcript.push({text: "Starting: " + this.loadedFileName, color: Color.clGreen})
+        this.transcript.push({text: "Starting: " + this.worldFileName, color: Color.clGreen})
 
-        /* TODO: user or remove
         this.sessionFileName = kUnsavedSessionFileName + "." + kSessionExtension
         this.sessionChangeCount = 0
-        */
     }
 
     /*
@@ -794,20 +788,6 @@ export class TSApplication implements TSDomain {
     isWorldFileChanged(): boolean {
         let result = false
         result = this.worldChangeCount !== 0
-        return result
-    }
-    
-    beginUpdate(): void {
-        this.changeLock += 1
-    }
-    
-    endUpdate(): void {
-        this.changeLock -= 1
-    }
-    
-    ignoreChanges(): boolean {
-        let result = false
-        result = this.changeLock !== 0
         return result
     }
     
