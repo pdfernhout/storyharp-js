@@ -5,7 +5,6 @@ import { TSChangedVariableWrapper } from "./TSChangedVariableWrapper"
 import { TSDesiredStateVariableWrapper } from "./TSDesiredStateVariableWrapper"
 import { TWorld } from "./TWorld"
 
-// TODO: This should become an enum
 // need to be sequence from zero
 export enum TSRuleField {
     kRuleContext = 0, 

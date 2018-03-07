@@ -47,8 +47,6 @@ export class RuleTableView {
             }
         }
         if (rule.selected && (editedRule !== rule) && !isControlClick && !isShiftClick) {
-            // TODO: Remove this -- odd how it is not easy to access one component from a sibling component
-            // this.editRule(rule)
             this.domain.editedRule = rule
         }
     }
