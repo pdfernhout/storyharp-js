@@ -180,8 +180,12 @@ export class TSApplication implements TSDomain {
 
     constructor() {
         this.world = new TWorld()
+
         this.sessionCommandList = new TSCommandList(this)
+        this.sessionCommandList.setNewUndoLimit(1000)
+
         this.worldCommandList = new TSCommandList(this)
+        this.worldCommandList.setNewUndoLimit(1000)
         this.worldCommandList.notifyProcedure = this.commandChangedNotification.bind(this)
 
         // TODO: Fix these
@@ -258,17 +262,10 @@ export class TSApplication implements TSDomain {
     startTimeThisSession: TDateTime = new TDateTime()
     
     create(): void {
-        TObject.prototype.create.call(this)
-        this.world = usworld.TWorld().Create()
-        this.sessionCommandList = uscommands.TSCommandList().create()
-        this.sessionCommandList.setNewUndoLimit(1000)
-        this.worldCommandList = uscommands.TSCommandList().create()
-        this.worldCommandList.setNewUndoLimit(1000)
+
         this.worldFileName = kUnsavedWorldFileName + "." + kWorldExtension
         this.sessionFileName = kUnsavedSessionFileName + "." + kSessionExtension
-        this.sessionChangeCount = 0
-        this.worldChangeCount = 0
-        this.isWorldFileLoaded = false
+
         this.mapView = usmapview.TSMapView.create
         this.sessionOrWorldStartupFileName = ""
         this.playerOnly = false
