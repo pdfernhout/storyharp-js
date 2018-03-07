@@ -1,7 +1,7 @@
 import * as m from "mithril"
 
 import { Color, expander, makeFileNameWithWldExtension, makeFileNameWithoutWldExtension } from "./common"
-import { TWorld } from "./TWorld"
+import { TWorld, ExportRulesOption } from "./TWorld"
 import { VariablesView } from "./VariablesView"
 import { RuleEditorForm } from "./RuleEditorForm"
 import { FileUtils } from "./FileUtils"
@@ -122,7 +122,7 @@ function viewFiles(domain: TSDomain) {
             domain.demoConfig.demoWorldFiles.map((entry: DemoEntry) => 
                 m("tr.mt1", 
                     { onclick: () => {
-                    domain.loadTestWorld(entry.name)
+                    domain.loadWorldFromServerData(entry.name)
                     activeForm = "console"
                     }
                 },
@@ -168,18 +168,17 @@ function resetConsole(domain: TSDomain) {
     domain.newSession()
 }
 
-function saveWorld(domain: TSDomain) {
+function saveWorldToLocalFile(domain: TSDomain) {
     const world: TWorld = domain.world
     const fileName = makeFileNameWithoutWldExtension(domain.worldFileName)
-    FileUtils.saveToFile(fileName, world.saveWorldToFileContents(false), ".wld", (fileName: string) => {
+    FileUtils.saveToFile(fileName, world.saveWorldToFileContents(ExportRulesOption.kSaveAllRules), ".wld", (fileName: string) => {
         console.log("written", fileName)
         domain.worldFileName = makeFileNameWithWldExtension(fileName)
         m.redraw()
     })
 }
 
-// TODO: Remove all this redundancy of file loading
-function loadWorld(domain: TSDomain) {
+function loadWorldFromLocalFile(domain: TSDomain) {
     const world: TWorld = domain.world
     FileUtils.loadFromFile(false, (fileName: string, contents: string) => {
         console.log("chose", fileName)
@@ -221,14 +220,14 @@ export function viewConsoleForm(domain: TSDomain) {
             m(buttonWithHighlight("console"), { onclick: () => { activeForm = "console"; domain.world.updateAvailable() }}, "Console"),
             m(buttonWithHighlight("ruleEditor"), { onclick: () => activeForm = "ruleEditor" }, "Rule Editor"),
             (activeForm !== "about" && activeForm !== "files")
-                ? m("button.ml4", { title: "Open a world file", onclick: () => loadWorld(domain) }, "Load World")
+                ? m("button.ml4", { title: "Open a world file", onclick: () => loadWorldFromLocalFile(domain) }, "Load World")
                 : [],
             activeForm === "console" 
                 ? m("button.ml2.mr4", { title: "Reset current world", onclick: () => resetConsole(domain) }, "Restart World")
                 : [],
             activeForm === "ruleEditor" 
                 ? [
-                    m("button.ml1", { title: "Save a world file", onclick: () => saveWorld(domain) }, "Save World"),
+                    m("button.ml1", { title: "Save a world file", onclick: () => saveWorldToLocalFile(domain) }, "Save World"),
                     m("button.ml3", { title: "Make a new world", onclick: () => newWorld(domain) }, "New World"),
                 ]
                 : []

@@ -132,7 +132,7 @@ export interface TSDomain {
 
     demoConfig: DemoConfig
 
-    loadTestWorld: (name: string) => Promise<void>
+    loadWorldFromServerData: (name: string) => Promise<void>
 
     showCommandPrefixInMap: boolean
 
@@ -215,8 +215,7 @@ export class TSApplication implements TSDomain {
         }
     }
 
-    // TODO: consolidate world loading
-    async loadTestWorld(fileName: string) {
+    async loadWorldFromServerData(fileName: string) {
         if (!this.demoConfig) {
             this.demoConfig = <DemoConfig>await m.request(this.dataPath + "demoConfig.json")
                 .catch(error => {
@@ -241,15 +240,15 @@ export class TSApplication implements TSDomain {
         if (!loaded) throw new Error("Failed to load")
 
         this.updateForNewOrLoadedWorld(fileName, true)
-
-        /* Thinking about running first rule on startup -- but this is not good enough in any case:
-        if (domain.world.rules.length) {
-            domain.transcript.push({text: "> " + domain.world.rules[0].command.phrase, color: Color.clBlue})
-            domain.transcript.push({text: domain.world.rules[0].reply, color: Color.clBlack})
-        }
-        */
         m.redraw()
     }
+
+    /* TODO: Idea: Do or remove: Thinking about running first rule on startup -- but this is not good enough in any case:
+    if (domain.world.rules.length) {
+        domain.transcript.push({text: "> " + domain.world.rules[0].command.phrase, color: Color.clBlue})
+        domain.transcript.push({text: domain.world.rules[0].reply, color: Color.clBlack})
+    }
+    */
 
     /*
     mapView: TSMapView = new TSMapView()

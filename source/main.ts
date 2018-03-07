@@ -9,7 +9,7 @@ const application = new TSApplication()
 const MyComponent = { view: () => viewConsoleForm(application) }
 
 // loadTestWorld("GarTrek")
-application.loadTestWorld("House and Yard").then(() => {
+application.loadWorldFromServerData("House and Yard").then(() => {
     m.mount(document.body, MyComponent)
 })
 

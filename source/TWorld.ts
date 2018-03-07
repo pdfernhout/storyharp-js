@@ -23,9 +23,10 @@ function findCompleteWorldFileName(worldFileNameRead: string): string {
 }
 */
 
-// TODO: Should be an exported enum
-const kSaveAllRules = false
-const kSaveOnlySelectedRules = true
+export enum ExportRulesOption {
+    kSaveAllRules,
+    kSaveOnlySelectedRules,
+}
 
 function swapIntegers(a: int, b: int): int[] {
     return [b, a]
@@ -187,7 +188,7 @@ export class TWorld {
     }
 
     /* TODO: IMPLEMENT: saveWorldToFile(name: string, saveOnlySelectedRules: boolean): void { */
-    saveWorldToFileContents(saveOnlySelectedRules: boolean): string {
+    saveWorldToFileContents(rulesToExport: ExportRulesOption): string {
         // Emulate file writer
         const lines: string[] = []
         function writeln(...sections: (string | number)[]): void {
@@ -204,7 +205,7 @@ export class TWorld {
         writeln("map positions")
         for (let i = 0; i < this.rules.length; i++) {
             const rule: TSRule = this.rules[i]
-            if (saveOnlySelectedRules && !rule.selected) {
+            if (rulesToExport === ExportRulesOption.kSaveOnlySelectedRules && !rule.selected) {
                 continue
             }
             writeln("====================")

@@ -69,7 +69,7 @@ const MyComponent = {
 const domain = new TSApplication()
 domain.dataPath = "../data/"
 
-domain.loadTestWorld("House and Yard").then(() => {
+domain.loadWorldFromServerData("House and Yard").then(() => {
     m.mount(document.body, MyComponent)
     // Force a first update
     m.redraw()
