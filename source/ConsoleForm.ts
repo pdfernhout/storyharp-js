@@ -110,7 +110,7 @@ function color(color: Color) {
     }
 }
 
-function viewFiles(domain: TSDomain) {
+function viewDemoFiles(domain: TSDomain) {
     return m("div.overflow-auto", { style: "height: calc(100% - 7rem)" },
         m("div", "Choose a demo world file to load:"),
         m("br"),
@@ -122,8 +122,10 @@ function viewFiles(domain: TSDomain) {
             domain.demoConfig.demoWorldFiles.map((entry: DemoEntry) => 
                 m("tr.mt1", 
                     { onclick: () => {
-                    domain.loadWorldFromServerData(entry.name)
-                    activeForm = "console"
+                        if (!confirmUnsavedChangesLoss(domain)) return
+                        domain.loadWorldFromServerData(entry.name).then((loaded) => {
+                            if (loaded) activeForm = "console"
+                        })
                     }
                 },
                     m("td.nowrap.tr.f4", entry.name),
@@ -174,11 +176,23 @@ function saveWorldToLocalFile(domain: TSDomain) {
     FileUtils.saveToFile(fileName, world.saveWorldToFileContents(ExportRulesOption.kSaveAllRules), ".wld", (fileName: string) => {
         console.log("written", fileName)
         domain.worldFileName = makeFileNameWithWldExtension(fileName)
+        domain.resetWorldChangeCount()
         m.redraw()
     })
 }
 
+function confirmUnsavedChangesLoss(domain: TSDomain) {
+    if (domain.isWorldFileChanged()) {
+        if (!confirm("You have unsaved changes to the current world which will be lost; proceed anyway?")) {
+            return false
+        }
+    }
+    return true
+}
+
 function loadWorldFromLocalFile(domain: TSDomain) {
+    if (!confirmUnsavedChangesLoss(domain)) return
+
     const world: TWorld = domain.world
     FileUtils.loadFromFile(false, (fileName: string, contents: string) => {
         console.log("chose", fileName)
@@ -195,6 +209,8 @@ function loadWorldFromLocalFile(domain: TSDomain) {
 }
 
 function newWorld(domain: TSDomain) {
+    if (!confirmUnsavedChangesLoss(domain)) return
+
     const fileName = prompt("What would you like to call your new world?")
     if (!fileName) return
 
@@ -233,7 +249,7 @@ export function viewConsoleForm(domain: TSDomain) {
                 : []
         ),
         activeForm === "about" ? viewAbout(domain) : [],
-        activeForm === "files" ? viewFiles(domain) : [],
+        activeForm === "files" ? viewDemoFiles(domain) : [],
         // TODO: Probably should wrap these with hidden divs so the component state is preserved
         activeForm === "console" ? viewConsole(domain) : [],
         activeForm === "ruleEditor" ? m(RuleEditorForm, <any>{domain: domain}) : [],

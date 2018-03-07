@@ -4,7 +4,7 @@ import { TSCommandList } from "./TSCommandList"
 import { TSRule, TSRuleField } from "./TSRule"
 import { Color, ScrollIntoViewDirection, int, makeFileNameWithoutWldExtension } from "./common"
 import { TSDraggableObject } from "./TSDraggableObject"
-import { KfCommandChangeType, KfCommand } from "./KfCommand";
+import { KfCommandChangeType, KfCommand } from "./KfCommand"
 
 /*
 export interface DomainOptionsStructure {
@@ -114,8 +114,9 @@ export interface TSDomain {
     worldChangeCount: int
     isWorldFileLoaded: boolean
 
-    updateForNewOrLoadedWorld(fileName: string, isWorldFileLoaded: boolean): void;
-    isWorldFileChanged(): boolean;
+    updateForNewOrLoadedWorld(fileName: string, isWorldFileLoaded: boolean): void
+    isWorldFileChanged(): boolean
+    resetWorldChangeCount(): void
 
     editedRule: TSRule | null
     lastSingleRuleIndex: number
@@ -132,7 +133,7 @@ export interface TSDomain {
 
     demoConfig: DemoConfig
 
-    loadWorldFromServerData: (name: string) => Promise<void>
+    loadWorldFromServerData: (name: string) => Promise<boolean>
 
     showCommandPrefixInMap: boolean
 
@@ -233,7 +234,7 @@ export class TSApplication implements TSDomain {
                 return ""
             })
 
-        if (!worldContent) return
+        if (!worldContent) return false
     
         this.world.resetVariablesAndRules()
         const loaded = this.world.loadWorldFromFileContents(worldContent)
@@ -241,6 +242,8 @@ export class TSApplication implements TSDomain {
 
         this.updateForNewOrLoadedWorld(fileName, true)
         m.redraw()
+
+        return true
     }
 
     /* TODO: Idea: Do or remove: Thinking about running first rule on startup -- but this is not good enough in any case:
