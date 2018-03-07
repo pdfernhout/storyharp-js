@@ -39,3 +39,19 @@ export function ShowMessage(message: string) {
 */
 
 export enum ScrollIntoViewDirection { kFromBottom, kFromTop }
+
+export function makeFileNameWithWldExtension(fileName: string) {
+    if (!fileName.endsWith(".wld")) {
+        return fileName + ".wld"
+    } else {
+        return fileName
+    }
+}
+
+export function makeFileNameWithoutWldExtension(fileName: string) {
+    if (fileName.endsWith(".wld")) {
+       return fileName.substring(0, fileName.length - 4)
+    } else {
+        return fileName
+    }
+}

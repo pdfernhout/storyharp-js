@@ -2,7 +2,7 @@ import * as m from "mithril"
 import { TWorld } from "./TWorld"
 import { TSCommandList } from "./TSCommandList"
 import { TSRule, TSRuleField } from "./TSRule"
-import { Color, ScrollIntoViewDirection, int } from "./common"
+import { Color, ScrollIntoViewDirection, int, makeFileNameWithoutWldExtension } from "./common"
 import { TSDraggableObject } from "./TSDraggableObject"
 import { KfCommandChangeType, KfCommand } from "./KfCommand";
 
@@ -163,8 +163,8 @@ export class TSApplication implements TSDomain {
 
     transcript: TranscriptLine[] = []
 
-    worldFileName = ""
-    sessionFileName = ""
+    worldFileName = kUnsavedWorldFileName + "." + kWorldExtension
+    sessionFileName = kUnsavedSessionFileName + "." + kSessionExtension
 
     demoConfig: DemoConfig
 
@@ -262,9 +262,6 @@ export class TSApplication implements TSDomain {
     startTimeThisSession: TDateTime = new TDateTime()
     
     create(): void {
-
-        this.worldFileName = kUnsavedWorldFileName + "." + kWorldExtension
-        this.sessionFileName = kUnsavedSessionFileName + "." + kSessionExtension
 
         this.mapView = usmapview.TSMapView.create
         this.sessionOrWorldStartupFileName = ""
@@ -568,7 +565,7 @@ export class TSApplication implements TSDomain {
         this.world.newSession()
         this.sessionCommandList.clear()
         this.transcript.length = 0
-        this.transcript.push({text: "Starting: " + this.worldFileName, color: Color.clGreen})
+        this.transcript.push({text: "Starting: " + makeFileNameWithoutWldExtension(this.worldFileName), color: Color.clGreen})
 
         this.sessionFileName = kUnsavedSessionFileName + "." + kSessionExtension
         this.sessionChangeCount = 0
@@ -626,7 +623,7 @@ export class TSApplication implements TSDomain {
     
     */
 
-   commandChangedNotification(command: KfCommand, state: KfCommandChangeType): void {
+    commandChangedNotification(command: KfCommand, state: KfCommandChangeType): void {
         switch (state) {
             case KfCommandChangeType.commandDone:
                 this.worldChangeDone()

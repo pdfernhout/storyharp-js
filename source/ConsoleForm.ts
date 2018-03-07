@@ -1,6 +1,6 @@
 import * as m from "mithril"
 
-import { Color, expander } from "./common"
+import { Color, expander, makeFileNameWithWldExtension, makeFileNameWithoutWldExtension } from "./common"
 import { TWorld } from "./TWorld"
 import { VariablesView } from "./VariablesView"
 import { RuleEditorForm } from "./RuleEditorForm"
@@ -153,7 +153,6 @@ function viewAbout(domain: TSDomain) {
     )
 }
 
-
 function viewConsole(domain: TSDomain) {
     return m("div.overflow-auto", { style: "height: calc(100% - 5rem)" },
         m("div",
@@ -169,6 +168,16 @@ function resetConsole(domain: TSDomain) {
     domain.newSession()
 }
 
+function saveWorld(domain: TSDomain) {
+    const world: TWorld = domain.world
+    const fileName = makeFileNameWithoutWldExtension(domain.worldFileName)
+    FileUtils.saveToFile(fileName, world.saveWorldToFileContents(false), ".wld", (fileName: string) => {
+        console.log("written", fileName)
+        domain.worldFileName = makeFileNameWithWldExtension(fileName)
+        m.redraw()
+    })
+}
+
 // TODO: Remove all this redundancy of file loading
 function loadWorld(domain: TSDomain) {
     const world: TWorld = domain.world
@@ -180,20 +189,8 @@ function loadWorld(domain: TSDomain) {
         const loaded = world.loadWorldFromFileContents(contents)
         console.log("load status", loaded)
 
-        if (fileName.endsWith(".wld")) fileName = fileName.substring(0, fileName.length - 4)
-
         domain.updateForNewOrLoadedWorld(fileName, true)
 
-        m.redraw()
-    })
-}
-
-function saveWorld(domain: TSDomain) {
-    const world: TWorld = domain.world
-    const fileName = domain.worldFileName
-    FileUtils.saveToFile(fileName, world.saveWorldToFileContents(false), ".wld", (fileName: string) => {
-        console.log("written", fileName)
-        domain.worldFileName = fileName
         m.redraw()
     })
 }
@@ -203,7 +200,7 @@ function newWorld(domain: TSDomain) {
     if (!fileName) return
 
     domain.world.resetVariablesAndRules()
-    domain.updateForNewOrLoadedWorld(fileName, false)
+    domain.updateForNewOrLoadedWorld(makeFileNameWithWldExtension(fileName), false)
 }
 
 export function viewConsoleForm(domain: TSDomain) {
@@ -216,7 +213,7 @@ export function viewConsoleForm(domain: TSDomain) {
         m("div.mt1.mb2",
             m("span.f5.b.mr3.dib", "StoryHarp CYOA Player and Editor v" + storyHarpVersion),
             m("span", "World: "),
-            m("span.i", "" + domain.worldFileName),
+            m("span.i", "" + makeFileNameWithoutWldExtension(domain.worldFileName)),
         ),
         m("div.mb3",
             m(buttonWithHighlight("about"), { onclick: () => activeForm = "about" }, "About"),
