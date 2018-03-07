@@ -548,14 +548,21 @@ export class TSApplication implements TSDomain {
         this.worldCommandList.clear()
         if (fileName) {
             this.worldFileName = fileName
+            // TODO: use or remove: this.options.mostRecentWorld = this.worldFileName
         } else {
             this.worldFileName = kUnsavedWorldFileName + "." + kWorldExtension
+            // TODO: use or remove: this.options.mostRecentSession = ""
         }
         this.worldChangeCount = 0
         this.isWorldFileLoaded = isWorldFileLoaded
 
         this.editedRule = null
         this.lastSingleRuleIndex = 0
+
+        /* TODO
+        usruleeditorform.RuleEditorForm.lastChoice = null
+        usruleeditorform.RuleEditorForm.previousChoice = null
+        */
 
         this.newSession()
     }
@@ -589,25 +596,6 @@ export class TSApplication implements TSDomain {
     
     isSessionFileChanged(): boolean {
         return this.sessionChangeCount !== 0
-    }
-    
-    loadWorld(fileName: string): void {
-        this.sessionCommandList.clear()
-        this.sessionFileName = kUnsavedSessionFileName + "." + kSessionExtension
-        this.sessionChangeCount = 0
-        this.worldCommandList.clear()
-        this.worldFileName = fileName
-        this.worldChangeCount = 0
-        this.world.resetVariablesAndRules()
-        this.world.focus = null
-        this.world.previousFocus = null
-        usruleeditorform.RuleEditorForm.lastChoice = null
-        usruleeditorform.RuleEditorForm.previousChoice = null
-        if (this.world.loadWorldFromFile(fileName)) {
-            this.isWorldFileLoaded = true
-            this.options.mostRecentWorld = this.worldFileName
-            this.options.mostRecentSession = ""
-        }
     }
     
     mergeWorld(fileName: string): void {
