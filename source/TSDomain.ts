@@ -5,23 +5,6 @@ import { TSRule, TSRuleField } from "./TSRule"
 import { Color, ScrollIntoViewDirection, int } from "./common"
 import { TSDraggableObject } from "./TSDraggableObject"
 
-// unit usdomain
-
-/*
-from conversion_common import *
-import uregistersupport
-import ufilesupport
-import usruleeditorform
-import usconsoleform
-import usmapview
-import uscommands
-import usworld
-import delphi_compatability
-
-// files
-
-*/
-
 /*
 export interface DomainOptionsStructure {
     extraMediaDirectory: string
@@ -69,26 +52,9 @@ export interface DomainOptionsStructure {
     pictureWindowRect: TRect
 }
 
-*/
-
-/*
-
 // const
-const kMinWidthOnScreen = 40
-const kMinHeightOnScreen = 20
 const kDefaultLogFileName = "StoryHarp.log"
-const kPageTable = 0
-const kPageMap = 1
-const kPageBrowser = 2
-const kDefaultAgentCharacterFileName = "StoryHarp.acs"
 const kDefaultIniFileName = "StoryHarp.ini"
-const kEncryptingMultiplierForAccumulatedUnregisteredTime = 1
-const kKeyForAccumulatedUnregisteredTime = "Time scale fraction"
-
-
-// var
-let domain: TSDomain
-
 
 */
 
@@ -97,71 +63,6 @@ const kUnsavedWorldFileName = "untitled"
 const kUnsavedSessionFileName = "untitled"
 const kWorldExtension = "wld"
 const kSessionExtension = "ses"
-
-/*
-
-function min(a: float, b: float): float {
-    let result = 0.0
-    if ((a < b)) {
-        result = a
-    } else {
-        result = b
-    }
-    return result
-}
-
-function max(a: float, b: float): float {
-    let result = 0.0
-    if ((a > b)) {
-        result = a
-    } else {
-        result = b
-    }
-    return result
-}
-
-function hexEncode(aString: string): string {
-    let result = ""
-    let i: int
-    let letter: char
-    
-    result = ""
-    for (i = 0; i <= len(aString) - 1; i++) {
-        // ((i+4) mod length(aString))
-        letter = aString[i + 1]
-        result = result + chr(ord("A") + (ord(letter) / 32))
-        result = result + chr(ord("A") + (ord(letter) % 32))
-    }
-    return result
-}
-
-function hexUnencode(encodedString: string): string {
-    let result = ""
-    let i: int
-    let letter: char
-    let value: int
-    
-    result = ""
-    value = 0
-    for (i = 0; i <= len(encodedString) - 1; i++) {
-        letter = encodedString[i + 1]
-        if (i % 2 === 0) {
-            value = (ord(letter) - ord("A")) * 32
-        } else {
-            value = value + (ord(letter) - ord("A"))
-            result = result + chr(value)
-        }
-    }
-    return result
-}
-
-
-// player
-// Agent
-// editor
-// windows
-
-*/
 
 export interface TranscriptLine {
     text: string
@@ -352,7 +253,6 @@ export class TSApplication implements TSDomain {
     useIniFile: boolean = false
 
     startTimeThisSession: TDateTime = new TDateTime()
-    accumulatedUnregisteredTime: TDateTime = new TDateTime()
     
     create(): void {
         TObject.prototype.create.call(this)
@@ -373,9 +273,7 @@ export class TSApplication implements TSDomain {
         this.iniFileName = kDefaultIniFileName
         this.readCommandLine()
         this.readIniFile()
-        // if not registered then  // registration stored in ini file
         this.startTimeThisSession = UNRESOLVED.Now
-        this.justRegistered = false
     }
     
     readCommandLine(): void {
@@ -452,10 +350,6 @@ export class TSApplication implements TSDomain {
         usruleeditorform.RuleEditorForm.MapPaintBoxChanged()
         usruleeditorform.RuleEditorForm.updateViews()
         usruleeditorform.RuleEditorForm.editRule(null)
-        UNRESOLVED.DecodeDate(UNRESOLVED.Now, Year, Month, Day)
-        if ((!this.registered) && (Year >= 2000)) {
-            MessageDialog("This evaluation copy of StoryHarp is out of date." + String.fromCharCode(13) + String.fromCharCode(13) + "Please check for an updated evaluation version at:" + String.fromCharCode(13) + "http://www.kurtz-fernhout.com" + String.fromCharCode(13) + String.fromCharCode(13) + "The web site may also have updated pricing information." + String.fromCharCode(13) + "This message will disappear when the product is registered.", mtInformation, {mbOK, }, 0)
-        }
     }
     
     storeProfileInformation(): void {
@@ -506,21 +400,7 @@ export class TSApplication implements TSDomain {
             UNRESOLVED.writeString(section, "Browse by (context, rule, reply, move, requirements, changes)", IntToStr(this.options.browseBy))
             UNRESOLVED.writeString(section, "Page showing (table, map, browser)", IntToStr(this.options.pageShowing))
             UNRESOLVED.writeString(section, "Button symbols", ufilesupport.boolToStr(this.options.buttonSymbols))
-            if (this.justRegistered) {
-                // registration, embedded here to hide time scale fraction
-                // always track useage
-                section = "Registration"
-                UNRESOLVED.writeString(section, "R1", "BQRESTYUBSHQYIBLJHSD")
-                UNRESOLVED.writeString(section, "R2", "BTBTBYBUOBTRST")
-                UNRESOLVED.writeString(section, "R3", hexEncode(this.registrationCode))
-                UNRESOLVED.writeString(section, "R4", hexEncode(this.registrationName))
-            }
-            if ((!this.registered) && (!this.playerOnly)) {
-                section = "Editor"
-                this.accumulatedUnregisteredTime = this.accumulatedUnregisteredTime + max((UNRESOLVED.now - this.startTimeThisSession), 0)
-                saveNumber = this.accumulatedUnregisteredTime * kEncryptingMultiplierForAccumulatedUnregisteredTime
-                UNRESOLVED.writeString(section, kKeyForAccumulatedUnregisteredTime, FloatToStr(saveNumber))
-            }
+
             // windows
             section = "Windows"
             UNRESOLVED.writeString(section, "Player window position", ufilesupport.rectToString(this.options.consoleWindowRect))
@@ -597,19 +477,6 @@ export class TSApplication implements TSDomain {
             this.options.editorPanelRequirementsChangesHeight = StrToInt(UNRESOLVED.readString(section, "Editor bottom splitter", "100"))
             this.options.editorPanelFirstListWidth = StrToInt(UNRESOLVED.readString(section, "Editor browser splitter", "200"))
             this.options.pictureWindowRect = ufilesupport.stringToRect(UNRESOLVED.readString(section, "Picture window position", "200 200 200 200"))
-            // registration
-            section = "Registration"
-            this.registrationName = UNRESOLVED.readString(section, "R4", "")
-            this.registrationName = hexUnencode(this.registrationName)
-            this.registrationCode = UNRESOLVED.readString(section, "R3", "")
-            this.registrationCode = hexUnencode(this.registrationCode)
-            this.registered = uregistersupport.RegistrationMatch(this.registrationName, this.registrationCode)
-            if (!this.registered) {
-                section = "Editor"
-                timeString = UNRESOLVED.readString(section, kKeyForAccumulatedUnregisteredTime, "0")
-                readNumber = max(StrToFloat(timeString), 0)
-                this.accumulatedUnregisteredTime = readNumber / kEncryptingMultiplierForAccumulatedUnregisteredTime
-            }
         } finally {
             iniFile.free
         }
@@ -666,16 +533,6 @@ export class TSApplication implements TSDomain {
         this.options.pictureWindowRect = Rect(200, 200, 200, 200)
     }
     
-    windowsDirectory(): string {
-        let result = ""
-        let cString: char[] // 255 + 1
-        
-        result = ""
-        UNRESOLVED.getWindowsDirectory(cString, 256)
-        result = UNRESOLVED.strPas(cString)
-        return result
-    }
-    
     loadIni(section: string, theField: string, theDefault: string): string {
         let result = ""
         let iniFile: TIniFile
@@ -687,22 +544,6 @@ export class TSApplication implements TSDomain {
             iniFile.free
         }
         return result
-    }
-    
-    setFormSize(aForm: TForm, newRect: TRect): void {
-        if (aForm === null) {
-            return
-        }
-        if ((newRect.Left !== 0) || (newRect.Right !== 0) || (newRect.Top !== 0) || (newRect.Bottom !== 0)) {
-            if (newRect.Left > delphi_compatability.Screen.Width - kMinWidthOnScreen) {
-                newRect.Left = delphi_compatability.Screen.Width - kMinWidthOnScreen
-            }
-            if (newRect.Top > delphi_compatability.Screen.Height - kMinHeightOnScreen) {
-                newRect.Top = delphi_compatability.Screen.Height - kMinHeightOnScreen
-            }
-            aForm.Position = delphi_compatability.TPosition.poDesigned
-            aForm.SetBounds(newRect.Left, newRect.Top, newRect.Right, newRect.Bottom)
-        }
     }
     
     */
@@ -751,9 +592,7 @@ export class TSApplication implements TSDomain {
     }
     
     isSessionFileChanged(): boolean {
-        let result = false
-        result = this.sessionChangeCount !== 0
-        return result
+        return this.sessionChangeCount !== 0
     }
     
     loadWorld(fileName: string): void {
@@ -786,9 +625,7 @@ export class TSApplication implements TSDomain {
     }
     
     isWorldFileChanged(): boolean {
-        let result = false
-        result = this.worldChangeCount !== 0
-        return result
+        return this.worldChangeCount !== 0
     }
     
     resetWorldChangeCount(): void {
