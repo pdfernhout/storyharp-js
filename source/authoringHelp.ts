@@ -1,15 +1,17 @@
-// Taken from website
-export const authoringHelp = `
-We hope you find StoryHarp the quickest and easiest way to build interactive CYOA stories.
+import { Glyph } from "./VariablesView"
 
+// Taken from website
+
+export const authoringHelp = `
 The StoryHarp authoring environment was designed to be as simple as possible
 to help you, the author, focus on creative writing.
 Simple as it is, there are still several basic concepts you need to know to get started.
 They form the core building blocks with which you can build adventures of a certain style.
 
-The key ideas are: command, reply, requirements, variables, changes, context, focus, and rules.
+The key ideas and their icons in the interface are: command (${Glyph.command}), reply (${Glyph.reply}), move (${Glyph.move}),
+requirements (${Glyph.requirements}), variables (${Glyph.present}), changes (${Glyph.changes}), context (${Glyph.context}), focus, and rules.
 
-A StoryHarp adventure consists of commands chosen by the user which produce replies made by the system.
+A StoryHarp adventure consists of commands (${Glyph.command}) chosen by the user which produce replies (${Glyph.reply}) announced by the system.
 For example, commanding "examine the vase" might produce a reply of
 "The vase is fairly heavy, with a blue green glaze. The word 'sassafras' is etched on the bottom."
 Replies often give you clues to other things you can do later in the adventure.
@@ -17,16 +19,16 @@ In this case, you might need to use the word 'sassafras' somehow.
 In order to preserve a sense of interactivity, most replies should be no longer than a few sentences.
 
 Of course, not all commands may be available at once.
-Commands may have requirements which must be met before they are available.
+Commands may have requirements (${Glyph.requirements}) which must be met before they are available.
 
-Requirements are specified in terms of global variables that may be true or false.
+Requirements are specified in terms of global variables that may be true (${Glyph.present}) or false (${Glyph.absent}).
 Requirements are specified as a list of variables, and whether each variable needs to be true or false.
 Each variable has a name, which is usually a short phrase, like 'wearing glasses' or 'barred from the hotel'.
 
-Commands may make changes to the state of variables, which in turn may affect the availability of commands.
+Commands may make changes (${Glyph.changes}) to the state of variables, which in turn may affect the availability of commands.
 Changes are specified as a list of variables, and whether each variable will be set to true or false.
 
-Most commands only make sense in a certain context, which is usually defined by a physical location.
+Most commands only make sense in a certain context (${Glyph.context}), which is usually defined by a physical location.
 For example, you might be able to examine the vase only if you are standing near the fireplace.
 
 To support this most common situation, every command is assigned a context.
@@ -40,7 +42,7 @@ So, usually, you only want one context active at a time,
 and therefore want one to become inactive (false) when another one becomes active (true).
 
 To support this, StoryHarp maintains a focus on one variable at a time (the focused context).
-So, the most common change is to move the focus from one context to another.
+So, the most common change is to move (${Glyph.move}) the focus from one context to another.
 This sets the old focus variable to false and sets the new focus variable to true.
 More than one context can be active at a time, but only one active context can have the focus.
 
