@@ -51,15 +51,20 @@ export class KfCommandList {
         // remove any extra commands after the current
         // do this first to free memory for command
         this.clearRedoableCommands()
+
         // see if too many commands are stored and if so, scroll them
         this.freeCommandsAboveLimit(this.undoLimit - 1)
+
         // now do this command
-        if (!newCommand.notifyProcedure && this.notifyProcedure) {
-            newCommand.notifyProcedure = this.notifyProcedure.bind(this)
-        }
         newCommand.doCommand() // may fail in which case won't add
         this.lastDoneCommandIndex++
         this.commandList.push(newCommand)
+
+        // Even if the command had its own notify procedure for mouse tracking,
+        // make sure it uses the list's notify procedure if there is one
+        if (this.notifyProcedure) {
+            newCommand.notifyProcedure = this.notifyProcedure
+        }
         newCommand.doNotify()
     }
 
@@ -82,9 +87,6 @@ export class KfCommandList {
             this.anchorPoint = point
             this.previousPoint = point
             nextMouseCommand = newCommand
-            if (!newCommand.notifyProcedure && this.notifyProcedure) {
-                newCommand.notifyProcedure = this.notifyProcedure.bind(this)
-            }
             this.mouseCommand = nextMouseCommand.trackMouse(TrackPhase.trackPress, this.anchorPoint, this.previousPoint, point, false, this.rightButtonDown)
             result = (this.mouseCommand !== null)
             }

@@ -1222,15 +1222,6 @@ export class RuleEditorMenuCommands {
     }
     
     // ------------------------------------------------------------------ @Commands
-    commandChangedNotification(command: KfCommand, state: KfCommandChangeType): void {
-        switch (state) {
-            case ucommand.KfCommandChangeType.commandDone:
-                usdomain.domain.worldChangeDone()
-                break
-            case ucommand.KfCommandChangeType.commandUndone:
-                usdomain.domain.worldChangeUndone()
-                break
-    }
     
     trackLastCommand(): void {
         this.editRule(this.lastCommand)

@@ -4,6 +4,7 @@ import { TSCommandList } from "./TSCommandList"
 import { TSRule, TSRuleField } from "./TSRule"
 import { Color, ScrollIntoViewDirection, int } from "./common"
 import { TSDraggableObject } from "./TSDraggableObject"
+import { KfCommandChangeType, KfCommand } from "./KfCommand";
 
 /*
 export interface DomainOptionsStructure {
@@ -114,6 +115,7 @@ export interface TSDomain {
     isWorldFileLoaded: boolean
 
     updateForNewOrLoadedWorld(fileName: string, isWorldFileLoaded: boolean): void;
+    isWorldFileChanged(): boolean;
 
     editedRule: TSRule | null
     lastSingleRuleIndex: number
@@ -180,6 +182,7 @@ export class TSApplication implements TSDomain {
         this.world = new TWorld()
         this.sessionCommandList = new TSCommandList(this)
         this.worldCommandList = new TSCommandList(this)
+        this.worldCommandList.notifyProcedure = this.commandChangedNotification.bind(this)
 
         // TODO: Fix these
         this.consoleForm = {
@@ -624,6 +627,19 @@ export class TSApplication implements TSDomain {
         this.world.saveWorldToFile(fileName, usworld.kSaveAllRules)
     }
     
+    */
+
+   commandChangedNotification(command: KfCommand, state: KfCommandChangeType): void {
+        switch (state) {
+            case KfCommandChangeType.commandDone:
+                this.worldChangeDone()
+                break
+            case KfCommandChangeType.commandUndone:
+                this.worldChangeUndone()
+                break
+            }
+    }
+
     isWorldFileChanged(): boolean {
         return this.worldChangeCount !== 0
     }
@@ -634,14 +650,10 @@ export class TSApplication implements TSDomain {
     
     worldChangeDone(): void {
         this.worldChangeCount += 1
-        usruleeditorform.RuleEditorForm.updateMenus()
     }
     
     worldChangeUndone(): void {
         this.worldChangeCount -= 1
-        usruleeditorform.RuleEditorForm.updateMenus()
     }
-    
-    */
 }
 

@@ -21,9 +21,6 @@ export class TSMapDragCommand extends KfCommand {
         for (let i = 0; i < this.dragRecords.length; i++) {
             this.dragRecords[i].doDrag()
         }
-        if (this.notifyProcedure) {
-            this.notifyProcedure(this, KfCommandChangeType.commandDone)
-        }
         super.doCommand()
     }
     
@@ -33,9 +30,6 @@ export class TSMapDragCommand extends KfCommand {
             this.dragRecords[i].draggedNode.selected = true
             this.dragRecords[i].undoDrag()
         }
-        if (this.notifyProcedure) {
-            this.notifyProcedure(this, KfCommandChangeType.commandUndone)
-        }
         super.undoCommand()
     }
     
@@ -44,9 +38,6 @@ export class TSMapDragCommand extends KfCommand {
         for (let i = 0; i < this.dragRecords.length; i++) {
             this.dragRecords[i].draggedNode.selected = true
             this.dragRecords[i].doDrag()
-        }
-        if (this.notifyProcedure) {
-            this.notifyProcedure(this, KfCommandChangeType.commandDone)
         }
         super.doCommand()
     }
