@@ -39,7 +39,7 @@ export class TQuickFillComboBox {
             return true
         }
 
-        return m("div.ml1.dib.relative",
+        return m("div.dib.relative",
             {
                 style: (<any>vnode.attrs).style || "",
                 oncreate: (vnode: any) => this.clientWidth = (<HTMLInputElement>(vnode.dom)).clientWidth,
