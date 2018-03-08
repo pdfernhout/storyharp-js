@@ -1,8 +1,6 @@
 import * as m from "mithril"
 import { int, expander } from "./common"
 
-// TODO: Unfinished. Just has drop down not quick fill.
-// TODO: Use or remove quickfill code.
 export class TQuickFillComboBox {
     lastMatch: string = ""
     FMustBeInList: boolean = false
@@ -128,23 +126,7 @@ export class TQuickFillComboBox {
                                 this.inputElement.focus()
                                 this.inputElement.selectionStart = this.Text.length
                                 this.inputElement.selectionEnd = this.Text.length
-                                /* Seems to not work for security reasons:
-                                   https://stackoverflow.com/questions/20163708/dispatching-keyboard-event-doesnt-work-in-javascript
-                                // redispatch a copy of the event to the input element
-                                const newEvent = new KeyboardEvent("keydown", event)
-                                setTimeout(() => {
-                                    this.inputElement.focus()
-                                    this.inputElement.selectionStart = this.Text.length
-                                    this.inputElement.selectionEnd = this.Text.length
-                                    m.redraw()
-                                    setTimeout(() => {
-                                        this.inputElement.dispatchEvent(newEvent)
-                                        m.redraw()
-                                    }, 0)
-                                }, 20)
-                                */
                                 return false
-                                // (<any>event).redraw = false
                             }
                             return true
                         }
@@ -156,174 +138,6 @@ export class TQuickFillComboBox {
 
     getItemsForMatch(): string[] {
         if (this.menuOpenedByButton) return this.Items
-
-        const filteredItems = this.Items.filter(each => each.includes(this.Text))
-        //if (filteredItems.length === 0) {
-        //    return this.Items
-        //}
-        return filteredItems
-        /*
-        if (!this.Text || this.Items.indexOf(this.Text) !== -1) {
-            return this.Items
-        } else {
-            return this.Items.filter(each => each.includes(this.Text))
-        }
-        */
+        return this.Items.filter(each => each.includes(this.Text))
     }
-
-    /*
-    
-    // pdf hack test remove
-    // pdf hack - test remove
-    CBNEditChange(MSG: Tmessage): void {
-        let i: int
-        
-        TCustomComboBox.prototype.CBNEditChange.call(this)
-        i = 0
-    }
-    
-    // returns -1 if no match, otherwise returns the index of the match
-    findMatch(match: string): int {
-        if (match === "") {
-            return -1
-        }
-        if (this.Items.length === 0) {
-            return -1
-        }
-        for (let i = 0; i < this.Items.length; i++) {
-            const item = this.Items[i]
-            if (item.substring(0, match.length) === match) {
-                return i
-            }
-        }
-        return -1
-    }
-    
-    quickFillComboBoxKeyPress(Key: string): void {
-        let index: int
-        let startText: string
-        let atEnd: boolean
-        
-        if (this.Text === "") {
-            //reset if empty
-            this.lastMatch = ""
-        }
-
-        //compensate for selection about to replace
-        atEnd = (this.SelStart + this.SelLength) === len(this.Text)
-
-        if (!atEnd) {
-            if ((this.Text !== this.lastMatch) || (this.SelLength !== 0)) {
-                if (this.FMustBeInList) {
-                    if ((Key === 8) && (this.SelStart > 0)) {
-                        this.SelStart = this.SelStart - 1
-                    }
-                    //eat key
-                    Key = 0
-                } else {
-                    this.lastMatch = ""
-                }
-                if ((this.Text === "") && this.FEntryRequired && (this.Items.Count > 0)) {
-                    //eat key
-                    Key = 0
-                    this.lastMatch = this.Items[0]
-                    this.Text = this.lastMatch
-                }
-                return Key
-            }
-        }
-        if (Key === 8) {
-            if (this.SelLength === 0) {
-                startText = UNRESOLVED.Copy(this.Text, 1, this.SelStart - 1)
-                if (this.SelStart > 0) {
-                    this.SelStart = this.SelStart - 1
-                }
-            } else {
-                startText = UNRESOLVED.Copy(this.Text, 1, this.SelStart)
-            }
-        } else if (Key < 32) {
-            //don't process control keys - low asciii values
-            this.lastMatch = ""
-            if ((this.Text === "") && this.FEntryRequired && (this.Items.Count > 0)) {
-                this.lastMatch = this.Items[0]
-                this.Text = this.lastMatch
-            }
-            return Key
-        } else {
-            startText = UNRESOLVED.Copy(this.Text, 1, this.SelStart) + String.fromCharCode(Key)
-        }
-        Key = 0
-        if (startText === "") {
-            if (this.FEntryRequired && (this.Items.Count > 0)) {
-                this.lastMatch = this.Items[0]
-                this.Text = this.lastMatch
-            } else {
-                this.Text = ""
-                this.lastMatch = ""
-            }
-            return Key
-        }
-        index = this.findMatch(startText)
-        if (index >= 0) {
-            //   if (index < 0) and EntryRequired and (self.items.count > 0) then
-            //     begin
-            //     index := 0;
-            //     startText := Copy(;
-            //     end;
-            this.lastMatch = this.Items[index]
-            this.Text = this.lastMatch
-            this.SelStart = len(startText)
-        } else {
-            if (!this.FMustBeInList) {
-                this.lastMatch = ""
-                this.Text = startText
-                this.SelStart = len(startText)
-            }
-        }
-        return Key
-    }
-    
-    // PDF PORT changed Message to TheMessage as used in with and gramamr did not like that
-    ComboWndProc(TheMessage: TMessage, ComboWnd: HWnd, ComboProc: Pointer): void {
-        try {
-            //FIX unresolved WITH expression: TheMessage
-            switch (UNRESOLVED.Msg) {
-                case UNRESOLVED.WM_CHAR:
-                    if (this.Style !== delphi_compatability.TComboBoxStyle.csDropDownList) {
-                        UNRESOLVED.TWMKey(TheMessage).charCode = this.quickFillComboBoxKeyPress(UNRESOLVED.TWMKey(TheMessage).charCode)
-                    }
-                    break
-                case UNRESOLVED.CBN_EDITUPDATE:
-                    UNRESOLVED.Dispatch(TheMessage)
-                    break
-                case UNRESOLVED.WM_LBUTTONUP:
-                    UNRESOLVED.Dispatch(TheMessage)
-                    break
-            TCustomComboBox.prototype.ComboWndProc.call(this, TheMessage, ComboWnd, ComboProc)
-        } catch (Exception e) {
-            delphi_compatability.Application.HandleException(this)
-        }
-    }
-    
-    Change(): void {
-        if (this.FMustBeInList && (this.Text !== "")) {
-            if ((this.Items.Count <= 0)) {
-                this.Text = ""
-                return
-            }
-            if (this.findMatch(this.Text) < 0) {
-                this.lastMatch = this.Items[0]
-                this.Text = this.lastMatch
-                this.SelStart = 0
-                this.SelLength = 0
-            }
-        }
-        if ((this.Text === "") && this.FEntryRequired && (this.Items.Count > 0)) {
-            this.lastMatch = this.Items[0]
-            this.Text = this.lastMatch
-        }
-        TCustomComboBox.prototype.Change.call(this)
-    }
-    */
-
 }
