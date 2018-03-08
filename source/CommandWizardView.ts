@@ -258,7 +258,7 @@ export class CommandWizardView {
                             this.contextName = event.target.value
                             if (this.wasGenerateRulesPressed) this.checkInputForErrors()
                         },
-                        choices: this.domain.world.getContextNames(),
+                        items: this.domain.world.getContextNames(),
                     },
                 ),
 

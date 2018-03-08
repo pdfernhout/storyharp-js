@@ -5,7 +5,7 @@ const MyComponent = {
     view: () => m("div", 
         "This should be a TQuickFillComboBox:",
         m(TQuickFillComboBox, <any>{
-            choices: ["a", "b", "c", "sassafras", "a very long choice that is impactical",  "a very long choice that is really impactical and goes on and on and on and on and on and on and on and on", "d"]
+            items: ["a", "b", "c", "sassafras", "a very long choice that is impactical",  "a very long choice that is really impactical and goes on and on and on and on and on and on and on and on", "d"]
         })
     )
 }

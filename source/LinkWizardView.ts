@@ -288,7 +288,7 @@ export class LinkWizardView {
                             this.firstContext = event.target.value
                             if (this.wasGenerateRulesPressed) this.checkInputForErrors()
                         },
-                        choices: this.domain.world.getContextNames(),
+                        items: this.domain.world.getContextNames(),
                     },
                 ),
                 this.firstContextError ? m("div.i.bg-yellow", this.firstContextError) : [],
@@ -305,7 +305,7 @@ export class LinkWizardView {
                             this.secondContext = event.target.value
                             if (this.wasGenerateRulesPressed) this.checkInputForErrors()
                         },
-                        choices: this.domain.world.getContextNames(),
+                        items: this.domain.world.getContextNames(),
                     },
                 ),
                 this.secondContextError ? m("div.i.bg-yellow", this.secondContextError) : [],

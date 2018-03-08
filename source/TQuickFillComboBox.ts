@@ -3,10 +3,11 @@ import { int, expander } from "./common"
 
 export class TQuickFillComboBox {
     lastMatch: string = ""
-    FMustBeInList: boolean = false
-    FEntryRequired: boolean = false
-    Items: string[] = []
-    Text: string = ""
+    // TODO: Use or remove these
+    // mustBeInList: boolean = false
+    // entryRequired: boolean = false
+    items: string[] = []
+    text: string = ""
     menuOpen = false
     menuOpenedByButton = false
     size = 20
@@ -14,11 +15,11 @@ export class TQuickFillComboBox {
     onchangeCallback: (event: { target: HTMLInputElement }) => {}
 
     constructor(vnode: m.Vnode) {
-        this.Text = (<any>vnode.attrs).value
+        this.text = (<any>vnode.attrs).value
         this.onchangeCallback = (<any>vnode.attrs).onchange
-        this.Items = (<any>vnode.attrs).choices
-        this.FMustBeInList = (<any>vnode.attrs).mustBeInList || false
-        this.FEntryRequired = (<any>vnode.attrs).required || false
+        this.items = (<any>vnode.attrs).items
+        // this.mustBeInList = (<any>vnode.attrs).mustBeInList || false
+        // this.entryRequired = (<any>vnode.attrs).required || false
     }
 
     view(vnode: m.Vnode) {
@@ -26,10 +27,10 @@ export class TQuickFillComboBox {
 
         return m("div.ml1.dib.relative",
             m("input" + extraStyling, {
-                value: this.Text,
+                value: this.text,
                 // oninput: (event: { target: HTMLInputElement }) => this.Text = event.target.value,
                 onchange: (event: { target: HTMLInputElement }) => {
-                    this.Text = event.target.value
+                    this.text = event.target.value
                     if (this.onchangeCallback) this.onchangeCallback(event)
                 },
                 oncreate: (vnode: any) => {
@@ -46,7 +47,7 @@ export class TQuickFillComboBox {
                         // enter or down arrow
                         this.menuOpen = true
                         this.menuOpenedByButton = false
-                        this.Text = (<HTMLInputElement>event.target).value
+                        this.text = (<HTMLInputElement>event.target).value
                     } else {
                         (<any>event).redraw = false
                     }
@@ -88,7 +89,7 @@ export class TQuickFillComboBox {
                         tabindex: index,
                         onclick: () => {
                             this.menuOpen = false
-                            this.Text = item
+                            this.text = item
                             if (this.onchangeCallback) this.onchangeCallback(<any>{target: {value: item}})
                         },
                         onkeydown: (event: KeyboardEvent) => {
@@ -115,17 +116,17 @@ export class TQuickFillComboBox {
                             } else if (event.keyCode === 13) {
                                 // enter
                                 this.menuOpen = false
-                                this.Text = item
+                                this.text = item
                                 if (this.onchangeCallback) this.onchangeCallback(<any>{target: {value: item}})    
                             } else if (event.keyCode === 27) {
                                 // escape
                                 this.menuOpen = false  
                            } else {
                                 this.menuOpen = false
-                                if (event.key.length === 1) this.Text += event.key
+                                if (event.key.length === 1) this.text += event.key
                                 this.inputElement.focus()
-                                this.inputElement.selectionStart = this.Text.length
-                                this.inputElement.selectionEnd = this.Text.length
+                                this.inputElement.selectionStart = this.text.length
+                                this.inputElement.selectionEnd = this.text.length
                                 return false
                             }
                             return true
@@ -137,7 +138,7 @@ export class TQuickFillComboBox {
     }
 
     getItemsForMatch(): string[] {
-        if (this.menuOpenedByButton) return this.Items
-        return this.Items.filter(each => each.includes(this.Text))
+        if (this.menuOpenedByButton) return this.items
+        return this.items.filter(each => each.includes(this.text))
     }
 }
