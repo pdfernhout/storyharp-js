@@ -322,11 +322,13 @@ export class IndividualRuleView {
                                 },
                                 "Context",
                             ),
-                            m("input.ContextEdit.TEdit",
-                                {
+                            m(TQuickFillComboBox,
+                                <any>{
+                                    extraStyling: ".ContextEdit",
                                     style: { width: "35rem", },
                                     value: rule.context.phrase,
-                                    onchange: contextChange
+                                    onchange: contextChange,
+                                    items: this.domain.world.getContextNames(),
                                 },
                             ),
                         ),
@@ -360,20 +362,13 @@ export class IndividualRuleView {
                                 },
                                 "Command",
                             ),
-                            m("input.CommandEdit.TEdit",
-                                {
-                                    style: { width: "35rem", },
-                                    value: rule.command.phrase,
-                                    onchange: commandChange
-                                },
-                            ),
                             m(TQuickFillComboBox,
                                 <any>{
                                     extraStyling: ".CommandEdit",
                                     style: { width: "35rem", },
                                     value: rule.command.phrase,
                                     onchange: commandChange,
-                                    items: this.domain.world.getC(),
+                                    items: this.domain.world.getCommandNames(),
                                 },
                             ),
                         ),
