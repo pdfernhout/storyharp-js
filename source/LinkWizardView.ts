@@ -318,13 +318,15 @@ export class LinkWizardView {
                 m("h3", "Forward"),
 
                 m("p", "What command (", Glyph.command, ") should the user say to move from ", m("i", (this.firstContext || "the first context")), ":"),
-                m("input.ml2" + (this.firstCommandError ? ".bg-yellow" : ""),
-                    {
+                m(TQuickFillComboBox,
+                    <any>{
+                        extraStyling: (this.firstCommandError ? ".ml2.bg-yellow" : ".ml2"),
                         value: this.firstCommand,
                         onchange: (event: { target: HTMLInputElement }) => {
                             this.firstCommand = event.target.value
                             if (this.wasGenerateRulesPressed) this.checkInputForErrors()
-                        }
+                        },
+                        items: this.domain.world.getCommandNames(),
                     },
                 ),
                 this.firstCommandError ? m("div.i.bg-yellow", this.firstCommandError) : [],
@@ -354,13 +356,15 @@ export class LinkWizardView {
                 m("h3", "Backward"),
 
                 m("p", "What command (", Glyph.command, ") should the user say to move from ", m("i", (this.secondContext || "the second context")), ":"),
-                m("input.ml2" + (this.secondCommandError ? ".bg-yellow" : ""),
-                    {
+                m(TQuickFillComboBox,
+                    <any>{
+                        extraStyling: (this.secondCommandError ? ".ml2.bg-yellow" : ".ml2"),
                         value: this.secondCommand,
                         onchange: (event: { target: HTMLInputElement }) => {
                             this.secondCommand = event.target.value
                             if (this.wasGenerateRulesPressed) this.checkInputForErrors()
-                        }
+                        },
+                        items: this.domain.world.getCommandNames(),
                     },
                 ),
                 this.secondCommandError ? m("div.i.bg-yellow", this.secondCommandError) : [],

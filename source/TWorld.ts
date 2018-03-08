@@ -471,6 +471,12 @@ export class TWorld {
     getContextNames(): string[] {
         return this.getContexts().map(variable => variable.phrase).sort()
     }
+
+    getCommandNames(): string[] {
+        const commandNames = new Set()
+        this.rules.map(rule => commandNames.add(rule.command.phrase))
+        return [...commandNames].sort()
+    }
     
     boundsRect(): TRect {
         // It is OK to have left and right at zero because

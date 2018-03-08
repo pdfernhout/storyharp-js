@@ -5,6 +5,7 @@ import { TPoint } from "./TPoint"
 import { TWorld } from "./TWorld"
 import { Glyph } from "./VariablesView"
 import { TSDomain } from "./TSDomain"
+import { TQuickFillComboBox } from "./TQuickFillComboBox"
 
 const exampleOne =`
 cave|You are in a big cave.
@@ -195,13 +196,15 @@ export class ContextWizardView {
                 m("h3", "Generate Descriptions"),
 
                 m("p", "What command (", Glyph.command, ") should the user to say to access these descriptive replies?"),
-                m("input.ml2" + (this.commandPhraseError ? ".bg-yellow" : ""),
-                    {
+                m(TQuickFillComboBox,
+                    <any>{
+                        extraStyling: (this.commandPhraseError ? ".ml2.bg-yellow" : ".ml2"),
                         value: this.commandPhrase,
                         onchange: (event: { target: HTMLInputElement }) => {
                             this.commandPhrase = event.target.value
                             if (this.wasGenerateRulesPressed) this.checkInputForErrors()
-                        }
+                        },
+                        items: this.domain.world.getCommandNames(),
                     },
                 ),
 
