@@ -48,7 +48,6 @@ export class TQuickFillComboBox {
                     this.size = this.inputElement.size
                 },
                 onkeydown: (event: KeyboardEvent) => {
-                    console.log("onkeydown in input", event)
                     if (event.keyCode === 13 || event.keyCode === 40) {
                         // enter or down arrow
                         this.menuOpen = true
@@ -69,7 +68,7 @@ export class TQuickFillComboBox {
                 }
             }, expander(this.menuOpen)),
             this.menuOpen
-                ? m("ul.absolute.bg-light-gray.overflow-auto",
+                ? m("ul.absolute.bg-light-gray.pa2.overflow-auto",
                     {
                         style: {
                             // Override Chrome user agent settings
@@ -86,10 +85,12 @@ export class TQuickFillComboBox {
                         oncreate: (vnode: any) => {
                             // TODO: focus on the first matching child instead
                             const firstChild = <HTMLElement>(<HTMLElement>vnode.dom).firstChild
-                            console.log("oncreate", firstChild)
                             if (firstChild) {
                                 firstChild.focus()
                                 // firstChild.scrollIntoView(true)
+                                setTimeout(() => {
+                                    (<HTMLElement>vnode.dom).scrollTop = 0
+                                }, 50)
                             }
                         },
                         onmouseleave: () => { this.menuOpen = false },
