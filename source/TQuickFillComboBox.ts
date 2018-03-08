@@ -84,15 +84,17 @@ export class TQuickFillComboBox {
                             "z-index": 1,
                         },
                         oncreate: (vnode: any) => {
+                            // TODO: focus on the first matching child instead
                             const firstChild = <HTMLElement>(<HTMLElement>vnode.dom).firstChild
                             console.log("oncreate", firstChild)
                             if (firstChild) {
                                 firstChild.focus()
+                                // firstChild.scrollIntoView(true)
                             }
                         },
                         onmouseleave: () => { this.menuOpen = false },
                     },
-                   this.getItemsForMatch().map((item, index) => m("li.hover-bg-light-blue.focus-bg-light-blue", {
+                   this.getItemsForMatch().map((item, index) => m("li.focus-bg-light-blue", {
                         tabindex: index,
                         onclick: () => {
                             this.menuOpen = false
@@ -100,6 +102,12 @@ export class TQuickFillComboBox {
                             focusOnInput()
                             if (this.onchangeCallback) this.onchangeCallback(<any>{target: {value: item}})
                         },
+                        /*
+                        onmouseover: (event: Event) {
+                            const node = <HTMLElement>event.target
+                            node.focus()
+                        },
+                        */
                         onkeydown: (event: KeyboardEvent) => {
                             if (event.keyCode === 38) {
                                 // up arrow
@@ -108,7 +116,10 @@ export class TQuickFillComboBox {
                                     (<HTMLElement>node.previousSibling).focus()
                                 } else {
                                     const lastChild: HTMLElement | null = <HTMLElement>(<HTMLElement>node.parentElement).lastChild
-                                    if (lastChild) lastChild.focus()
+                                    if (lastChild) {
+                                        lastChild.focus()
+                                        // lastChild.scrollIntoView(false)
+                                    }
                                 }
                                 return false
                             } else if (event.keyCode === 40) {
@@ -118,7 +129,10 @@ export class TQuickFillComboBox {
                                     (<HTMLElement>node.nextSibling).focus()
                                 } else {
                                    const firstChild: HTMLElement | null = <HTMLElement>(<HTMLElement>node.parentElement).firstChild
-                                   if (firstChild) firstChild.focus()
+                                   if (firstChild) {
+                                       firstChild.focus()
+                                       // firstChild.scrollIntoView(true)
+                                   }
                                 }
                                 return false
                             } else if (event.keyCode === 13) {
