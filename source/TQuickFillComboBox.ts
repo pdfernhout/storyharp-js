@@ -23,6 +23,8 @@ export class TQuickFillComboBox {
     }
 
     view(vnode: m.Vnode) {
+        this.items = (<any>vnode.attrs).items
+        
         const extraStyling = (<any>vnode.attrs).extraStyling || ""
 
         const focusOnInput = () => {
