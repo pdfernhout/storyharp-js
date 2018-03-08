@@ -5,27 +5,7 @@ import { TSRule, TSRuleField } from "./TSRule"
 import { TSCommandList } from "./TSCommandList"
 import { TSNewRulesCommand } from "./TSNewRulesCommand"
 import { TSDomain } from "./TSDomain"
-
-/* Decided not to use and to edit a rule directly
-// Similar to TSRule:
-interface TSRuleShadow {
-    context: string
-    requirements: string[]
-    command: string
-    reply: string
-    move: string
-    changes: string[]
-}
-
-ruleShadow: TSRuleShadow = {
-    context: "",
-    requirements: [],
-    command: "",
-    reply: "",
-    move: "",
-    changes: [],
-}
-*/
+import { TQuickFillComboBox } from "./TQuickFillComboBox"
 
 // TODO: Change capitalization on some method names
 export class IndividualRuleView {
@@ -387,6 +367,15 @@ export class IndividualRuleView {
                                     onchange: commandChange
                                 },
                             ),
+                            m(TQuickFillComboBox,
+                                <any>{
+                                    extraStyling: ".CommandEdit",
+                                    style: { width: "35rem", },
+                                    value: rule.command.phrase,
+                                    onchange: commandChange,
+                                    items: this.domain.world.getC(),
+                                },
+                            ),
                         ),
                         m(".Reply.flex.items-center.mt1",
                             /*
@@ -420,11 +409,13 @@ export class IndividualRuleView {
                                 },
                                 "Move",
                             ),
-                            m("input.MoveEdit.TEdit",
-                                {
+                            m(TQuickFillComboBox,
+                                <any>{
+                                    extraStyling: ".MoveEdit",
                                     style: { width: "35rem", },
                                     value: rule.move.phrase,
-                                    onchange: moveChange
+                                    onchange: moveChange,
+                                    items: this.domain.world.getContextNames(),
                                 },
                             ),
                         ),
