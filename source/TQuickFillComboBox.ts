@@ -2,22 +2,21 @@ import * as m from "mithril"
 import { int, expander } from "./common"
 
 export class TQuickFillComboBox {
-    lastMatch: string = ""
+    items: string[]
+    text: string
+    menuOpen = false
+    menuOpenedByButton = false
+    clientWidth = 0
+    inputElement: HTMLInputElement
+    onchangeCallback: (event: { target: HTMLInputElement }) => {}
     // TODO: Use or remove these
     // mustBeInList: boolean = false
     // entryRequired: boolean = false
-    items: string[] = []
-    text: string = ""
-    menuOpen = false
-    menuOpenedByButton = false
-    size = 20
-    inputElement: HTMLInputElement
-    onchangeCallback: (event: { target: HTMLInputElement }) => {}
 
     constructor(vnode: m.Vnode) {
-        this.text = (<any>vnode.attrs).value
-        this.onchangeCallback = (<any>vnode.attrs).onchange
-        this.items = (<any>vnode.attrs).items
+        this.text = (<any>vnode.attrs).value || ""
+        this.onchangeCallback = (<any>vnode.attrs).onchange || ((event: any) => {})
+        this.items = (<any>vnode.attrs).items || []
         // this.mustBeInList = (<any>vnode.attrs).mustBeInList || false
         // this.entryRequired = (<any>vnode.attrs).required || false
     }
@@ -33,9 +32,25 @@ export class TQuickFillComboBox {
             this.inputElement.selectionEnd = this.text.length
         }
 
+        const isEnoughRoomAtBottom = (threshold: number) => {
+            const roomAtBottom = window.innerHeight - this.inputElement.getBoundingClientRect().bottom // this.inputElement.offsetTop + this.inputElement.offsetHeight
+            console.log("room", roomAtBottom)
+            if (roomAtBottom < threshold) return false
+            return true
+        }
+
         return m("div.ml1.dib.relative",
+            {
+                style: (<any>vnode.attrs).style || "",
+                oncreate: (vnode: any) => this.clientWidth = (<HTMLInputElement>(vnode.dom)).clientWidth,
+                onupdate: (vnode: any) => this.clientWidth = (<HTMLInputElement>(vnode.dom)).clientWidth,
+
+            },
             m("input" + extraStyling, {
                 value: this.text,
+                style: {
+                    width: "calc(100% - 3rem)",
+                },
                 // oninput: (event: { target: HTMLInputElement }) => this.Text = event.target.value,
                 onchange: (event: { target: HTMLInputElement }) => {
                     this.text = event.target.value
@@ -43,11 +58,9 @@ export class TQuickFillComboBox {
                 },
                 oncreate: (vnode: any) => {
                     this.inputElement = <HTMLInputElement>(vnode.dom)
-                    this.size = this.inputElement.size
                 },
                 onupdate: (vnode: any) => {
                     this.inputElement = <HTMLInputElement>(vnode.dom)
-                    this.size = this.inputElement.size
                 },
                 onkeydown: (event: KeyboardEvent) => {
                     if (event.keyCode === 13 || event.keyCode === 40) {
@@ -79,10 +92,11 @@ export class TQuickFillComboBox {
                             "list-style-type": "none",
                             "margin": "0",
                             "padding": "0.25rem",
-                            "width": "" + this.size + "rem",
-                            "max-height": "10rem",
+                            width: this.clientWidth + "px",
+                            "max-height": "200px",
                             "box-shadow": "0px 8px 16px 0px rgba(0,0,0,0.2)",
                             "z-index": 1,
+                            bottom: isEnoughRoomAtBottom(200) ? null : 2 + "rem",
                         },
                         tabindex: (this.items.length ? null : 0),
                         oncreate: (vnode: any) => {
