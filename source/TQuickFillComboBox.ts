@@ -25,6 +25,12 @@ export class TQuickFillComboBox {
     view(vnode: m.Vnode) {
         const extraStyling = (<any>vnode.attrs).extraStyling || ""
 
+        const focusOnInput = () => {
+            this.inputElement.focus()
+            this.inputElement.selectionStart = this.text.length
+            this.inputElement.selectionEnd = this.text.length
+        }
+
         return m("div.ml1.dib.relative",
             m("input" + extraStyling, {
                 value: this.text,
@@ -58,6 +64,7 @@ export class TQuickFillComboBox {
             m("button", {
                 onclick: () => {
                     this.menuOpen = !this.menuOpen
+                    if (!this.menuOpen) focusOnInput()
                     this.menuOpenedByButton = true
                 }
             }, expander(this.menuOpen)),
@@ -90,6 +97,7 @@ export class TQuickFillComboBox {
                         onclick: () => {
                             this.menuOpen = false
                             this.text = item
+                            focusOnInput()
                             if (this.onchangeCallback) this.onchangeCallback(<any>{target: {value: item}})
                         },
                         onkeydown: (event: KeyboardEvent) => {
@@ -117,16 +125,16 @@ export class TQuickFillComboBox {
                                 // enter
                                 this.menuOpen = false
                                 this.text = item
+                                focusOnInput()
                                 if (this.onchangeCallback) this.onchangeCallback(<any>{target: {value: item}})    
                             } else if (event.keyCode === 27) {
                                 // escape
-                                this.menuOpen = false  
+                                this.menuOpen = false
+                                focusOnInput()
                            } else {
                                 this.menuOpen = false
                                 if (event.key.length === 1) this.text += event.key
-                                this.inputElement.focus()
-                                this.inputElement.selectionStart = this.text.length
-                                this.inputElement.selectionEnd = this.text.length
+                                focusOnInput()
                                 return false
                             }
                             return true
