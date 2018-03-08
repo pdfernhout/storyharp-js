@@ -1,24 +1,59 @@
-// unit QuickFillComboBox
+import * as m from "mithril"
+import { int, expander } from "./common"
 
-from conversion_common import *
-import delphi_compatability
-
-//Must be published before Items
-// pdf added
-// pdf added
-// pdf added
-// PDF PORT changed from "register" as there was a name conflict with grammar; won't be called anyway
-function RegisterIt(): void {
-    UNRESOLVED.RegisterComponents("Speech", {TQuickFillComboBox, })
-}
-
-
+// TODO: Unfinished. Just has drop down not quick fill.
+// TODO: Use or remove quickfill code.
 export class TQuickFillComboBox {
     lastMatch: string = ""
     FMustBeInList: boolean = false
     FEntryRequired: boolean = false
-    TQuickFillComboBox.prototype = new TCustomComboBox()
-    TQuickFillComboBox.prototype.constructor = TQuickFillComboBox
+    Items: string[] = []
+    Text: string = ""
+    menuOpen = false
+    size = 20
+
+    constructor(vnode: m.Vnode) {
+        this.Items = (<any>vnode.attrs).choices
+        this.FMustBeInList = (<any>vnode.attrs).mustBeInList || false
+        this.FEntryRequired = (<any>vnode.attrs).required || false
+    }
+
+    view() {
+        return m("div.ml1",
+            m("input", {
+                value: this.Text,
+                oninput: (event: { target: HTMLInputElement }) => this.Text = event.target.value,
+                oncreate: (vnode: any) => this.size = (<HTMLInputElement>(vnode.dom)).size,
+                onupdate: (vnode: any) => this.size = (<HTMLInputElement>(vnode.dom)).size,
+            }),
+            m("button", {
+                onclick: () => this.menuOpen = !this.menuOpen
+            }, expander(this.menuOpen)),
+            this.menuOpen
+                ? m("ul.relative.bg-light-gray",
+                    {
+                        style: {
+                            // Override Chrome user agent settings
+                            "-webkit-margin-before": "0em",
+                            "-webkit-margin-after": "0em",
+                            "list-style-type": "none",
+                            "margin": "0",
+                            "padding": "0",
+                            "width": "" + this.size + "rem",
+                        },
+                    },
+                    this.Items.map(item => m("li.hover-bg-light-blue", {
+                        onclick: () => {
+                            this.menuOpen= false
+                            this.Text = item
+                        }
+                    }, item))
+                )
+                : []
+        )
+    }
+
+    /*
     
     // pdf hack test remove
     // pdf hack - test remove
@@ -29,38 +64,24 @@ export class TQuickFillComboBox {
         i = 0
     }
     
+    // returns -1 if no match, otherwise returns the index of the match
     findMatch(match: string): int {
-        let result = 0
-        let i: int
-        let j: int
-        let test: string
-        let matches: boolean
-        
-        result = -1
         if (match === "") {
-            return result
+            return -1
         }
-        if (this.Items.Count === 0) {
-            return result
+        if (this.Items.length === 0) {
+            return -1
         }
-        for (i = 0; i <= this.Items.Count - 1; i++) {
-            matches = true
-            test = this.Items[i]
-            for (j = 1; j <= len(match); j++) {
-                if (test[j] !== match[j]) {
-                    matches = false
-                    break
-                }
-            }
-            if (matches === true) {
-                result = i
-                return result
+        for (let i = 0; i < this.Items.length; i++) {
+            const item = this.Items[i]
+            if (item.substring(0, match.length) === match) {
+                return i
             }
         }
-        return result
+        return -1
     }
     
-    quickFillComboBoxKeyPress(Key: byte): void {
+    quickFillComboBoxKeyPress(Key: string): void {
         let index: int
         let startText: string
         let atEnd: boolean
@@ -69,8 +90,10 @@ export class TQuickFillComboBox {
             //reset if empty
             this.lastMatch = ""
         }
+
         //compensate for selection about to replace
         atEnd = (this.SelStart + this.SelLength) === len(this.Text)
+
         if (!atEnd) {
             if ((this.Text !== this.lastMatch) || (this.SelLength !== 0)) {
                 if (this.FMustBeInList) {
@@ -183,6 +206,6 @@ export class TQuickFillComboBox {
         }
         TCustomComboBox.prototype.Change.call(this)
     }
-    
-}
+    */
 
+}
