@@ -10,7 +10,9 @@ export class TQuickFillComboBox {
     Items: string[] = []
     Text: string = ""
     menuOpen = false
+    menuOpenedByButton = false
     size = 20
+    inputElement: HTMLInputElement
     onchangeCallback: (event: { target: HTMLInputElement }) => {}
 
     constructor(vnode: m.Vnode) {
@@ -23,6 +25,7 @@ export class TQuickFillComboBox {
 
     view(vnode: m.Vnode) {
         const extraStyling = (<any>vnode.attrs).extraStyling || ""
+
         return m("div.ml1.dib.relative",
             m("input" + extraStyling, {
                 value: this.Text,
@@ -31,11 +34,33 @@ export class TQuickFillComboBox {
                     this.Text = event.target.value
                     if (this.onchangeCallback) this.onchangeCallback(event)
                 },
-                oncreate: (vnode: any) => this.size = (<HTMLInputElement>(vnode.dom)).size,
-                onupdate: (vnode: any) => this.size = (<HTMLInputElement>(vnode.dom)).size,
+                oncreate: (vnode: any) => {
+                    this.inputElement = <HTMLInputElement>(vnode.dom)
+                    this.size = this.inputElement.size
+                },
+                onupdate: (vnode: any) => {
+                    this.inputElement = <HTMLInputElement>(vnode.dom)
+                    this.size = this.inputElement.size
+                },
+                onkeydown: (event: KeyboardEvent) => {
+                    console.log("onkeydown in input", event)
+                    if (event.keyCode === 13 || event.keyCode === 40) {
+                        // enter or down arrow
+                        this.menuOpen = true
+                        this.menuOpenedByButton = false
+                        this.Text = (<HTMLInputElement>event.target).value
+                    } else {
+                        (<any>event).redraw = false
+                    }
+                    return true
+                },
+                onfocus:() => { this.menuOpen = false },
             }),
             m("button", {
-                onclick: () => this.menuOpen = !this.menuOpen
+                onclick: () => {
+                    this.menuOpen = !this.menuOpen
+                    this.menuOpenedByButton = true
+                }
             }, expander(this.menuOpen)),
             this.menuOpen
                 ? m("ul.absolute.bg-light-gray.overflow-auto",
@@ -52,17 +77,98 @@ export class TQuickFillComboBox {
                             "box-shadow": "0px 8px 16px 0px rgba(0,0,0,0.2)",
                             "z-index": 1,
                         },
+                        oncreate: (vnode: any) => {
+                            const firstChild = <HTMLElement>(<HTMLElement>vnode.dom).firstChild
+                            console.log("oncreate", firstChild)
+                            if (firstChild) {
+                                firstChild.focus()
+                            }
+                        },
+                        onmouseleave: () => { this.menuOpen = false },
                     },
-                    this.Items.map(item => m("li.hover-bg-light-blue", {
+                   this.getItemsForMatch().map((item, index) => m("li.hover-bg-light-blue.focus-bg-light-blue", {
+                        tabindex: index,
                         onclick: () => {
                             this.menuOpen = false
                             this.Text = item
                             if (this.onchangeCallback) this.onchangeCallback(<any>{target: {value: item}})
+                        },
+                        onkeydown: (event: KeyboardEvent) => {
+                            if (event.keyCode === 38) {
+                                // up arrow
+                                const node = <HTMLElement>event.target
+                                if (node.previousSibling) {
+                                    (<HTMLElement>node.previousSibling).focus()
+                                } else {
+                                    const lastChild: HTMLElement | null = <HTMLElement>(<HTMLElement>node.parentElement).lastChild
+                                    if (lastChild) lastChild.focus()
+                                }
+                                return false
+                            } else if (event.keyCode === 40) {
+                                // down arrow
+                                const node = <HTMLElement>event.target
+                                if (node.nextSibling) {
+                                    (<HTMLElement>node.nextSibling).focus()
+                                } else {
+                                   const firstChild: HTMLElement | null = <HTMLElement>(<HTMLElement>node.parentElement).firstChild
+                                   if (firstChild) firstChild.focus()
+                                }
+                                return false
+                            } else if (event.keyCode === 13) {
+                                // enter
+                                this.menuOpen = false
+                                this.Text = item
+                                if (this.onchangeCallback) this.onchangeCallback(<any>{target: {value: item}})    
+                            } else if (event.keyCode === 27) {
+                                // escape
+                                this.menuOpen = false  
+                           } else {
+                                this.menuOpen = false
+                                if (event.key.length === 1) this.Text += event.key
+                                this.inputElement.focus()
+                                this.inputElement.selectionStart = this.Text.length
+                                this.inputElement.selectionEnd = this.Text.length
+                                /* Seems to not work for security reasons:
+                                   https://stackoverflow.com/questions/20163708/dispatching-keyboard-event-doesnt-work-in-javascript
+                                // redispatch a copy of the event to the input element
+                                const newEvent = new KeyboardEvent("keydown", event)
+                                setTimeout(() => {
+                                    this.inputElement.focus()
+                                    this.inputElement.selectionStart = this.Text.length
+                                    this.inputElement.selectionEnd = this.Text.length
+                                    m.redraw()
+                                    setTimeout(() => {
+                                        this.inputElement.dispatchEvent(newEvent)
+                                        m.redraw()
+                                    }, 0)
+                                }, 20)
+                                */
+                                return false
+                                // (<any>event).redraw = false
+                            }
+                            return true
                         }
                     }, item))
                 )
                 : []
         )
+    }
+
+    getItemsForMatch(): string[] {
+        if (this.menuOpenedByButton) return this.Items
+
+        const filteredItems = this.Items.filter(each => each.includes(this.Text))
+        //if (filteredItems.length === 0) {
+        //    return this.Items
+        //}
+        return filteredItems
+        /*
+        if (!this.Text || this.Items.indexOf(this.Text) !== -1) {
+            return this.Items
+        } else {
+            return this.Items.filter(each => each.includes(this.Text))
+        }
+        */
     }
 
     /*
