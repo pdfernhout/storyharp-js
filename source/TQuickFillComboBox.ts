@@ -82,6 +82,7 @@ export class TQuickFillComboBox {
                             "box-shadow": "0px 8px 16px 0px rgba(0,0,0,0.2)",
                             "z-index": 1,
                         },
+                        tabindex: (this.items.length ? null : 0),
                         oncreate: (vnode: any) => {
                             // TODO: focus on the first matching child instead
                             const firstChild = <HTMLElement>(<HTMLElement>vnode.dom).firstChild
@@ -91,9 +92,19 @@ export class TQuickFillComboBox {
                                 setTimeout(() => {
                                     (<HTMLElement>vnode.dom).scrollTop = 0
                                 }, 50)
+                            } else {
+                                (<HTMLElement>vnode.dom).focus()
                             }
                         },
                         onmouseleave: () => { this.menuOpen = false },
+                        onfocusout: () => { if (!this.items.length) this.menuOpen = false },
+                        onkeydown: (event: KeyboardEvent) => {
+                            if (!this.items.length) {
+                                this.menuOpen = false
+                                if (event.key.length === 1) this.text += event.key
+                                focusOnInput()
+                            }
+                        }
                     },
                    this.getItemsForMatch().map((item, index) => m("li.focus-bg-light-blue", {
                         tabindex: index,
