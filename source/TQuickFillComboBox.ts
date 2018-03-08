@@ -11,18 +11,26 @@ export class TQuickFillComboBox {
     Text: string = ""
     menuOpen = false
     size = 20
+    onchangeCallback: (event: { target: HTMLInputElement }) => {}
 
     constructor(vnode: m.Vnode) {
+        this.Text = (<any>vnode.attrs).value
+        this.onchangeCallback = (<any>vnode.attrs).onchange
         this.Items = (<any>vnode.attrs).choices
         this.FMustBeInList = (<any>vnode.attrs).mustBeInList || false
         this.FEntryRequired = (<any>vnode.attrs).required || false
     }
 
-    view() {
-        return m("div.ml1",
-            m("input", {
+    view(vnode: m.Vnode) {
+        const extraStyling = (<any>vnode.attrs).extraStyling || ""
+        return m("div.ml1.dib.relative",
+            m("input" + extraStyling, {
                 value: this.Text,
-                oninput: (event: { target: HTMLInputElement }) => this.Text = event.target.value,
+                // oninput: (event: { target: HTMLInputElement }) => this.Text = event.target.value,
+                onchange: (event: { target: HTMLInputElement }) => {
+                    this.Text = event.target.value
+                    if (this.onchangeCallback) this.onchangeCallback(event)
+                },
                 oncreate: (vnode: any) => this.size = (<HTMLInputElement>(vnode.dom)).size,
                 onupdate: (vnode: any) => this.size = (<HTMLInputElement>(vnode.dom)).size,
             }),
@@ -30,7 +38,7 @@ export class TQuickFillComboBox {
                 onclick: () => this.menuOpen = !this.menuOpen
             }, expander(this.menuOpen)),
             this.menuOpen
-                ? m("ul.relative.bg-light-gray",
+                ? m("ul.absolute.bg-light-gray.overflow-auto",
                     {
                         style: {
                             // Override Chrome user agent settings
@@ -38,14 +46,18 @@ export class TQuickFillComboBox {
                             "-webkit-margin-after": "0em",
                             "list-style-type": "none",
                             "margin": "0",
-                            "padding": "0",
+                            "padding": "0.25rem",
                             "width": "" + this.size + "rem",
+                            "max-height": "10rem",
+                            "box-shadow": "0px 8px 16px 0px rgba(0,0,0,0.2)",
+                            "z-index": 1,
                         },
                     },
                     this.Items.map(item => m("li.hover-bg-light-blue", {
                         onclick: () => {
-                            this.menuOpen= false
+                            this.menuOpen = false
                             this.Text = item
+                            if (this.onchangeCallback) this.onchangeCallback(<any>{target: {value: item}})
                         }
                     }, item))
                 )

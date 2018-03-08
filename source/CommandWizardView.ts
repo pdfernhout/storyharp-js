@@ -6,6 +6,7 @@ import { TWorld } from "./TWorld"
 import { Glyph } from "./VariablesView"
 import { TSRule } from "./TSRule"
 import { TSDomain } from "./TSDomain"
+import { TQuickFillComboBox } from "./TQuickFillComboBox"
 
 // the good place
 const exampleWithFiveRules = `
@@ -248,14 +249,16 @@ export class CommandWizardView {
                 m("h3", "Context"),
 
                 m("p", "What context (", Glyph.context, ") do you want your new commands to use?"),
-                // TODO: Drop down or scrolling list of existing contexts
-                m("input.ml2" + (this.contextNameError ? ".bg-yellow" : ""),
-                    {
+
+                m(TQuickFillComboBox,
+                    <any>{
+                        extraStyling: (this.contextNameError ? ".ml2.bg-yellow" : ".ml2"),
                         value: this.contextName,
                         onchange: (event: { target: HTMLInputElement }) => {
                             this.contextName = event.target.value
                             if (this.wasGenerateRulesPressed) this.checkInputForErrors()
-                        }
+                        },
+                        choices: this.domain.world.getContextNames(),
                     },
                 ),
 

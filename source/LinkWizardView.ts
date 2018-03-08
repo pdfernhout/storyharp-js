@@ -6,6 +6,8 @@ import { TWorld } from "./TWorld"
 import { Glyph } from "./VariablesView"
 import { TSDomain } from "./TSDomain"
 import { TSRule } from "./TSRule";
+import { TSVariable } from "./TSVariable"
+import { TQuickFillComboBox } from "./TQuickFillComboBox"
 
 /* TODO use or remove:
         if (this.FirstContextBox.Items.Count < 2) {
@@ -278,13 +280,15 @@ export class LinkWizardView {
 
                 m("p", "First context (", Glyph.context, "):"),
 
-                m("input.ml2" + (this.firstContextError ? ".bg-yellow" : ""),
-                    {
+                m(TQuickFillComboBox,
+                    <any>{
+                        extraStyling: (this.firstContextError ? ".ml2.bg-yellow" : ".ml2"),
                         value: this.firstContext,
                         onchange: (event: { target: HTMLInputElement }) => {
                             this.firstContext = event.target.value
                             if (this.wasGenerateRulesPressed) this.checkInputForErrors()
-                        }
+                        },
+                        choices: this.domain.world.getContextNames(),
                     },
                 ),
                 this.firstContextError ? m("div.i.bg-yellow", this.firstContextError) : [],
@@ -293,13 +297,15 @@ export class LinkWizardView {
 
                 m("p", "Second context (", Glyph.context, "):"),
 
-                m("input.ml2" + (this.secondContextError ? ".bg-yellow" : ""),
-                    {
+                m(TQuickFillComboBox,
+                    <any>{
+                        extraStyling: (this.secondContextError ? ".ml2.bg-yellow" : ".ml2"),
                         value: this.secondContext,
                         onchange: (event: { target: HTMLInputElement }) => {
                             this.secondContext = event.target.value
                             if (this.wasGenerateRulesPressed) this.checkInputForErrors()
-                        }
+                        },
+                        choices: this.domain.world.getContextNames(),
                     },
                 ),
                 this.secondContextError ? m("div.i.bg-yellow", this.secondContextError) : [],

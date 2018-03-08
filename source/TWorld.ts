@@ -457,27 +457,20 @@ export class TWorld {
         return null
     }
     
-    /* TODO: Maybe move this code used in wizard? If it is still needed with Mithril?
-    addContextsToCombBox(comboBox: TComboBox): void {
-        comboBox.Clear()
+    getContexts(): TSVariable[] {
+        const result = []
         for (let i = 0; i < this.variables.length; i++) {
             const variable: TSVariable = this.variables[i]
             if (variable.contextUseages > 0) {
-                comboBox.Items.AddObject(variable.phrase, variable)
+                result.push(variable)
             }
         }
+        return result
     }
-    
-    addContextsToListBox(listBox: TListBox): void {
-        listBox.Clear()
-        for (let i = 0; i < this.variables.length; i++) {
-            const variable: TSVariable = this.variables[i]
-            if (variable.contextUseages > 0) {
-                listBox.Items.AddObject(variable.phrase, variable)
-            }
-        }
+
+    getContextNames(): string[] {
+        return this.getContexts().map(variable => variable.phrase).sort()
     }
-    */
     
     boundsRect(): TRect {
         // It is OK to have left and right at zero because
