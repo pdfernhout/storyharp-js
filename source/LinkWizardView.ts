@@ -317,7 +317,7 @@ export class LinkWizardView {
 
                 m("h3", "Forward"),
 
-                m("p", "What command (", Glyph.command, ") should the user say to move from ", (this.firstContext || "the first context") + ":"),
+                m("p", "What command (", Glyph.command, ") should the user say to move from ", m("i", (this.firstContext || "the first context")), ":"),
                 m("input.ml2" + (this.firstCommandError ? ".bg-yellow" : ""),
                     {
                         value: this.firstCommand,
@@ -353,7 +353,7 @@ export class LinkWizardView {
 
                 m("h3", "Backward"),
 
-                m("p", "What command (", Glyph.command, ") should the user say to move from ", (this.secondContext || "the second context") + ":"),
+                m("p", "What command (", Glyph.command, ") should the user say to move from ", m("i", (this.secondContext || "the second context")), ":"),
                 m("input.ml2" + (this.secondCommandError ? ".bg-yellow" : ""),
                     {
                         value: this.secondCommand,
