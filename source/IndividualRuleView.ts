@@ -338,27 +338,15 @@ export class IndividualRuleView {
                             ),
                         ),
                         m(".Requirements.mt1",
-                            m("button.RequirementsSpeedButton.TSpeedButton.w4.mr1",
+                            m("button.RequirementsSpeedButton.TSpeedButton.w4.mr1.v-top",
                                 {
                                     onclick: () => this.SpeedButtonClick(TSRuleField.kRuleRequirements),
                                     title: "Browse all rules with the selected requirement",
                                 },
                                 "Requirements",
                             ),
-                            /*
-                            m("TListBox.RequirementsListBox.TListBox",
-                                {
-                                },
-                            ),
-                            */
-                            m("input.RequirementsEdit.TEdit",
-                                {
-                                    style: { width: "35rem", },
-                                    value: rule.decompileRequirements(),
-                                    onchange: requirementsChange
-                                },
-                            ),
                             m(TSLogicListBox, {
+                                style: { width: "35rem", },
                                 items: rule.requirements,
                                 world: world
                             })
@@ -425,27 +413,15 @@ export class IndividualRuleView {
                         ),
                     ),
                     m(".Changes.mt1",
-                        m("button.ChangesSpeedButton.TSpeedButton.w4.mr1",
+                        m("button.ChangesSpeedButton.TSpeedButton.w4.mr1.v-top",
                             {
                                 onclick: () => this.SpeedButtonClick(TSRuleField.kRuleChanges),
                                 title: "Browse all rules with the selected change",
                             },
                             "Changes",
                         ),
-                        /*
-                        m("TListBox.ChangesListBox.TListBox",
-                            {
-                            },
-                        ),
-                        */
-                        m("input.ChangesEdit.TEdit",
-                            {
-                                style: { width: "35rem", },
-                                value: rule.decompileChanges(),
-                                onchange: changesChange,
-                            },
-                        ),
                         m(TSLogicListBox, {
+                            style: { width: "35rem", },
                             items: rule.changes,
                             world: world
                         })
