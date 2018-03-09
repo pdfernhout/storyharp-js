@@ -304,6 +304,7 @@ export class IndividualRuleView {
                                 },
                                 "Lower",
                             ),
+                            /* TODO: use or remove
                             m("button.insertSound.TSpeedButton.ml1",
                                 {
                                     onclick: InsertSoundClick,
@@ -318,14 +319,16 @@ export class IndividualRuleView {
                                 },
                                 "Music",
                             ),
+                            */
                         ),
                         m(".Context.mt1",
-                            m("button.ContextSpeedButton.TSpeedButton.w4.mr1",
+                            m("button.ContextSpeedButton.w4.mr1",
                                 {
+                                    style: "width: 10rem",
                                     onclick: () => this.SpeedButtonClick(TSRuleField.kRuleContext),
                                     title: "Browse all rules with this context",
                                 },
-                                "Context",
+                                Glyph.context + " Context",
                             ),
                             m(TQuickFillComboBox,
                                 <any>{
@@ -338,12 +341,13 @@ export class IndividualRuleView {
                             ),
                         ),
                         m(".Requirements.mt1",
-                            m("button.RequirementsSpeedButton.TSpeedButton.w4.mr1.v-top",
+                            m("button.RequirementsSpeedButton.mr1.v-top",
                                 {
+                                    style: "width: 10rem",
                                     onclick: () => this.SpeedButtonClick(TSRuleField.kRuleRequirements),
                                     title: "Browse all rules with the selected requirement",
                                 },
-                                "Requirements",
+                                Glyph.requirements + " Requirements",
                             ),
                             m(TSLogicListBox, {
                                 style: { width: "35rem", },
@@ -353,12 +357,13 @@ export class IndividualRuleView {
                             })
                         ),
                         m(".Command.mt1",
-                            m("button.CommandSpeedButton.TSpeedButton.w4.mr1",
+                            m("button.CommandSpeedButton.mr1",
                                 {
+                                    style: "width: 10rem",
                                     onclick: () => this.SpeedButtonClick(TSRuleField.kRuleCommand),
                                     title: "Browse all rules with this command",
                                 },
-                                "Command",
+                                Glyph.command + " Command",
                             ),
                             m(TQuickFillComboBox,
                                 <any>{
@@ -378,10 +383,11 @@ export class IndividualRuleView {
                                 },
                             ),
                             */
-                            m("button.Label5.TLabel.w4.mr1",
+                            m("button.ReplySpeedButton.mr1",
                                 {
+                                    style: "width: 10rem",
                                 },
-                                "Reply",
+                                Glyph.reply + " Reply",
                             ),
                             m("textarea.ReplyMemo.TMemo",
                                 {
@@ -395,12 +401,13 @@ export class IndividualRuleView {
                             ),
                         ),
                         m(".Move.mt1",
-                            m("button.MoveSpeedButton.TSpeedButton.w4.mr1",
+                            m("button.MoveSpeedButton.mr1",
                                 {
+                                    style: "width: 10rem",
                                     onclick: () => this.SpeedButtonClick(TSRuleField.kRuleMove),
                                     title: "Browse all rules with this move",
                                 },
-                                "Move",
+                                Glyph.move + " Move",
                             ),
                             m(TQuickFillComboBox,
                                 <any>{
@@ -414,12 +421,13 @@ export class IndividualRuleView {
                         ),
                     ),
                     m(".Changes.mt1",
-                        m("button.ChangesSpeedButton.TSpeedButton.w4.mr1.v-top",
+                        m("button.ChangesSpeedButton.mr1.v-top",
                             {
+                                style: "width: 10rem",
                                 onclick: () => this.SpeedButtonClick(TSRuleField.kRuleChanges),
                                 title: "Browse all rules with the selected change",
                             },
-                            "Changes",
+                            Glyph.changes + " Changes",
                         ),
                         m(TSLogicListBox, {
                             style: { width: "35rem", },
