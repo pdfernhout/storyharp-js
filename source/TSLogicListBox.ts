@@ -8,8 +8,7 @@ export class TSLogicListBox {
     inputElement: TQuickFillComboBox
 
     view(vnode: any) {
-        const { selections, items, world, ...attrs } = vnode.attrs
-        const onchangeCallback = vnode.attrs.onchange || (() => {})
+        const { selections, items, world, onchange: onchangeCallback, ...attrs } = vnode.attrs
         
         return m("div.dib.LogicListBox.ba.bg-white",
             attrs,
@@ -36,14 +35,14 @@ export class TSLogicListBox {
                         m("span.pl1.b", {
                             onclick: (event: any) => {
                                 wrapper.desiredState = wrapper.desiredState ? TSVariableState.kAbsent : TSVariableState.kPresent
-                                onchangeCallback(selections)
+                                if (onchangeCallback) onchangeCallback(selections)
                             }    
                         }, wrapper.desiredState ? Glyph.present : Glyph.absent),
                         wrapper.variable.phrase,
                         m("span.ml2", {
                             onclick: () => {
                                 selections.splice(i, 1)
-                                onchangeCallback(selections)
+                                if (onchangeCallback) onchangeCallback(selections)
                             },
                         }, "x")
                     )
@@ -75,7 +74,7 @@ export class TSLogicListBox {
                                 }
                                 selections.push(new TSDesiredStateVariableWrapper(world.findOrCreateVariable(variableName, false), desiredState))
                                 event.target.value = ""
-                                onchangeCallback(selections)
+                                if (onchangeCallback) onchangeCallback(selections)
                             }
                         }
                     })
