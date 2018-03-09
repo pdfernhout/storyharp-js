@@ -4,20 +4,33 @@ import { TSDesiredStateVariableWrapper } from "./TSDesiredStateVariableWrapper"
 import { Glyph } from "./VariablesView"
 
 export class TSLogicListBox {
+    inputElement: HTMLInputElement
+
     view(vnode: any) {
-        const items = vnode.attrs.items
-        const world = vnode.attrs.world
+        const { items, world, ...attrs } = vnode.attrs
         
-        return m("div.LogicListBox",
-            m("ul",
+        return m("div.dib.LogicListBox.ba.bg-white",
+            attrs,
+            m("ul.bg-white.pl1.pr1",
                 {
                     style:  {
                         "list-style-type": "none",
+                        "-webkit-margin-before": "0em",
+                        "-webkit-margin-after": "0em",
+                        "-webkit-padding-start": "0px",
                     },
+                    onclick: (event: any) => {
+                        this.inputElement.focus()
+                    }
                 },
                 items.map((item: TSDesiredStateVariableWrapper, i: number) => {
-                    return m("li.ba.bg-light-yellow.fl.mr1.mb1.br1",
-                        m("span", {
+                    return m("li.ba.bg-light-gray.fl.ml1.mt1.mb1.br1",
+                        {
+                            style: {
+                                "word-wrap": "break-word",
+                            }
+                        },
+                        m("span.pl1.b", {
                             onclick: (event: any) => {
                                 // TODO: make this a command
                                 item.desiredState = item.desiredState ? TSVariableState.kAbsent : TSVariableState.kPresent
@@ -30,12 +43,28 @@ export class TSLogicListBox {
                         }, "x")
                     )
                 }),
-                m("li", 
-                    m("input", {
+                m("li.ml1.mt1.mb1", 
+                    m("input.ml1.mt1.mb1", {
+                        style: {
+                            "border": "0",
+                            "white-space": "nowrap",
+                        },
+                        oncreate: (vnode: any) => {
+                            this.inputElement = <HTMLInputElement>(vnode.dom)
+                        },
                         onchange: (event: any) => {
                             if (event.target.value) {
                                 // TODO: Make this a command
-                                items.push(new TSDesiredStateVariableWrapper(world.findOrCreateVariable(event.target.value, false), TSVariableState.kPresent))
+                                let desiredState = TSVariableState.kPresent
+                                let variableName = event.target.value.trim()
+                                if (variableName.startsWith("~") {
+                                    variableName = variableName.substring(1).trim()
+                                    desiredState = TSVariableState.kAbsent
+                                } else if (variableName.startsWith("+")) {
+                                    variableName = variableName.substring(1).trim()
+                                }
+                                items.push(new TSDesiredStateVariableWrapper(world.findOrCreateVariable(variableName, false), desiredState))
+                                event.target.value = ""
                             }
                         }
                     })
