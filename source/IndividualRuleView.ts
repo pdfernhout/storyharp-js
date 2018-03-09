@@ -347,7 +347,8 @@ export class IndividualRuleView {
                             ),
                             m(TSLogicListBox, {
                                 style: { width: "35rem", },
-                                items: rule.requirements,
+                                selections: rule.requirements,
+                                items: world.getVariableNames(),
                                 world: world
                             })
                         ),
@@ -422,7 +423,8 @@ export class IndividualRuleView {
                         ),
                         m(TSLogicListBox, {
                             style: { width: "35rem", },
-                            items: rule.changes,
+                            selections: rule.changes,
+                            items: world.getVariableNames(),
                             world: world
                         })
                     ),

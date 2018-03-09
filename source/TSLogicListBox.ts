@@ -2,12 +2,13 @@ import * as m from "mithril"
 import { TSVariableState } from "./TSVariable"
 import { TSDesiredStateVariableWrapper } from "./TSDesiredStateVariableWrapper"
 import { Glyph } from "./VariablesView"
+import { TQuickFillComboBox } from "./TQuickFillComboBox";
 
 export class TSLogicListBox {
-    inputElement: HTMLInputElement
+    inputElement: TQuickFillComboBox
 
     view(vnode: any) {
-        const { items, world, ...attrs } = vnode.attrs
+        const {selections, items, world, ...attrs } = vnode.attrs
         
         return m("div.dib.LogicListBox.ba.bg-white",
             attrs,
@@ -20,12 +21,13 @@ export class TSLogicListBox {
                         "-webkit-padding-start": "0px",
                     },
                     onclick: (event: any) => {
-                        this.inputElement.focus()
+                        // TODO: problem as events bubble up from combobox: this.inputElement.focus()
                     }
                 },
-                items.map((item: TSDesiredStateVariableWrapper, i: number) => {
+                selections.map((item: TSDesiredStateVariableWrapper, i: number) => {
                     return m("li.ba.bg-light-gray.fl.ml1.mt1.mb1.br1",
                         {
+                            id: i,
                             style: {
                                 "word-wrap": "break-word",
                             }
@@ -38,19 +40,25 @@ export class TSLogicListBox {
                         }, item.desiredState ? Glyph.present : Glyph.absent),
                         item.variable.phrase,
                         m("span.ml2", {
-                            // make this int command
-                            onclick: () => items.splice(i, 1),
+                            // TODO: make this into command
+                            onclick: () => selections.splice(i, 1),
                         }, "x")
                     )
                 }),
                 m("li.ml1.mt1.mb1", 
-                    m("input.ml1.mt1.mb1", {
+                    m(TQuickFillComboBox, <any>{
+                        id: -1,
+                        items: items,
+                        value: "",
+                        ignoreLeadingCharacter: "~+",
+                        clearAfterAccept: true,
                         style: {
+                            "margin-left": "0.25rem",
                             "border": "0",
                             "white-space": "nowrap",
                         },
                         oncreate: (vnode: any) => {
-                            this.inputElement = <HTMLInputElement>(vnode.dom)
+                            this.inputElement = <TQuickFillComboBox>(vnode.state)
                         },
                         onchange: (event: any) => {
                             if (event.target.value) {
@@ -63,7 +71,7 @@ export class TSLogicListBox {
                                 } else if (variableName.startsWith("+")) {
                                     variableName = variableName.substring(1).trim()
                                 }
-                                items.push(new TSDesiredStateVariableWrapper(world.findOrCreateVariable(variableName, false), desiredState))
+                                selections.push(new TSDesiredStateVariableWrapper(world.findOrCreateVariable(variableName, false), desiredState))
                                 event.target.value = ""
                             }
                         }

@@ -9,22 +9,41 @@ export class TQuickFillComboBox {
     clientWidth = 0
     inputElement: HTMLInputElement
     onchangeCallback: (event: { target: HTMLInputElement }) => {}
+    ignoreLeadingCharacter: string
+    leadingCharacter: string = ""
+    clearAfterAccept: boolean
     // TODO: Use or remove these
     // mustBeInList: boolean = false
     // entryRequired: boolean = false
 
-    constructor(vnode: m.Vnode) {
-        this.text = (<any>vnode.attrs).value || ""
-        this.onchangeCallback = (<any>vnode.attrs).onchange || ((event: any) => {})
-        this.items = (<any>vnode.attrs).items || []
-        // this.mustBeInList = (<any>vnode.attrs).mustBeInList || false
-        // this.entryRequired = (<any>vnode.attrs).required || false
+    // TODO: Figure out how to improve vnode typing specific to component
+    constructor(vnode: any) {
+        this.text = vnode.attrs.value || ""
+        this.onchangeCallback = vnode.attrs.onchange || ((event: any) => {})
+        this.items = vnode.attrs.items || []
+        this.ignoreLeadingCharacter = vnode.attrs.ignoreLeadingCharacter || ""
+        this.clearAfterAccept = vnode.attrs.clearAfterAccept || false
+        // this.mustBeInList = vnode.attrs.mustBeInList || false
+        // this.entryRequired = vnode.attrs.required || false
     }
 
-    view(vnode: m.Vnode) {
-        this.items = (<any>vnode.attrs).items
+    focus() {
+        this.inputElement.focus()
+    }
+
+    doOnchangeCallback() {
+        if (this.onchangeCallback) {
+            this.onchangeCallback(<any>{target: {value: this.text}})
+        }
+        if (this.clearAfterAccept) {
+            this.text = ""
+        }
+    }
+
+    view(vnode: any) {
+        this.items = vnode.attrs.items
         
-        const extraStyling = (<any>vnode.attrs).extraStyling || ""
+        const extraStyling = vnode.attrs.extraStyling || ""
 
         const focusOnInput = () => {
             this.inputElement.focus()
@@ -40,7 +59,7 @@ export class TQuickFillComboBox {
 
         return m("div.dib.relative",
             {
-                style: (<any>vnode.attrs).style || "",
+                style: vnode.attrs.style || "",
                 oncreate: (vnode: any) => this.clientWidth = (<HTMLInputElement>(vnode.dom)).clientWidth,
                 onupdate: (vnode: any) => this.clientWidth = (<HTMLInputElement>(vnode.dom)).clientWidth,
 
@@ -53,7 +72,7 @@ export class TQuickFillComboBox {
                 // oninput: (event: { target: HTMLInputElement }) => this.Text = event.target.value,
                 onchange: (event: { target: HTMLInputElement }) => {
                     this.text = event.target.value
-                    if (this.onchangeCallback) this.onchangeCallback(event)
+                    this.calculateLeadingCharacter()
                 },
                 oncreate: (vnode: any) => {
                     this.inputElement = <HTMLInputElement>(vnode.dom)
@@ -64,9 +83,15 @@ export class TQuickFillComboBox {
                 onkeydown: (event: KeyboardEvent) => {
                     if (event.keyCode === 40) {
                         // down arrow
+                        this.text = (<HTMLInputElement>event.target).value
+                        this.calculateLeadingCharacter()
                         this.menuOpen = true
                         this.menuOpenedByButton = false
+                    } else if (event.keyCode === 13) {
+                        // enter
+                        this.menuOpen = false
                         this.text = (<HTMLInputElement>event.target).value
+                        this.doOnchangeCallback()
                     } else {
                         (<any>event).redraw = false
                     }
@@ -76,6 +101,7 @@ export class TQuickFillComboBox {
             }),
             m("button", {
                 onclick: () => {
+                    this.calculateLeadingCharacter()
                     this.menuOpen = !this.menuOpen
                     if (!this.menuOpen) focusOnInput()
                     this.menuOpenedByButton = true
@@ -125,9 +151,9 @@ export class TQuickFillComboBox {
                         tabindex: index,
                         onclick: () => {
                             this.menuOpen = false
-                            this.text = item
+                            this.text = this.leadingCharacter + item
                             focusOnInput()
-                            if (this.onchangeCallback) this.onchangeCallback(<any>{target: {value: item}})
+                            this.doOnchangeCallback()
                         },
                         /*
                         onmouseover: (event: Event) {
@@ -165,9 +191,9 @@ export class TQuickFillComboBox {
                             } else if (event.keyCode === 13) {
                                 // enter
                                 this.menuOpen = false
-                                this.text = item
+                                this.text = this.leadingCharacter + item
                                 focusOnInput()
-                                if (this.onchangeCallback) this.onchangeCallback(<any>{target: {value: item}})    
+                                this.doOnchangeCallback()
                             } else if (event.keyCode === 27) {
                                 // escape
                                 this.menuOpen = false
@@ -186,8 +212,26 @@ export class TQuickFillComboBox {
         )
     }
 
+    calculateLeadingCharacter() {
+        const text = this.text.trim()
+        if (this.ignoreLeadingCharacter) {
+            this.leadingCharacter = ""
+            for (let i = 0; i < this.ignoreLeadingCharacter.length; i++) {
+                const c = this.ignoreLeadingCharacter[i]
+                if (text.startsWith(c)) {
+                    this.leadingCharacter = c
+                    break
+                }
+            }
+        }
+    }
+
     getItemsForMatch(): string[] {
         if (this.menuOpenedByButton) return this.items
-        return this.items.filter(each => each.includes(this.text))
+        let text = this.text.trim()
+        if (this.leadingCharacter) {
+            text = text.substring(1).trim()
+        }
+        return this.items.filter(each => each.includes(text))
     }
 }

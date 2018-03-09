@@ -472,6 +472,13 @@ export class TWorld {
         return this.getContexts().map(variable => variable.phrase).sort()
     }
 
+    getVariableNames(): string[] {
+        // TODO: Can have only one of each variable so do not need the set
+        const variableNames = new Set()
+        this.variables.map(variable => variableNames.add(variable.phrase))
+        return [...variableNames].sort()
+    }
+
     getCommandNames(): string[] {
         const commandNames = new Set()
         this.rules.map(rule => commandNames.add(rule.command.phrase))
