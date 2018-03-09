@@ -18,9 +18,8 @@ export class TQuickFillComboBox {
 
     // TODO: Figure out how to improve vnode typing specific to component
     constructor(vnode: any) {
+        // TODO: Maybe want to move these assignemnts into view method and even remove those instance variables?
         this.text = vnode.attrs.value || ""
-        this.onchangeCallback = vnode.attrs.onchange || ((event: any) => {})
-        this.items = vnode.attrs.items || []
         this.ignoreLeadingCharacter = vnode.attrs.ignoreLeadingCharacter || ""
         this.clearAfterAccept = vnode.attrs.clearAfterAccept || false
         // this.mustBeInList = vnode.attrs.mustBeInList || false
@@ -42,6 +41,7 @@ export class TQuickFillComboBox {
 
     view(vnode: any) {
         this.items = vnode.attrs.items
+        this.onchangeCallback = vnode.attrs.onchange || ((event: any) => {})
         
         const extraStyling = vnode.attrs.extraStyling || ""
 
