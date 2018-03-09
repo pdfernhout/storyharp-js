@@ -8,7 +8,8 @@ export class TSLogicListBox {
     inputElement: TQuickFillComboBox
 
     view(vnode: any) {
-        const {selections, items, world, ...attrs } = vnode.attrs
+        const { selections, items, world, ...attrs } = vnode.attrs
+        const onchangeCallback = vnode.attrs.onchange || (() => {})
         
         return m("div.dib.LogicListBox.ba.bg-white",
             attrs,
@@ -24,7 +25,7 @@ export class TSLogicListBox {
                         // TODO: problem as events bubble up from combobox: this.inputElement.focus()
                     }
                 },
-                selections.map((item: TSDesiredStateVariableWrapper, i: number) => {
+                selections.map((wrapper: TSDesiredStateVariableWrapper, i: number) => {
                     return m("li.ba.bg-light-gray.fl.ml1.mt1.mb1.br1",
                         {
                             id: i,
@@ -34,14 +35,16 @@ export class TSLogicListBox {
                         },
                         m("span.pl1.b", {
                             onclick: (event: any) => {
-                                // TODO: make this a command
-                                item.desiredState = item.desiredState ? TSVariableState.kAbsent : TSVariableState.kPresent
+                                wrapper.desiredState = wrapper.desiredState ? TSVariableState.kAbsent : TSVariableState.kPresent
+                                onchangeCallback(selections)
                             }    
-                        }, item.desiredState ? Glyph.present : Glyph.absent),
-                        item.variable.phrase,
+                        }, wrapper.desiredState ? Glyph.present : Glyph.absent),
+                        wrapper.variable.phrase,
                         m("span.ml2", {
-                            // TODO: make this into command
-                            onclick: () => selections.splice(i, 1),
+                            onclick: () => {
+                                selections.splice(i, 1)
+                                onchangeCallback(selections)
+                            },
                         }, "x")
                     )
                 }),
@@ -62,10 +65,9 @@ export class TSLogicListBox {
                         },
                         onchange: (event: any) => {
                             if (event.target.value) {
-                                // TODO: Make this a command
                                 let desiredState = TSVariableState.kPresent
                                 let variableName = event.target.value.trim()
-                                if (variableName.startsWith("~") {
+                                if (variableName.startsWith("~")) {
                                     variableName = variableName.substring(1).trim()
                                     desiredState = TSVariableState.kAbsent
                                 } else if (variableName.startsWith("+")) {
@@ -73,6 +75,7 @@ export class TSLogicListBox {
                                 }
                                 selections.push(new TSDesiredStateVariableWrapper(world.findOrCreateVariable(variableName, false), desiredState))
                                 event.target.value = ""
+                                onchangeCallback(selections)
                             }
                         }
                     })

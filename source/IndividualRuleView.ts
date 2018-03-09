@@ -203,6 +203,14 @@ export class IndividualRuleView {
         const worldCommandList: TSCommandList = this.domain.worldCommandList
         const rule: TSRule | null = this.domain.editedRule
 
+        const requirements: TSDesiredStateVariableWrapper[] = []
+        const changes: TSDesiredStateVariableWrapper[] = []
+        if (rule) {
+            // Make copies
+            rule.compile(rule.decompile(rule.requirements), requirements)
+            rule.compile(rule.decompile(rule.changes), changes)
+        }
+
         // TODO: Fix all these
         const ruleEditorForm: any = this.domain.ruleEditorForm
         const changeLogForm: any = this.domain.changeLogForm
@@ -232,14 +240,16 @@ export class IndividualRuleView {
             worldCommandList.ruleFieldChange(rule, TSRuleField.kRuleMove, event.target.value)
         }
 
-        function requirementsChange(event: { target: HTMLInputElement }) {
+        function requirementsChange(newRequirements: TSDesiredStateVariableWrapper[]) {
             if (!rule) throw new Error("Rule must be defined first")
-            worldCommandList.ruleFieldChange(rule, TSRuleField.kRuleRequirements, event.target.value)
+            const value = rule.decompile(newRequirements)
+            worldCommandList.ruleFieldChange(rule, TSRuleField.kRuleRequirements, value)
         }
 
-        function changesChange(event: { target: HTMLInputElement }) {
+        function changesChange(newChanges: TSDesiredStateVariableWrapper[]) {
             if (!rule) throw new Error("Rule must be defined first")
-            worldCommandList.ruleFieldChange(rule, TSRuleField.kRuleChanges, event.target.value)
+            const value = rule.decompile(newChanges)
+            worldCommandList.ruleFieldChange(rule, TSRuleField.kRuleChanges, value)
         }
 
         return m(".IndividualRuleView.ba.bg-light-gray.w-100.pa1",
@@ -351,9 +361,10 @@ export class IndividualRuleView {
                             ),
                             m(TSLogicListBox, {
                                 style: { width: "35rem", },
-                                selections: rule.requirements,
+                                selections: requirements,
                                 items: world.getVariableNames(),
-                                world: world
+                                world: world,
+                                onchange: requirementsChange,
                             })
                         ),
                         m(".Command.mt1",
@@ -431,9 +442,10 @@ export class IndividualRuleView {
                         ),
                         m(TSLogicListBox, {
                             style: { width: "35rem", },
-                            selections: rule.changes,
+                            selections: changes,
                             items: world.getVariableNames(),
-                            world: world
+                            world: world,
+                            onchange: changesChange,
                         })
                     ),
                 ]
