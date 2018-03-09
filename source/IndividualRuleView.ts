@@ -6,6 +6,10 @@ import { TSCommandList } from "./TSCommandList"
 import { TSNewRulesCommand } from "./TSNewRulesCommand"
 import { TSDomain } from "./TSDomain"
 import { TQuickFillComboBox } from "./TQuickFillComboBox"
+import { TSChangedVariableWrapper } from "./TSChangedVariableWrapper";
+import { TSDesiredStateVariableWrapper } from "./TSDesiredStateVariableWrapper";
+import { Glyph } from "./VariablesView"
+import { TSVariableState } from "./TSVariable";
 
 // TODO: Change capitalization on some method names
 export class IndividualRuleView {
@@ -203,6 +207,43 @@ export class IndividualRuleView {
         const changeLogForm: any = this.domain.changeLogForm
         const consoleForm: any = this.domain.consoleForm
 
+        const logicDisplay = (items: TSDesiredStateVariableWrapper[]) => {
+            return m("div.LogicDisplay",
+                m("ul",
+                    {
+                        style:  {
+                            "list-style-type": "none",
+                        },
+                    },
+                    items.map((item: TSDesiredStateVariableWrapper, i: number) => {
+                        return m("li.ba.bg-light-yellow.fl.mr1.mb1.br1",
+                            m("span", {
+                                onclick: (event: any) => {
+                                    // TODO: make this a command
+                                    item.desiredState = item.desiredState ? TSVariableState.kAbsent : TSVariableState.kPresent
+                                }    
+                            }, item.desiredState ? Glyph.present : Glyph.absent),
+                            item.variable.phrase,
+                            m("span.ml2", {
+                                // make this int command
+                                onclick: () => items.splice(i, 1),
+                            }, "x")
+                        )
+                    }),
+                    m("li", 
+                        m("input", {
+                            onchange: (event: any) => {
+                                if (event.target.value) {
+                                    // TODO: Make this a command
+                                    items.push(new TSDesiredStateVariableWrapper(world.findOrCreateVariable(event.target.value, false), TSVariableState.kPresent))
+                                }
+                            }
+                        })
+                    )
+                )
+            )
+        }
+
         function InsertMusicButtonClick() { console.log("InsertMusicButtonClick") }
 
         function InsertSoundClick() { console.log("insertSoundClick") }
@@ -353,6 +394,7 @@ export class IndividualRuleView {
                                     onchange: requirementsChange
                                 },
                             ),
+                            logicDisplay(rule.requirements),
                         ),
                         m(".Command.mt1",
                             m("button.CommandSpeedButton.TSpeedButton.w4.mr1",
@@ -436,6 +478,7 @@ export class IndividualRuleView {
                                 onchange: changesChange,
                             },
                         ),
+                        logicDisplay(rule.changes),
                     ),
                 ]
             ]
