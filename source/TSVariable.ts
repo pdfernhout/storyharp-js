@@ -3,7 +3,7 @@ import { TSDraggableObject } from "./TSDraggableObject"
 import { TWorld } from "./TWorld"
 import { TSRuleField } from "./TSRule"
 
-export enum TSVariableState { kPresent, kAbsent }
+export enum TSVariableState { kAbsent, kPresent }
 
 export type TSVariableDisplayOptions = boolean[] /* 5 + 1 */
 
