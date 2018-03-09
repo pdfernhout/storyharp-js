@@ -34,7 +34,6 @@ export class TQuickFillComboBox {
 
         const isEnoughRoomAtBottom = (threshold: number) => {
             const roomAtBottom = window.innerHeight - this.inputElement.getBoundingClientRect().bottom // this.inputElement.offsetTop + this.inputElement.offsetHeight
-            console.log("room", roomAtBottom)
             if (roomAtBottom < threshold) return false
             return true
         }
@@ -63,8 +62,8 @@ export class TQuickFillComboBox {
                     this.inputElement = <HTMLInputElement>(vnode.dom)
                 },
                 onkeydown: (event: KeyboardEvent) => {
-                    if (event.keyCode === 13 || event.keyCode === 40) {
-                        // enter or down arrow
+                    if (event.keyCode === 40) {
+                        // down arrow
                         this.menuOpen = true
                         this.menuOpenedByButton = false
                         this.text = (<HTMLInputElement>event.target).value
