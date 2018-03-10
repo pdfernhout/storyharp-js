@@ -6,7 +6,7 @@ import { VariablesView } from "./VariablesView"
 import { RuleEditorForm } from "./RuleEditorForm"
 import { FileUtils } from "./FileUtils"
 import { authoringHelp } from "./authoringHelp"
-import { TSDomain, DemoEntry } from "./TSDomain"
+import { TSDomain, DemoEntry, TranscriptLine } from "./TSDomain"
 import { storyHarpVersion } from "./version"
 
 const firstRiddleAnswer = "say an answer for a riddle"
@@ -156,10 +156,37 @@ function viewAbout(domain: TSDomain) {
     )
 }
 
+function viewTranscriptItem(item: TranscriptLine) {
+    let text = item.text
+    const findMacros = /{(.*?)}/g
+    const macros = findMacros.exec(text)
+    // just does one macro for now
+    console.log("macros",macros)
+    let pictureFile = ""
+    // {picture http://www.kurtz-fernhout.com/StoryHarp2.gif}
+    // {picture https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/Kitten_in_Rizal_Park%2C_Manila.jpg/345px-Kitten_in_Rizal_Park%2C_Manila.jpg}
+    if (macros) {
+        if (macros[1].startsWith("sound ")) {
+            const soundFile = macros[1].substring("sound ".length)
+            console.log("sound", soundFile)
+        } else if (macros[1].startsWith("picture ") {
+            pictureFile = macros[1].substring("picture ".length)
+            console.log("picture", pictureFile)
+            if (!pictureFile.startsWith("http")) {
+                pictureFile = ""
+            }
+        }
+    }
+    return m("div.mw6" + color(item.color),
+        pictureFile ? m("div", m("img", {src: pictureFile})) : [],
+        text
+    )
+}
+
 function viewConsole(domain: TSDomain) {
     return m("div.overflow-auto", { style: "height: calc(100% - 5rem)" },
         m("div",
-            domain.transcript.map((item: any) => m("div.mw6" + color(item.color), item.text)),
+            domain.transcript.map(viewTranscriptItem),
         ),
         viewChoices(domain),
         m(VariablesView, <any>{domain}),
