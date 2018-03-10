@@ -116,9 +116,14 @@ export class VariablesView {
                 },
                 shownVariables.map(variable => 
                     m("div.nowrap",
+                        {
+                            style: {
+                                "background-color": variable.getState() ? "lightgreen" : "linen",
+                            },
+                        }
                         m("span.blue.w1", {
                             onclick: () => sessionCommandList.toggleVariable(variable)
-                        }, variable.getState() === TSVariableState.kPresent ? m("span.green.b", Glyph.present) : m("span.orange.i", Glyph.absent)),
+                        }, variable.getState() === TSVariableState.kPresent ? m("span.b.pl1.mr2", Glyph.present) : m("span.i.pl1.mr2", Glyph.absent)),
                         m("span.ml1.mw5.truncate.dib", { title: variable.phrase }, variable.phrase),
                         m("div.nowrap.ml1.fr",
                             m("span.blue.w1", variable.contextUseages > 0 ? Glyph.context : Glyph.spacer),
