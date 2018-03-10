@@ -25,13 +25,14 @@ export class TSLogicListBox {
                     }
                 },
                 selections.map((wrapper: TSDesiredStateVariableWrapper, i: number) => {
-                    return m("li.ba.bg-light-gray.fl.ml1.mb1.br1",
+                    return m("li.ba.fl.ml1.mb1.br1",
                         {
                             id: i,
                             style: {
                                 "margin-top": "0.15rem",
                                 "word-wrap": "break-word",
-                            }
+                                "background-color": wrapper.desiredState ? "lightgreen" : "linen",
+                            },
                         },
                         m("span.pl1.b", {
                             onclick: (event: any) => {
