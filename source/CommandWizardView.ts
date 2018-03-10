@@ -74,8 +74,6 @@ export class CommandWizardView {
 
     wasGenerateRulesPressed = false
 
-    showHelp = true
-
     constructor(vnode: m.Vnode) {
         this.domain = (<any>vnode.attrs).domain
         this.commandWizardData = this.domain.commandWizardData
@@ -231,7 +229,7 @@ export class CommandWizardView {
 
     view() {
         function caption(text: string) { return text }
-        const showHelp = this.showHelp
+        const showHelp = this.domain.showWizardHelp
         function help(...args: string[]) {
             return showHelp ? m("p", ...args) : []
         }
@@ -243,7 +241,7 @@ export class CommandWizardView {
             m("div",
                 m("h2", "New Commands Wizard"),
 
-                m("div", {onclick: () => this.showHelp = !this.showHelp }, "Show help", expander(showHelp, "", "(Click to close help)")),
+                m("div", {onclick: () => this.domain.showWizardHelp = !this.domain.showWizardHelp }, "Show wizard help", expander(showHelp, "", "(Click to close help)")),
 
                 help("This wizard will create a set of new rules based on one context and a list of commands you enter."),
                 help("You can enter a reply for each command."),

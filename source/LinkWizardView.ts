@@ -72,8 +72,6 @@ export class LinkWizardView {
 
     wasGenerateRulesPressed = false
 
-    showHelp = true
-
     constructor(vnode: m.Vnode) {
         this.domain = (<any>vnode.attrs).domain
         this.linkWizardData = this.domain.linkWizardData
@@ -275,7 +273,7 @@ export class LinkWizardView {
 
     view() {
         function caption(text: string) { return text }
-        const showHelp = this.showHelp
+        const showHelp = this.domain.showWizardHelp
         function help(...args: string[]) {
             return showHelp ? m("p", ...args) : []
         }
@@ -286,7 +284,7 @@ export class LinkWizardView {
             m("div",
                 m("h2", "New Links Wizard"),
 
-                m("div", {onclick: () => this.showHelp = !this.showHelp }, "Show help", expander(showHelp, "", "(Click to close help)")),
+                m("div", {onclick: () => this.domain.showWizardHelp = !this.domain.showWizardHelp }, "Show wizard help", expander(showHelp, "", "(Click to close help)")),
 
                 help("This wizard will link up two contexts by creating rules with commands to move between them."),
 

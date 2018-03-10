@@ -59,8 +59,6 @@ export class ContextWizardView {
 
     wasGenerateRulesPressed = false
 
-    showHelp = true
-
     constructor(vnode: m.Vnode) {
         this.domain = (<any>vnode.attrs).domain
         this.contextWizardData = this.domain.contextWizardData
@@ -152,7 +150,7 @@ export class ContextWizardView {
 
     view() {
         function caption(text: string) { return text }
-        const showHelp = this.showHelp
+        const showHelp = this.domain.showWizardHelp
         function help(...args: string[]) {
             return showHelp ? m("p", ...args) : []
         }
@@ -163,7 +161,7 @@ export class ContextWizardView {
             m("div",
                 m("h2", "New Contexts Wizard"),
 
-                m("div", {onclick: () => this.showHelp = !this.showHelp }, "Show help", expander(showHelp, "", "(Click to close help)")),
+                m("div", {onclick: () => this.domain.showWizardHelp = !this.domain.showWizardHelp  }, "Show wizard help", expander(showHelp, "", "(Click to close help)")),
 
                 help("This wizard will create new rules defining contexts and replies to a common command like \"look\"."),
 

@@ -145,6 +145,7 @@ export interface TSDomain {
     linkWizardData: LinkWizardData
     contextWizardData: ContextWizardData
     commandWizardData: CommandWizardData
+    showWizardHelp: boolean
 
     consoleForm: ConsoleFormAPI
     ruleEditorForm: RuleEditorAPI
@@ -181,6 +182,7 @@ export class TSApplication implements TSDomain {
     linkWizardData: LinkWizardData
     contextWizardData: ContextWizardData
     commandWizardData: CommandWizardData
+    showWizardHelp = true
 
     dataPath = "./data/"
 
