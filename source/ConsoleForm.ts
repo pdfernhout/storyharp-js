@@ -311,10 +311,10 @@ export function viewConsoleForm(domain: TSDomain) {
             m("span.i.ml1", "" + makeFileNameWithoutWldExtension(domain.worldFileName))
         ),
         m("div.mb3",
+            m(buttonWithHighlight("console"), { onclick: () => { activeForm = "console"; domain.world.updateAvailable() }}, "Player"),
+            m(buttonWithHighlight("ruleEditor"), { onclick: () => activeForm = "ruleEditor" }, "Editor"),
+            m(buttonWithHighlight("files"), { onclick: () => activeForm = "files" }, "Examples"),
             m(buttonWithHighlight("about"), { onclick: () => activeForm = "about" }, "About"),
-            m(buttonWithHighlight("files"), { onclick: () => activeForm = "files" }, "Demos"),
-            m(buttonWithHighlight("console"), { onclick: () => { activeForm = "console"; domain.world.updateAvailable() }}, "Console"),
-            m(buttonWithHighlight("ruleEditor"), { onclick: () => activeForm = "ruleEditor" }, "Rule Editor"),
             (activeForm !== "about" && activeForm !== "files")
                 ? m("button.ml4", { title: "Open a world file", onclick: () => loadWorldFromLocalFile(domain) }, "Load World")
                 : [],
