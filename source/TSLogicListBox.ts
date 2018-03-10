@@ -25,10 +25,11 @@ export class TSLogicListBox {
                     }
                 },
                 selections.map((wrapper: TSDesiredStateVariableWrapper, i: number) => {
-                    return m("li.ba.bg-light-gray.fl.ml1.mt1.mb1.br1",
+                    return m("li.ba.bg-light-gray.fl.ml1.mb1.br1",
                         {
                             id: i,
                             style: {
+                                "margin-top": "0.15rem",
                                 "word-wrap": "break-word",
                             }
                         },
