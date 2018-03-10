@@ -49,16 +49,17 @@ export class TSLogicListBox {
                 }),
                 m("li.ml1.mt1.mb1", 
                     m(TQuickFillComboBox, <any>{
-                        id: -1,
-                        items: items,
-                        // Always start from empty value in this special case
-                        value: "",
-                        ignoreLeadingCharacter: "~+",
                         style: {
                             "margin-left": "0.25rem",
                             "border": "0",
                             "white-space": "nowrap",
                         },
+                        id: -1,
+                        // Always start from empty value in this special case
+                        value: "",
+                        items: items,
+                        ignoreLeadingCharacter: "~+",
+                        clearOnEscape: true,
                         oncreate: (vnode: any) => {
                             this.comboBox = <TQuickFillComboBox>(vnode.state)
                         },

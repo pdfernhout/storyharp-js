@@ -46,6 +46,7 @@ export class TQuickFillComboBox {
         const ignoreLeadingCharacter: string = vnode.attrs.ignoreLeadingCharacter || ""
         let leadingCharacter = ""
         const extraStyling: string = vnode.attrs.extraStyling || ""
+        const clearOnEscape = vnode.attrs.clearOnEscape || false
         // TODO: use or remove
         // const mustBeInList: boolean = vnode.attrs.mustBeInList || false
         // const entryRequired: boolean = vnode.attrs.required || false
@@ -157,6 +158,8 @@ export class TQuickFillComboBox {
                         // enter
                         this.textValue = event.target.value
                         doOnchangeCallback()
+                    } else if (clearOnEscape && event.keyCode === 27) {
+                        this.clear()
                     } else {
                         event.redraw = false
                     }
