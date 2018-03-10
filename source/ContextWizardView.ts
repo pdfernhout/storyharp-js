@@ -225,7 +225,7 @@ export class ContextWizardView {
 
                 help("After you have generated new rules, if you change your mind, you can choose Undo from the Edit menu to remove your new rules."),
                 help("The new rules will also initally be selected in the rules table."),
-                help("The text you entered here to generate rules will also be saved in the log file if you need to recover it later."),
+                // TODO: use or remove: help("The text you entered here to generate rules will also be saved in the log file if you need to recover it later."),
             ),
         )
     }
