@@ -7,6 +7,7 @@ import { TSDraggableObject } from "./TSDraggableObject"
 import { KfCommandChangeType, KfCommand } from "./KfCommand"
 import { LinkWizardData, newLinkWizardData } from "./LinkWizardView"
 import { ContextWizardData, newContextWizardData } from "./ContextWizardView"
+import { CommandWizardData, newCommandWizardData } from "./CommandWizardView"
 
 /*
 export interface DomainOptionsStructure {
@@ -143,6 +144,7 @@ export interface TSDomain {
 
     linkWizardData: LinkWizardData
     contextWizardData: ContextWizardData
+    commandWizardData: CommandWizardData
 
     consoleForm: ConsoleFormAPI
     ruleEditorForm: RuleEditorAPI
@@ -178,6 +180,7 @@ export class TSApplication implements TSDomain {
 
     linkWizardData: LinkWizardData
     contextWizardData: ContextWizardData
+    commandWizardData: CommandWizardData
 
     dataPath = "./data/"
 
@@ -199,6 +202,7 @@ export class TSApplication implements TSDomain {
 
         this.linkWizardData = newLinkWizardData()
         this.contextWizardData = newContextWizardData()
+        this.commandWizardData = newCommandWizardData()
         
         // TODO: Fix these
         this.consoleForm = {

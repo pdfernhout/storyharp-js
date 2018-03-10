@@ -38,26 +38,39 @@ enum EndSequence {
     removeLastCommand = "removeLastCommand"
 }
 
+export interface CommandWizardData {
+    newCommandsTextToParse: string
+    contextName: string
+    prefix: string
+    endSequence: EndSequence
+    doSequence: boolean
+}
+
+export function newCommandWizardData(): CommandWizardData {
+    return {
+        newCommandsTextToParse: "",
+        contextName: "",
+        prefix: "",
+        endSequence: EndSequence.noSelection,
+        doSequence: false,
+    }
+}
+
 export class CommandWizardView {
     domain: TSDomain
+    commandWizardData: CommandWizardData
 
-    newCommandsTextToParse: string = ""
     newCommandsTextToParseError: string = ""
     newCommandsTextToParseLastGenerated: string = ""
 
-    contextName = ""
     contextNameError: string = ""
     contextNameLastGenerated: string = ""
 
-    prefix = ""
     prefixError: string = ""
     prefixLastGenerated: string = ""
 
-    endSequence = EndSequence.noSelection
     endSequenceError: string = ""
     endSequenceGenerated: string = ""
-
-    doSequence = false
 
     wasGenerateRulesPressed = false
 
@@ -65,26 +78,27 @@ export class CommandWizardView {
 
     constructor(vnode: m.Vnode) {
         this.domain = (<any>vnode.attrs).domain
+        this.commandWizardData = this.domain.commandWizardData
     }
     
     checkInputForErrors() {
-        if (!this.newCommandsTextToParse.trim()) {
+        if (!this.commandWizardData.newCommandsTextToParse.trim()) {
             this.newCommandsTextToParseError = "You must enter one or more commands to generate rules."
         } else {
             this.newCommandsTextToParseError = ""
         }
-        if (!this.contextName.trim()) {
+        if (!this.commandWizardData.contextName.trim()) {
             this.contextNameError = "You must enter a context to be used with these commands."
         } else {
             this.contextNameError = ""
         }
-        if (this.doSequence) {
-            if (!this.prefix.trim()) {
+        if (this.commandWizardData.doSequence) {
+            if (!this.commandWizardData.prefix.trim()) {
                 this.prefixError = "You must enter a prefix."
             } else {
                 this.prefixError = ""
             }
-            if (this.endSequence === EndSequence.noSelection) {
+            if (this.commandWizardData.endSequence === EndSequence.noSelection) {
                 this.endSequenceError = "You must select an option to end the sequence."
             } else {
                 this.endSequenceError = ""
@@ -97,7 +111,7 @@ export class CommandWizardView {
     }
     
     generateRules(): void {
-        console.log("generateRules", this.endSequence)
+        console.log("generateRules", this.commandWizardData.endSequence)
 
         this.wasGenerateRulesPressed = true
         if (this.checkInputForErrors()) {
@@ -105,8 +119,8 @@ export class CommandWizardView {
             return
         }
 
-        const contextName = this.contextName.trim()
-        const prefix = this.prefix.trim()
+        const contextName = this.commandWizardData.contextName.trim()
+        const prefix = this.commandWizardData.prefix.trim()
 
         const world: TWorld = this.domain.world
         const ruleEditorForm = this.domain.ruleEditorForm
@@ -117,7 +131,7 @@ export class CommandWizardView {
         const newRulesCommand = new TSNewRulesCommand(this.domain)
         newRulesCommand.creator = "command sequence wizard"
 
-        const lines = this.newCommandsTextToParse.split(/\r\n|\r|\n/)
+        const lines = this.commandWizardData.newCommandsTextToParse.split(/\r\n|\r|\n/)
 
         let index = 1
         let newRule: TSRule | null = null
@@ -139,7 +153,7 @@ export class CommandWizardView {
             }
 
             newRule = world.newRule()
-            newRule.setContext(this.contextName)
+            newRule.setContext(this.commandWizardData.contextName)
             newRule.setCommand(command)
             newRule.setReply(reply)
             newRule.selected = true
@@ -148,7 +162,7 @@ export class CommandWizardView {
             ruleEditorForm.lastChoice = newRule
             this.domain.editedRule = newRule
 
-            if (this.doSequence && (prefix !== "")) {
+            if (this.commandWizardData.doSequence && (prefix !== "")) {
                 let requirements
                 let changes
                 // Add zero at end of index to provide room for adding things in between liek BASIC line numbers
@@ -169,14 +183,14 @@ export class CommandWizardView {
             // position.Y = position.Y + 60
         }
 
-        if (this.doSequence && (prefix !== "") && (newRule !== null) && (index > 2)) {
+        if (this.commandWizardData.doSequence && (prefix !== "") && (newRule !== null) && (index > 2)) {
             // cleanup for last rule
             let changes = newRule.changesString
-            if (this.endSequence === EndSequence.loopToFirst) {
+            if (this.commandWizardData.endSequence === EndSequence.loopToFirst) {
                 changes = "~" + prefix + " " + (index - 2) + "0 & " + "~" + prefix + " started"
-            } else if (this.endSequence === EndSequence.leaveLastCommand) {
+            } else if (this.commandWizardData.endSequence === EndSequence.leaveLastCommand) {
                 changes = ""
-            } else if (this.endSequence === EndSequence.removeLastCommand) {
+            } else if (this.commandWizardData.endSequence === EndSequence.removeLastCommand) {
                 changes = "~" + prefix + " " + (index - 2) + "0"
             } else {
                 throw new Error("unexpected case")
@@ -193,10 +207,10 @@ export class CommandWizardView {
             return
         }
 
-        this.newCommandsTextToParseLastGenerated = this.newCommandsTextToParse
-        this.contextNameLastGenerated = this.contextName
-        this.prefixLastGenerated = this.prefix
-        this.endSequenceGenerated = this.endSequence
+        this.newCommandsTextToParseLastGenerated = this.commandWizardData.newCommandsTextToParse
+        this.contextNameLastGenerated = this.commandWizardData.contextName
+        this.prefixLastGenerated = this.commandWizardData.prefix
+        this.endSequenceGenerated = this.commandWizardData.endSequence
         // this.newCommandsTextToParse = ""
         this.wasGenerateRulesPressed = false
     }
@@ -221,7 +235,7 @@ export class CommandWizardView {
         function help(...args: string[]) {
             return showHelp ? m("p", ...args) : []
         }
-        const doSequence = this.doSequence
+        const doSequence = this.commandWizardData.doSequence
 
         return m(".CommandWizardView.h-100.overflow-auto",
             {
@@ -253,9 +267,9 @@ export class CommandWizardView {
                 m(TQuickFillComboBox,
                     <any>{
                         extraStyling: (this.contextNameError ? ".ml2.bg-yellow" : ".ml2"),
-                        value: this.contextName,
+                        value: this.commandWizardData.contextName,
                         onchange: (event: { target: HTMLInputElement }) => {
-                            this.contextName = event.target.value
+                            this.commandWizardData.contextName = event.target.value
                             if (this.wasGenerateRulesPressed) this.checkInputForErrors()
                         },
                         items: this.domain.world.getContextNames(),
@@ -284,14 +298,14 @@ export class CommandWizardView {
 
                 m("div.ma2", "Command (", Glyph.command, ")", m("span.ml2.mr2.f4.b", "|"), "Reply (", Glyph.reply, ")"),
 
-                m("div.b", "New commands ", this.contextName ? "for: " + this.contextName : ""),
+                m("div.b", "New commands ", this.commandWizardData.contextName ? "for: " + this.commandWizardData.contextName : ""),
                 m("textarea.ml2" + (this.newCommandsTextToParseError ? ".bg-yellow" : ""),
                     {
                         rows: 10,
                         cols: 60,
-                        value: this.newCommandsTextToParse,
+                        value: this.commandWizardData.newCommandsTextToParse,
                         onchange: (event: { target: HTMLInputElement }) => {
-                            this.newCommandsTextToParse = event.target.value
+                            this.commandWizardData.newCommandsTextToParse = event.target.value
                             if (this.wasGenerateRulesPressed) this.checkInputForErrors()
                         }
                     },
@@ -310,7 +324,7 @@ export class CommandWizardView {
                     m("input[type=checkbox].ml1", {
                         checked: doSequence || undefined,
                         onchange: (event: { target: HTMLInputElement }) => { 
-                            this.doSequence = event.target.checked 
+                            this.commandWizardData.doSequence = event.target.checked 
                             if (this.wasGenerateRulesPressed) this.checkInputForErrors()
                         }
                     }),
@@ -327,9 +341,9 @@ export class CommandWizardView {
                     m("p", " What prefix do you want to use for the requirements that create the sequence?"),
 
                     m("input", {
-                        value: this.prefix,
+                        value: this.commandWizardData.prefix,
                         onchange: (event: { target: HTMLInputElement }) => {
-                            this.prefix = event.target.value
+                            this.commandWizardData.prefix = event.target.value
                             if (this.wasGenerateRulesPressed) this.checkInputForErrors()
                         },
                         disabled: !doSequence || null,
@@ -345,9 +359,9 @@ export class CommandWizardView {
                         {
                             name: "endSequence",
                             value: EndSequence.loopToFirst,
-                            checked: this.endSequence === EndSequence.loopToFirst,
+                            checked: this.commandWizardData.endSequence === EndSequence.loopToFirst,
                             onchange: () => { 
-                                this.endSequence = EndSequence.loopToFirst
+                                this.commandWizardData.endSequence = EndSequence.loopToFirst
                                 if (this.wasGenerateRulesPressed) this.checkInputForErrors()
                             },
                             disabled: !doSequence || null,
@@ -359,9 +373,9 @@ export class CommandWizardView {
                         {
                             name: "endSequence",
                             value: EndSequence.leaveLastCommand,
-                            checked: this.endSequence === EndSequence.leaveLastCommand,
+                            checked: this.commandWizardData.endSequence === EndSequence.leaveLastCommand,
                             onchange: () => { 
-                                this.endSequence = EndSequence.leaveLastCommand 
+                                this.commandWizardData.endSequence = EndSequence.leaveLastCommand 
                                 if (this.wasGenerateRulesPressed) this.checkInputForErrors()
                             },
                             disabled: !doSequence || null,
@@ -374,9 +388,9 @@ export class CommandWizardView {
                         {
                             name: "endSequence",
                             value: EndSequence.removeLastCommand,
-                            checked: this.endSequence === EndSequence.removeLastCommand,
+                            checked: this.commandWizardData.endSequence === EndSequence.removeLastCommand,
                             onchange: () => { 
-                                this.endSequence = EndSequence.removeLastCommand 
+                                this.commandWizardData.endSequence = EndSequence.removeLastCommand 
                                 if (this.wasGenerateRulesPressed) this.checkInputForErrors()
                             },
                             disabled: !doSequence || null,
@@ -401,6 +415,16 @@ export class CommandWizardView {
                 help("After you have generated new rules, if you change your mind, you can choose Undo from the Edit menu to remove your new rules."),
                 help("The new rules will also initally be selected in the rules table."),
                 // TODO: use or remove: help("The command and reply text you entered here to generate rules will also be saved in the log file if you need to recover it later."),
+
+                m("div.ml2.mt2", 
+                    m("button", {
+                        onclick: () => {
+                            if (!confirm("Are you sure you want to clear the Command Wizard form?")) return
+                            this.domain.commandWizardData = newCommandWizardData()
+                            this.commandWizardData = this.domain.commandWizardData
+                        }
+                    }, "Clear Command Wizard form"),
+                ),
             ),
         )
     }
