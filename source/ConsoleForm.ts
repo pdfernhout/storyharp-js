@@ -156,30 +156,82 @@ function viewAbout(domain: TSDomain) {
     )
 }
 
-function viewTranscriptItem(item: TranscriptLine) {
-    let text = item.text
-    const findMacros = /{(.*?)}/g
-    const macros = findMacros.exec(text)
-    // just does one macro for now
-    console.log("macros",macros)
-    let pictureFile = ""
-    // {picture http://www.kurtz-fernhout.com/StoryHarp2.gif}
-    // {picture https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/Kitten_in_Rizal_Park%2C_Manila.jpg/345px-Kitten_in_Rizal_Park%2C_Manila.jpg}
-    if (macros) {
-        if (macros[1].startsWith("sound ")) {
-            const soundFile = macros[1].substring("sound ".length)
-            console.log("sound", soundFile)
-        } else if (macros[1].startsWith("picture ") {
-            pictureFile = macros[1].substring("picture ".length)
-            console.log("picture", pictureFile)
-            if (!pictureFile.startsWith("http")) {
-                pictureFile = ""
+enum SegmentType {
+    speakText,
+    sayOptionsMacroInForce,
+    showPicture,
+    speakSound
+}
+
+interface Segment {
+    type: SegmentType
+    text: string
+}
+
+function parseTextWithMacros(aString: string): Segment[] { 
+    const result: Segment[] = []   
+    let remaining = aString
+    const wholeLength = aString.length
+    while (remaining.length > 0) {
+        const startPosition = remaining.indexOf("{")
+        if (startPosition !== -1) {
+            const toSay = remaining.substring(0, startPosition - 1)
+            if (toSay.trim() !== "") {
+                result.push({type: SegmentType.speakText, text: toSay})
             }
+            remaining = remaining.substring(startPosition + 1)
+        } else {
+            if (remaining.trim() !== "") {
+                result.push({type: SegmentType.speakText, text: remaining})
+            }
+            return result
+        }
+        const endPosition = remaining.indexOf("}")
+        if (endPosition === -1) {
+            // error - unmatched braces
+            console.log("Error == unmatched braces")
+            result.push({type: SegmentType.speakText, text: remaining})
+            return result
+        }
+        const macro = remaining.substring(0, endPosition - 1).trim()
+        remaining = remaining.substring(endPosition + 1)
+        if (macro.startsWith("options")) {
+            // cfk added
+            // TODO: use or remove: sayOptionsMacroInForce = true
+            result.push({type: SegmentType.sayOptionsMacroInForce, text: ""})
+        } else if (macro.startsWith("picture ")) {
+            result.push({type: SegmentType.showPicture, text: macro.substring("picture ".length)})
+        } else if (macro.startsWith("sound ")) {
+            // TODO: legacy from when did not prefix sounds? Maybe should require that? 
+            result.push({type: SegmentType.speakSound, text: macro.substring("sound ".length)})
+        } else {
+            // TODO: legacy from when did not prefix sounds? Maybe should require that? 
+            result.push({type: SegmentType.speakSound, text: macro})
         }
     }
+    return result
+}
+
+function viewTranscriptItem(item: TranscriptLine) {
+    // {picture http://www.kurtz-fernhout.com/StoryHarp2.gif}
+    // {picture https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/Kitten_in_Rizal_Park%2C_Manila.jpg/345px-Kitten_in_Rizal_Park%2C_Manila.jpg}
+    const segments = parseTextWithMacros(item.text)
     return m("div.mw6" + color(item.color),
-        pictureFile ? m("div", m("img", {src: pictureFile})) : [],
-        text
+        segments.map(segment => {
+            switch (segment.type) {
+                case SegmentType.speakText:
+                    return segment.text
+                case SegmentType.sayOptionsMacroInForce:
+                    return []
+                case SegmentType.showPicture:
+                    return m("div", m("img", {src: segment.text}))
+                case SegmentType.speakSound:
+                    // console.log("Unfinished sound handling", segment)
+                    return []
+                default:
+                    throw new Error("unexpected segment type: " + JSON.stringify(segment))
+            }
+        })
     )
 }
 
