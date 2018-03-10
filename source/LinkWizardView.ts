@@ -450,16 +450,22 @@ export class LinkWizardView {
                 help("The new rules will also initally be selected in the rules table."),
                 // TODO: use or remove: help("The text you entered here to generate rules will also be saved in the log file if you need to recover it later."),
 
-                m("div.ml2.mt2", 
+                m("div.ml2.mt2.mb3", 
                     m("button", {
                         onclick: () => {
                             if (!confirm("Are you sure you want to clear the Link Wizard form?")) return
                             this.domain.linkWizardData = newLinkWizardData()
                             this.linkWizardData = this.domain.linkWizardData
+                            this.firstContextError = ""
+                            this.firstCommandError = ""
+                            this.firstReplyError = ""
+                            this.secondContextError = ""
+                            this.secondCommandError = ""
+                            this.secondReplyError = ""
+                            this.wasGenerateRulesPressed = false
                         }
                     }, "Clear Link Wizard form"),
                 ),
-
             ),
         )
     }
