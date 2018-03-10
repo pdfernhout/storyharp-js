@@ -241,7 +241,7 @@ export class TQuickFillComboBox {
                         onblur: (event: FocusEvent) => {
                             log("onblur", event, this.isMenuOpen)
                             if (this.isMenuOpen && event.relatedTarget !== this.buttonElement) {
-                                closeMenu(null, false)
+                                closeMenu(null, event.relatedTarget === this.inputElement)
                             } else {
                                 (<any>event).redraw = false
                             }
@@ -259,7 +259,7 @@ export class TQuickFillComboBox {
                             log("relatedTarget", relatedTarget)
                             if (this.isMenuOpen && (!relatedTarget || relatedTarget.parentElement !== this.ulElement) && relatedTarget !== this.buttonElement) {
                                 log("calling closemenu from item", item)
-                                closeMenu(null, false)
+                                closeMenu(null, event.relatedTarget === this.inputElement)
                             } else {
                                 (<any>event).redraw = false
                             }
