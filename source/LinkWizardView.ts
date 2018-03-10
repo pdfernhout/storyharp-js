@@ -28,30 +28,45 @@ yard : burrow inside
 
 */
 
+export interface LinkWizardData {
+    firstContext: string
+    firstCommand: string
+    firstReply: string
+    secondContext: string
+    secondCommand: string
+    secondReply: string
+}
+
+export function newLinkWizardData(): LinkWizardData {
+    return {
+        firstContext: "",
+        firstCommand: "",
+        firstReply: "",
+        secondContext: "",
+        secondCommand: "",
+        secondReply: "",
+    }
+}
+
 export class LinkWizardView {
     domain: TSDomain
+    linkWizardData: LinkWizardData
 
-    firstContext: string = ""
     firstContextError: string = ""
     firstContextLastGenerated: string = ""
 
-    firstCommand: string = ""
     firstCommandError: string = ""
     firstCommandLastGenerated: string = ""
 
-    firstReply: string = ""
     firstReplyError: string = ""
     firstReplyLastGenerated: string = ""
 
-    secondContext: string = ""
     secondContextError: string = ""
     secondContextGenerated: string = ""
 
-    secondCommand: string = ""
     secondCommandError: string = ""
     secondCommandLastGenerated: string = ""
 
-    secondReply: string = ""
     secondReplyError: string = ""
     secondReplyLastGenerated: string = ""
 
@@ -61,6 +76,7 @@ export class LinkWizardView {
 
     constructor(vnode: m.Vnode) {
         this.domain = (<any>vnode.attrs).domain
+        this.linkWizardData = this.domain.linkWizardData
         this.initializeContexts()
     }
 
@@ -70,10 +86,10 @@ export class LinkWizardView {
         for (let i = 0; i < world.variables.length; i++) {
             const variable = world.variables[i]
             if (variable.selected) {
-                if (!this.firstContext) {
-                    this.firstContext = variable.phrase
+                if (!this.linkWizardData.firstContext) {
+                    this.linkWizardData.firstContext = variable.phrase
                 } else {
-                    this.secondContext = variable.phrase
+                    this.linkWizardData.secondContext = variable.phrase
                     break
                 }
             }
@@ -88,28 +104,28 @@ export class LinkWizardView {
         this.secondCommandError = ""
         this.secondReplyError = ""
 
-        if (this.firstCommand.trim() === this.secondContext.trim()) {
+        if (this.linkWizardData.firstCommand.trim() === this.linkWizardData.secondContext.trim()) {
             this.firstContextError = "The two contexts must have different names."
             this.secondContextError = "The two contexts must have different names."
         }
 
-        if (!this.firstContext.trim()) {
+        if (!this.linkWizardData.firstContext.trim()) {
             this.firstContextError = "Both contexts must be entered to proceed."
         }
 
-        if (!this.secondContext.trim()) {
+        if (!this.linkWizardData.secondContext.trim()) {
             this.secondContextError = "Both contexts must be entered to proceed."
         }
 
-        if (!this.firstCommand.trim() && this.firstReply.trim()) {
+        if (!this.linkWizardData.firstCommand.trim() && this.linkWizardData.firstReply.trim()) {
             this.firstCommandError = "You must enter a command phrase if you enter a reply."
         }
 
-        if (!this.secondCommand.trim() && this.secondReply.trim()) {
+        if (!this.linkWizardData.secondCommand.trim() && this.linkWizardData.secondReply.trim()) {
             this.secondCommandError = "You must enter a command phrase if you enter a reply."
         }
 
-        if (!this.firstCommand.trim() && !this.secondCommand.trim()) {
+        if (!this.linkWizardData.firstCommand.trim() && !this.linkWizardData.secondCommand.trim()) {
             this.firstCommandError = "You must enter at least one command to generate a link."
             this.secondCommandError = "You must enter at least one command to generate a link."
         }
@@ -187,12 +203,22 @@ export class LinkWizardView {
         const newRulesCommand = new TSNewRulesCommand(this.domain)
         newRulesCommand.creator = "link wizard"
 
-        const newRule1 = this.makeLink(this.firstContext.trim(), this.secondContext.trim(), this.firstCommand.trim(), this.firstReply.trim())
+        const newRule1 = this.makeLink(
+            this.linkWizardData.firstContext.trim(),
+            this.linkWizardData.secondContext.trim(),
+            this.linkWizardData.firstCommand.trim(),
+            this.linkWizardData.firstReply.trim()
+        )
         if (newRule1 !== null) {
             newRulesCommand.addRule(newRule1)
         }
 
-        const newRule2 = this.makeLink(this.secondContext.trim(), this.firstContext.trim(), this.secondCommand.trim(), this.secondReply.trim())
+        const newRule2 = this.makeLink(
+            this.linkWizardData.secondContext.trim(),
+            this.linkWizardData.firstContext.trim(),
+            this.linkWizardData.secondCommand.trim(),
+            this.linkWizardData.secondReply.trim()
+        )
         if (newRule2 !== null) {
             newRulesCommand.addRule(newRule2)
         }
@@ -206,12 +232,12 @@ export class LinkWizardView {
             return
         }
 
-        this.firstContextLastGenerated = this.firstContext
-        this.firstCommandLastGenerated = this.firstCommand
-        this.firstReplyLastGenerated = this.firstReply
-        this.secondContextGenerated = this.secondContext
-        this.secondCommandLastGenerated = this.secondCommand
-        this.secondReplyLastGenerated = this.secondReply
+        this.firstContextLastGenerated = this.linkWizardData.firstContext
+        this.firstCommandLastGenerated = this.linkWizardData.firstCommand
+        this.firstReplyLastGenerated = this.linkWizardData.firstReply
+        this.secondContextGenerated = this.linkWizardData.secondContext
+        this.secondCommandLastGenerated = this.linkWizardData.secondCommand
+        this.secondReplyLastGenerated = this.linkWizardData.secondReply
 
         // TODO: How to clear this out? Maybe add clear button?
         // this.newContextsTextToParse = ""
@@ -283,9 +309,9 @@ export class LinkWizardView {
                 m(TQuickFillComboBox,
                     <any>{
                         extraStyling: (this.firstContextError ? ".ml2.bg-yellow" : ".ml2"),
-                        value: this.firstContext,
+                        value: this.linkWizardData.firstContext,
                         onchange: (event: { target: HTMLInputElement }) => {
-                            this.firstContext = event.target.value
+                            this.linkWizardData.firstContext = event.target.value
                             if (this.wasGenerateRulesPressed) this.checkInputForErrors()
                         },
                         items: this.domain.world.getContextNames(),
@@ -300,9 +326,9 @@ export class LinkWizardView {
                 m(TQuickFillComboBox,
                     <any>{
                         extraStyling: (this.secondContextError ? ".ml2.bg-yellow" : ".ml2"),
-                        value: this.secondContext,
+                        value: this.linkWizardData.secondContext,
                         onchange: (event: { target: HTMLInputElement }) => {
-                            this.secondContext = event.target.value
+                            this.linkWizardData.secondContext = event.target.value
                             if (this.wasGenerateRulesPressed) this.checkInputForErrors()
                         },
                         items: this.domain.world.getContextNames(),
@@ -317,13 +343,13 @@ export class LinkWizardView {
 
                 m("h3", "Forward"),
 
-                m("p", "What command (", Glyph.command, ") should the user say to move from ", m("i", (this.firstContext || "the first context")), ":"),
+                m("p", "What command (", Glyph.command, ") should the user say to move from ", m("i", (this.linkWizardData.firstContext || "the first context")), ":"),
                 m(TQuickFillComboBox,
                     <any>{
                         extraStyling: (this.firstCommandError ? ".ml2.bg-yellow" : ".ml2"),
-                        value: this.firstCommand,
+                        value: this.linkWizardData.firstCommand,
                         onchange: (event: { target: HTMLInputElement }) => {
-                            this.firstCommand = event.target.value
+                            this.linkWizardData.firstCommand = event.target.value
                             if (this.wasGenerateRulesPressed) this.checkInputForErrors()
                         },
                         items: this.domain.world.getCommandNames(),
@@ -333,15 +359,15 @@ export class LinkWizardView {
 
                 help("Leave this blank if you don't want to move this way. Examples are \"move forward\", \"go east\", \"leap up\", \"enter the building\", and \"activate the transporter\"."),
 
-                m("p", "What should the computer reply (", Glyph.reply, ") after the user says the move command from ", m("i", (this.firstContext || "the first context")), "?"),
+                m("p", "What should the computer reply (", Glyph.reply, ") after the user says the move command from ", m("i", (this.linkWizardData.firstContext || "the first context")), "?"),
 
                 m("textarea.ml2" + (this.firstReplyError ? ".bg-yellow" : ""),
                     {
                         rows: 10,
                         cols: 60,
-                        value: this.firstReply,
+                        value: this.linkWizardData.firstReply,
                         onchange: (event: { target: HTMLInputElement }) => {
-                            this.firstReply = event.target.value
+                            this.linkWizardData.firstReply = event.target.value
                             if (this.wasGenerateRulesPressed) this.checkInputForErrors()
                         }
                     },
@@ -355,13 +381,13 @@ export class LinkWizardView {
 
                 m("h3", "Backward"),
 
-                m("p", "What command (", Glyph.command, ") should the user say to move from ", m("i", (this.secondContext || "the second context")), ":"),
+                m("p", "What command (", Glyph.command, ") should the user say to move from ", m("i", (this.linkWizardData.secondContext || "the second context")), ":"),
                 m(TQuickFillComboBox,
                     <any>{
                         extraStyling: (this.secondCommandError ? ".ml2.bg-yellow" : ".ml2"),
-                        value: this.secondCommand,
+                        value: this.linkWizardData.secondCommand,
                         onchange: (event: { target: HTMLInputElement }) => {
-                            this.secondCommand = event.target.value
+                            this.linkWizardData.secondCommand = event.target.value
                             if (this.wasGenerateRulesPressed) this.checkInputForErrors()
                         },
                         items: this.domain.world.getCommandNames(),
@@ -371,15 +397,15 @@ export class LinkWizardView {
 
                 help("Leave this blank if you don't want to move this way. Examples are \"move forward\", \"go east\", \"leap up\", \"enter the building\", and \"activate the transporter\"."),
 
-                m("p", "What should the computer reply (", Glyph.reply, ") after the user says the move command from ", m("i", (this.secondContext || "the second context")), "?"),
+                m("p", "What should the computer reply (", Glyph.reply, ") after the user says the move command from ", m("i", (this.linkWizardData.secondContext || "the second context")), "?"),
 
                 m("textarea.ml2" + (this.secondReplyError ? ".bg-yellow" : ""),
                     {
                         rows: 10,
                         cols: 60,
-                        value: this.secondReply,
+                        value: this.linkWizardData.secondReply,
                         onchange: (event: { target: HTMLInputElement }) => {
-                            this.secondReply = event.target.value
+                            this.linkWizardData.secondReply = event.target.value
                             if (this.wasGenerateRulesPressed) this.checkInputForErrors()
                         }
                     },
@@ -395,18 +421,18 @@ export class LinkWizardView {
 
                 m("div.commandsToGenerate",
                  
-                    (this.firstCommand || this.secondCommand) 
+                    (this.linkWizardData.firstCommand || this.linkWizardData.secondCommand) 
                         ? m("p", "Commands to generate:")
                         : [],
 
                     m("div.ml3",
-                        (!this.firstCommand)
+                        (!this.linkWizardData.firstCommand)
                             ? []
-                            : m("p", this.firstContext + "  ---  " + this.firstCommand + "  -->  " + this.secondContext),
+                            : m("p", this.linkWizardData.firstContext + "  ---  " + this.linkWizardData.firstCommand + "  -->  " + this.linkWizardData.secondContext),
 
-                        (!this.secondCommand)
+                        (!this.linkWizardData.secondCommand)
                             ? []
-                            : m("p", this.secondContext + "  ---  " + this.secondCommand + "  -->  " + this.firstContext),
+                            : m("p", this.linkWizardData.secondContext + "  ---  " + this.linkWizardData.secondCommand + "  -->  " + this.linkWizardData.firstContext),
                     )
                 ),
     
@@ -423,6 +449,17 @@ export class LinkWizardView {
                 help("After you have generated new rules, if you change your mind, you can choose Undo from the Edit menu to remove your new rules."),
                 help("The new rules will also initally be selected in the rules table."),
                 // TODO: use or remove: help("The text you entered here to generate rules will also be saved in the log file if you need to recover it later."),
+
+                m("div.ml2.mt2", 
+                    m("button", {
+                        onclick: () => {
+                            if (!confirm("Are you sure you want to clear the Link Wizard form?")) return
+                            this.domain.linkWizardData = newLinkWizardData()
+                            this.linkWizardData = this.domain.linkWizardData
+                        }
+                    }, "Clear Link Wizard form"),
+                ),
+
             ),
         )
     }

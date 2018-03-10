@@ -5,6 +5,7 @@ import { TSRule, TSRuleField } from "./TSRule"
 import { Color, ScrollIntoViewDirection, int, makeFileNameWithoutWldExtension } from "./common"
 import { TSDraggableObject } from "./TSDraggableObject"
 import { KfCommandChangeType, KfCommand } from "./KfCommand"
+import { LinkWizardData, newLinkWizardData } from "./LinkWizardView"
 
 /*
 export interface DomainOptionsStructure {
@@ -139,6 +140,8 @@ export interface TSDomain {
 
     newSession: () => void
 
+    linkWizardData: LinkWizardData
+
     consoleForm: ConsoleFormAPI
     ruleEditorForm: RuleEditorAPI
     changeLogForm: ChangeLogAPI
@@ -171,6 +174,8 @@ export class TSApplication implements TSDomain {
 
     showCommandPrefixInMap = false
 
+    linkWizardData: LinkWizardData
+
     dataPath = "./data/"
 
     // TODO: Fix these
@@ -189,6 +194,8 @@ export class TSApplication implements TSDomain {
         this.worldCommandList.setNewUndoLimit(1000)
         this.worldCommandList.notifyProcedure = this.commandChangedNotification.bind(this)
 
+        this.linkWizardData = newLinkWizardData()
+        
         // TODO: Fix these
         this.consoleForm = {
             addLineToTranscript: (text: string, color: number) => this.transcript.push({text, color}),
