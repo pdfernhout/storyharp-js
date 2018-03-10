@@ -316,15 +316,15 @@ export function viewConsoleForm(domain: TSDomain) {
             m(buttonWithHighlight("files"), { onclick: () => activeForm = "files" }, "Examples"),
             m(buttonWithHighlight("about"), { onclick: () => activeForm = "about" }, "About"),
             (activeForm !== "about" && activeForm !== "files")
-                ? m("button.ml4", { title: "Open a world file", onclick: () => loadWorldFromLocalFile(domain) }, "Load World")
+                ? m("button.ml4", { title: "Open a world file", onclick: () => loadWorldFromLocalFile(domain) }, "Load")
                 : [],
             activeForm === "console" 
-                ? m("button.ml2.mr4", { title: "Reset current world", onclick: () => resetConsole(domain) }, "Restart World")
+                ? m("button.ml2.mr4", { title: "Reset current world", onclick: () => resetConsole(domain) }, "Restart")
                 : [],
             activeForm === "ruleEditor" 
                 ? [
-                    m("button.ml1", { title: "Save a world file", onclick: () => saveWorldToLocalFile(domain) }, "Save World"),
-                    m("button.ml3", { title: "Make a new world", onclick: () => newWorld(domain) }, "New World"),
+                    m("button.ml1", { title: "Save a world file", onclick: () => saveWorldToLocalFile(domain) }, "Save"),
+                    m("button.ml3", { title: "Make a new world", onclick: () => newWorld(domain) }, "New"),
                 ]
                 : []
         ),
