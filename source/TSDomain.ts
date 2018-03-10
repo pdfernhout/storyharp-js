@@ -6,6 +6,7 @@ import { Color, ScrollIntoViewDirection, int, makeFileNameWithoutWldExtension } 
 import { TSDraggableObject } from "./TSDraggableObject"
 import { KfCommandChangeType, KfCommand } from "./KfCommand"
 import { LinkWizardData, newLinkWizardData } from "./LinkWizardView"
+import { ContextWizardData, newContextWizardData } from "./ContextWizardView"
 
 /*
 export interface DomainOptionsStructure {
@@ -141,6 +142,7 @@ export interface TSDomain {
     newSession: () => void
 
     linkWizardData: LinkWizardData
+    contextWizardData: ContextWizardData
 
     consoleForm: ConsoleFormAPI
     ruleEditorForm: RuleEditorAPI
@@ -175,6 +177,7 @@ export class TSApplication implements TSDomain {
     showCommandPrefixInMap = false
 
     linkWizardData: LinkWizardData
+    contextWizardData: ContextWizardData
 
     dataPath = "./data/"
 
@@ -195,6 +198,7 @@ export class TSApplication implements TSDomain {
         this.worldCommandList.notifyProcedure = this.commandChangedNotification.bind(this)
 
         this.linkWizardData = newLinkWizardData()
+        this.contextWizardData = newContextWizardData()
         
         // TODO: Fix these
         this.consoleForm = {

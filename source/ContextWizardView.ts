@@ -34,14 +34,26 @@ mindy st. claire's house | You're in a medium place at Mindy St. Claire's house.
 const defaultCommand = "look"
 const defaultReply = "There is nothing of interest here."
 
+export interface ContextWizardData {
+    newContextsTextToParse: string
+    commandPhrase: string
+}
+
+export function newContextWizardData(): ContextWizardData {
+    return {
+        newContextsTextToParse: "",
+        commandPhrase: defaultCommand,
+    }
+}
+
+
 export class ContextWizardView {
     domain: TSDomain
+    contextWizardData: ContextWizardData
 
-    newContextsTextToParse: string = ""
     newContextsTextToParseError: string = ""
     newContextsTextToParseLastGenerated: string = ""
 
-    commandPhrase = defaultCommand
     commandPhraseError: string = ""
     commandPhraseLastGenerated: string = ""
 
@@ -51,15 +63,16 @@ export class ContextWizardView {
 
     constructor(vnode: m.Vnode) {
         this.domain = (<any>vnode.attrs).domain
+        this.contextWizardData = this.domain.contextWizardData
     }
     
     checkInputForErrors() {
-        if (!this.newContextsTextToParse.trim()) {
+        if (!this.contextWizardData.newContextsTextToParse.trim()) {
             this.newContextsTextToParseError = "You must enter one or more contexts to generate rules."
         } else {
             this.newContextsTextToParseError = ""
         }
-        if (!this.commandPhrase.trim()) {
+        if (!this.contextWizardData.commandPhrase.trim()) {
             this.commandPhraseError = "You must enter a command to be used to describe these contexts."
         } else {
             this.commandPhraseError = ""
@@ -76,7 +89,7 @@ export class ContextWizardView {
             return
         }
 
-        const commandPhrase = this.commandPhrase.trim()
+        const commandPhrase = this.contextWizardData.commandPhrase.trim()
 
         const world: TWorld = this.domain.world
         const ruleEditorForm = this.domain.ruleEditorForm
@@ -87,7 +100,7 @@ export class ContextWizardView {
         const newRulesCommand = new TSNewRulesCommand(this.domain)
         newRulesCommand.creator = "new context wizard"
 
-        const lines = this.newContextsTextToParse.split(/\r\n|\r|\n/)
+        const lines = this.contextWizardData.newContextsTextToParse.split(/\r\n|\r|\n/)
 
         for (let line of lines) {
             line = line.trim()
@@ -125,8 +138,8 @@ export class ContextWizardView {
             return
         }
 
-        this.newContextsTextToParseLastGenerated = this.newContextsTextToParse
-        this.commandPhraseLastGenerated = this.commandPhrase
+        this.newContextsTextToParseLastGenerated = this.contextWizardData.newContextsTextToParse
+        this.commandPhraseLastGenerated = this.contextWizardData.commandPhrase
         // this.newContextsTextToParse = ""
         this.wasGenerateRulesPressed = false
     }
@@ -183,9 +196,9 @@ export class ContextWizardView {
                     {
                         rows: 10,
                         cols: 60,
-                        value: this.newContextsTextToParse,
+                        value: this.contextWizardData.newContextsTextToParse,
                         onchange: (event: { target: HTMLInputElement }) => {
-                            this.newContextsTextToParse = event.target.value
+                            this.contextWizardData.newContextsTextToParse = event.target.value
                             if (this.wasGenerateRulesPressed) this.checkInputForErrors()
                         }
                     },
@@ -199,9 +212,9 @@ export class ContextWizardView {
                 m(TQuickFillComboBox,
                     <any>{
                         extraStyling: (this.commandPhraseError ? ".ml2.bg-yellow" : ".ml2"),
-                        value: this.commandPhrase,
+                        value: this.contextWizardData.commandPhrase,
                         onchange: (event: { target: HTMLInputElement }) => {
-                            this.commandPhrase = event.target.value
+                            this.contextWizardData.commandPhrase = event.target.value
                             if (this.wasGenerateRulesPressed) this.checkInputForErrors()
                         },
                         items: this.domain.world.getCommandNames(),
@@ -226,6 +239,16 @@ export class ContextWizardView {
                 help("After you have generated new rules, if you change your mind, you can choose Undo from the Edit menu to remove your new rules."),
                 help("The new rules will also initally be selected in the rules table."),
                 // TODO: use or remove: help("The text you entered here to generate rules will also be saved in the log file if you need to recover it later."),
+
+                m("div.ml2.mt2", 
+                    m("button", {
+                        onclick: () => {
+                            if (!confirm("Are you sure you want to clear the Context Wizard form?")) return
+                            this.domain.contextWizardData = newContextWizardData()
+                            this.contextWizardData = this.domain.contextWizardData
+                        }
+                    }, "Clear Context Wizard form"),
+                ),
             ),
         )
     }
