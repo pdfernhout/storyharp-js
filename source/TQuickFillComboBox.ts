@@ -1,54 +1,79 @@
 import * as m from "mithril"
 import { int, expander } from "./common"
 
+// Uncomment console.log version for debugging events
+const log = (...args: any[]) => {}
+// const log = console.log
+
+// Key idea here is that the "combobox" has focus when any of the input, button, or menu items have focus.
+// So, an onchange is only sent when focus is lost from all of those
 export class TQuickFillComboBox {
-    items: string[]
-    text: string
-    menuOpen = false
+    lastSuppliedText = ""
+    textValue: string = ""
+    isMenuOpen = false
     menuOpenedByButton = false
     clientWidth = 0
     inputElement: HTMLInputElement
-    onchangeCallback: (event: { target: HTMLInputElement }) => {}
-    ignoreLeadingCharacter: string
-    leadingCharacter: string = ""
-    clearAfterAccept: boolean
-    // TODO: Use or remove these
-    // mustBeInList: boolean = false
-    // entryRequired: boolean = false
-
-    // TODO: Figure out how to improve vnode typing specific to component
-    constructor(vnode: any) {
-        // TODO: Maybe want to move these assignemnts into view method and even remove those instance variables?
-        this.text = vnode.attrs.value || ""
-        this.ignoreLeadingCharacter = vnode.attrs.ignoreLeadingCharacter || ""
-        this.clearAfterAccept = vnode.attrs.clearAfterAccept || false
-        // this.mustBeInList = vnode.attrs.mustBeInList || false
-        // this.entryRequired = vnode.attrs.required || false
-    }
+    buttonElement: HTMLButtonElement
+    ulElement: HTMLUListElement
 
     focus() {
         this.inputElement.focus()
     }
 
-    doOnchangeCallback() {
-        if (this.onchangeCallback) {
-            this.onchangeCallback(<any>{target: {value: this.text}})
-        }
-        if (this.clearAfterAccept) {
-            this.text = ""
-        }
-    }
-
+    // TODO: Figure out how to improve vnode typing specific to component
     view(vnode: any) {
-        this.items = vnode.attrs.items
-        this.onchangeCallback = vnode.attrs.onchange || ((event: any) => {})
-        
-        const extraStyling = vnode.attrs.extraStyling || ""
+        log("===================== view ==========================")
+        const suppliedText: string = vnode.attrs.value || ""
+        log("supplied text", suppliedText)
+        // let suppliedTextChange = false
+        if (this.lastSuppliedText !== suppliedText) {
+            log("suppliedTextChange", this.lastSuppliedText, suppliedText)
+            // suppliedTextChange = true
+            this.lastSuppliedText = suppliedText
+            this.textValue = suppliedText
+        }
+        log("textValue", this.textValue)
+        log("isMenuOpen", this.isMenuOpen)
+        const items: string[] = vnode.attrs.items || []
+        const onchangeCallback: (event: { target: HTMLInputElement }) => {} = vnode.attrs.onchange || ((event: any) => {})
+        const ignoreLeadingCharacter: string = vnode.attrs.ignoreLeadingCharacter || ""
+        let leadingCharacter = ""
+        const extraStyling: string = vnode.attrs.extraStyling || ""
+        // TODO: use or remove
+        // const mustBeInList: boolean = vnode.attrs.mustBeInList || false
+        // const entryRequired: boolean = vnode.attrs.required || false
 
-        const focusOnInput = () => {
-            this.inputElement.focus()
-            this.inputElement.selectionStart = this.text.length
-            this.inputElement.selectionEnd = this.text.length
+        const doOnchangeCallback = () => {
+            log("doOnchangeCallback", this.textValue)
+            if (onchangeCallback) {
+                onchangeCallback(<any>{target: {value: this.textValue}})
+            }
+        }
+
+        const openMenu = (menuOpenedByButton = false) => {
+            this.isMenuOpen = true
+            this.menuOpenedByButton = menuOpenedByButton
+        }
+
+        const closeMenu = (newText: string | null = null, focusOnInput: boolean = true) => {
+            log("closeMenu", newText, focusOnInput)
+            // This may be called a second time from the focusout of menu items if used a keypress to close
+            if (!this.isMenuOpen) return
+            this.isMenuOpen = false
+            if (newText !== null) {
+                this.textValue = newText
+                // TODO: Next line may not be needed?
+                this.inputElement.value = newText
+                this.inputElement.selectionStart = newText.length
+                this.inputElement.selectionEnd = newText.length
+            }
+            if (focusOnInput) {
+                this.inputElement.focus()
+            } else {
+                // Losing focus for entire combobox complex, so let creator know if input text has changed
+                if (this.textValue !== this.lastSuppliedText) doOnchangeCallback()
+            }
         }
 
         const isEnoughRoomAtBottom = (threshold: number) => {
@@ -56,6 +81,33 @@ export class TQuickFillComboBox {
             if (roomAtBottom < threshold) return false
             return true
         }
+
+        const calculateLeadingCharacter = () => {
+            const trimmedText = this.textValue.trim()
+            if (ignoreLeadingCharacter) {
+                leadingCharacter = ""
+                for (let i = 0; i < ignoreLeadingCharacter.length; i++) {
+                    const c = ignoreLeadingCharacter[i]
+                    if (trimmedText.startsWith(c)) {
+                        leadingCharacter = c
+                        break
+                    }
+                }
+            }
+        }
+
+        const getItemsForMatch = (items: string[], text: string, leadingCharacter: string): string[] => {
+            if (this.menuOpenedByButton) return items
+            text = text.trim()
+            if (leadingCharacter) {
+                text = text.substring(1).trim()
+            }
+            return items.filter(each => each.includes(text))
+        }
+
+        calculateLeadingCharacter()
+
+        const matchingItems = this.isMenuOpen ? getItemsForMatch(items, this.textValue, leadingCharacter) : []
 
         return m("div.dib.relative",
             {
@@ -65,49 +117,68 @@ export class TQuickFillComboBox {
 
             },
             m("input" + extraStyling, {
-                value: this.text,
+                value: this.textValue,
                 style: {
                     width: "calc(100% - 3rem)",
-                },
-                // oninput: (event: { target: HTMLInputElement }) => this.Text = event.target.value,
-                onchange: (event: { target: HTMLInputElement }) => {
-                    this.text = event.target.value
-                    this.calculateLeadingCharacter()
                 },
                 oncreate: (vnode: any) => {
                     this.inputElement = <HTMLInputElement>(vnode.dom)
                 },
-                onupdate: (vnode: any) => {
-                    this.inputElement = <HTMLInputElement>(vnode.dom)
-                },
-                onkeydown: (event: KeyboardEvent) => {
-                    if (event.keyCode === 40) {
-                        // down arrow
-                        this.text = (<HTMLInputElement>event.target).value
-                        this.calculateLeadingCharacter()
-                        this.menuOpen = true
-                        this.menuOpenedByButton = false
-                    } else if (event.keyCode === 13) {
-                        // enter
-                        this.menuOpen = false
-                        this.text = (<HTMLInputElement>event.target).value
-                        this.doOnchangeCallback()
+                onchange: (event: { target: HTMLInputElement }) => {
+                    log("input onchange", event.target.value, this.isMenuOpen)
+                    if (this.textValue !== event.target.value) {
+                        this.textValue = event.target.value
                     } else {
                         (<any>event).redraw = false
                     }
+                },
+                onblur: (event: FocusEvent) => {
+                    log("input onblur")
+                    if (!this.isMenuOpen && event.relatedTarget !== this.buttonElement) {
+                        log("input onblur processed", this.inputElement.value, this.isMenuOpen)
+                        this.textValue = this.inputElement.value
+                        if (this.lastSuppliedText !== this.textValue) doOnchangeCallback() 
+                    } else {
+                        (<any>event).redraw = false
+                    }
+                },
+                onkeydown: (event: {keyCode: number, target: HTMLInputElement, redraw: boolean}) => {
+                    if ((event.keyCode === 40) || (event.keyCode === 38)) {
+                        // down arrow
+                        this.textValue = event.target.value
+                        openMenu()
+                    } else if (event.keyCode === 13) {
+                        // enter
+                        this.textValue = event.target.value
+                        doOnchangeCallback()
+                    } else {
+                        event.redraw = false
+                    }
                     return true
                 },
-                onfocus:() => { this.menuOpen = false },
             }),
             m("button", {
+                oncreate: (vnode: any) => {
+                    this.buttonElement = <HTMLButtonElement>(vnode.dom)
+                },
                 onclick: () => {
-                    this.calculateLeadingCharacter()
-                    this.menuOpen = !this.menuOpen
-                    if (!this.menuOpen) focusOnInput()
-                    this.menuOpenedByButton = true
-                }
-            }, expander(this.menuOpen)),
-            this.menuOpen
+                    log("button onclick", this.isMenuOpen)
+                    if (this.isMenuOpen) {
+                        closeMenu()
+                    } else {
+                        openMenu(true)
+                    }
+                },
+                onblur: (event: FocusEvent) => {
+                    log("onblur button", event, this.isMenuOpen)
+                    if (!this.isMenuOpen && event.relatedTarget !== this.inputElement) {
+                        doOnchangeCallback()
+                    } else {
+                        (<any>event).redraw = false
+                    }
+                },
+            }, expander(this.isMenuOpen)),
+            this.isMenuOpen
                 ? m("ul.absolute.bg-light-gray.pa2.overflow-auto",
                     {
                         style: {
@@ -123,8 +194,8 @@ export class TQuickFillComboBox {
                             "z-index": 1,
                             bottom: isEnoughRoomAtBottom(200) ? null : 2 + "rem",
                         },
-                        tabindex: (this.items.length ? null : 0),
                         oncreate: (vnode: any) => {
+                            this.ulElement = vnode.dom
                             // TODO: focus on the first matching child instead
                             const firstChild = <HTMLElement>(<HTMLElement>vnode.dom).firstChild
                             if (firstChild) {
@@ -133,35 +204,62 @@ export class TQuickFillComboBox {
                                 setTimeout(() => {
                                     (<HTMLElement>vnode.dom).scrollTop = 0
                                 }, 50)
-                            } else {
-                                (<HTMLElement>vnode.dom).focus()
                             }
                         },
-                        onmouseleave: () => { this.menuOpen = false },
-                        onfocusout: () => { if (!this.items.length) this.menuOpen = false },
-                        onkeydown: (event: KeyboardEvent) => {
-                            if (!this.items.length) {
-                                this.menuOpen = false
-                                if (event.key.length === 1) this.text += event.key
-                                focusOnInput()
-                            }
-                        }
+                        onmouseleave: () => {
+                            log("onmouseleave")
+                            closeMenu()
+                        },
                     },
-                   this.getItemsForMatch().map((item, index) => m("li.focus-bg-light-blue", {
+                    matchingItems.length ? [] : m("li.focus-bg-light-blue", {
+                        tabindex: 0,
+                        onclick: () => {
+                            log("onclick")
+                            closeMenu()
+                        },
+                        onkeydown: (event: KeyboardEvent) => {
+                            log("onkeydown", event)
+                            if (event.keyCode === 13) {
+                                // enter
+                                closeMenu()
+                            } else if (event.keyCode === 27) {
+                                // escape
+                                closeMenu()
+                           } else {
+                                if (event.key.length === 1) this.textValue += event.key
+                                closeMenu()
+                                return false
+                            }
+                            return true
+                        },
+                        onblur: (event: FocusEvent) => {
+                            log("onblur", event, this.isMenuOpen)
+                            if (this.isMenuOpen && event.relatedTarget !== this.buttonElement) {
+                                closeMenu(null, false)
+                            } else {
+                                (<any>event).redraw = false
+                            }
+                        },
+                    }, "No matches..."),
+                    matchingItems.map((item, index) => m("li.focus-bg-light-blue", {
                         tabindex: index,
                         onclick: () => {
-                            this.menuOpen = false
-                            this.text = this.leadingCharacter + item
-                            focusOnInput()
-                            this.doOnchangeCallback()
+                            log("on click in item", item)
+                            closeMenu(leadingCharacter + item)
                         },
-                        /*
-                        onmouseover: (event: Event) {
-                            const node = <HTMLElement>event.target
-                            node.focus()
+                        onblur: (event: FocusEvent) => {
+                            const relatedTarget: any = event.relatedTarget
+                            log("onblur in item", item, this.isMenuOpen)
+                            log("relatedTarget", relatedTarget)
+                            if (this.isMenuOpen && (!relatedTarget || relatedTarget.parentElement !== this.ulElement) && relatedTarget !== this.buttonElement) {
+                                log("calling closemenu from item", item)
+                                closeMenu(null, false)
+                            } else {
+                                (<any>event).redraw = false
+                            }
                         },
-                        */
                         onkeydown: (event: KeyboardEvent) => {
+                            log("onkeydown in item", item, event)
                             if (event.keyCode === 38) {
                                 // up arrow
                                 const node = <HTMLElement>event.target
@@ -183,25 +281,20 @@ export class TQuickFillComboBox {
                                 } else {
                                    const firstChild: HTMLElement | null = <HTMLElement>(<HTMLElement>node.parentElement).firstChild
                                    if (firstChild) {
-                                       firstChild.focus()
-                                       // firstChild.scrollIntoView(true)
+                                        firstChild.focus()
+                                        // firstChild.scrollIntoView(true)
                                    }
                                 }
                                 return false
                             } else if (event.keyCode === 13) {
                                 // enter
-                                this.menuOpen = false
-                                this.text = this.leadingCharacter + item
-                                focusOnInput()
-                                this.doOnchangeCallback()
+                                closeMenu(leadingCharacter + item)
                             } else if (event.keyCode === 27) {
                                 // escape
-                                this.menuOpen = false
-                                focusOnInput()
-                           } else {
-                                this.menuOpen = false
-                                if (event.key.length === 1) this.text += event.key
-                                focusOnInput()
+                                closeMenu()
+                            } else {
+                                if (event.key.length === 1) this.textValue += event.key
+                                closeMenu()
                                 return false
                             }
                             return true
@@ -210,28 +303,5 @@ export class TQuickFillComboBox {
                 )
                 : []
         )
-    }
-
-    calculateLeadingCharacter() {
-        const text = this.text.trim()
-        if (this.ignoreLeadingCharacter) {
-            this.leadingCharacter = ""
-            for (let i = 0; i < this.ignoreLeadingCharacter.length; i++) {
-                const c = this.ignoreLeadingCharacter[i]
-                if (text.startsWith(c)) {
-                    this.leadingCharacter = c
-                    break
-                }
-            }
-        }
-    }
-
-    getItemsForMatch(): string[] {
-        if (this.menuOpenedByButton) return this.items
-        let text = this.text.trim()
-        if (this.leadingCharacter) {
-            text = text.substring(1).trim()
-        }
-        return this.items.filter(each => each.includes(text))
     }
 }
