@@ -36,7 +36,7 @@ export class TSLogicListBox {
                         },
                         m("span.pl1.b", {
                             onclick: (event: any) => {
-                                wrapper.desiredState = wrapper.desiredState ? TSVariableState.kAbsent : TSVariableState.kPresent
+                                wrapper.invertDesiredState()
                                 if (onchangeCallback) onchangeCallback(selections)
                             }    
                         }, wrapper.desiredState ? Glyph.present : Glyph.absent),
