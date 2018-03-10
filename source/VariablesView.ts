@@ -120,7 +120,7 @@ export class VariablesView {
                             style: {
                                 "background-color": variable.getState() ? "lightgreen" : "linen",
                             },
-                        }
+                        },
                         m("span.blue.w1", {
                             onclick: () => sessionCommandList.toggleVariable(variable)
                         }, variable.getState() === TSVariableState.kPresent ? m("span.b.pl1.mr2", Glyph.present) : m("span.i.pl1.mr2", Glyph.absent)),
