@@ -174,39 +174,6 @@ export class RuleEditorMenuCommands {
     numNewContextsMadeByPopupMenuThisSession: int = 0
     numNewCommandsMadeByPopupMenuThisSession: int = 0
     
-    // ------------------------------------------------------ @Creation/destruction
-    FormCreate(Sender: TObject): void {
-        this.numNewContextsMadeByPopupMenuThisSession = 1
-        this.numNewCommandsMadeByPopupMenuThisSession = 1
-        usdomain.domain.setFormSize(this, usdomain.domain.options.editorWindowRect)
-        if (usdomain.domain.options.editorPanelEditorHeight > 0) {
-            this.PanelEditor.Height = usdomain.domain.options.editorPanelEditorHeight
-            this.PanelEditor.Top = this.ClientHeight - this.PanelEditor.Height
-        }
-        if (usdomain.domain.options.editorPanelRequirementsChangesHeight > 0) {
-            this.PanelRequirementsChanges.Height = usdomain.domain.options.editorPanelRequirementsChangesHeight
-            this.PanelRequirementsChanges.Top = this.PanelEditor.ClientHeight - this.PanelRequirementsChanges.Height
-        }
-        switch (usdomain.domain.options.pageShowing) {
-            case usdomain.kPageTable:
-                this.ListPages.ActivePage = this.TabSheetTable
-                break
-            case usdomain.kPageMap:
-                this.ListPages.ActivePage = this.TabSheetMap
-                break
-            case usdomain.kPageBrowser:
-                this.ListPages.ActivePage = this.TabSheetBrowse
-                break
-        if (usdomain.domain.options.editorPanelFirstListWidth > 0) {
-            this.PanelFirstList.Width = usdomain.domain.options.editorPanelFirstListWidth
-        }
-        usdomain.domain.worldCommandList.notifyProcedure = this.commandChangedNotification
-        this.startingUp = true
-        this.updateForChangeToDomainOptions()
-        this.startingUp = false
-    }
-    
-
 
     // ----------------------------------------------------------------- @File menu
     MenuFileNewWorldClick(Sender: TObject): void {
@@ -469,16 +436,7 @@ export class RuleEditorMenuCommands {
     }
     
     // ----------------------------------------------------------------- @Edit menu
-    MenuEditUndoClick(Sender: TObject): void {
-        this.commitChangesToRule()
-        usdomain.domain.worldCommandList.undoLast()
-    }
-    
-    MenuEditRedoClick(Sender: TObject): void {
-        this.commitChangesToRule()
-        usdomain.domain.worldCommandList.redoLast()
-    }
-    
+
     MenuEditCutClick(Sender: TObject): void {
         let clip: string
         let key: byte
@@ -628,86 +586,7 @@ export class RuleEditorMenuCommands {
             this.updateForChangeToDomainOptions()
         }
     }
-    
-    // ----------------------------------------------------------------- @Rule menu
-    MenuRuleNewClick(Sender: TObject): void {
-        let newRule: TSRule
-        let variable: TSvariable
-        let newRulesCommand: TSNewRulesCommand
-        
-        this.commitChangesToRule()
-        newRulesCommand = uscommands.TSNewRulesCommand().create()
-        newRule = usdomain.domain.world.newRule()
-        newRulesCommand.addRule(newRule)
-        //
-        //  if ListPages.ActivePage = TabSheetTable then
-        //    begin
-        //
-        //    end
-        // 	else if ListPages.ActivePage = TabSheetBrowse then
-        //    begin
-        //    end
-        //	else if ListPages.ActivePage = TabSheetMap then
-        //    begin
-        //  	if lastChoice is TSVariable then
-        //    	newRule.setContext(TSVariable(lastChoice).phrase)
-        //  	else if lastChoice is TSRule then
-        //    	newRule.setContext(TSRule(lastChoice).context.phrase);
-        //    end;
-        //    
-        variable = usdomain.domain.world.firstSelectedVariable()
-        if (variable !== null) {
-            newRule.setContext(variable.phrase)
-        } else if (this.rule !== null) {
-            newRule.setContext(this.rule.context.phrase)
-        }
-        usdomain.domain.world.deselectAllExcept(newRule)
-        newRule.selected = true
-        usdomain.domain.worldCommandList.doCommand(newRulesCommand)
-        this.editRule(newRule)
-        if (trim(newRule.context.phrase) !== "") {
-            this.ActiveControl = this.CommandEdit
-        } else {
-            this.ActiveControl = this.ContextEdit
-        }
-    }
-    
-    MenuRuleDuplicateClick(Sender: TObject): void {
-        let newRule: TSRule
-        let newRulesCommand: TSNewRulesCommand
-        
-        this.commitChangesToRule()
-        if (this.rule === null) {
-            return
-        }
-        newRulesCommand = uscommands.TSNewRulesCommand().create()
-        newRulesCommand.creator = "duplicating"
-        newRule = usdomain.domain.world.newRule()
-        newRulesCommand.addRule(newRule)
-        newRule.setContext(this.rule.context.phrase)
-        newRule.setCommand(this.rule.command.phrase)
-        newRule.setReply(this.rule.reply)
-        newRule.setMove(this.rule.move.phrase)
-        newRule.setRequirements(this.rule.requirementsString)
-        newRule.setChanges(this.rule.changesString)
-        usdomain.domain.world.deselectAllExcept(newRule)
-        newRule.selected = true
-        usdomain.domain.worldCommandList.doCommand(newRulesCommand)
-        this.editRule(newRule)
-        this.updateForRuleChange()
-    }
-    
-    MenuRuleDeleteClick(Sender: TObject): void {
-        this.commitChangesToRule()
-        if ((this.rule !== null) && (this.rule.selected)) {
-            this.editRule(null)
-        }
-        usdomain.domain.world.deleteSelectedRules()
-        this.previousChoice = null
-        this.lastChoice = null
-        this.updateForRuleChange()
-    }
-    
+
     // -------------------------------------------------------------- @Display menu
     MenuMapsShowCommandsClick(Sender: TObject): void {
         this.commitChangesToRule()
@@ -770,226 +649,9 @@ export class RuleEditorMenuCommands {
         }
     }
     
-    MenuMapsQuickContextsClick(Sender: TObject): void {
-        this.commitChangesToRule()
-        this.switchToPage(this.TabSheetMap)
-        if (uscontextwizard.ContextWizardForm.initialize()) {
-            uscontextwizard.ContextWizardForm.ShowModal()
-        }
-    }
-    
-    MenuMapLinkWizardClick(Sender: TObject): void {
-        this.commitChangesToRule()
-        this.switchToPage(this.TabSheetMap)
-        if (uslinkwizard.LinkWizardForm.initialize()) {
-            uslinkwizard.LinkWizardForm.ShowModal()
-        }
-    }
-    
-    MenuMapQuickCommandsClick(Sender: TObject): void {
-        this.commitChangesToRule()
-        this.switchToPage(this.TabSheetMap)
-        if (uscommandwizard.CommandWizardForm.initialize()) {
-            uscommandwizard.CommandWizardForm.ShowModal()
-        }
-    }
-    
-    MenuEditLogFileClick(Sender: TObject): void {
-        this.commitChangesToRule()
-        uschangelog.ChangeLogForm.loadChangeLog()
-        uschangelog.ChangeLogForm.Show()
-        uschangelog.ChangeLogForm.Invalidate()
-        uschangelog.ChangeLogForm.Refresh()
-        uschangelog.ChangeLogForm.scrollLogEndIntoView()
-    }
-    
-    // ----------------------------------------------------------------- @Help menu
-    MenuHelpRegisterClick(Sender: TObject): void {
-        this.commitChangesToRule()
-        usconsoleform.ConsoleForm.MenuHelpRegisterClick(Sender)
-    }
-    
-    MenuHelpAboutClick(Sender: TObject): void {
-        this.commitChangesToRule()
-        usconsoleform.ConsoleForm.MenuHelpAboutClick(Sender)
-    }
-    
-    // ---------------------------------------------------------------- @Button bar
-    MenuRuleRaiseClick(Sender: TObject): void {
-        this.commitChangesToRule()
-        this.switchToPage(this.TabSheetTable)
-        usdomain.domain.world.raiseSelectedRules()
-    }
-    
-    MenuRuleLowerClick(Sender: TObject): void {
-        this.commitChangesToRule()
-        this.switchToPage(this.TabSheetTable)
-        usdomain.domain.world.lowerSelectedRules()
-    }
-    
-    NewRuleButtonClick(Sender: TObject): void {
-        this.MenuRuleNewClick(this)
-    }
-    
-    DuplicateRuleButtonClick(Sender: TObject): void {
-        this.MenuRuleDuplicateClick(this)
-    }
-    
-    DeleteRuleButtonClick(Sender: TObject): void {
-        this.MenuRuleDeleteClick(this)
-    }
-    
-    MoveUpButtonClick(Sender: TObject): void {
-        this.MenuRuleRaiseClick(this)
-    }
-    
-    MoveDownButtonClick(Sender: TObject): void {
-        this.MenuRuleLowerClick(this)
-    }
-    
-    // ------------------------------------------------------------------ @Updating
-    updateForChangeToDomainOptions(): void {
-        if (usdomain.domain.options.tableFontName !== "") {
-            // table -- also set default row height for table
-            this.RuleGrid.Font.Name = usdomain.domain.options.tableFontName
-        }
-        if (usdomain.domain.options.tableFontSize > 0) {
-            this.RuleGrid.Font.Size = usdomain.domain.options.tableFontSize
-        }
-        this.RuleGrid.Canvas.Font = this.RuleGrid.Font
-        this.RuleGrid.DefaultRowHeight = this.RuleGrid.Canvas.TextHeight("W") + 2
-        if (usdomain.domain.options.mapFontName !== "") {
-            // map
-            this.MapImage.Canvas.Font.Name = usdomain.domain.options.mapFontName
-        }
-        if (usdomain.domain.options.mapFontSize > 0) {
-            this.MapImage.Canvas.Font.Size = usdomain.domain.options.mapFontSize
-        }
-        if (usdomain.domain.options.browserFontName !== "") {
-            // browser
-            this.FirstListBox.Font.Name = usdomain.domain.options.browserFontName
-        }
-        if (usdomain.domain.options.browserFontSize > 0) {
-            this.FirstListBox.Font.Size = usdomain.domain.options.browserFontSize
-        }
-        this.SecondListBox.Font = this.FirstListBox.Font
-        // options menu
-        this.MenuDisplayShowButtonBar.checked = usdomain.domain.options.showButtonBar
-        this.PanelButtonBar.Visible = usdomain.domain.options.showButtonBar
-        if (this.MenuOptionsShowRuleEditor.checked !== usdomain.domain.options.showRuleEditor) {
-            this.MenuOptionsShowRuleEditor.checked = usdomain.domain.options.showRuleEditor
-            if (usdomain.domain.options.showRuleEditor) {
-                this.PanelEditor.Height = 2
-                this.PanelEditor.Enabled = true
-            } else {
-                this.PanelEditor.Height = 1
-                this.PanelEditor.Enabled = false
-            }
-            this.Resize()
-        }
-        this.MenuMapsShowCommands.checked = usdomain.domain.options.showCommandsInMap
-        if ((usdomain.domain.options.buttonSymbols !== this.buttonSymbols) || (this.startingUp)) {
-            this.buttonSymbols = usdomain.domain.options.buttonSymbols
-            usconsoleform.ConsoleForm.setButtonGlyphs(usdomain.domain.options.buttonSymbols)
-            this.setButtonGlyphs()
-            this.Invalidate()
-            // replyPicture.visible := not buttonSymbols;
-            this.setOrganizeByField(usdomain.domain.options.browseBy)
-        }
-        if (usdomain.domain.options.browseBy !== this.organizeByField) {
-            this.setOrganizeByField(usdomain.domain.options.browseBy)
-        }
-        // updating
-        this.updateForRuleChange()
-        this.MapPaintBoxChanged()
-        this.adjustScrollBars()
-        this.updateViews()
-    }
-    
-    updateMenus(): void {
-        // unfinished - maybe want better save as testing
-        this.MenuFileSaveWorld.enabled = usdomain.domain.isWorldFileChanged()
-        this.MenuFileSaveWorldAs.enabled = true
-        this.updateMenusForUndoRedo()
-    }
-    
-    updateViews(): void {
-        if (delphi_compatability.Application.terminated) {
-            return
-        }
-        this.updateMenus()
-        usconsoleform.ConsoleForm.updateViews()
-        uspictureform.PictureForm.updateViews()
-    }
-    
-    updateForRuleChange(): void {
-        this.RuleGrid.RowCount = usdomain.domain.world.rules.Count + 1
-        if (this.RuleGrid.RowCount > 1) {
-            this.RuleGrid.FixedRows = 1
-        }
-        this.RuleGrid.Invalidate()
-        usconsoleform.ConsoleForm.updateVariables()
-        usconsoleform.ConsoleForm.VariablesListBox.Invalidate()
-        this.MapPaintBoxChanged()
-        this.setOrganizeByField(this.organizeByField)
-        //if (domain.world.focus = nil) or (domain.world.focus = domain.world.emptyEntry) then
-        //  domain.world.setInitialFocus;
-        usdomain.domain.world.updateAvailable()
-        usconsoleform.ConsoleForm.updateViews()
-        this.updateRuleNumberLabel()
-    }
-    
-    updateMenusForUndoRedo(): void {
-        if (usdomain.domain.worldCommandList.isUndoEnabled()) {
-            this.MenuEditUndo.enabled = true
-            this.MenuEditUndo.caption = "&Undo " + usdomain.domain.worldCommandList.undoDescription()
-        } else {
-            this.MenuEditUndo.enabled = false
-            this.MenuEditUndo.caption = "Can't undo"
-        }
-        if (usdomain.domain.worldCommandList.isRedoEnabled()) {
-            this.MenuEditRedo.enabled = true
-            this.MenuEditRedo.caption = "&Redo " + usdomain.domain.worldCommandList.redoDescription()
-        } else {
-            this.MenuEditRedo.enabled = false
-            this.MenuEditRedo.caption = "Can't redo"
-        }
-    }
-    
     // -------------------------------------------------------------------- @Events
-    ListBoxMouseUp(Sender: TObject, Button: TMouseButton, Shift: TShiftState, X: int, Y: int): void {
-        let desiredStateWrapper: TSDesiredStateVariableWrapper
-        let wrapperObject: TObject
-        let listBox: TListBox
-        let oldIndex: int
-        let oldTopIndex: int
-        
-        this.lastClickAtLeft = false
-        listBox = Sender
-        if ((listBox.ItemIndex < 0) || (listBox.ItemIndex >= listBox.Items.Count)) {
-            return
-        }
-        if (listBox.ItemIndex === listBox.Items.Count - 1) {
-            this.ListBoxDblClick(Sender)
-        } else if (X < 10) {
-            oldIndex = listBox.ItemIndex
-            oldTopIndex = listBox.TopIndex
-            this.lastClickAtLeft = true
-            wrapperObject = listBox.Items.Objects[listBox.ItemIndex]
-            desiredStateWrapper = wrapperObject
-            // temporarily invert to get new display string
-            desiredStateWrapper.invertDesiredState()
-            listBox.Items[listBox.ItemIndex] = desiredStateWrapper.displayString()
-            listBox.Items.Objects[listBox.ItemIndex] = desiredStateWrapper
-            // restore to current state
-            desiredStateWrapper.invertDesiredState()
-            // now create command for undo
-            this.commitChangesToRule()
-            listBox.ItemIndex = oldIndex
-            listBox.TopIndex = oldTopIndex
-        }
-    }
-    
+ 
+
     ListBoxDragOver(Sender: TObject, Source: TObject, X: int, Y: int, State: TDragState, Accept: boolean): void {
         //
         return Accept
@@ -1441,42 +1103,6 @@ export class RuleEditorMenuCommands {
         ShowMessage("Search string \"" + aText + "\" not found.")
     }
     
-    
-    
-    // ------------------------------------------------------------------- @Browser
- 
-    
-    // ------------------------------------------------------------------ @Resizing
-
-    SplitterRequirementsChangesMoved(Sender: TObject): void {
-        this.FormResize(Sender)
-    }
-    
-    SplitterEditMoved(Sender: TObject): void {
-        if (this.PanelEditor.Visible && (this.PanelEditor.Height <= 50)) {
-            //PanelEditor.hide;
-            this.PanelTop.Height = this.ClientHeight - kSplitterHeight - 1
-            this.PanelEditor.Height = 1
-            this.PanelEditor.Enabled = false
-            this.MenuOptionsShowRuleEditor.checked = false
-            usdomain.domain.options.showRuleEditor = false
-        } else {
-            //if not PanelEditor.visible then
-            //      begin
-            //    	PanelEditor.show;
-            //    	{PanelTop.height := self.clientHeight - 200;
-            //      end; 
-            this.MenuOptionsShowRuleEditor.checked = true
-            usdomain.domain.options.showRuleEditor = true
-            if (this.PanelEditor.Height === 1) {
-                this.PanelEditor.Height = 2
-            }
-            this.PanelEditor.Enabled = true
-            this.FormResize(Sender)
-        }
-        usdomain.domain.options.editorPanelEditorHeight = this.PanelEditor.Height
-    }
-
     // -------------- more menus
     
     MenuFileExportClick(Sender: TObject): void {
@@ -1625,35 +1251,6 @@ export class RuleEditorMenuCommands {
             Key = 0
         }
         return Key
-    }
-    
-    MenuHelpContentsClick(Sender: TObject): void {
-        this.commitChangesToRule()
-        delphi_compatability.Application.HelpCommand(UNRESOLVED.HELP_FINDER, 0)
-    }
-    
-    MenuHelpBasicConceptsClick(Sender: TObject): void {
-        this.commitChangesToRule()
-        delphi_compatability.Application.HelpJump("A_summary_based_on_definitions")
-    }
-    
-    MenuHelpTutorialClick(Sender: TObject): void {
-        this.commitChangesToRule()
-        delphi_compatability.Application.HelpJump("Basic_Tutorial")
-    }
-    
-    MenuHelpEditingWorldsClick(Sender: TObject): void {
-        this.commitChangesToRule()
-        delphi_compatability.Application.HelpJump("Editing_worlds")
-    }
-    
-    MenuWorldSwitchToPlayerClick(Sender: TObject): void {
-        this.commitChangesToRule()
-        usconsoleform.ConsoleForm.Show()
-    }
-    
-    FormShow(Sender: TObject): void {
-        UNRESOLVED.DragAcceptFiles(this.Handle, true)
     }
     
     PopupNewContextClick(Sender: TObject): void {
