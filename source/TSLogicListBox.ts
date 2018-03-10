@@ -5,7 +5,7 @@ import { Glyph } from "./VariablesView"
 import { TQuickFillComboBox } from "./TQuickFillComboBox";
 
 export class TSLogicListBox {
-    inputElement: TQuickFillComboBox
+    comboBox: TQuickFillComboBox
 
     view(vnode: any) {
         const { selections, items, world, onchange: onchangeCallback, ...attrs } = vnode.attrs
@@ -51,16 +51,16 @@ export class TSLogicListBox {
                     m(TQuickFillComboBox, <any>{
                         id: -1,
                         items: items,
+                        // Always start from empty value in this special case
                         value: "",
                         ignoreLeadingCharacter: "~+",
-                        clearAfterAccept: true,
                         style: {
                             "margin-left": "0.25rem",
                             "border": "0",
                             "white-space": "nowrap",
                         },
                         oncreate: (vnode: any) => {
-                            this.inputElement = <TQuickFillComboBox>(vnode.state)
+                            this.comboBox = <TQuickFillComboBox>(vnode.state)
                         },
                         onchange: (event: any) => {
                             if (event.target.value) {
@@ -75,6 +75,7 @@ export class TSLogicListBox {
                                 selections.push(new TSDesiredStateVariableWrapper(world.findOrCreateVariable(variableName, false), desiredState))
                                 event.target.value = ""
                                 if (onchangeCallback) onchangeCallback(selections)
+                                this.comboBox.clear()
                             }
                         }
                     })

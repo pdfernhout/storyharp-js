@@ -21,6 +21,12 @@ export class TQuickFillComboBox {
         this.inputElement.focus()
     }
 
+    clear() {
+        this.lastSuppliedText = ""
+        this.textValue = ""
+        this.inputElement.value = ""
+    }
+
     // TODO: Figure out how to improve vnode typing specific to component
     view(vnode: any) {
         log("===================== view ==========================")
@@ -36,7 +42,7 @@ export class TQuickFillComboBox {
         log("textValue", this.textValue)
         log("isMenuOpen", this.isMenuOpen)
         const items: string[] = vnode.attrs.items || []
-        const onchangeCallback: (event: { target: HTMLInputElement }) => {} = vnode.attrs.onchange || ((event: any) => {})
+        const onchangeCallback: (event: { target: HTMLInputElement }) => {} = vnode.attrs.onchange
         const ignoreLeadingCharacter: string = vnode.attrs.ignoreLeadingCharacter || ""
         let leadingCharacter = ""
         const extraStyling: string = vnode.attrs.extraStyling || ""
@@ -47,7 +53,7 @@ export class TQuickFillComboBox {
         const doOnchangeCallback = () => {
             log("doOnchangeCallback", this.textValue)
             if (onchangeCallback) {
-                onchangeCallback(<any>{target: {value: this.textValue}})
+                onchangeCallback({target: this.inputElement})
             }
         }
 
