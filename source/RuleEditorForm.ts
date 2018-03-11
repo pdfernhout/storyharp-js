@@ -37,7 +37,7 @@ export class RuleEditorForm {
         }
 
         return m("div.flex-auto.h-100.overflow-hidden",
-            m("div.mt2",
+            m("div",
                 "Wizard:",
                 m(wizardButtonWithHighlight("context"), { onclick: (event: Event) => this.setCurrentWizard(event, "context") }, "Context"),
                 m(wizardButtonWithHighlight("command"),  { onclick: (event: Event) => this.setCurrentWizard(event, "command") }, "Command"),
@@ -66,7 +66,7 @@ export class RuleEditorForm {
 
         return m(".RuleEditorForm.ml3.flex.flex-column.flex-nowrap.overflow-hidden",
             { style: "height: calc(100% - 5rem)" },
-            m("div.flex-none",
+            m("div.flex-none.mb2",
                 m("span", "Rule Editor:"),
                 m(buttonWithHighlight("table"), { onclick: (event: Event) => this.setCurrentView(event, "table") }, "Table"),
                 m(buttonWithHighlight("map"),  { onclick: (event: Event) => this.setCurrentView(event, "map") }, "Map"),

@@ -348,7 +348,7 @@ export function viewConsoleForm(domain: TSDomain) {
             // m("span.ml1", "World:"),
             m("span.i.ml1", "" + makeFileNameWithoutWldExtension(domain.worldFileName))
         ),
-        m("div.mb3",
+        m("div.mb2",
             m(buttonWithHighlight("console"), { onclick: (event: any) => setActiveForm(event, "console") }, "Player"),
             m(buttonWithHighlight("ruleEditor"), { onclick: (event: any) => setActiveForm(event, "ruleEditor") }, "Editor"),
             m(buttonWithHighlight("files"), { onclick: (event: any) => setActiveForm(event, "files") }, "Examples"),
