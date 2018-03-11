@@ -1,7 +1,7 @@
 import { TSRule } from "./TSRule"
 import { TSVariableState } from "./TSVariable"
 import { TSDesiredStateVariableWrapper } from "./TSDesiredStateVariableWrapper"
-import { TSDomain } from "./TSDomain"
+import { TWorld } from "./TWorld"
 
 export class TSJavaScriptWriter {
     output: string[] = []
@@ -23,7 +23,7 @@ export class TSJavaScriptWriter {
         return result
     }
     
-    writeChangesForRule(domain: TSDomain, rule: TSRule): string {
+    writeChangesForRule(world: TWorld, rule: TSRule): string {
         let result = ""
         for (let i = 0; i < rule.changes.length; i++) {
             const wrapper: TSDesiredStateVariableWrapper = rule.changes[i]
@@ -34,7 +34,7 @@ export class TSJavaScriptWriter {
                 this.writeln("      variableValue[" + varies + "] = true;")
             }
         }
-        if (rule.move !== domain.world.emptyEntry) {
+        if (rule.move !== world.emptyEntry) {
             const varies = "" + rule.move.indexInVariables
             this.writeln("      move(" + varies + ");")
         }
@@ -52,17 +52,17 @@ export class TSJavaScriptWriter {
         return result
     }
     
-    writeStoryFunctions(domain: TSDomain): void {
+    writeStoryFunctions(world: TWorld): void {
         let varies: string
         
-        const firstRule: TSRule = domain.world.rules[0]
-        varies = "" + domain.world.variables.length
+        const firstRule: TSRule = world.rules[0]
+        varies = "" + world.variables.length
         this.writeln("  int SHNumberVariables()")
         this.writeln("    {")
         this.writeln("    return " + varies + ";")
         this.writeln("    }")
         this.writeln("")
-        varies = "" + domain.world.rules.length
+        varies = "" + world.rules.length
         this.writeln("  int SHNumberRules()")
         this.writeln("    {")
         this.writeln("    return " + varies + ";")
@@ -82,24 +82,24 @@ export class TSJavaScriptWriter {
         this.writeln("")
         this.writeln("  void SHDefineVariables()")
         this.writeln("    {")
-        for (let i = 0; i < domain.world.variables.length; i++) {
-            varies = this.specialHandlingForReply(domain.world.variables[i].phrase)
+        for (let i = 0; i < world.variables.length; i++) {
+            varies = this.specialHandlingForReply(world.variables[i].phrase)
             this.writeln("    variableName[" + i + "] = \"" + varies + "\";")
         }
         this.writeln("    }")
         this.writeln("")
         this.writeln("  void SHComputeSatisfiedRules()")
         this.writeln("    {")
-        for (let i = 0; i < domain.world.rules.length; i++) {
-            const rule: TSRule = domain.world.rules[i]
+        for (let i = 0; i < world.rules.length; i++) {
+            const rule: TSRule = world.rules[i]
             this.writeln("    ruleSatisfied[" + i + "] = " + this.logicalStatementForRule(rule) + ";")
         }
         this.writeln("    }")
         this.writeln("")
         this.writeln("  void SHAddAvailableCommands()")
         this.writeln("    {")
-        for (let i = 0; i < domain.world.rules.length; i++) {
-            const rule: TSRule = domain.world.rules[i]
+        for (let i = 0; i < world.rules.length; i++) {
+            const rule: TSRule = world.rules[i]
             varies = "" + rule.command.indexInVariables
             this.writeln("    if (ruleSatisfied[" + i + "]) addCommand(" + varies + ");")
         }
@@ -107,13 +107,13 @@ export class TSJavaScriptWriter {
         this.writeln("")
         this.writeln("  void SHDoCommand(int command)")
         this.writeln("    {")
-        for (let i = 0; i < domain.world.rules.length; i++) {
-            const rule: TSRule = domain.world.rules[i]
+        for (let i = 0; i < world.rules.length; i++) {
+            const rule: TSRule = world.rules[i]
             varies = "" + rule.command.indexInVariables
             this.writeln("    if (command == " + varies + " && ruleSatisfied[" + i + "])")
             this.writeln("      {")
             this.writeln("      reply(\"" + this.specialHandlingForReply(rule.reply) + "\");")
-            this.writeChangesForRule(domain, rule)
+            this.writeChangesForRule(world, rule)
             this.writeln("      }")
         }
         this.writeln("    }")
@@ -121,23 +121,24 @@ export class TSJavaScriptWriter {
         this.writeln("  }")
     }
     
-    writeJavaScriptProgram(domain: TSDomain, filename: string): void {
-        if ((domain.world.rules.length < 1) || (domain.world.variables.length < 1)) {
+    writeJavaScriptProgram(world: TWorld): string {
+        if ((world.rules.length < 1) || (world.variables.length < 1)) {
+            // TODO: Move this alert into the caller
             alert("Some rules and contexts must be defined first")
-            return
+            return ""
         }
         // TODO: use or remove: load "Template.java"
 
         this.output = []
-        domain.world.updateVariablesForIndexInVariables()
+        world.updateVariablesForIndexInVariables()
         /*TODO: Use or remove:
         while (!UNRESOLVED.eof(javaTemplate)) {
             UNRESOLVED.readln(javaTemplate, line)
             this.writeln(line)
         }
         */
-        this.writeStoryFunctions(domain)
-        console.log(this.output.join("/n") + "/n")
+        this.writeStoryFunctions(world)
+        return this.output.join("\n") + "\n"
     }
     
 }
