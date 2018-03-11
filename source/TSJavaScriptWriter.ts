@@ -29,14 +29,14 @@ export class TSJavaScriptWriter {
             const wrapper: TSDesiredStateVariableWrapper = rule.changes[i]
             const varies: string = "" + wrapper.variable.indexInVariables
             if (wrapper.desiredState === TSVariableState.kAbsent) {
-                this.writeln("      variableValue[" + varies + "] = false;")
+                this.writeln("            variableValue[" + varies + "] = false;")
             } else {
-                this.writeln("      variableValue[" + varies + "] = true;")
+                this.writeln("            variableValue[" + varies + "] = true;")
             }
         }
         if (rule.move !== world.emptyEntry) {
             const varies = "" + rule.move.indexInVariables
-            this.writeln("      move(" + varies + ");")
+            this.writeln("            move(" + varies + ");")
         }
         return result
     }
@@ -57,57 +57,57 @@ export class TSJavaScriptWriter {
         
         const firstRule: TSRule = world.rules[0]
         varies = "" + world.variables.length
-        this.writeln("  function SHNumberVariables() {")
-        this.writeln("    return " + varies + ";")
-        this.writeln("  }")
+        this.writeln("    function SHNumberVariables() {")
+        this.writeln("        return " + varies + ";")
+        this.writeln("    }")
         this.writeln("")
         varies = "" + world.rules.length
-        this.writeln("  function SHNumberRules() {")
-        this.writeln("    return " + varies + ";")
-        this.writeln("  }")
+        this.writeln("    function SHNumberRules() {")
+        this.writeln("        return " + varies + ";")
+        this.writeln("    }")
         this.writeln("")
         varies = "" + firstRule.context.indexInVariables
-        this.writeln("  function SHFirstLocation() {")
-        this.writeln("    return " + varies + ";")
-        this.writeln("  }")
+        this.writeln("    function SHFirstLocation() {")
+        this.writeln("        return " + varies + ";")
+        this.writeln("    }")
         this.writeln("")
         varies = "" + firstRule.command.indexInVariables
-        this.writeln("  function SHFirstCommand() {")
-        this.writeln("    return " + varies + ";")
-        this.writeln("  }")
+        this.writeln("    function SHFirstCommand() {")
+        this.writeln("        return " + varies + ";")
+        this.writeln("    }")
         this.writeln("")
-        this.writeln("  function SHDefineVariables() {")
+        this.writeln("    function SHDefineVariables() {")
         for (let i = 0; i < world.variables.length; i++) {
             varies = this.specialHandlingForReply(world.variables[i].phrase)
-            this.writeln("    variableName[" + i + "] = \"" + varies + "\";")
+            this.writeln("        variableName[" + i + "] = \"" + varies + "\";")
         }
-        this.writeln("  }")
+        this.writeln("    }")
         this.writeln("")
-        this.writeln("  function SHComputeSatisfiedRules() {")
+        this.writeln("    function SHComputeSatisfiedRules() {")
         for (let i = 0; i < world.rules.length; i++) {
             const rule: TSRule = world.rules[i]
-            this.writeln("    ruleSatisfied[" + i + "] = " + this.logicalStatementForRule(rule) + ";")
+            this.writeln("        ruleSatisfied[" + i + "] = " + this.logicalStatementForRule(rule) + ";")
         }
-        this.writeln("  }")
+        this.writeln("    }")
         this.writeln("")
-        this.writeln("  function SHAddAvailableCommands() {")
-        for (let i = 0; i < world.rules.length; i++) {
-            const rule: TSRule = world.rules[i]
-            varies = "" + rule.command.indexInVariables
-            this.writeln("    if (ruleSatisfied[" + i + "]) addCommand(" + varies + ");")
-        }
-        this.writeln("  }")
-        this.writeln("")
-        this.writeln("  function SHDoCommand(command) {")
+        this.writeln("    function SHAddAvailableCommands() {")
         for (let i = 0; i < world.rules.length; i++) {
             const rule: TSRule = world.rules[i]
             varies = "" + rule.command.indexInVariables
-            this.writeln("    if (command == " + varies + " && ruleSatisfied[" + i + "]) {")
-            this.writeln("      reply(\"" + this.specialHandlingForReply(rule.reply) + "\");")
+            this.writeln("        if (ruleSatisfied[" + i + "]) addCommand(" + varies + ");")
+        }
+        this.writeln("    }")
+        this.writeln("")
+        this.writeln("    function SHDoCommand(command) {")
+        for (let i = 0; i < world.rules.length; i++) {
+            const rule: TSRule = world.rules[i]
+            varies = "" + rule.command.indexInVariables
+            this.writeln("        if (command == " + varies + " && ruleSatisfied[" + i + "]) {")
+            this.writeln("            reply(\"" + this.specialHandlingForReply(rule.reply) + "\");")
             this.writeChangesForRule(world, rule)
-            this.writeln("    }")
+            this.writeln("        }")
         }
-        this.writeln("  }")
+        this.writeln("    }")
         this.writeln("")
         this.writeln("}")
     }
