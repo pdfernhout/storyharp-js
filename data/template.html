@@ -6,21 +6,53 @@
 <body>
 
   <form name="storyharp">
-
-    <input type="button" value="test" onClick="addText();">
     <p>
-      <textarea name="transcript" cols="50" rows="20"></textarea>
+    <textarea id="transcript" cols="50" rows="20"></textarea>
+    <ul id="choices">
+    </ul>
   </form>
 
   <script language="javascript" type="text/javascript">
+  "use strict";
+  
+  var numVariables = SHNumberVariables();
+  var numRules = SHNumberRules();
+  var variableName = new Array(numVariables); // string
+  var variableValue = new Array(numVariables); // boolean
+  var variableIsAvailableCommand = new Array(numVariables); // boolean
+  var ruleSatisfied = new Array(numRules); // boolean
+
+  var currentLocation;
+
+  function main() {
+    SHDefineVariables();
+    storyReset();
+  }
+
+  main();
+
+  /*
+    <input type="button" value="test" onClick="addText();">
     function addText() {
       var newtext = "Hello world;\n";
       newtext = prompt('Enter New Text Here:', '');
       document.storyharp.transcript.value += newtext;
     }
 
+*/
+
+    function setText(text) {
+      var transcript = document.getElementById("transcript");
+      transcript.value = text
+    }
+
+    function appendText(text) {
+      var transcript = document.getElementById("transcript");
+      transcript.value += text
+    }
+
     function storyReset() {
-      text.setText("");
+      setText("");
       var i;
       for (i = 0; i < numVariables; i++) variableValue[i] = false;
       initialLocation();
@@ -30,17 +62,18 @@
       setChoices();
     }
 
+/*
     function action(e, o) {
       var command;
       if (o instanceof String) {
         if (e.target == aboutButton) {
           resetArmed = false;
           reply("\n\n========================================\n");
-          reply("This applet's source was generated using\n");
+          reply("This application's source was generated using\n");
           reply("the StoryHarp(TM) Authoring System\n");
           reply("from http://www.kurtz-fernhout.com\n");
           reply("StoryHarp and portions of the source are\n");
-          reply("Copyright 1998 Kurtz-Fernhout Software\n");
+          reply("Copyright 1998-2008 Kurtz-Fernhout Software\n");
           reply("========================================\n");
         }
         if (e.target == resetButton) {
@@ -63,11 +96,14 @@
       return false;
     }
 
+*/
     function setChoices() {
-      if (choices.getSelectedIndex() >= 0)
-        choices.deselect(choices.getSelectedIndex());
-      if (choices.countItems() > 0)
-        choices.delItems(0, choices.countItems() - 1);
+      // Clear the list
+      document.getElementById("choices").innerHTML = "";
+
+      // element = document.getElementById("element-id");
+      // element.parentNode.removeChild(element);
+
       clearCommandAvailableFlags();
       SHComputeSatisfiedRules();
       SHAddAvailableCommands();
@@ -75,7 +111,11 @@
 
     function addCommand(c) {
       if (!variableIsAvailableCommand[c]) {
-        choices.addItem(variableName[c]);
+        var ul = document.getElementById("choices");
+        var li = document.createElement("li");
+        console.log("addCommand", c, variableName[c]);
+        li.appendChild(document.createTextNode(variableName[c]));
+        ul.appendChild(li);
         variableIsAvailableCommand[c] = true;
       }
     }
@@ -87,7 +127,8 @@
     }
 
     function reply(longstring) {
-      text.appendText(longstring);
+      // TODO: Improve this to remove macros
+      appendText(longstring);
       /*
       StringTokenizer st = new StringTokenizer(longstring, " \n{}", true);
       while(st.hasMoreTokens())
@@ -118,6 +159,7 @@
         }
         */
     }
+/*
 
     // may not be needed if store number for list entry
     function lookupCommand(commandString) {
@@ -128,12 +170,16 @@
       return -1;
     }
 
+*/
+
+/* TODO: moved to above so can be removed:
     function allocateSpace() {
-      variableName = new String[numVariables];
-      variableValue = new boolean[numVariables];
-      variableIsAvailableCommand = new boolean[numVariables];
-      ruleSatisfied = new boolean[numRules];
+      variableName = new Array(numVariables); // string
+      variableValue = new Array(numVariables); // boolean
+      variableIsAvailableCommand = new Array(numVariables); // boolean
+      ruleSatisfied = new Array(numRules); // boolean
     }
+*/
 
     function initialLocation() {
       // initial location
@@ -148,11 +194,14 @@
       }
     }
 
+/*
     function AddFeedbackForCommand(command) {
       reply("\n\n>> ");
       reply(variableName[command]);
       reply("\n");
     }
+
+    */
 
     //
     // The following functions are specific to the story.
