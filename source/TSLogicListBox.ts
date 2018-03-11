@@ -27,7 +27,7 @@ export class TSLogicListBox {
                 selections.map((wrapper: TSDesiredStateVariableWrapper, i: number) => {
                     return m("li.ba.fl.ml1.mb1.br1",
                         {
-                            id: i,
+                            key: i,
                             style: {
                                 "margin-top": "0.15rem",
                                 "word-wrap": "break-word",
@@ -56,7 +56,7 @@ export class TSLogicListBox {
                             "border": "0",
                             "white-space": "nowrap",
                         },
-                        id: -1,
+                        key: -1,
                         // Always start from empty value in this special case
                         value: "",
                         items: items,

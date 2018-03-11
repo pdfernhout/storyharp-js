@@ -126,7 +126,7 @@ export class RuleTableView {
         return m(".RuleTableView.h-100.overflow-auto",
             m("table.collapse",
                 m("tr",
-                    { id: "header" },
+                    { key: "header" },
                     m("th.w-10", "context"),
                     m("th.w-20", "requirements"),
                     m("th.w-20", "command"),
@@ -137,7 +137,7 @@ export class RuleTableView {
                 world.rules.map(rule => 
                     m("tr" + color(rule, row++) + styleForSelected(rule),
                         {
-                            id: rule,
+                            key: rule,
                             onclick: (event: any) => this.ruleClicked(event, rule),
                             oncreate: (vnode: m.Vnode) => this.scrollToRuleIfNeeded(vnode, rule),
                             onupdate: (vnode: m.Vnode) => this.scrollToRuleIfNeeded(vnode, rule),
