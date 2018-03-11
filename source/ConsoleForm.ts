@@ -141,13 +141,14 @@ let showAuthoringHelp = false
 
 function viewAbout(domain: TSDomain) {
     return m("div.overflow-auto", { style: "height: calc(100% - 7rem)" },
+        m("img", { style: "float: left", src: "resources/harp.png", alt: "Picture of a harp" }),
         m("h3", "StoryHarp v" + storyHarpVersion),
         m("p", `
-            StoryHarp is an interactive environment for authoring and playing
-            interactive CYOA (choose your own adventure) and other Interactive Fiction stories.
+            A tool for authoring and playing Interactive Fiction adventure stories where the player picks from a list of choices.
         `),
-        m("p"),
-        m("div", { onclick: () => showAuthoringHelp = !showAuthoringHelp }, expander(showAuthoringHelp, "(Click for:) ") + "Authoring help"),
+        m("p", "Website: ", m("a", { href: "http://storyharp.com" }, "StoryHarp.com")),
+        m("p", { style: "clear: left" }),
+        m("div", { onclick: () => showAuthoringHelp = !showAuthoringHelp }, expander(showAuthoringHelp, "(Click for:) ") + "Authoring Help"),
         showAuthoringHelp ? authoringHelp.split("\n\n").map(text => m("p", text)) : [],
         m("hr"),
         // m("p", "StoryHarp 1.0 was originally a stand-alone desktop program in Delphi. Version 2.0 was in Java but was not released. Version 3.0 is web-based."),
