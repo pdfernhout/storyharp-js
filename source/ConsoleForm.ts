@@ -8,6 +8,7 @@ import { FileUtils } from "./FileUtils"
 import { authoringHelp } from "./authoringHelp"
 import { TSDomain, DemoEntry, TranscriptLine } from "./TSDomain"
 import { storyHarpVersion } from "./version"
+import { TSJavaScriptWriter } from "./TSJavaScriptWriter"
 
 const firstRiddleAnswer = "say an answer for a riddle"
 
@@ -298,6 +299,22 @@ function newWorld(domain: TSDomain) {
     domain.updateForNewOrLoadedWorld(makeFileNameWithWldExtension(fileName), false)
 }
 
+async function generate(domain: TSDomain) {
+    console.log("generate")
+    const writer = new TSJavaScriptWriter()
+    const programText = writer.writeJavaScriptProgram(domain.world)
+    if (!programText) {
+        alert("Some rules and contexts must be defined first")
+        return
+    }
+    const template = await m.request(domain.dataPath + "template.html", {deserialize: (text) => text})
+    const htmlFile = template
+        .replace(/\/\/ START REPLACE[\s\S]*\/\/ END REPLACE/gm, programText)
+        .replace("StoryHarp 3.0 Player", makeFileNameWithoutWldExtension(domain.worldFileName))
+
+    console.log("html", htmlFile)
+}
+
 export function viewConsoleForm(domain: TSDomain) {
 
     function buttonWithHighlight(selection: FormName) {
@@ -324,6 +341,7 @@ export function viewConsoleForm(domain: TSDomain) {
             activeForm === "ruleEditor" 
                 ? [
                     m("button.ml1", { title: "Save a world file", onclick: () => saveWorldToLocalFile(domain) }, "Save"),
+                    m("button.ml3", { title: "Generate a standalone HTML file for this world", onclick: () => generate(domain) }, "Generate"),
                     m("button.ml3", { title: "Make a new world", onclick: () => newWorld(domain) }, "New"),
                 ]
                 : []

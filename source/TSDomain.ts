@@ -147,6 +147,8 @@ export interface TSDomain {
     commandWizardData: CommandWizardData
     showWizardHelp: boolean
 
+    dataPath: string
+
     consoleForm: ConsoleFormAPI
     ruleEditorForm: RuleEditorAPI
     changeLogForm: ChangeLogAPI
