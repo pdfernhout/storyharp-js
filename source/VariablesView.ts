@@ -73,7 +73,7 @@ export class VariablesView {
                 (!this.buttonState.command || variable.commandUseages > 0)
         )
 
-        return m("div.ml1", { style: { "min-width": "25rem" } },
+        return m("div.ml1.h-100", { style: { "min-width": "25rem" } },
             "Context:",
             m("select.ml1.ma2",
                 {
@@ -139,8 +139,8 @@ export class VariablesView {
     }
 
     view(vnode: m.Vnode) {
-        return m(".VariablesView.fixed.ba.right-0.top-0.bg-washed-blue", 
-            m("div", { onclick: () => this.expanded = !this.expanded }, m("span.b", "Variables " + expander(this.expanded))),
+        return m(".VariablesView.fixed.ba.right-0.top-0.bg-washed-blue.pl1.br3.br--left", 
+            m("div", { onclick: () => this.expanded = !this.expanded }, m("span", "Variables " + expander(this.expanded))),
             !this.expanded
                 ? []
                 : this.viewInterior()
