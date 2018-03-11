@@ -20,41 +20,32 @@
 
 <body>
 
-  <form name="storyharp">
-    <p>
+  <div>
+    <button onclick="about()">About StoryHarp</button>
+    <button onclick="confirmReset()">Reset</button>
     <textarea id="transcript" cols="50" rows="20"></textarea>
     <ul id="choices">
     </ul>
-  </form>
+  </div>
 
   <script language="javascript" type="text/javascript">
-  "use strict";
-  
-  var numVariables = SHNumberVariables();
-  var numRules = SHNumberRules();
-  var variableName = new Array(numVariables); // string
-  var variableValue = new Array(numVariables); // boolean
-  var variableIsAvailableCommand = new Array(numVariables); // boolean
-  var ruleSatisfied = new Array(numRules); // boolean
+    "use strict";
+    
+    var numVariables = SHNumberVariables();
+    var numRules = SHNumberRules();
+    var variableName = new Array(numVariables); // string
+    var variableValue = new Array(numVariables); // boolean
+    var variableIsAvailableCommand = new Array(numVariables); // boolean
+    var ruleSatisfied = new Array(numRules); // boolean
 
-  var currentLocation;
+    var currentLocation;
 
-  function main() {
-    SHDefineVariables();
-    storyReset();
-  }
+    main();
 
-  main();
-
-  /*
-    <input type="button" value="test" onClick="addText();">
-    function addText() {
-      var newtext = "Hello world;\n";
-      newtext = prompt('Enter New Text Here:', '');
-      document.storyharp.transcript.value += newtext;
+    function main() {
+      SHDefineVariables();
+      storyReset();
     }
-
-*/
 
     function setText(text) {
       var transcript = document.getElementById("transcript");
@@ -78,48 +69,24 @@
       setChoices();
     }
 
-/*
-    function action(e, o) {
-      var command;
-      if (o instanceof String) {
-        if (e.target == aboutButton) {
-          resetArmed = false;
-          reply("\n\n========================================\n");
-          reply("This application's source was generated using\n");
-          reply("the StoryHarp(TM) Authoring System\n");
-          reply("from http://www.kurtz-fernhout.com\n");
-          reply("StoryHarp and portions of the source are\n");
-          reply("Copyright 1998-2008 Kurtz-Fernhout Software\n");
-          reply("========================================\n");
-        }
-        if (e.target == resetButton) {
-          if (resetArmed) {
-            storyReset();
-          }
-          else {
-            reply("\n\n*** Press 'Reset' again now to reset ***\n");
-            resetArmed = true;
-          }
-        }
-        else if (choices.getSelectedIndex() >= 0) {
-          resetArmed = false;
-          command = lookupCommand(choices.getSelectedItem());
-          AddFeedbackForCommand(command);
-          SHDoCommand(command);
-        }
-        setChoices();
-      }
-      return false;
+    function about() {
+      appendText("\n===========================================\n");
+      appendText("This application's source was generated using\n");
+      appendText("the StoryHarp(TM) Authoring System\n");
+      appendText("from http://www.kurtz-fernhout.com\n");
+      appendText("StoryHarp and portions of the source are\n");
+      appendText("Copyright 1998-2008 Kurtz-Fernhout Software\n");
+      appendText("===========================================\n");
     }
 
-*/
+    function confirmReset() {
+      if (confirm("Do you want to start over?")) {
+        storyReset();
+      }
+    }
+
     function setChoices() {
-      // Clear the list
       document.getElementById("choices").innerHTML = "";
-
-      // element = document.getElementById("element-id");
-      // element.parentNode.removeChild(element);
-
       clearCommandAvailableFlags();
       SHComputeSatisfiedRules();
       SHAddAvailableCommands();
@@ -130,9 +97,7 @@
         var ul = document.getElementById("choices");
         var li = document.createElement("li");
         li.setAttribute("class", "choice");
-        // console.log("addCommand", c, variableName[c]);
         li.appendChild(document.createTextNode(variableName[c]));
-        // li.onclick = "SHDoCommand(" + c + ")";
         li.addEventListener("click", function(e) {
           AddFeedbackForCommand(c);
           SHDoCommand(c);
@@ -150,59 +115,10 @@
     }
 
     function reply(longstring) {
-      // TODO: Improve this to remove macros
-      appendText(longstring);
-      /*
-      StringTokenizer st = new StringTokenizer(longstring, " \n{}", true);
-      while(st.hasMoreTokens())
-        {
-        String token = st.nextToken();
-        if(token.equals("\n"))
-          {
-          text.appendText("\n");
-          wrapCol = 0;
-          continue;
-          }
-        // eat macros for now without doing anything for them
-        if (token.equals("{")) {
-          while(st.hasMoreTokens() && (!st.nextToken().equals("}")));
-          continue;
-          }
-        var length = token.length();
-        if( (wrapCol+length)>=NUMCOLS)
-          { // token exceeds line
-          wrapCol = 0;
-          text.appendText("\n");
-          }
-        if(token.equals(" "))
-          if(wrapCol == 0)
-            continue;
-        wrapCol += length;
-        text.appendText(token);
-        }
-        */
+      var re = /{.*?}/g
+      var stringWithoutMacros = longstring.replace(re, " ")
+      appendText(stringWithoutMacros);
     }
-/*
-
-    // may not be needed if store number for list entry
-    function lookupCommand(commandString) {
-      var i;
-      for (i = 0; i < numVariables; i++) {
-        if (variableName[i] == commandString) return i;
-      }
-      return -1;
-    }
-
-*/
-
-/* TODO: moved to above so can be removed:
-    function allocateSpace() {
-      variableName = new Array(numVariables); // string
-      variableValue = new Array(numVariables); // boolean
-      variableIsAvailableCommand = new Array(numVariables); // boolean
-      ruleSatisfied = new Array(numRules); // boolean
-    }
-*/
 
     function initialLocation() {
       // initial location
