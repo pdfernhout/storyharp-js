@@ -158,7 +158,7 @@ export class CommandWizardView {
 
             newRulesCommand.addRule(newRule)
             ruleEditorForm.lastChoice = newRule
-            this.domain.editedRule = newRule
+            this.domain.editRule(newRule)
 
             if (this.commandWizardData.doSequence && (prefix !== "")) {
                 let requirements

@@ -35,7 +35,7 @@ export class TSNewRulesCommand extends KfCommand {
         // TODO: A little uncertain about this extra guard check added for TS for a null current editedRule
         if (this.domain.editedRule) {
             if (this.rules.indexOf(this.domain.editedRule) >= 0) {
-                this.domain.editedRule = null
+                this.domain.editRule(null)
             }
         }
     }

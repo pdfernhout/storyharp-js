@@ -128,7 +128,7 @@ export class IndividualRuleView {
         world.deselectAllExcept(newRule)
         newRule.selected = true
         worldCommandList.doCommand(newRulesCommand)
-        this.editRule(newRule)
+        this.domain.editRule(newRule)
         /* TODO: Use this to set focus or remove it
         if (newRule.context.phrase.trim() !== "") {
             this.ActiveControl = this.CommandEdit
@@ -159,7 +159,7 @@ export class IndividualRuleView {
         world.deselectAllExcept(newRule)
         newRule.selected = true
         worldCommandList.doCommand(newRulesCommand)
-        this.editRule(newRule)
+        this.domain.editRule(newRule)
     }
 
     RuleDeleteClick(): void {
@@ -167,7 +167,7 @@ export class IndividualRuleView {
         const worldCommandList: TSCommandList = this.domain.worldCommandList
 
         if ((rule !== null) && (rule.selected)) {
-            this.editRule(null)
+            this.domain.editRule(null)
         }
         worldCommandList.deleteSelectedRules()
         /* TODO: Remove or implement -- used in map
@@ -187,10 +187,6 @@ export class IndividualRuleView {
         const worldCommandList: TSCommandList = this.domain.worldCommandList
         const ruleEditorForm: any = this.domain.ruleEditorForm
         worldCommandList.raiseSelectedRules()
-    }
-
-    editRule(rule: TSRule | null): void {
-        this.domain.editedRule = rule
     }
 
     SpeedButtonClick(field: TSRuleField) {

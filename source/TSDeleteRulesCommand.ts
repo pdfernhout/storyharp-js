@@ -23,7 +23,7 @@ export class TSDeleteRulesCommand extends KfCommand {
         for (let i = this.ruleWrappers.length - 1; i >= 0; i--) {
             const wrapper: TSIndexChangeRuleWrapper = this.ruleWrappers[i]
             if (wrapper.rule === this.domain.editedRule) {
-                this.domain.editedRule = null
+                this.domain.editRule(null)
             }
             wrapper.rule.removeUseages()
             wrapper.doChange()
@@ -40,7 +40,7 @@ export class TSDeleteRulesCommand extends KfCommand {
             wrapper.rule.selected = true
         }
         if (this.ruleWrappers.length > 0) {
-            this.domain.editedRule = this.ruleWrappers[0].rule
+            this.domain.editRule(this.ruleWrappers[0].rule)
         }
         super.undoCommand()
         this.domain.ruleEditorForm.scrollGridSelectionsIntoView(ScrollIntoViewDirection.kFromTop)
@@ -51,7 +51,7 @@ export class TSDeleteRulesCommand extends KfCommand {
         for (let i = this.ruleWrappers.length - 1; i >= 0; i--) {
             const wrapper: TSIndexChangeRuleWrapper = this.ruleWrappers[i]
             if ((wrapper.rule === this.domain.editedRule)) {
-                this.domain.editedRule = null
+                this.domain.editRule(null)
             }
             wrapper.rule.removeUseages()
             wrapper.doChange()

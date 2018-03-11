@@ -124,7 +124,7 @@ export class ContextWizardView {
 
             newRulesCommand.addRule(newRule)
             ruleEditorForm.lastChoice = newRule
-            this.domain.editedRule = newRule
+            this.domain.editRule(newRule)
         }
 
         if (newRulesCommand.rules.length > 0) {

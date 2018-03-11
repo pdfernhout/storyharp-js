@@ -147,8 +147,7 @@ export class RuleBrowserView {
             }
         }
         if (rule.selected && (this.domain.editedRule !== rule) && !(event.ctrlKey) && !(event.shiftKey)) {
-            // this.editRule(rule)
-            this.domain.editedRule = rule
+            this.domain.editRule(rule)
         }
     }
 

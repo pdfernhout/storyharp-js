@@ -53,7 +53,7 @@ export class RuleTableView {
             }
         }
         if (rule.selected && (editedRule !== rule) && !isControlClick && !isShiftClick) {
-            this.domain.editedRule = rule
+            this.domain.editRule(rule)
         }
     }
 

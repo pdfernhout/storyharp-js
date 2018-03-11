@@ -8,7 +8,7 @@ import { TSDraggableObject } from "./TSDraggableObject"
 import { TSCommandList } from "./TSCommandList"
 import { TSMapDragCommand } from "./TSMapDragCommand"
 import { KfCommand, KfCommandChangeType } from "./KfCommand"
-import { TSVariableDisplayOptions } from "./TSVariable"
+import { TSVariableDisplayOptions, TSVariable } from "./TSVariable"
 import { TSDomain } from "./TSDomain"
 
 export class RuleMapView {
@@ -305,7 +305,7 @@ export class RuleMapView {
             return
         }
         if (this.lastChoice instanceof TSRule) {
-            this.domain.editedRule = this.lastChoice
+            this.domain.editRule(this.lastChoice)
         }
         //
         //  else
@@ -330,27 +330,22 @@ export class RuleMapView {
         //    
     }
 
-    /*
-
     scrollMapSelectionIntoView(): void {
-        let intersection: TRect
-        let visibleRect: TRect
-        let rule: TSRule
-        let variable: TSVariable
-        let i: int
-        let upperLeftObject: TSDraggableObject
-        let firstContextVariable: TSVariable
-        
-        upperLeftObject = null
-        visibleRect.Left = this.MapScrollBarHorizontal.Position
-        visibleRect.Top = this.MapScrollBarVertical.Position
-        visibleRect.Right = visibleRect.Left + this.MapImage.Width
-        visibleRect.Bottom = visibleRect.Top + this.MapImage.Height
-        for (i = 0; i <= usdomain.domain.world.rules.Count - 1; i++) {
-            rule = usworld.TSRule(usdomain.domain.world.rules[i])
+        const world = this.domain.world
+        const mapDrawer = this.mapDrawer
+        const canvas = this.canvas
+
+        let visibleRect: TRect = new TRect()
+    
+        let upperLeftObject: TSDraggableObject | null = null
+        visibleRect.Left = -mapDrawer.scroll.X
+        visibleRect.Top = -mapDrawer.scroll.Y
+        visibleRect.Right = visibleRect.Left + canvas.width / mapDrawer.scale
+        visibleRect.Bottom = visibleRect.Top + canvas.height / mapDrawer.scale
+        for (let i = 0; i < world.rules.length; i++) {
+            const rule: TSRule = world.rules[i]
             if (rule.selected) {
-                delphi_compatability.IntersectRect(intersection, rule.bounds(), visibleRect)
-                if (!delphi_compatability.IsRectEmpty(intersection)) {
+                if (rule.bounds().intersects(visibleRect)) {
                     return
                 }
                 if (upperLeftObject === null) {
@@ -362,15 +357,14 @@ export class RuleMapView {
                 }
             }
         }
-        firstContextVariable = null
-        for (i = 0; i <= usdomain.domain.world.variables.Count - 1; i++) {
-            variable = usworld.TSVariable(usdomain.domain.world.variables[i])
-            if ((firstContextVariable === null) && (variable.hasUseagesForField(usworld.kRuleContext))) {
+        let firstContextVariable: TSVariable | null = null
+        for (let i = 0; i < world.variables.length; i++) {
+            const variable: TSVariable = world.variables[i]
+            if ((firstContextVariable === null) && (variable.hasUseagesForField(TSRuleField.kRuleContext))) {
                 firstContextVariable = variable
             }
             if (variable.selected) {
-                delphi_compatability.IntersectRect(intersection, variable.bounds(), visibleRect)
-                if (!delphi_compatability.IsRectEmpty(intersection)) {
+                if (variable.bounds().intersects(visibleRect)) {
                     return
                 }
                 if (upperLeftObject === null) {
@@ -388,11 +382,9 @@ export class RuleMapView {
         if (upperLeftObject === null) {
             return
         }
-        this.MapScrollBarHorizontal.Position = localIntMin(localIntMax(upperLeftObject.center().X - this.MapImage.Width / 2, this.MapScrollBarHorizontal.Min), this.MapScrollBarHorizontal.Max)
-        this.MapScrollBarVertical.Position = localIntMin(localIntMax(upperLeftObject.center().Y + -this.MapImage.Height / 2, this.MapScrollBarVertical.Min), this.MapScrollBarVertical.Max)
+        mapDrawer.scroll.X = canvas.width / mapDrawer.scale / 2 - upperLeftObject.center().X
+        mapDrawer.scroll.Y =  canvas.height / mapDrawer.scale / 2 - upperLeftObject.center().Y
     }
-
-    */
 
     goodPosition(): TPoint {
         let result = new TPoint()
@@ -451,6 +443,11 @@ export class RuleMapView {
             // Canvas is cleared by resizing in update
             this.canvas.width = this.canvas.scrollWidth
             this.canvas.height = this.canvas.scrollHeight
+
+            if (this.domain.pendingMapScroll) {
+                this.scrollMapSelectionIntoView()
+                this.domain.pendingMapScroll = false
+            } 
 
             const context = canvas.getContext("2d")
             if (!context) return

@@ -131,7 +131,8 @@ export interface TSDomain {
     currentEditorView: string
     currentEditorWizard: string
 
-    setOrganizeByField: (newValue: TSRuleField) => null
+    editRule: (rule: TSRule | null) => void
+    setOrganizeByField: (newValue: TSRuleField) => void
 
     transcript: TranscriptLine[]
 
@@ -154,6 +155,7 @@ export interface TSDomain {
     mapViewState: MapViewState
 
     pendingTableScroll: PendingTableScroll | null
+    pendingMapScroll: boolean
 
     dataPath: string
 
@@ -178,6 +180,11 @@ export class TSApplication implements TSDomain {
     currentEditorView = "table"
     currentEditorWizard = "context"
 
+    editRule(rule: TSRule | null) {
+        this.editedRule = rule
+        if (rule) this.pendingMapScroll = true
+    }
+
     setOrganizeByField: (newValue: TSRuleField) => null
 
     transcript: TranscriptLine[] = []
@@ -197,6 +204,7 @@ export class TSApplication implements TSDomain {
     mapViewState: MapViewState
 
     pendingTableScroll: PendingTableScroll | null = null
+    pendingMapScroll: boolean = false
 
     dataPath = "./data/"
 
@@ -596,7 +604,7 @@ export class TSApplication implements TSDomain {
         this.worldChangeCount = 0
         this.isWorldFileLoaded = isWorldFileLoaded
 
-        this.editedRule = null
+        this.editRule(null)
         this.lastSingleRuleIndex = 0
 
         /* TODO
