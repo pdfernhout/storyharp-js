@@ -24,6 +24,14 @@ export class RuleBrowserView {
             label += "s"
         }
 
+        //  pendingMapScroll
+        const scrollIntoViewIfNeeded = (vnode: any, variable: TSVariable) => {
+            if (this.domain.pendingMapScroll && this.domain.editedRule && this.selectedVariable === variable) {
+                (<HTMLElement>(vnode.dom)).scrollIntoView(true)
+            }
+        }
+
+        // TODO: These two lists should be made navigable by keyboard
         return m("div.h-100.overflow-hidden",
             m("div",
                 {
@@ -40,7 +48,10 @@ export class RuleBrowserView {
                     .sort((a: TSVariable, b: TSVariable) => a.phrase.localeCompare(b.phrase)) 
                     .map((variable: TSVariable) => m("div.mt1" + (variable === this.selectedVariable ? ".bg-light-blue" : ""), 
                         {
-                            onclick: () => this.selectedVariable = variable
+                            key: variable,
+                            onclick: () => this.selectedVariable = variable,
+                            oncreate: (vnode: m.Vnode) => scrollIntoViewIfNeeded(vnode, variable),
+                            onupdate: (vnode: m.Vnode) => scrollIntoViewIfNeeded(vnode, variable),
                         },
                         // TODO: maybe? iterating over all rules in second list, then:
                         // focused = (rule === this.rule) && rule.selected
@@ -95,14 +106,25 @@ export class RuleBrowserView {
 
         this.ruleSubset = rules
 
+        //  pendingMapScroll
+        const scrollIntoViewIfNeeded = (vnode: any, rule: TSRule) => {
+            if (this.domain.pendingMapScroll && this.domain.editedRule && this.domain.editedRule === rule) {
+                (<HTMLElement>(vnode.dom)).scrollIntoView(true)
+                this.domain.pendingMapScroll = false
+            }
+        }
+
         return m("div.h-100.overflow-hidden",
             m("div", caption),
             m("div.ba.pa1.overflow-auto",
                 { style: "height: calc(100% - 1rem)" },
                 rules.map((rule, index) => m("div" + this.styleForSelected(rule),
                     {
+                        key: rule,
                         style: "user-select: none",
-                        onclick: (event: MouseEvent) => this.ruleClicked(event, rule, index)
+                        onclick: (event: MouseEvent) => this.ruleClicked(event, rule, index),
+                        oncreate: (vnode: m.Vnode) => scrollIntoViewIfNeeded(vnode, rule),
+                        onupdate: (vnode: m.Vnode) => scrollIntoViewIfNeeded(vnode, rule),
                     },
                     rule.variableForField(displayFieldType).phrase
                 ))

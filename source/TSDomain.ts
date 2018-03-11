@@ -156,6 +156,7 @@ export interface TSDomain {
 
     pendingTableScroll: PendingTableScroll | null
     pendingMapScroll: boolean
+    pendingBrowserScroll: boolean
 
     dataPath: string
 
@@ -183,12 +184,23 @@ export class TSApplication implements TSDomain {
     editRule(rule: TSRule | null) {
         this.editedRule = rule
         if (rule) {
+            // TODO: Improve scrolling behavior
+            // don't scroll for two forms because scrolling shifts
+            // even if item visible which is jumpy if click on rule
+            // however, this means undo/redo commands don't track properly
+
             if (!(this.currentEditorView === "table")) {
                 this.pendingTableScroll= {
                     rule: rule,
                     direction: ScrollIntoViewDirection.kFromTop,
                 }
             }
+
+            if (!(this.currentEditorView === "browser")) {
+                this.pendingBrowserScroll = true
+            }
+
+            // the map does not scroll if item is visible
             this.pendingMapScroll = true
         }
     }
@@ -213,6 +225,7 @@ export class TSApplication implements TSDomain {
 
     pendingTableScroll: PendingTableScroll | null = null
     pendingMapScroll: boolean = false
+    pendingBrowserScroll: boolean = false
 
     dataPath = "./data/"
 
