@@ -39,6 +39,9 @@
 
     var currentLocation;
 
+    var askedForRiddleAnswer = false;
+    var firstRiddleAnswer = "say an answer for a riddle";
+
     main();
 
     function main() {
@@ -63,7 +66,7 @@
       for (i = 0; i < numVariables; i++) variableValue[i] = false;
       initialLocation();
       SHComputeSatisfiedRules();
-      // AddFeedbackForCommand(SHFirstCommand());
+      // AddFeedbackForCommand(variableName[SHFirstCommand()]);
       SHDoCommand(SHFirstCommand());
       setChoices();
     }
@@ -93,18 +96,47 @@
 
     function addCommand(c) {
       if (!variableIsAvailableCommand[c]) {
+        variableIsAvailableCommand[c] = true;
         var ul = document.getElementById("choices");
         var li = document.createElement("li");
         li.setAttribute("class", "choice");
-        li.appendChild(document.createTextNode(variableName[c]));
+        var commandPhrase = variableName[c];
+        var isRiddleAnswer = commandPhrase.startsWith("$");
+        if (isRiddleAnswer) {
+            if (askedForRiddleAnswer) return;
+            // only list first riddle answer
+            commandPhrase = firstRiddleAnswer;
+            askedForRiddleAnswer = true;
+        }
+        li.appendChild(document.createTextNode(commandPhrase));
         li.addEventListener("click", function(e) {
-          AddFeedbackForCommand(c);
+          if (isRiddleAnswer) {
+            // for riddles - need to be reassembled into command string first
+            const answer = prompt("Please enter the answer to a riddle. [case-sensitive]", "");
+            if (!answer) return;
+            commandPhrase = "answer " + answer;
+            AddFeedbackForCommand(commandPhrase);
+            c = lookupCommand("$" + commandPhrase);
+            if (c === -1 || !variableIsAvailableCommand[c]) {
+                reply("That accomplishes nothing.");
+                return
+            }
+          } else {
+            AddFeedbackForCommand(variableName[c]);
+          }
           SHDoCommand(c);
           setChoices();
         })
         ul.appendChild(li);
-        variableIsAvailableCommand[c] = true;
       }
+    }
+
+    function lookupCommand(commandString) {
+      var i;
+      for (i = 0; i < numVariables; i++) {
+        if (variableName[i] == commandString) return i;
+      }
+      return -1;
     }
 
     function move(location) {
@@ -130,11 +162,12 @@
       for (i = 0; i < numVariables; i++) {
         variableIsAvailableCommand[i] = false;
       }
+      askedForRiddleAnswer = false
     }
 
-    function AddFeedbackForCommand(command) {
+    function AddFeedbackForCommand(commandPhrase) {
       reply("\n\n>> ");
-      reply(variableName[command]);
+      reply(commandPhrase);
       reply("\n");
     }
 
