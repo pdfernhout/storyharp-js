@@ -109,25 +109,15 @@ export class TSJavaScriptWriter {
         }
         this.writeln("    }")
         this.writeln("")
-        this.writeln("}")
     }
     
     writeJavaScriptProgram(world: TWorld): string {
         if ((world.rules.length < 1) || (world.variables.length < 1)) {
-            // TODO: Move this alert into the caller
-            alert("Some rules and contexts must be defined first")
             return ""
         }
-        // TODO: use or remove: load "Template.java"
 
         this.output = []
         world.updateVariablesForIndexInVariables()
-        /*TODO: Use or remove:
-        while (!UNRESOLVED.eof(javaTemplate)) {
-            UNRESOLVED.readln(javaTemplate, line)
-            this.writeln(line)
-        }
-        */
         this.writeStoryFunctions(world)
         return this.output.join("\n") + "\n"
     }
