@@ -266,6 +266,8 @@ export class RuleMapView {
             this.mapSelectionRect.Right = event.offsetX
             this.mapSelectionRect.Bottom = event.offsetY
             // TODO use or remove: this.XorRect(this.MapImage.Canvas, this.mapSelectionRect)
+        } else {
+            (<any>event).redraw = false
         }
     }
     
