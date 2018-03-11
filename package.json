@@ -1,7 +1,7 @@
 {
   "name": "storyharp-js",
-  "version": "1.0.0",
-  "description": "StoryHarp CYOA Editor",
+  "version": "3.0.0",
+  "description": "StoryHarp Interactive Fiction Editor and Player",
   "main": "index.js",
   "scripts": {
     "test": "tsc -p tsconfig-test.json && cd dist-test && ../node_modules/ospec/bin/ospec",
