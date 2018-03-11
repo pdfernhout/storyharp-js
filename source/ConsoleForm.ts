@@ -33,7 +33,7 @@ function availableCommands(world: TWorld, showRiddleAnswers=false): string[] {
     return result
 }
 
-function doCommand(domain: TSDomain, commandPhrase: string) {
+export function doCommand(domain: TSDomain, commandPhrase: string) {
     // console.log("doCommand", commandPhrase)
     if (commandPhrase === firstRiddleAnswer) {
         // for riddles - need to be reassembled into command string first

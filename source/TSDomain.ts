@@ -8,7 +8,8 @@ import { KfCommandChangeType, KfCommand } from "./KfCommand"
 import { LinkWizardData, newLinkWizardData } from "./LinkWizardView"
 import { ContextWizardData, newContextWizardData } from "./ContextWizardView"
 import { CommandWizardData, newCommandWizardData } from "./CommandWizardView"
-import { MapViewState, TSMapView, newMapViewState } from "./TSMapView"
+import { MapViewState, newMapViewState } from "./TSMapView"
+import { doCommand } from "./ConsoleForm";
 
 /*
 export interface DomainOptionsStructure {
@@ -86,6 +87,7 @@ export interface DemoConfig {
 export interface ConsoleFormAPI {
     addLineToTranscript: (text: string, color: Color) => void
     scrollTranscriptEndIntoView: () => void
+    doCommand: (domain: TSDomain, commandPhrase: string) => void
 }
 
 export interface RuleEditorAPI {
@@ -219,6 +221,7 @@ export class TSApplication implements TSDomain {
         this.consoleForm = {
             addLineToTranscript: (text: string, color: number) => this.transcript.push({text, color}),
             scrollTranscriptEndIntoView: () => null,
+            doCommand: doCommand
         }
 
         this.ruleEditorForm = {
@@ -602,6 +605,11 @@ export class TSApplication implements TSDomain {
 
         this.sessionFileName = kUnsavedSessionFileName + "." + kSessionExtension
         this.sessionChangeCount = 0
+
+        if (this.world.rules.length > 0) {
+            // TODO: This used to call doCommand in the speechSystem -- but made change -- consider other ramifications?
+            this.consoleForm.doCommand(this, this.world.rules[0].command.phrase)
+        }
     }
 
     /*
