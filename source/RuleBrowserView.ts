@@ -24,9 +24,8 @@ export class RuleBrowserView {
             label += "s"
         }
 
-        //  pendingMapScroll
         const scrollIntoViewIfNeeded = (vnode: any, variable: TSVariable) => {
-            if (this.domain.pendingMapScroll && this.domain.editedRule && this.selectedVariable === variable) {
+            if (this.domain.pendingBrowserScroll && this.domain.editedRule && this.selectedVariable === variable) {
                 (<HTMLElement>(vnode.dom)).scrollIntoView(true)
             }
         }
@@ -106,11 +105,10 @@ export class RuleBrowserView {
 
         this.ruleSubset = rules
 
-        //  pendingMapScroll
         const scrollIntoViewIfNeeded = (vnode: any, rule: TSRule) => {
-            if (this.domain.pendingMapScroll && this.domain.editedRule && this.domain.editedRule === rule) {
+            if (this.domain.pendingBrowserScroll && this.domain.editedRule && this.domain.editedRule === rule) {
                 (<HTMLElement>(vnode.dom)).scrollIntoView(true)
-                this.domain.pendingMapScroll = false
+                this.domain.pendingBrowserScroll = false
             }
         }
 

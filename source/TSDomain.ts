@@ -193,14 +193,14 @@ export class TSApplication implements TSDomain {
             // even if item visible which is jumpy if click on rule
             // however, this means undo/redo commands don't track properly
 
-            if (!(this.currentEditorView === "table")) {
-                this.pendingTableScroll= {
+            if (this.currentEditorView !== "table") {
+                this.pendingTableScroll = {
                     rule: rule,
                     direction: ScrollIntoViewDirection.kFromTop,
                 }
             }
 
-            if (!(this.currentEditorView === "browser")) {
+            if (this.currentEditorView !== "browser") {
                 this.pendingBrowserScroll = true
             }
 
