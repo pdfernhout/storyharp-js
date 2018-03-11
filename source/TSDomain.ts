@@ -182,7 +182,15 @@ export class TSApplication implements TSDomain {
 
     editRule(rule: TSRule | null) {
         this.editedRule = rule
-        if (rule) this.pendingMapScroll = true
+        if (rule) {
+            if (!(this.currentEditorView === "table")) {
+                this.pendingTableScroll= {
+                    rule: rule,
+                    direction: ScrollIntoViewDirection.kFromTop,
+                }
+            }
+            this.pendingMapScroll = true
+        }
     }
 
     setOrganizeByField: (newValue: TSRuleField) => null
