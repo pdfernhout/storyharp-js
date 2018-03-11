@@ -300,8 +300,7 @@ function newWorld(domain: TSDomain) {
     domain.updateForNewOrLoadedWorld(makeFileNameWithWldExtension(fileName), false)
 }
 
-async function generate(domain: TSDomain) {
-    console.log("generate")
+async function generateHTML(domain: TSDomain) {
     const writer = new TSJavaScriptWriter()
     const programText = writer.writeJavaScriptProgram(domain.world)
     if (!programText) {
@@ -362,7 +361,7 @@ export function viewConsoleForm(domain: TSDomain) {
             activeForm === "ruleEditor" 
                 ? [
                     m("button.ml1", { title: "Save a world file", onclick: () => saveWorldToLocalFile(domain) }, "Save"),
-                    m("button.ml3", { title: "Generate a standalone HTML file for this world", onclick: () => generate(domain) }, "Generate"),
+                    m("button.ml3", { title: "Generate a standalone HTML file for this world", onclick: () => generateHTML(domain) }, "Generate"),
                     m("button.ml3", { title: "Make a new world", onclick: () => newWorld(domain) }, "New"),
                 ]
                 : []
