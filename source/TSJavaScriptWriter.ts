@@ -57,68 +57,59 @@ export class TSJavaScriptWriter {
         
         const firstRule: TSRule = world.rules[0]
         varies = "" + world.variables.length
-        this.writeln("  int SHNumberVariables()")
-        this.writeln("    {")
+        this.writeln("  int SHNumberVariables() {")
         this.writeln("    return " + varies + ";")
-        this.writeln("    }")
+        this.writeln("  }")
         this.writeln("")
         varies = "" + world.rules.length
-        this.writeln("  int SHNumberRules()")
-        this.writeln("    {")
+        this.writeln("  int SHNumberRules() {")
         this.writeln("    return " + varies + ";")
-        this.writeln("    }")
+        this.writeln("  }")
         this.writeln("")
         varies = "" + firstRule.context.indexInVariables
-        this.writeln("  int SHFirstLocation()")
-        this.writeln("    {")
+        this.writeln("  int SHFirstLocation() {")
         this.writeln("    return " + varies + ";")
-        this.writeln("    }")
+        this.writeln("  }")
         this.writeln("")
         varies = "" + firstRule.command.indexInVariables
-        this.writeln("  int SHFirstCommand()")
-        this.writeln("    {")
+        this.writeln("  int SHFirstCommand() {")
         this.writeln("    return " + varies + ";")
-        this.writeln("    }")
+        this.writeln("  }")
         this.writeln("")
-        this.writeln("  void SHDefineVariables()")
-        this.writeln("    {")
+        this.writeln("  void SHDefineVariables() {")
         for (let i = 0; i < world.variables.length; i++) {
             varies = this.specialHandlingForReply(world.variables[i].phrase)
             this.writeln("    variableName[" + i + "] = \"" + varies + "\";")
         }
-        this.writeln("    }")
+        this.writeln("  }")
         this.writeln("")
-        this.writeln("  void SHComputeSatisfiedRules()")
-        this.writeln("    {")
+        this.writeln("  void SHComputeSatisfiedRules() {")
         for (let i = 0; i < world.rules.length; i++) {
             const rule: TSRule = world.rules[i]
             this.writeln("    ruleSatisfied[" + i + "] = " + this.logicalStatementForRule(rule) + ";")
         }
-        this.writeln("    }")
+        this.writeln("  }")
         this.writeln("")
-        this.writeln("  void SHAddAvailableCommands()")
-        this.writeln("    {")
+        this.writeln("  void SHAddAvailableCommands() {")
         for (let i = 0; i < world.rules.length; i++) {
             const rule: TSRule = world.rules[i]
             varies = "" + rule.command.indexInVariables
             this.writeln("    if (ruleSatisfied[" + i + "]) addCommand(" + varies + ");")
         }
-        this.writeln("    }")
+        this.writeln("  }")
         this.writeln("")
-        this.writeln("  void SHDoCommand(int command)")
-        this.writeln("    {")
+        this.writeln("  void SHDoCommand(int command) {")
         for (let i = 0; i < world.rules.length; i++) {
             const rule: TSRule = world.rules[i]
             varies = "" + rule.command.indexInVariables
-            this.writeln("    if (command == " + varies + " && ruleSatisfied[" + i + "])")
-            this.writeln("      {")
+            this.writeln("    if (command == " + varies + " && ruleSatisfied[" + i + "]) {")
             this.writeln("      reply(\"" + this.specialHandlingForReply(rule.reply) + "\");")
             this.writeChangesForRule(world, rule)
-            this.writeln("      }")
+            this.writeln("    }")
         }
-        this.writeln("    }")
-        this.writeln("")
         this.writeln("  }")
+        this.writeln("")
+        this.writeln("}")
     }
     
     writeJavaScriptProgram(world: TWorld): string {
