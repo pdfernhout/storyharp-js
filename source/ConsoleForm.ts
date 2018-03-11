@@ -312,7 +312,19 @@ async function generate(domain: TSDomain) {
         .replace(/\/\/ START REPLACE[\s\S]*\/\/ END REPLACE/gm, programText)
         .replace("StoryHarp 3.0 Player", makeFileNameWithoutWldExtension(domain.worldFileName))
 
-    console.log("html", htmlFile)
+    /* Works unless popup windows are blocked:
+    const newWindow = window.open()
+    if (!newWindow) throw new Error("Could not open window")
+    newWindow.document.open()
+    newWindow.document.write(htmlFile)
+    newWindow.document.close()
+    */
+
+    const fileName = makeFileNameWithoutWldExtension(domain.worldFileName)
+    FileUtils.saveToFile(fileName, htmlFile, ".html", (fileName: string) => {
+        console.log("written", fileName)
+        m.redraw()
+    })
 }
 
 export function viewConsoleForm(domain: TSDomain) {
