@@ -331,7 +331,15 @@ async function generate(domain: TSDomain) {
 export function viewConsoleForm(domain: TSDomain) {
 
     function buttonWithHighlight(selection: FormName) {
-        return "button.ml2.w4.bn.br3.br--top" + (activeForm === selection ? ".bg-light-blue" : "")
+        return "button.ml2.w4.bb-0.br3.br--top" + (activeForm === selection ? ".bg-white" : "")
+    }
+
+    function setActiveForm(event: any, formName: FormName) {
+        activeForm = formName
+        event.target.blur()
+        if (formName === "console") {
+            domain.world.updateAvailable()
+        }
     }
 
     return m(".ConsoleForm.ml3.h-100.overflow-hidden",
@@ -341,10 +349,10 @@ export function viewConsoleForm(domain: TSDomain) {
             m("span.i.ml1", "" + makeFileNameWithoutWldExtension(domain.worldFileName))
         ),
         m("div.mb3",
-            m(buttonWithHighlight("console"), { onclick: () => { activeForm = "console"; domain.world.updateAvailable() }}, "Player"),
-            m(buttonWithHighlight("ruleEditor"), { onclick: () => activeForm = "ruleEditor" }, "Editor"),
-            m(buttonWithHighlight("files"), { onclick: () => activeForm = "files" }, "Examples"),
-            m(buttonWithHighlight("about"), { onclick: () => activeForm = "about" }, "About"),
+            m(buttonWithHighlight("console"), { onclick: (event: any) => setActiveForm(event, "console") }, "Player"),
+            m(buttonWithHighlight("ruleEditor"), { onclick: (event: any) => setActiveForm(event, "ruleEditor") }, "Editor"),
+            m(buttonWithHighlight("files"), { onclick: (event: any) => setActiveForm(event, "files") }, "Examples"),
+            m(buttonWithHighlight("about"), { onclick: (event: any) => setActiveForm(event, "about") }, "About"),
             (activeForm !== "about" && activeForm !== "files")
                 ? m("button.ml4", { title: "Open a world file", onclick: () => loadWorldFromLocalFile(domain) }, "Load")
                 : [],
