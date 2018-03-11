@@ -32,7 +32,7 @@ export class RuleEditorForm {
         const domain = this.domain
 
         function wizardButtonWithHighlight(selection: WizardName) {
-            return "button.ml2.w4" + (currentWizard === selection ? ".bg-light-blue" : "")
+            return "button.ml2.w4.bn.br3.br--top" + (currentWizard === selection ? ".bg-light-blue" : "")
         }
 
         return m("div.flex-auto.h-100.overflow-hidden",
@@ -59,13 +59,13 @@ export class RuleEditorForm {
         const domain = this.domain
 
         function buttonWithHighlight(selection: ViewName) {
-            return "button.ml2.w4" + (currentView === selection ? ".bg-light-blue" : "")
+            return "button.ml2.w4.bn.br3.br--top" + (currentView === selection ? ".bg-light-blue" : "")
         }
 
         return m(".RuleEditorForm.ml3.flex.flex-column.flex-nowrap.overflow-hidden",
             { style: "height: calc(100% - 5rem)" },
             m("div.flex-none",
-                m("span.b", "Rule Editor"),
+                m("span", "Rule Editor:"),
                 m(buttonWithHighlight("table"), { onclick: () => this.setCurrentView("table") }, "Table"),
                 m(buttonWithHighlight("map"),  { onclick: () => this.setCurrentView("map") }, "Map"),
                 m(buttonWithHighlight("browser"),  { onclick: () => this.setCurrentView("browser") }, "Browser"),

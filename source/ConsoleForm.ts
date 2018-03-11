@@ -331,12 +331,12 @@ async function generate(domain: TSDomain) {
 export function viewConsoleForm(domain: TSDomain) {
 
     function buttonWithHighlight(selection: FormName) {
-        return "button.ml2" + (activeForm === selection ? ".bg-light-blue" : "")
+        return "button.ml2.w4.bn.br3.br--top" + (activeForm === selection ? ".bg-light-blue" : "")
     }
 
     return m(".ConsoleForm.ml3.h-100.overflow-hidden",
         m("div.mt1.mb1",
-            m("span.f5.b", "StoryHarp"),
+            m("span.f5.b", "StoryHarp:"),
             // m("span.ml1", "World:"),
             m("span.i.ml1", "" + makeFileNameWithoutWldExtension(domain.worldFileName))
         ),
