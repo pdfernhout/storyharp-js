@@ -57,40 +57,40 @@ export class TSJavaScriptWriter {
         
         const firstRule: TSRule = world.rules[0]
         varies = "" + world.variables.length
-        this.writeln("  int SHNumberVariables() {")
+        this.writeln("  function SHNumberVariables() {")
         this.writeln("    return " + varies + ";")
         this.writeln("  }")
         this.writeln("")
         varies = "" + world.rules.length
-        this.writeln("  int SHNumberRules() {")
+        this.writeln("  function SHNumberRules() {")
         this.writeln("    return " + varies + ";")
         this.writeln("  }")
         this.writeln("")
         varies = "" + firstRule.context.indexInVariables
-        this.writeln("  int SHFirstLocation() {")
+        this.writeln("  function SHFirstLocation() {")
         this.writeln("    return " + varies + ";")
         this.writeln("  }")
         this.writeln("")
         varies = "" + firstRule.command.indexInVariables
-        this.writeln("  int SHFirstCommand() {")
+        this.writeln("  function SHFirstCommand() {")
         this.writeln("    return " + varies + ";")
         this.writeln("  }")
         this.writeln("")
-        this.writeln("  void SHDefineVariables() {")
+        this.writeln("  function SHDefineVariables() {")
         for (let i = 0; i < world.variables.length; i++) {
             varies = this.specialHandlingForReply(world.variables[i].phrase)
             this.writeln("    variableName[" + i + "] = \"" + varies + "\";")
         }
         this.writeln("  }")
         this.writeln("")
-        this.writeln("  void SHComputeSatisfiedRules() {")
+        this.writeln("  function SHComputeSatisfiedRules() {")
         for (let i = 0; i < world.rules.length; i++) {
             const rule: TSRule = world.rules[i]
             this.writeln("    ruleSatisfied[" + i + "] = " + this.logicalStatementForRule(rule) + ";")
         }
         this.writeln("  }")
         this.writeln("")
-        this.writeln("  void SHAddAvailableCommands() {")
+        this.writeln("  function SHAddAvailableCommands() {")
         for (let i = 0; i < world.rules.length; i++) {
             const rule: TSRule = world.rules[i]
             varies = "" + rule.command.indexInVariables
@@ -98,7 +98,7 @@ export class TSJavaScriptWriter {
         }
         this.writeln("  }")
         this.writeln("")
-        this.writeln("  void SHDoCommand(int command) {")
+        this.writeln("  function SHDoCommand(command) {")
         for (let i = 0; i < world.rules.length; i++) {
             const rule: TSRule = world.rules[i]
             varies = "" + rule.command.indexInVariables
