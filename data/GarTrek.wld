@@ -9,14 +9,6 @@ Changes
 map positions
 ====================
 introduction
-introduction
-{sound Gong.wav}{sound Flub.wav}Welcome to an audio adventure - where your voice does the walking. To find out what else you can say at any time, say "options".
-introduction two
-inventory
-
-980,-398|961,-516|1084,-513
-====================
-introduction two
 tell me a story about the future
 {music  passport.mid} It is the dawn of the third millennium. The laws of space and time keep most humans within a light year of the sun. Most people live in the billions of space habitats they call 'gardens'. Our story begins as you enter the lobby of a posh hotel on Earth.{sound Conversa.wav} You are there to meet your uncle.{sound Giggle.wav}
 lobby2
