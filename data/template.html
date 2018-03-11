@@ -1,6 +1,21 @@
 <html>
 
 <head>
+  <style>
+    .choice {
+      background: #eee;
+      border-top: 1px solid transparent;
+    }
+
+    .choice:hover {
+      background: #e1e1e1;
+      border-top: 1px solid #d0d0d0;
+    }
+
+    #transcript {
+      width: 100%;
+    }
+  </style>
 </head>
 
 <body>
@@ -49,6 +64,7 @@
     function appendText(text) {
       var transcript = document.getElementById("transcript");
       transcript.value += text
+      transcript.scrollTop = transcript.scrollHeight - transcript.clientHeight;
     }
 
     function storyReset() {
@@ -113,8 +129,15 @@
       if (!variableIsAvailableCommand[c]) {
         var ul = document.getElementById("choices");
         var li = document.createElement("li");
-        console.log("addCommand", c, variableName[c]);
+        li.setAttribute("class", "choice");
+        // console.log("addCommand", c, variableName[c]);
         li.appendChild(document.createTextNode(variableName[c]));
+        // li.onclick = "SHDoCommand(" + c + ")";
+        li.addEventListener("click", function(e) {
+          AddFeedbackForCommand(c);
+          SHDoCommand(c);
+          setChoices();
+        })
         ul.appendChild(li);
         variableIsAvailableCommand[c] = true;
       }
@@ -194,14 +217,11 @@
       }
     }
 
-/*
     function AddFeedbackForCommand(command) {
       reply("\n\n>> ");
       reply(variableName[command]);
       reply("\n");
     }
-
-    */
 
     //
     // The following functions are specific to the story.
