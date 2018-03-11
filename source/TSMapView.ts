@@ -117,9 +117,36 @@ function IntersectionPointForLineAndRectangle(origin: TPoint, destRect: TRect): 
 }
 
 
+export interface MapViewState {
+    scroll: TPoint
+    scale: number
+}
+
+export function newMapViewState(): MapViewState {
+    return {
+        scroll: new TPoint(0, 0),
+        scale: defaultScale,
+    }
+}
+
 export class TSMapView {
-    scroll: TPoint = new TPoint()
-    scale: number = defaultScale
+    state: MapViewState
+
+    constructor(state: MapViewState) {
+        this.state = state
+    }
+
+    get scroll(): TPoint {
+        return this.state.scroll
+    }
+
+    get scale(): number {
+        return this.state.scale
+    }
+
+    set scale(value: number) {
+        this.state.scale = value
+    }
 
     /* TODO: this code is not used
 

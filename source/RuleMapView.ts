@@ -17,7 +17,7 @@ export class RuleMapView {
     worldCommandList: TSCommandList
     
     canvas: HTMLCanvasElement
-    mapDrawer = new TSMapView()
+    mapDrawer: TSMapView
 
     isDragging = false
     lastMouseLocation = new TPoint(0, 0)
@@ -32,10 +32,11 @@ export class RuleMapView {
     lastMapMouseDownPosition: TPoint = new TPoint()
 
     constructor(vnode: m.Vnode) {
-        const domain = (<any>vnode.attrs).domain
+        const domain: TSDomain = (<any>vnode.attrs).domain
         this.domain = domain
         this.world = domain.world
         this.worldCommandList = domain.worldCommandList
+        this.mapDrawer = new TSMapView(domain.mapViewState)
     }
 
     /* TODO: use or remove

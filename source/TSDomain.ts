@@ -8,6 +8,7 @@ import { KfCommandChangeType, KfCommand } from "./KfCommand"
 import { LinkWizardData, newLinkWizardData } from "./LinkWizardView"
 import { ContextWizardData, newContextWizardData } from "./ContextWizardView"
 import { CommandWizardData, newCommandWizardData } from "./CommandWizardView"
+import { MapViewState, TSMapView, newMapViewState } from "./TSMapView"
 
 /*
 export interface DomainOptionsStructure {
@@ -147,6 +148,8 @@ export interface TSDomain {
     commandWizardData: CommandWizardData
     showWizardHelp: boolean
 
+    mapViewState: MapViewState
+
     dataPath: string
 
     consoleForm: ConsoleFormAPI
@@ -186,6 +189,8 @@ export class TSApplication implements TSDomain {
     commandWizardData: CommandWizardData
     showWizardHelp = true
 
+    mapViewState: MapViewState
+
     dataPath = "./data/"
 
     // TODO: Fix these
@@ -207,7 +212,9 @@ export class TSApplication implements TSDomain {
         this.linkWizardData = newLinkWizardData()
         this.contextWizardData = newContextWizardData()
         this.commandWizardData = newCommandWizardData()
-        
+
+        this.mapViewState = newMapViewState()
+
         // TODO: Fix these
         this.consoleForm = {
             addLineToTranscript: (text: string, color: number) => this.transcript.push({text, color}),
@@ -273,7 +280,6 @@ export class TSApplication implements TSDomain {
     */
 
     /*
-    mapView: TSMapView = new TSMapView()
     options: DomainOptionsStructure = new DomainOptionsStructure()
     iniFileName: string = ""
     sessionOrWorldStartupFileName: string = ""
@@ -284,7 +290,6 @@ export class TSApplication implements TSDomain {
     
     create(): void {
 
-        this.mapView = usmapview.TSMapView.create
         this.sessionOrWorldStartupFileName = ""
         this.playerOnly = false
         this.useIniFile = true

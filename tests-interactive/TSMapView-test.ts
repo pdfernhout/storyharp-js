@@ -1,11 +1,11 @@
 import * as m from "mithril"
-import { TSMapView } from "../source/TSMapView"
+import { TSMapView, newMapViewState } from "../source/TSMapView"
 import { TPoint } from "../source/TPoint"
 import { TRect } from "../source/TRect"
 import { TSRuleField } from "../source/TSRule"
 import { TSApplication } from "../source/TSDomain"
 
-const mapDrawer = new TSMapView()
+const mapDrawer = new TSMapView(newMapViewState())
 
 const MyComponent = { 
     view: () => m("div", 
