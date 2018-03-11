@@ -6,10 +6,11 @@
   "scripts": {
     "test": "tsc -p tsconfig-test.json && cd dist-test && ../node_modules/ospec/bin/ospec",
     "test-interactive": "tsc --watch & echo \"browse to: http://localhost:8080/tests-interactive/\" && http-server -c-1 && fg",
-    "build": "npm run copy-lib && npm run copy-data && npm run copy-index && tsc",
+    "build": "npm run copy-lib && npm run copy-data && npm run copy-index && npm run copy-resources && tsc",
     "copy-lib": "mkdir -p dist/source/lib && cp node_modules/systemjs/dist/system.src.js node_modules/tachyons/css/tachyons.css node_modules/mithril/mithril.js dist/source/lib/",
     "copy-data": "mkdir -p dist/source/data && cp data/*.wld data/*.json data/template.html dist/source/data/",
-    "copy-index": "cp source/index.html dist/source/"
+    "copy-index": "cp source/index.html dist/source/",
+    "copy-resources": "mkdir -p dist/source/resources && cp source/resources/*.png dist/source/resources/"
   },
   "author": "Paul D. Fernhout <pdfernhout@kurtz-fernhout.com>",
   "license": "AGPL-3.0-or-later",
