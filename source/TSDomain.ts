@@ -10,6 +10,7 @@ import { ContextWizardData, newContextWizardData } from "./ContextWizardView"
 import { CommandWizardData, newCommandWizardData } from "./CommandWizardView"
 import { MapViewState, newMapViewState } from "./TSMapView"
 import { doCommand } from "./ConsoleForm";
+import { PendingTableScroll } from "./RuleTableView"
 
 /*
 export interface DomainOptionsStructure {
@@ -152,6 +153,8 @@ export interface TSDomain {
 
     mapViewState: MapViewState
 
+    pendingTableScroll: PendingTableScroll | null
+
     dataPath: string
 
     consoleForm: ConsoleFormAPI
@@ -193,6 +196,8 @@ export class TSApplication implements TSDomain {
 
     mapViewState: MapViewState
 
+    pendingTableScroll: PendingTableScroll | null = null
+
     dataPath = "./data/"
 
     // TODO: Fix these
@@ -226,7 +231,12 @@ export class TSApplication implements TSDomain {
 
         this.ruleEditorForm = {
             selectEditorField: (fieldIndex: number) => null,
-            scrollGridSelectionsIntoView: () => null,
+            scrollGridSelectionsIntoView: (direction: ScrollIntoViewDirection) => {
+                this.pendingTableScroll = {
+                    rule: null,
+                    direction,
+                }
+            },
             lastChoice: null,
             lastCommand: null
         }

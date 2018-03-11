@@ -876,46 +876,6 @@ export class RuleEditorMenuCommands {
         //
     }
     
-    scrollGridSelectionsIntoView(direction: boolean): void {
-        let rule: TSRule
-        let firstSelectedRuleIndex: int
-        let i: int
-        
-        firstSelectedRuleIndex = -1
-        if (direction === kFromBottom) {
-            for (i = usdomain.domain.world.rules.Count - 1; i >= 0; i--) {
-                rule = usworld.TSRule(usdomain.domain.world.rules[i])
-                if (!rule.selected) {
-                    continue
-                }
-                firstSelectedRuleIndex = i
-                break
-            }
-        } else {
-            for (i = 0; i <= usdomain.domain.world.rules.Count - 1; i++) {
-                rule = usworld.TSRule(usdomain.domain.world.rules[i])
-                if (!rule.selected) {
-                    continue
-                }
-                firstSelectedRuleIndex = i
-                break
-            }
-        }
-        if (firstSelectedRuleIndex === -1) {
-            return
-        }
-        // to account for header
-        firstSelectedRuleIndex += 1
-        if ((this.RuleGrid.TopRow <= firstSelectedRuleIndex) && (this.RuleGrid.TopRow + this.RuleGrid.VisibleRowCount > firstSelectedRuleIndex)) {
-            return
-        }
-        if (direction === kFromBottom) {
-            this.RuleGrid.TopRow = localIntMax(1, firstSelectedRuleIndex - this.RuleGrid.VisibleRowCount + 1)
-        } else {
-            this.RuleGrid.TopRow = localIntMax(1, firstSelectedRuleIndex)
-        }
-    }
-    
     //graphs
     // ----------------------------------------------------------------------- @Map
 
