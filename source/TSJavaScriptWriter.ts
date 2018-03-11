@@ -1,63 +1,49 @@
-// unit usjavawriter
+import { TSRule } from "./TSRule"
+import { TSVariableState } from "./TSVariable"
+import { TSDesiredStateVariableWrapper } from "./TSDesiredStateVariableWrapper"
+import { TSDomain } from "./TSDomain"
 
-from conversion_common import *
-import usworld
-import usdomain
-import delphi_compatability
-
-
-export class TSJavaWriter {
-    javaFile: TextFile = new TextFile()
+export class TSJavaScriptWriter {
+    output: string[] = []
     
-    java(line: string): void {
-        writeln(this.javaFile, line)
+    writeln(line: string): void {
+        this.output.push(line)
     }
     
     logicalStatementForRule(rule: TSRule): string {
-        let result = ""
-        let i: int
-        let wrapper: TSDesiredStateVariableWrapper
-        
-        result = "variableValue[" + IntToStr(rule.context.indexInVariables) + "]"
-        for (i = 0; i <= rule.requirements.Count - 1; i++) {
+        let result = "variableValue[" + rule.context.indexInVariables + "]"
+        for (let i = 0; i < rule.requirements.length; i++) {
             result = result + " && "
-            wrapper = usworld.TSDesiredStateVariableWrapper(rule.requirements.Items[i])
-            if (wrapper.desiredState === usworld.TSVariableState.kAbsent) {
+            const wrapper: TSDesiredStateVariableWrapper = rule.requirements[i]
+            if (wrapper.desiredState === TSVariableState.kAbsent) {
                 result = result + "!"
             }
-            result = result + "variableValue[" + IntToStr(wrapper.variable.indexInVariables) + "]"
+            result = result + "variableValue[" + wrapper.variable.indexInVariables + "]"
         }
         return result
     }
     
-    writeChangesForRule(rule: TSRule): string {
+    writeChangesForRule(domain: TSDomain, rule: TSRule): string {
         let result = ""
-        let i: int
-        let wrapper: TSDesiredStateVariableWrapper
-        let varies: string
-        
-        for (i = 0; i <= rule.changes.Count - 1; i++) {
-            wrapper = usworld.TSDesiredStateVariableWrapper(rule.changes.Items[i])
-            varies = IntToStr(wrapper.variable.indexInVariables)
-            if (wrapper.desiredState === usworld.TSVariableState.kAbsent) {
-                this.java("      variableValue[" + varies + "] = false;")
+        for (let i = 0; i < rule.changes.length; i++) {
+            const wrapper: TSDesiredStateVariableWrapper = rule.changes[i]
+            const varies: string = "" + wrapper.variable.indexInVariables
+            if (wrapper.desiredState === TSVariableState.kAbsent) {
+                this.writeln("      variableValue[" + varies + "] = false;")
             } else {
-                this.java("      variableValue[" + varies + "] = true;")
+                this.writeln("      variableValue[" + varies + "] = true;")
             }
         }
-        if (rule.move !== usdomain.domain.world.emptyEntry) {
-            varies = IntToStr(rule.move.indexInVariables)
-            this.java("      move(" + varies + ");")
+        if (rule.move !== domain.world.emptyEntry) {
+            const varies = "" + rule.move.indexInVariables
+            this.writeln("      move(" + varies + ");")
         }
         return result
     }
     
     specialHandlingForReply(reply: string): string {
         let result = ""
-        let i: int
-        
-        result = ""
-        for (i = 1; i <= len(reply); i++) {
+        for (let i = 0; i < reply.length; i++) {
             if (reply[i] === "\"") {
                 result = result + "\\"
             }
@@ -66,110 +52,92 @@ export class TSJavaWriter {
         return result
     }
     
-    writeStoryFunctions(): void {
-        let firstRule: TSRule
-        let rule: TSRule
+    writeStoryFunctions(domain: TSDomain): void {
         let varies: string
-        let i: int
         
-        firstRule = usworld.TSRule(usdomain.domain.world.rules[0])
-        varies = IntToStr(usdomain.domain.world.variables.Count)
-        this.java("  int SHNumberVariables()")
-        this.java("    {")
-        this.java("    return " + varies + ";")
-        this.java("    }")
-        this.java("")
-        varies = IntToStr(usdomain.domain.world.rules.Count)
-        this.java("  int SHNumberRules()")
-        this.java("    {")
-        this.java("    return " + varies + ";")
-        this.java("    }")
-        this.java("")
-        varies = IntToStr(firstRule.context.indexInVariables)
-        this.java("  int SHFirstLocation()")
-        this.java("    {")
-        this.java("    return " + varies + ";")
-        this.java("    }")
-        this.java("")
-        varies = IntToStr(firstRule.command.indexInVariables)
-        this.java("  int SHFirstCommand()")
-        this.java("    {")
-        this.java("    return " + varies + ";")
-        this.java("    }")
-        this.java("")
-        this.java("  void SHDefineVariables()")
-        this.java("    {")
-        for (i = 0; i <= usdomain.domain.world.variables.Count - 1; i++) {
-            varies = this.specialHandlingForReply(usworld.TSVariable(usdomain.domain.world.variables[i]).phrase)
-            this.java("    variableName[" + IntToStr(i) + "] = \"" + varies + "\";")
+        const firstRule: TSRule = domain.world.rules[0]
+        varies = "" + domain.world.variables.length
+        this.writeln("  int SHNumberVariables()")
+        this.writeln("    {")
+        this.writeln("    return " + varies + ";")
+        this.writeln("    }")
+        this.writeln("")
+        varies = "" + domain.world.rules.length
+        this.writeln("  int SHNumberRules()")
+        this.writeln("    {")
+        this.writeln("    return " + varies + ";")
+        this.writeln("    }")
+        this.writeln("")
+        varies = "" + firstRule.context.indexInVariables
+        this.writeln("  int SHFirstLocation()")
+        this.writeln("    {")
+        this.writeln("    return " + varies + ";")
+        this.writeln("    }")
+        this.writeln("")
+        varies = "" + firstRule.command.indexInVariables
+        this.writeln("  int SHFirstCommand()")
+        this.writeln("    {")
+        this.writeln("    return " + varies + ";")
+        this.writeln("    }")
+        this.writeln("")
+        this.writeln("  void SHDefineVariables()")
+        this.writeln("    {")
+        for (let i = 0; i < domain.world.variables.length; i++) {
+            varies = this.specialHandlingForReply(domain.world.variables[i].phrase)
+            this.writeln("    variableName[" + i + "] = \"" + varies + "\";")
         }
-        this.java("    }")
-        this.java("")
-        this.java("  void SHComputeSatisfiedRules()")
-        this.java("    {")
-        for (i = 0; i <= usdomain.domain.world.rules.Count - 1; i++) {
-            rule = usworld.TSRule(usdomain.domain.world.rules[i])
-            this.java("    ruleSatisfied[" + IntToStr(i) + "] = " + this.logicalStatementForRule(rule) + ";")
+        this.writeln("    }")
+        this.writeln("")
+        this.writeln("  void SHComputeSatisfiedRules()")
+        this.writeln("    {")
+        for (let i = 0; i < domain.world.rules.length; i++) {
+            const rule: TSRule = domain.world.rules[i]
+            this.writeln("    ruleSatisfied[" + i + "] = " + this.logicalStatementForRule(rule) + ";")
         }
-        this.java("    }")
-        this.java("")
-        this.java("  void SHAddAvailableCommands()")
-        this.java("    {")
-        for (i = 0; i <= usdomain.domain.world.rules.Count - 1; i++) {
-            rule = usworld.TSRule(usdomain.domain.world.rules[i])
-            varies = IntToStr(rule.command.indexInVariables)
-            this.java("    if (ruleSatisfied[" + IntToStr(i) + "]) addCommand(" + varies + ");")
+        this.writeln("    }")
+        this.writeln("")
+        this.writeln("  void SHAddAvailableCommands()")
+        this.writeln("    {")
+        for (let i = 0; i < domain.world.rules.length; i++) {
+            const rule: TSRule = domain.world.rules[i]
+            varies = "" + rule.command.indexInVariables
+            this.writeln("    if (ruleSatisfied[" + i + "]) addCommand(" + varies + ");")
         }
-        this.java("    }")
-        this.java("")
-        this.java("  void SHDoCommand(int command)")
-        this.java("    {")
-        for (i = 0; i <= usdomain.domain.world.rules.Count - 1; i++) {
-            rule = usworld.TSRule(usdomain.domain.world.rules[i])
-            varies = IntToStr(rule.command.indexInVariables)
-            this.java("    if (command == " + varies + " && ruleSatisfied[" + IntToStr(i) + "])")
-            this.java("      {")
-            this.java("      reply(\"" + this.specialHandlingForReply(rule.reply) + "\");")
-            this.writeChangesForRule(rule)
-            this.java("      }")
+        this.writeln("    }")
+        this.writeln("")
+        this.writeln("  void SHDoCommand(int command)")
+        this.writeln("    {")
+        for (let i = 0; i < domain.world.rules.length; i++) {
+            const rule: TSRule = domain.world.rules[i]
+            varies = "" + rule.command.indexInVariables
+            this.writeln("    if (command == " + varies + " && ruleSatisfied[" + i + "])")
+            this.writeln("      {")
+            this.writeln("      reply(\"" + this.specialHandlingForReply(rule.reply) + "\");")
+            this.writeChangesForRule(domain, rule)
+            this.writeln("      }")
         }
-        this.java("    }")
-        this.java("")
-        this.java("  }")
+        this.writeln("    }")
+        this.writeln("")
+        this.writeln("  }")
     }
     
-    writeJavaProgram(filename: string): void {
-        let javaTemplate: TextFile
-        let line: string
-        
-        if ((usdomain.domain.world.rules.Count < 1) || (usdomain.domain.world.variables.Count < 1)) {
-            ShowMessage("Some rules and contexts must be defined first")
+    writeJavaScriptProgram(domain: TSDomain, filename: string): void {
+        if ((domain.world.rules.length < 1) || (domain.world.variables.length < 1)) {
+            alert("Some rules and contexts must be defined first")
             return
         }
-        AssignFile(javaTemplate, ExtractFilePath(delphi_compatability.Application.exeName) + "Template.java")
-        try {
-            Reset(javaTemplate)
-            AssignFile(this.javaFile, filename)
-            try {
-                Rewrite(this.javaFile)
-                usdomain.domain.world.updateVariablesForIndexInVariables()
-                while (!UNRESOLVED.eof(javaTemplate)) {
-                    UNRESOLVED.readln(javaTemplate, line)
-                    this.java(line)
-                }
-                this.writeStoryFunctions()
-                Flush(this.javaFile)
-            } finally {
-                try {
-                    CloseFile(this.javaFile)
-                } catch (Exception e) {
-                    ShowMessage("Problem closing java file " + filename)
-                }
-            }
-        } finally {
-            CloseFile(javaTemplate)
+        // TODO: use or remove: load "Template.java"
+
+        this.output = []
+        domain.world.updateVariablesForIndexInVariables()
+        /*TODO: Use or remove:
+        while (!UNRESOLVED.eof(javaTemplate)) {
+            UNRESOLVED.readln(javaTemplate, line)
+            this.writeln(line)
         }
+        */
+        this.writeStoryFunctions(domain)
+        console.log(this.output.join("/n") + "/n")
     }
     
 }
-
