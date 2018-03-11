@@ -46,11 +46,14 @@ export class VariablesView {
         this.domain = (<any>vnode.attrs).domain
     }
 
-    makeToggleButton(buttonName: keyof ButtonState) {
+    makeToggleButton(buttonName: keyof ButtonState, titleHelp: string) {
         const state = this.buttonState[buttonName]
         const glyph = Glyph[buttonName]
         return m("button.ml1" + (state ? ".bg-light-blue" : ""),
-            { onclick: () => this.buttonState[buttonName] = !this.buttonState[buttonName] },
+            { 
+                title: titleHelp,
+                onclick: () => this.buttonState[buttonName] = !this.buttonState[buttonName]
+            },
             glyph
         )
     }
@@ -100,12 +103,12 @@ export class VariablesView {
             ),
             m("div",
                 m("span.ml1", "Filter:"),
-                this.makeToggleButton("present"),
-                this.makeToggleButton("context"),
-                this.makeToggleButton("move"),
-                this.makeToggleButton("requirements"),
-                this.makeToggleButton("changes"),
-                this.makeToggleButton("command"),
+                this.makeToggleButton("present", "Display only true variables"),
+                this.makeToggleButton("context", "Display only variables used as contexts"),
+                this.makeToggleButton("move", "Display only variables used as moves"),
+                this.makeToggleButton("requirements", "Display only variables used as requirements"),
+                this.makeToggleButton("changes", "Display only variables used as changes"),
+                this.makeToggleButton("command", "Display only variables used as commands"),
             ),
             m("div.overflow-auto.ma2",
                 {
