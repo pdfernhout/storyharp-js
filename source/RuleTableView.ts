@@ -57,7 +57,7 @@ export class RuleTableView {
         }
     }
 
-    scrollGridSelectionsIntoView(direction: ScrollIntoViewDirection): void { 
+    findSelectedRuleToBeScrolledIntoView(direction: ScrollIntoViewDirection): void { 
         let firstSelectedRuleIndex = -1
         if (direction === ScrollIntoViewDirection.kFromBottom) {
             for (let i = this.domain.world.rules.length - 1; i >= 0; i--) {
@@ -120,7 +120,7 @@ export class RuleTableView {
 
         if (this.domain.pendingTableScroll && !this.domain.pendingTableScroll.rule) {
             // Find the rule that needs to be scrolled to
-            this.scrollGridSelectionsIntoView(this.domain.pendingTableScroll.direction)
+            this.findSelectedRuleToBeScrolledIntoView(this.domain.pendingTableScroll.direction)
         }
 
         return m(".RuleTableView.h-100.overflow-auto",
