@@ -151,7 +151,7 @@ function viewAbout(domain: TSDomain) {
         m("hr"),
         // m("p", "StoryHarp 1.0 was originally a stand-alone desktop program in Delphi. Version 2.0 was in Java but was not released. Version 3.0 is web-based."),
         // m("p"),
-        m("p", "StoryHarp 3.0 Copyright 1998-2008 Paul D. Fernhout and Cynthia F. Kurtz"),
+        m("p", "StoryHarp 3.0 Copyright 1998-2018 Paul D. Fernhout and Cynthia F. Kurtz"),
         m("p", "StoryHarp is a trademark of Paul D. Fernhout and Cynthia F. Kurtz")
     )
 }
