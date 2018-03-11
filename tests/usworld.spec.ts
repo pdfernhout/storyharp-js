@@ -2,7 +2,7 @@ import * as fs from "fs"
 
 import * as o from "ospec"
 
-import { TWorld } from "../source/TWorld"
+import { TWorld, ExportRulesOption } from "../source/TWorld"
 
 const GarTrekWorldContents = fs.readFileSync("../data/GarTrek.wld").toString()
 const GarTrekSessionContents = fs.readFileSync("../data/just at sphinx 2.ses").toString()
@@ -47,7 +47,7 @@ o.spec("usworld", () => {
             const world = new TWorld()
             const loaded = world.loadWorldFromFileContents(Tiny1WorldContents)
             o(loaded).equals(true)
-            const contents = world.saveWorldToFileContents(false)
+            const contents = world.saveWorldToFileContents(ExportRulesOption.kSaveAllRules)
             o(contents).equals(Tiny1WorldContents.replace("; world file version 1.0", "; StoryHarp world file version 1.3"))
         })
 
