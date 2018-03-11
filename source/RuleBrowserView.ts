@@ -48,7 +48,7 @@ export class RuleBrowserView {
                     .sort((a: TSVariable, b: TSVariable) => a.phrase.localeCompare(b.phrase)) 
                     .map((variable: TSVariable) => m("div.mt1" + (variable === this.selectedVariable ? ".bg-light-blue" : ""), 
                         {
-                            key: variable,
+                            key: variable.uuid,
                             onclick: () => this.selectedVariable = variable,
                             oncreate: (vnode: m.Vnode) => scrollIntoViewIfNeeded(vnode, variable),
                             onupdate: (vnode: m.Vnode) => scrollIntoViewIfNeeded(vnode, variable),
@@ -120,7 +120,7 @@ export class RuleBrowserView {
                 { style: "height: calc(100% - 1rem)" },
                 rules.map((rule, index) => m("div" + this.styleForSelected(rule),
                     {
-                        key: rule,
+                        key: rule.uuid,
                         style: "user-select: none",
                         onclick: (event: MouseEvent) => this.ruleClicked(event, rule, index),
                         oncreate: (vnode: m.Vnode) => scrollIntoViewIfNeeded(vnode, rule),

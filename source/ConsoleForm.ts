@@ -79,10 +79,12 @@ function viewChoices(domain: TSDomain) {
     Promise.resolve().then(scrollIntoView)
     return m("div", 
         m("hr"),
-        commands.sort().map(command => m("div.ma2.dark-blue.hover-blue", {
-            key: command,
-            onclick: () => doCommand(domain, command),
-        }, command)),
+        [ // Put this in an array to keep keys seperate from non-keyed items
+            commands.sort().map(command => m("div.ma2.dark-blue.hover-blue", {
+                key: command,
+                onclick: () => doCommand(domain, command),
+            }, command)),
+        ],
         m("hr"),
         m("div#undoRedoButtons.ma2",
             m("button.ml2.w4", {
@@ -220,7 +222,7 @@ function viewTranscriptItem(item: TranscriptLine) {
     // {picture https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/Kitten_in_Rizal_Park%2C_Manila.jpg/345px-Kitten_in_Rizal_Park%2C_Manila.jpg}
     const segments = parseTextWithMacros(item.text)
     return m("div.mw6" + color(item.color),
-        { key: item },
+        { key: item.uuid },
         segments.map(segment => {
             switch (segment.type) {
                 case SegmentType.speakText:

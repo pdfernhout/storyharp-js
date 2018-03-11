@@ -1,6 +1,10 @@
 import { TSVariable, TSVariableState } from "./TSVariable"
 
+// Wrappers are given UUIDs to pass as keys to Mithril
+let nextWrapperUUID = 1
+
 export class TSDesiredStateVariableWrapper {
+    uuid: number = nextWrapperUUID++
     variable: TSVariable
     desiredState: TSVariableState
 

@@ -2,7 +2,12 @@ import { TPoint } from "./TPoint"
 import { TRect } from "./TRect"
 import { StrToInt } from "./common"
 
+// These objects are given UUIDs so they can be passed to Mithril as key fields.
+// These UUIDs are only unique per application run.
+let nextDraggableObjectUUID = 1
+
 export class TSDraggableObject {
+    uuid: number = nextDraggableObjectUUID++
     position: TPoint = new TPoint()
     extent: TPoint = new TPoint()
     selected: boolean = false

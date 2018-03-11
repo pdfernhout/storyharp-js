@@ -24,10 +24,10 @@ export class TSLogicListBox {
                         // TODO: problem as events bubble up from combobox: this.inputElement.focus()
                     }
                 },
-                selections.map((wrapper: TSDesiredStateVariableWrapper, i: number) => {
+                selections.map((wrapper: TSDesiredStateVariableWrapper) => {
                     return m("li.ba.fl.ml1.mb1.br1",
                         {
-                            key: i,
+                            key: wrapper.uuid,
                             style: {
                                 "margin-top": "0.15rem",
                                 "word-wrap": "break-word",
@@ -49,14 +49,14 @@ export class TSLogicListBox {
                         }, "x")
                     )
                 }),
-                m("li.ml1.mt1.mb1", 
+                m("li.ml1.mt1.mb1",
+                    { key: -1 },
                     m(TQuickFillComboBox, <any>{
                         style: {
                             "margin-left": "0.25rem",
                             "border": "0",
                             "white-space": "nowrap",
                         },
-                        key: -1,
                         // Always start from empty value in this special case
                         value: "",
                         items: items,

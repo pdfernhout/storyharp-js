@@ -137,7 +137,7 @@ export class RuleTableView {
                 world.rules.map(rule => 
                     m("tr" + color(rule, row++) + styleForSelected(rule),
                         {
-                            key: rule,
+                            key: rule.uuid,
                             onclick: (event: any) => this.ruleClicked(event, rule),
                             oncreate: (vnode: m.Vnode) => this.scrollToRuleIfNeeded(vnode, rule),
                             onupdate: (vnode: m.Vnode) => this.scrollToRuleIfNeeded(vnode, rule),

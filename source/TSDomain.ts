@@ -72,6 +72,7 @@ const kWorldExtension = "wld"
 const kSessionExtension = "ses"
 
 export interface TranscriptLine {
+    uuid: number
     text: string
     color: Color
 }
@@ -166,6 +167,9 @@ export interface TSDomain {
     speechSystem: SpeechSystemAPI
 }
 
+// Transcript lines are given UUIDs to pss as keys to Mithril -- they are only unique per application run
+let nextTranscriptLineUUID = 1
+
 export class TSApplication implements TSDomain {
     world: TWorld
     sessionCommandList: TSCommandList
@@ -253,7 +257,7 @@ export class TSApplication implements TSDomain {
 
         // TODO: Fix these
         this.consoleForm = {
-            addLineToTranscript: (text: string, color: number) => this.transcript.push({text, color}),
+            addLineToTranscript: (text: string, color: number) => this.transcript.push({uuid: nextTranscriptLineUUID++, text, color}),
             scrollTranscriptEndIntoView: () => null,
             doCommand: doCommand
         }
@@ -313,13 +317,6 @@ export class TSApplication implements TSDomain {
 
         return true
     }
-
-    /* TODO: Idea: Do or remove: Thinking about running first rule on startup -- but this is not good enough in any case:
-    if (domain.world.rules.length) {
-        domain.transcript.push({text: "> " + domain.world.rules[0].command.phrase, color: Color.clBlue})
-        domain.transcript.push({text: domain.world.rules[0].reply, color: Color.clBlack})
-    }
-    */
 
     /*
     options: DomainOptionsStructure = new DomainOptionsStructure()
@@ -640,7 +637,7 @@ export class TSApplication implements TSDomain {
         this.world.newSession()
         this.sessionCommandList.clear()
         this.transcript.length = 0
-        this.transcript.push({text: "Starting: " + makeFileNameWithoutWldExtension(this.worldFileName), color: Color.clGreen})
+        this.consoleForm.addLineToTranscript("Starting: " + makeFileNameWithoutWldExtension(this.worldFileName), Color.clGreen)
 
         this.sessionFileName = kUnsavedSessionFileName + "." + kSessionExtension
         this.sessionChangeCount = 0
