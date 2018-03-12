@@ -104,9 +104,13 @@ UI Components:
    114 TSLogicListBox.ts
    325 TQuickFillComboBox.ts
 
-Views:
+UI View Support:
 
     73 authoringHelp.ts
+   511 TSMapView.ts
+
+Main UI Views:
+
    102 RuleEditorForm.ts
    152 VariablesView.ts
    156 RuleTableView.ts
@@ -116,7 +120,6 @@ Views:
    431 CommandWizardView.ts
    444 IndividualRuleView.ts
    470 LinkWizardView.ts
-   511 TSMapView.ts
    591 RuleMapView.ts
 
 Code generation:
