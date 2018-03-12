@@ -150,16 +150,20 @@ export class TQuickFillComboBox {
                     }
                 },
                 onkeydown: (event: {keyCode: number, target: HTMLInputElement, redraw: boolean}) => {
+                    log("onkeydown", event)
                     if ((event.keyCode === 40) || (event.keyCode === 38)) {
                         // down arrow
                         this.textValue = event.target.value
                         openMenu()
+                        return false
                     } else if (event.keyCode === 13) {
                         // enter
                         this.textValue = event.target.value
                         doOnchangeCallback()
+                        return false
                     } else if (clearOnEscape && event.keyCode === 27) {
                         this.clear()
+                        return false
                     } else {
                         event.redraw = false
                     }
@@ -231,13 +235,15 @@ export class TQuickFillComboBox {
                             if (event.keyCode === 13) {
                                 // enter
                                 closeMenu()
+                                return false
                             } else if (event.keyCode === 27) {
                                 // escape
                                 closeMenu()
+                                return false
                            } else {
                                 if (event.key.length === 1) this.textValue += event.key
                                 closeMenu()
-                                return false
+                                if (event.key.length === 1) return false
                             }
                             return true
                         },
@@ -251,7 +257,7 @@ export class TQuickFillComboBox {
                         },
                     }, "No matches..."),
                     matchingItems.map((item, index) => m("li.focus-bg-light-blue", {
-                        tabindex: index,
+                        tabindex: 0,
                         onclick: () => {
                             log("on click in item", item)
                             closeMenu(leadingCharacter + item)
@@ -298,13 +304,16 @@ export class TQuickFillComboBox {
                             } else if (event.keyCode === 13) {
                                 // enter
                                 closeMenu(leadingCharacter + item)
+                                return false
                             } else if (event.keyCode === 27) {
                                 // escape
                                 closeMenu()
+                                return false
                             } else {
+                                // some other key
                                 if (event.key.length === 1) this.textValue += event.key
                                 closeMenu()
-                                return false
+                                if (event.key.length === 1) return false
                             }
                             return true
                         }
