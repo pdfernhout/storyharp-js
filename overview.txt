@@ -73,7 +73,7 @@ Core Application Classes:
    390 TSRule.ts
    526 TWorld.ts
 
-Command Infrastructure:
+Generic Command Infrastructure:
 
     27 TSDragRecord.ts
     39 TSDraggableObject.ts
@@ -86,18 +86,20 @@ Application Command Support:
     39 TSIndexChangeRuleWrapper.ts
    122 TSCommandList.ts
 
-Application Commands:
+Editor Commands:
 
-    28 TSMoveFocusCommand.ts
-    40 TSAbstractMoveFocusCommand.ts
     55 TSToggleVariableCommand.ts
     74 TSDeleteRulesCommand.ts
     75 TSNewRulesCommand.ts
     79 TSRuleFieldChangeCommand.ts
     83 TSMoveRulesCommand.ts
    105 TSMapDragCommand.ts
+
+Session Commands:
+
+    28 TSMoveFocusCommand.ts
+    40 TSAbstractMoveFocusCommand.ts
    133 TSDoCommandPhraseCommand.ts
-   431 CommandWizardView.ts
 
 UI Components:
 
