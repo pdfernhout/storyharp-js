@@ -1,0 +1,56 @@
+This is an overview of source file sizes in lines of code.
+It is to give a sense of the application structure and relative complexity.
+
+RuleEditorMenuCommands is commented converted code not yet used or deleted.
+
+~/workspace/storyharp-js/source$ date
+
+   Mon Mar 12 10:06:02 EDT 2018
+
+~/workspace/storyharp-js/source$ wc -l *.ts | sort -n
+
+     1 version.ts
+    19 TPoint.ts
+    22 TSChangedVariableWrapper.ts
+    24 main.ts
+    27 TSDragRecord.ts
+    28 TSMoveFocusCommand.ts
+    39 TSDraggableObject.ts
+    39 TSIndexChangeRuleWrapper.ts
+    40 TSAbstractMoveFocusCommand.ts
+    43 TSDesiredStateVariableWrapper.ts
+    55 TRect.ts
+    55 TSToggleVariableCommand.ts
+    57 common.ts
+    70 KfCommand.ts
+    73 authoringHelp.ts
+    74 TSDeleteRulesCommand.ts
+    75 TSNewRulesCommand.ts
+    78 TSVariable.ts
+    79 TSRuleFieldChangeCommand.ts
+    83 TSMoveRulesCommand.ts
+    91 FileUtils.ts
+   102 RuleEditorForm.ts
+   105 TSMapDragCommand.ts
+   114 TSLogicListBox.ts
+   122 TSCommandList.ts
+   125 TSJavaScriptWriter.ts
+   133 TSDoCommandPhraseCommand.ts
+   152 VariablesView.ts
+   156 RuleTableView.ts
+   211 KfCommandList.ts
+   256 ContextWizardView.ts
+   266 RuleBrowserView.ts
+   325 TQuickFillComboBox.ts
+   376 ConsoleForm.ts
+   390 TSRule.ts
+   431 CommandWizardView.ts
+   444 IndividualRuleView.ts
+   470 LinkWizardView.ts
+   511 TSMapView.ts
+   526 TWorld.ts
+   591 RuleMapView.ts
+   723 TSDomain.ts
+  1258 RuleEditorMenuCommands.ts
+
+  8859 total
