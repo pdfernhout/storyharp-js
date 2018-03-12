@@ -1,5 +1,5 @@
 This is an overview of StoryHarp application source file sizes in lines of code.
-It is to give a sense of the application structure and relative complexity.
+It shows a sense of the application structure and relative complexity.
 
 RuleEditorMenuCommands is commented converted code not yet used or deleted.
 
@@ -80,7 +80,7 @@ Generic Command Infrastructure:
     70 KfCommand.ts
    211 KfCommandList.ts
 
-Application Command Support:
+Application-specific Command Support:
 
     22 TSChangedVariableWrapper.ts
     39 TSIndexChangeRuleWrapper.ts
@@ -135,6 +135,6 @@ Utility:
     57 common.ts
     91 FileUtils.ts
 
-Unused commented code that still might be useful:
+Unused commented code that might still be useful:
 
   1258 RuleEditorMenuCommands.ts
