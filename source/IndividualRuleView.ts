@@ -207,11 +207,6 @@ export class IndividualRuleView {
             rule.compile(rule.decompile(rule.changes), changes)
         }
 
-        // TODO: Fix all these
-        const ruleEditorForm: any = this.domain.ruleEditorForm
-        const changeLogForm: any = this.domain.changeLogForm
-        const consoleForm: any = this.domain.consoleForm
-
         function InsertMusicButtonClick() { console.log("InsertMusicButtonClick") }
 
         function InsertSoundClick() { console.log("insertSoundClick") }
