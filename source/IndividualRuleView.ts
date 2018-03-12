@@ -6,7 +6,6 @@ import { TSCommandList } from "./TSCommandList"
 import { TSNewRulesCommand } from "./TSNewRulesCommand"
 import { TSDomain } from "./TSDomain"
 import { TQuickFillComboBox } from "./TQuickFillComboBox"
-import { TSChangedVariableWrapper } from "./TSChangedVariableWrapper";
 import { TSDesiredStateVariableWrapper } from "./TSDesiredStateVariableWrapper";
 import { Glyph } from "./VariablesView"
 import { TSVariableState } from "./TSVariable";
