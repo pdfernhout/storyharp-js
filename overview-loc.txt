@@ -1,4 +1,4 @@
-This is an overview of source file sizes in lines of code.
+This is an overview of StoryHarp application source file sizes in lines of code.
 It is to give a sense of the application structure and relative complexity.
 
 RuleEditorMenuCommands is commented converted code not yet used or deleted.
@@ -54,3 +54,79 @@ RuleEditorMenuCommands is commented converted code not yet used or deleted.
   1258 RuleEditorMenuCommands.ts
 
   8859 total
+
+================ Categorization by Purpose ===========
+
+Startup:
+
+     1 version.ts
+    24 main.ts
+
+Application State (TSDomain also includes TSApplication):
+
+   723 TSDomain.ts
+
+Core Application Classes:
+
+    22 TSChangedVariableWrapper.ts
+    39 TSIndexChangeRuleWrapper.ts
+    43 TSDesiredStateVariableWrapper.ts
+    78 TSVariable.ts
+   390 TSRule.ts
+   526 TWorld.ts
+
+Code generation:
+
+  125 TSJavaScriptWriter.ts
+
+Command Infrastructure:
+
+    27 TSDragRecord.ts
+    39 TSDraggableObject.ts
+    70 KfCommand.ts
+   211 KfCommandList.ts
+
+Application Commands and Creation:
+
+    28 TSMoveFocusCommand.ts
+    40 TSAbstractMoveFocusCommand.ts
+    55 TSToggleVariableCommand.ts
+    74 TSDeleteRulesCommand.ts
+    75 TSNewRulesCommand.ts
+    79 TSRuleFieldChangeCommand.ts
+    83 TSMoveRulesCommand.ts
+   105 TSMapDragCommand.ts
+   122 TSCommandList.ts
+   133 TSDoCommandPhraseCommand.ts
+   431 CommandWizardView.ts
+
+UI Components:
+
+   114 TSLogicListBox.ts
+   325 TQuickFillComboBox.ts
+
+Views:
+
+    73 authoringHelp.ts
+   102 RuleEditorForm.ts
+   152 VariablesView.ts
+   156 RuleTableView.ts
+   256 ContextWizardView.ts
+   266 RuleBrowserView.ts
+   376 ConsoleForm.ts
+   431 CommandWizardView.ts
+   444 IndividualRuleView.ts
+   470 LinkWizardView.ts
+   511 TSMapView.ts
+   591 RuleMapView.ts
+
+Utility:
+
+    19 TPoint.ts
+    55 TRect.ts
+    57 common.ts
+    91 FileUtils.ts
+
+Unused commented code that still might be useful:
+
+  1258 RuleEditorMenuCommands.ts
