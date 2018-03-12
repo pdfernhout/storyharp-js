@@ -480,7 +480,7 @@ export class RuleMapView {
                 // set tabindex to make canvas focusable
                 tabindex: 0,
 
-                /* Experiment that does not work to know when canvas has focus:
+                /* Experiment that does not work to show when canvas has focus via border change:
                 style: {
                     "border-color": (this.canvas && this.canvas === document.activeElement)
                         ? "black"
@@ -532,6 +532,10 @@ export class RuleMapView {
                     ;(<any>event).redraw = false
                     */
                    this.MapImageMouseUp(event)
+                },
+
+                onmouseout: (event: MouseEvent) => {
+                    this.MapImageMouseUp(event)
                 },
 
                 onkeydown: (event: KeyboardEvent) => {
