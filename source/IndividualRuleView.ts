@@ -179,13 +179,11 @@ export class IndividualRuleView {
 
     MoveDownClick() {
         const worldCommandList: TSCommandList = this.domain.worldCommandList
-        const ruleEditorForm: any = this.domain.ruleEditorForm
         worldCommandList.lowerSelectedRules()
     }
 
     MoveUpClick() {
         const worldCommandList: TSCommandList = this.domain.worldCommandList
-        const ruleEditorForm: any = this.domain.ruleEditorForm
         worldCommandList.raiseSelectedRules()
     }
 
