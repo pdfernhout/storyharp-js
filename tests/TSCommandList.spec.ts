@@ -58,7 +58,7 @@ o.spec("TSCommandList", () => {
         const transcript: TranscriptLine[] = []
         const said: string[] = []
         const consoleForm = {
-            addLineToTranscript: (text: string, color: Color) => transcript.push({text: text, color: color}),
+            addLineToTranscript: (text: string, color: Color) => transcript.push({uuid: Math.random(), text: text, color: color}),
             scrollTranscriptEndIntoView: () => null,
         }
         const speechSystem = {

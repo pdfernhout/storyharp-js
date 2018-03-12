@@ -13,7 +13,6 @@ o.spec("TSJavaScriptWriter", () => {
         o(loaded).equals(true)
         const writer = new TSJavaScriptWriter()
         const program = writer.writeJavaScriptProgram(world)
-        console.log(program)
         o(program.length > 0).equals(true)
     })
 

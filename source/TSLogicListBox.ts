@@ -24,7 +24,7 @@ export class TSLogicListBox {
                         // TODO: problem as events bubble up from combobox: this.inputElement.focus()
                     }
                 },
-                selections.map((wrapper: TSDesiredStateVariableWrapper) => {
+                selections.map((wrapper: TSDesiredStateVariableWrapper, i: number) => {
                     return m("li.ba.fl.ml1.mb1.br1",
                         {
                             key: wrapper.uuid,
