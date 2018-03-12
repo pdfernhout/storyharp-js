@@ -6,7 +6,7 @@ import { VariablesView } from "./VariablesView"
 import { RuleEditorForm } from "./RuleEditorForm"
 import { FileUtils } from "./FileUtils"
 import { authoringHelp } from "./authoringHelp"
-import { TSDomain, DemoEntry, TranscriptLine } from "./TSDomain"
+import { TSDomain, DemoEntry, TranscriptLine, FormName } from "./TSDomain"
 import { storyHarpVersion } from "./version"
 import { TSJavaScriptWriter } from "./TSJavaScriptWriter"
 
@@ -101,9 +101,6 @@ function viewChoices(domain: TSDomain) {
     )
 }
 
-type FormName = "about" | "console" | "files" | "ruleEditor"
-let activeForm: FormName = "console"
-
 function color(color: Color) {
     switch (color) {
         case Color.clBlue: return ".blue"
@@ -128,7 +125,7 @@ function viewDemoFiles(domain: TSDomain) {
                     { onclick: () => {
                         if (!confirmUnsavedChangesLoss(domain)) return
                         domain.loadWorldFromServerData(entry.name).then((loaded) => {
-                            if (loaded) activeForm = "console"
+                            if (loaded) domain.activeForm = "console"
                         })
                     }
                 },
@@ -334,11 +331,11 @@ async function generateHTML(domain: TSDomain) {
 export function viewConsoleForm(domain: TSDomain) {
 
     function buttonWithHighlight(selection: FormName) {
-        return "button.ml2.w4.bb-0.br3.br--top" + (activeForm === selection ? ".bg-white" : "")
+        return "button.ml2.w4.bb-0.br3.br--top" + (domain.activeForm === selection ? ".bg-white" : "")
     }
 
     function setActiveForm(event: any, formName: FormName) {
-        activeForm = formName
+        domain.activeForm = formName
         event.target.blur()
         if (formName === "console") {
             domain.world.updateAvailable()
@@ -356,13 +353,13 @@ export function viewConsoleForm(domain: TSDomain) {
             m(buttonWithHighlight("ruleEditor"), { onclick: (event: any) => setActiveForm(event, "ruleEditor") }, "Editor"),
             m(buttonWithHighlight("files"), { onclick: (event: any) => setActiveForm(event, "files") }, "Examples"),
             m(buttonWithHighlight("about"), { onclick: (event: any) => setActiveForm(event, "about") }, "About"),
-            (activeForm !== "about" && activeForm !== "files")
+            (domain.activeForm !== "about" && domain.activeForm !== "files")
                 ? m("button.ml4", { title: "Open a world file", onclick: () => loadWorldFromLocalFile(domain) }, "Load")
                 : [],
-            activeForm === "console" 
+            domain.activeForm === "console" 
                 ? m("button.ml2.mr4", { title: "Reset current world", onclick: () => resetConsole(domain) }, "Restart")
                 : [],
-            activeForm === "ruleEditor" 
+            domain.activeForm === "ruleEditor" 
                 ? [
                     m("button.ml1", { title: "Save a world file", onclick: () => saveWorldToLocalFile(domain) }, "Save"),
                     m("button.ml3", { title: "Generate a standalone HTML file for this world", onclick: () => generateHTML(domain) }, "Generate"),
@@ -370,10 +367,10 @@ export function viewConsoleForm(domain: TSDomain) {
                 ]
                 : []
         ),
-        activeForm === "about" ? viewAbout(domain) : [],
-        activeForm === "files" ? viewDemoFiles(domain) : [],
+        domain.activeForm === "about" ? viewAbout(domain) : [],
+        domain.activeForm === "files" ? viewDemoFiles(domain) : [],
         // TODO: Probably should wrap these with hidden divs so the component state is preserved
-        activeForm === "console" ? viewConsole(domain) : [],
-        activeForm === "ruleEditor" ? m(RuleEditorForm, <any>{domain: domain}) : [],
+        domain.activeForm === "console" ? viewConsole(domain) : [],
+        domain.activeForm === "ruleEditor" ? m(RuleEditorForm, <any>{domain: domain}) : [],
     )
 }

@@ -112,6 +112,10 @@ export interface SpeechSystemAPI {
     stripMacros: (textWithMacros: string) => string
 }
 
+export type FormName = "about" | "console" | "files" | "ruleEditor"
+export type EditorName = "table" | "map" | "browser" | "wizards"
+export type WizardName = "context" | "command" | "link"
+
 // This is a seperate interface for testability
 export interface TSDomain {
     world: TWorld
@@ -129,8 +133,9 @@ export interface TSDomain {
     editedRule: TSRule | null
     lastSingleRuleIndex: number
 
-    currentEditorView: string
-    currentEditorWizard: string
+    activeForm: FormName
+    currentEditorView: EditorName
+    currentEditorWizard: WizardName
 
     editRule: (rule: TSRule | null) => void
 
@@ -184,8 +189,9 @@ export class TSApplication implements TSDomain {
     editedRule: TSRule | null = null
     lastSingleRuleIndex = 0
 
-    currentEditorView = "table"
-    currentEditorWizard = "context"
+    activeForm: FormName = "console"
+    currentEditorView: EditorName = "table"
+    currentEditorWizard: WizardName = "context"
 
     editRule(rule: TSRule | null) {
         this.editedRule = rule
@@ -715,4 +721,3 @@ export class TSApplication implements TSDomain {
         this.worldChangeCount -= 1
     }
 }
-
