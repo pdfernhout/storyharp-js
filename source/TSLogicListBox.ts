@@ -35,17 +35,41 @@ export class TSLogicListBox {
                             },
                         },
                         m("span.pl1.b", {
-                            onclick: (event: any) => {
+                            tabindex: 0,
+                            key: 1,
+                            // not onclick because of issue with losing focus from combobox eating click
+                            onmousedown: (event: any) => {
                                 wrapper.invertDesiredState()
                                 if (onchangeCallback) onchangeCallback(selections)
-                            }    
+                            },
+                            onkeydown: (event: {keyCode: number, target: HTMLInputElement, redraw: boolean}) => {
+                                if ((event.keyCode === 13) || (event.keyCode === 32)) {
+                                    // enter or space
+                                    wrapper.invertDesiredState()
+                                    if (onchangeCallback) onchangeCallback(selections)
+                                } else {
+                                    event.redraw = false
+                                }
+                            } 
                         }, wrapper.desiredState ? Glyph.present : Glyph.absent),
-                        wrapper.variable.phrase,
+                        m("span", { key: 2 }, wrapper.variable.phrase),
                         m("span.ml2", {
-                            onclick: () => {
+                            tabindex: 0,
+                            key: 3,
+                            // not onclick because of issue with losing focus from combobox eating click
+                            onmousedown: () => {
                                 selections.splice(i, 1)
                                 if (onchangeCallback) onchangeCallback(selections)
                             },
+                            onkeydown: (event: {keyCode: number, target: HTMLInputElement, redraw: boolean}) => {
+                                if (event.keyCode === 13) {
+                                    // enter
+                                    selections.splice(i, 1)
+                                    if (onchangeCallback) onchangeCallback(selections)
+                                } else {
+                                    event.redraw = false
+                                }
+                            }
                         }, "x")
                     )
                 }),
