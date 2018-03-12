@@ -7,15 +7,17 @@ import { TSDomain } from "./TSDomain"
 
 export class RuleBrowserView {
     domain: TSDomain
-    browseBy = TSRuleField.kRuleContext
     selectedVariable: TSVariable | null = null
     lastBrowserSingleRuleIndex = 0
     ruleSubset: TSRule[] = []
 
     constructor(vnode: m.Vnode) {
         this.domain = (<any>vnode.attrs).domain
-        this.domain.setOrganizeByField = this.setOrganizeByField.bind(this)
-        this.setOrganizeByField(TSRuleField.kRuleContext)
+        this.setOrganizeByField(this.domain.browseBy)
+    }
+
+    get browseBy(): TSRuleField {
+        return this.domain.browseBy
     }
 
     viewFirstListBox() {
@@ -209,7 +211,7 @@ export class RuleBrowserView {
         */
 
         // if organizeByField <> newValue then
-        this.browseBy = newValue
+        this.domain.browseBy = newValue
         
         if (this.domain.editedRule !== null) {
             this.selectedVariable = this.domain.editedRule.variableForFieldWithSelections(
@@ -243,6 +245,9 @@ export class RuleBrowserView {
     }
 
     view() {
+        if (this.domain.pendingBrowserScroll) {
+            this.setOrganizeByField(this.domain.browseBy)
+        }
         return m(".RuleBrowserView.div.flex.flex-row.h-100.overflow-hidden",
             m("div.w-30.h-100.overflow-hidden",
                 this.viewFirstListBox(),

@@ -133,6 +133,8 @@ export interface TSDomain {
     currentEditorWizard: string
 
     editRule: (rule: TSRule | null) => void
+
+    browseBy: TSRuleField
     setOrganizeByField: (newValue: TSRuleField) => void
 
     transcript: TranscriptLine[]
@@ -209,7 +211,10 @@ export class TSApplication implements TSDomain {
         }
     }
 
-    setOrganizeByField: (newValue: TSRuleField) => null
+    setOrganizeByField(newValue: TSRuleField) {
+        this.browseBy = newValue
+        this.pendingBrowserScroll = true
+    }
 
     transcript: TranscriptLine[] = []
 
@@ -226,6 +231,8 @@ export class TSApplication implements TSDomain {
     showWizardHelp = true
 
     mapViewState: MapViewState
+
+    browseBy = TSRuleField.kRuleContext
 
     pendingTableScroll: PendingTableScroll | null = null
     pendingMapScroll: boolean = false
