@@ -176,9 +176,6 @@ export class CommandWizardView {
             }
 
             index += 1
-
-            // TODO: use or remove
-            // position.Y = position.Y + 60
         }
 
         if (this.commandWizardData.doSequence && (prefix !== "") && (newRule !== null) && (index > 2)) {
@@ -291,7 +288,7 @@ export class CommandWizardView {
 
                 help("You can also use the same context more than once and later add special requirements (", Glyph.requirements, ") to some of the extra rules"),
 
-                help("Here is an example of a sequence showing a mix of different entries which generates five rules:"),
+                help("Here is an example of a sequence (intentionally showing inconsistent input styles) which generates five rules:"),
                 showHelp ? m("pre.ba.bw2.pa1.ml2.mr2", exampleWithFiveRules) : [],
 
                 m("div.ma2", "Command (", Glyph.command, ")", m("span.ml2.mr2.f4.b", "|"), "Reply (", Glyph.reply, ")"),
