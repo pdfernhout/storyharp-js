@@ -16,6 +16,8 @@ export enum TSRuleField {
     kLastRuleField = 5
 }
 
+const textToDisplayForEmptyCommandPhrase = "...new command..."
+
 export class TSRule extends TSDraggableObject {
     world: TWorld
     context: TSVariable
@@ -31,7 +33,7 @@ export class TSRule extends TSDraggableObject {
     useagesRemoved: boolean = false
  
     displayName(): string {
-        return this.command.phrase
+        return this.command.phrase || textToDisplayForEmptyCommandPhrase
     }
 
     displayNamePrefixed(showPrefix: boolean): string {
@@ -39,7 +41,7 @@ export class TSRule extends TSDraggableObject {
         if (showPrefix) {
             result = "> "
         }
-        result = result + this.command.phrase
+        result = result + (this.command.phrase || textToDisplayForEmptyCommandPhrase)
         return result
     }
     
