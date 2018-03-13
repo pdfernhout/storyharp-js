@@ -124,7 +124,9 @@ export class RuleTableView {
         }
 
         return m(".RuleTableView.h-100.overflow-auto",
-            m("table.collapse.w-100",
+            m("table.collapse",
+                // Ensure room for borders to avoid scroller
+                { style: "width: calc(100% - 2px)" },
                 m("tr",
                     { key: "header" },
                     m("th.tc", {style: "width: 3%"}, "#"),
