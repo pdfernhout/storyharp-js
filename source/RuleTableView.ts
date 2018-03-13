@@ -124,17 +124,18 @@ export class RuleTableView {
         }
 
         return m(".RuleTableView.h-100.overflow-auto",
-            m("table.collapse",
+            m("table.collapse.w-100",
                 m("tr",
                     { key: "header" },
-                    m("th.w-10", "context"),
-                    m("th.w-20", "requirements"),
-                    m("th.w-20", "command"),
-                    m("th.w-20", "reply"),
-                    m("th.w-10", "move"),
-                    m("th.w-20", "changes"),
+                    m("th.tc", {style: "width: 3%"}, "#"),
+                    m("th.w-10.pl1.bl.b--moon-gray", "context"),
+                    m("th.w-20.pl1.bl.b--moon-gray", "requirements"),
+                    m("th.pl1", {style: "width: 17%"}, "command"),
+                    m("th.w-20.pl1.bl.b--moon-gray", "reply"),
+                    m("th.w-10.pl1.bl.b--moon-gray", "move"),
+                    m("th.w-20.pl1.bl.b--moon-gray", "changes"),
                 ),
-                world.rules.map(rule => 
+                world.rules.map((rule, index) => 
                     m("tr" + color(rule, row++) + styleForSelected(rule),
                         {
                             key: rule.uuid,
@@ -142,12 +143,13 @@ export class RuleTableView {
                             oncreate: (vnode: m.Vnode) => this.scrollToRuleIfNeeded(vnode, rule),
                             onupdate: (vnode: m.Vnode) => this.scrollToRuleIfNeeded(vnode, rule),
                         },
-                        m("td.w-10", rule.context.phrase),
-                        m("td.w-20", rule.requirements.map(wrapper => m("div.nowrap", wrapper.displayString()))),
-                        m("td.w-20", rule.command.phrase),
-                        m("td.w-20", ellipsis(rule.reply)),
-                        m("td.w-10", rule.move.phrase),
-                        m("td.w-20", rule.changes.map(wrapper => m("div.nowrap", wrapper.displayString()))),
+                        m("td.tc",{style: "width: 3%"}, index + 1),
+                        m("td.w-10.pl1.bl.b--moon-gray", rule.context.phrase),
+                        m("td.w-20.pl1.bl.b--moon-gray", rule.requirements.map(wrapper => m("div.nowrap", wrapper.displayString()))),
+                        m("td.pl1.i.bl.b--moon-gray", {style: "width: 17%"}, rule.command.phrase),
+                        m("td.w-20.pl1.bl.b--moon-gray", ellipsis(rule.reply)),
+                        m("td.w-10.pl1.bl.b--moon-gray", rule.move.phrase),
+                        m("td.w-20.pl1.bl.b--moon-gray", rule.changes.map(wrapper => m("div.nowrap", wrapper.displayString()))),
                     )
                 )   
             )
