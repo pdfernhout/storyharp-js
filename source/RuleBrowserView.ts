@@ -5,6 +5,9 @@ import { TSRuleField, TSRule } from "./TSRule"
 import { Glyph } from "./VariablesView"
 import { TSDomain } from "./TSDomain"
 
+// TODO: Blank commands are stil not displayed in first listbox
+const textToDisplayForBlankName = "...empty..."
+
 export class RuleBrowserView {
     domain: TSDomain
     selectedVariable: TSVariable | null = null
@@ -58,7 +61,7 @@ export class RuleBrowserView {
                         // focused = (rule === this.rule) && rule.selected
                         // not sure how this changes the look: 
                         // setCanvasColorsForSelection(listBox.Canvas, selected, focused, false)
-                        variable.phrase
+                        variable.phrase || textToDisplayForBlankName
                     ))
             )
         )
@@ -126,7 +129,7 @@ export class RuleBrowserView {
                         oncreate: (vnode: m.Vnode) => scrollIntoViewIfNeeded(vnode, rule),
                         onupdate: (vnode: m.Vnode) => scrollIntoViewIfNeeded(vnode, rule),
                     },
-                    rule.variableForField(displayFieldType).phrase
+                    rule.variableForField(displayFieldType).phrase || textToDisplayForBlankName
                 ))
             )
         )
