@@ -22,6 +22,9 @@ interface TSize {
 }
 
 export const defaultScale = 1.5
+const baseFontString = "10px sans-serif"
+const commandFontModifier = "" // "italic "
+const contextFontModifier = "" // "bold "
 
 function TextExtent(context: CanvasRenderingContext2D, text: string): TSize {
     return {
@@ -395,6 +398,8 @@ export class TSMapView {
         context.textBaseline = "top"
         context.scale(this.scale, this.scale)
         
+        context.font = contextFontModifier + baseFontString
+        
         // calculate bounds for text boxes
         // TODO: canvas.Pen.Color = delphi_compatability.clBlack
         for (let i = 0; i < world.rules.length; i++) {
@@ -413,6 +418,9 @@ export class TSMapView {
             rule.extent.X = textSize.cx
             rule.extent.Y = textSize.cy
         }
+
+        context.font = commandFontModifier + baseFontString
+
         for (let i = 0; i < world.variables.length; i++) {
             const variable: TSVariable = world.variables[i]
             if (variable.meetsDisplayOptions(displayOptions)) {
@@ -468,6 +476,12 @@ export class TSMapView {
         /* TODO: Use or remove
         usruleeditorform.setCanvasColorsForSelection(canvas, selected, focused, isCommand)
         */
+
+        if (isCommand) {
+            context.font = commandFontModifier + baseFontString;
+        } else {
+            context.font = contextFontModifier + baseFontString;
+        }
 
         if (selected) {
             context.strokeStyle = "rgb(0, 0, 0)"
