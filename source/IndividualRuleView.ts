@@ -104,6 +104,7 @@ export class IndividualRuleView {
             this.ActiveControl = this.ContextEdit
         }
         */
+        this.expanded = true
     }
 
     RuleDuplicateClick(): void {
