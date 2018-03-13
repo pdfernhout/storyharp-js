@@ -11,6 +11,7 @@ import { CommandWizardData, newCommandWizardData } from "./CommandWizardView"
 import { MapViewState, newMapViewState } from "./TSMapView"
 import { doCommand } from "./ConsoleForm";
 import { PendingTableScroll } from "./RuleTableView"
+import { TPoint } from "./TPoint"
 
 /*
 export interface DomainOptionsStructure {
@@ -96,6 +97,8 @@ export interface RuleEditorAPI {
     scrollGridSelectionsIntoView: (direction: ScrollIntoViewDirection) => void
     selectEditorField: (field: TSRuleField) => void
     lastChoice: TSDraggableObject | null
+    previousChoice: TSDraggableObject | null
+    // TODO: Is lastCommand needed here?
     lastCommand: TSRule | null
 }
 
@@ -253,7 +256,7 @@ export class TSApplication implements TSDomain {
     speechSystem: SpeechSystemAPI
 
     constructor() {
-        this.world = new TWorld()
+        this.world = new TWorld(this.goodPosition.bind(this))
 
         this.sessionCommandList = new TSCommandList(this)
         this.sessionCommandList.setNewUndoLimit(1000)
@@ -284,6 +287,7 @@ export class TSApplication implements TSDomain {
                 }
             },
             lastChoice: null,
+            previousChoice: null,            
             lastCommand: null
         }
 
@@ -329,6 +333,57 @@ export class TSApplication implements TSDomain {
         m.redraw()
 
         return true
+    }
+
+    goodPosition(): TPoint {
+        let result = new TPoint()
+        if (this.ruleEditorForm.lastChoice !== null) {
+            if (this.ruleEditorForm.previousChoice !== null) {
+                //var
+                //  	mapBoundsRect: TRect
+                //    selection: TSDraggableObject; 
+                result = new TPoint(
+                    (this.ruleEditorForm.previousChoice.position.X + this.ruleEditorForm.lastChoice.position.X) / 2,
+                    (this.ruleEditorForm.previousChoice.position.Y + this.ruleEditorForm.lastChoice.position.Y) / 2 + 30)
+            } else {
+                result = new TPoint(this.ruleEditorForm.lastChoice.position.X, this.ruleEditorForm.lastChoice.position.Y + 30)
+            }
+        } else {
+            // mapBoundsRect := domain.world.boundsRect
+            //    result.x := (mapBoundsRect.left - mapBoundsRect.right) div 2
+            //    result.y := mapBoundsRect.bottom + 30;  
+            result = new TPoint(
+                Math.round(this.mapViewState.viewportSize.X / 2 - this.mapViewState.scroll.X),
+                Math.round(this.mapViewState.viewportSize.Y / 2 - this.mapViewState.scroll.Y)
+            )
+        }
+        result.X = result.X + Math.round(Math.random() * 200) - 100
+        result.Y = result.Y + Math.round(Math.random() * 200) - 100
+        //if (domain <> nil) and (domain.world <> nil) then
+        //    begin
+        //    selection := domain.world.firstSelectedObject
+        //    if selection <> nil then
+        //      begin
+        //      result.x := selection.position.x
+        //      result.y := selection.position.y + 30
+        //      end
+        //    end
+        //  result := Point(MapScrollBarHorizontal.position + MapImage.width div 2, MapScrollBarVertical.position +  MapImage.height div 2)
+        //  //result.x := result.x + random(200) - 100
+        //  //result.y := result.y + random(200) - 100
+        //result := Point(MapScrollBarHorizontal.position + MapImage.width div 2, MapScrollBarVertical.position +  MapImage.height div 2)
+        //  if (domain <> nil) and (domain.world <> nil) then
+        //    begin
+        //    selection := domain.world.firstSelectedObject
+        //    if selection <> nil then
+        //      begin
+        //      result.x := selection.position.x
+        //      result.y := selection.position.y
+        //      end
+        //    end
+        //  result.x := result.x + random(200) - 100
+        //  result.y := result.y + random(200) - 100;   
+        return result
     }
 
     /*
@@ -638,10 +693,8 @@ export class TSApplication implements TSDomain {
         this.editRule(null)
         this.lastSingleRuleIndex = 0
 
-        /* TODO
-        usruleeditorform.RuleEditorForm.lastChoice = null
-        usruleeditorform.RuleEditorForm.previousChoice = null
-        */
+        this.ruleEditorForm.lastChoice = null
+        this.ruleEditorForm.previousChoice = null
 
         this.newSession()
     }

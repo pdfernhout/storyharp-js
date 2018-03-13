@@ -123,12 +123,14 @@ function IntersectionPointForLineAndRectangle(origin: TPoint, destRect: TRect): 
 export interface MapViewState {
     scroll: TPoint
     scale: number
+    viewportSize: TPoint
 }
 
 export function newMapViewState(): MapViewState {
     return {
         scroll: new TPoint(0, 0),
         scale: defaultScale,
+        viewportSize: new TPoint(0, 0),
     }
 }
 

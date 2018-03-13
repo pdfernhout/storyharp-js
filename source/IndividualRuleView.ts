@@ -139,10 +139,8 @@ export class IndividualRuleView {
             this.domain.editRule(null)
         }
         worldCommandList.deleteSelectedRules()
-        /* TODO: Remove or implement -- used in map
-        this.previousChoice = null
-        this.lastChoice = null
-        */
+        this.domain.ruleEditorForm.previousChoice = null
+        this.domain.ruleEditorForm.lastChoice = null
     }
 
 

@@ -22,8 +22,21 @@ export class RuleMapView {
     isDragging = false
     lastMouseLocation = new TPoint(0, 0)
 
-    previousChoice: TSDraggableObject | null
-    lastChoice: TSDraggableObject | null 
+    get previousChoice(): TSDraggableObject | null {
+        return this.domain.ruleEditorForm.previousChoice
+    }
+
+    set previousChoice(value: TSDraggableObject | null) {
+        this.domain.ruleEditorForm.previousChoice = value
+    }
+
+    get lastChoice(): TSDraggableObject | null {
+        return this.domain.ruleEditorForm.lastChoice
+    }
+
+    set lastChoice(value: TSDraggableObject | null) {
+        this.domain.ruleEditorForm.lastChoice = value
+    }
 
     actionInProgress: boolean = false
     mapSelectionInProgress: boolean = false
@@ -66,7 +79,7 @@ export class RuleMapView {
         this.MapPaintBoxChanged()
     }
 
-    /*
+    /* TODO: use or remove
     
     MapPaintBoxChanged(): void {
         let displayOptions: TSVariableDisplayOptions
@@ -388,63 +401,19 @@ export class RuleMapView {
         mapDrawer.scroll.Y =  canvas.height / mapDrawer.scale / 2 - upperLeftObject.center().Y
     }
 
-    goodPosition(): TPoint {
-        let result = new TPoint()
-        if (this.lastChoice !== null) {
-            if (this.previousChoice !== null) {
-                //var
-                //  	mapBoundsRect: TRect
-                //    selection: TSDraggableObject; 
-                result = new TPoint((this.previousChoice.position.X + this.lastChoice.position.X) / 2, (this.previousChoice.position.Y + this.lastChoice.position.Y) / 2 + 30)
-            } else {
-                result = new TPoint(this.lastChoice.position.X, this.lastChoice.position.Y + 30)
-            }
-        } else {
-            // mapBoundsRect := domain.world.boundsRect
-            //    result.x := (mapBoundsRect.left - mapBoundsRect.right) div 2
-            //    result.y := mapBoundsRect.bottom + 30;  
-            result = new TPoint(
-                Math.round(this.canvas.width / 2 - this.mapDrawer.scroll.X),
-                Math.round(this.canvas.height / 2 - this.mapDrawer.scroll.Y)
-            )
-        }
-        result.X = result.X + Math.round(Math.random() * 200) - 100
-        result.Y = result.Y + Math.round(Math.random() * 200) - 100
-        //if (domain <> nil) and (domain.world <> nil) then
-        //    begin
-        //    selection := domain.world.firstSelectedObject
-        //    if selection <> nil then
-        //      begin
-        //      result.x := selection.position.x
-        //      result.y := selection.position.y + 30
-        //      end
-        //    end
-        //  result := Point(MapScrollBarHorizontal.position + MapImage.width div 2, MapScrollBarVertical.position +  MapImage.height div 2)
-        //  //result.x := result.x + random(200) - 100
-        //  //result.y := result.y + random(200) - 100
-        //result := Point(MapScrollBarHorizontal.position + MapImage.width div 2, MapScrollBarVertical.position +  MapImage.height div 2)
-        //  if (domain <> nil) and (domain.world <> nil) then
-        //    begin
-        //    selection := domain.world.firstSelectedObject
-        //    if selection <> nil then
-        //      begin
-        //      result.x := selection.position.x
-        //      result.y := selection.position.y
-        //      end
-        //    end
-        //  result.x := result.x + random(200) - 100
-        //  result.y := result.y + random(200) - 100;   
-        return result
-    }
-
     view() {
         const world: TWorld = this.world
 
         const drawWorld = () => {
             const canvas = this.canvas
-            // Canvas is cleared by resizing in update
+
+            // Canvas is cleared as side-effect by resizing in update
             this.canvas.width = this.canvas.scrollWidth
             this.canvas.height = this.canvas.scrollHeight
+
+            // Keep viewportSize up-to-date as it is needed by goodPosition algorithm
+            this.domain.mapViewState.viewportSize.X = this.canvas.scrollWidth
+            this.domain.mapViewState.viewportSize.Y = this.canvas.height
 
             if (this.domain.pendingMapScroll) {
                 this.scrollMapSelectionIntoView()

@@ -6,11 +6,6 @@ import { TSRule } from "./TSRule"
 import { TSDragRecord } from "./TSDragRecord"
 import { TSDraggableObject } from "./TSDraggableObject"
 
-/* External dependencies that need to be defined in app:
-  // These can be set at World creation
-  TWorld instance goodPositionCallback
-*/
-
 /* TODO: FIX: this is used by loadSessionFromFile and needs to be rethought
 function findCompleteWorldFileName(worldFileNameRead: string): string {
     let result = ""
@@ -32,9 +27,10 @@ function swapIntegers(a: int, b: int): int[] {
     return [b, a]
 }
 
+type GoodPositionCallback = () => TPoint
+
 export class TWorld {
-    // TODO: goodPosition needs to be set by user
-    goodPositionCallback = function() { return new TPoint(0, 0) }
+    goodPositionCallback: GoodPositionCallback
 
     emptyEntry: TSVariable = new TSVariable()
     variables: TSVariable[] = []
@@ -43,6 +39,14 @@ export class TWorld {
     previousFocus: TSVariable | null = null
     firstCommandDoneForLastCommandPhrase: int = 0
     lastVariableCreated: string = ""
+
+    constructor(goodPositionCallback?: GoodPositionCallback) {
+        if (goodPositionCallback) {
+            this.goodPositionCallback = goodPositionCallback
+        } else {
+            this.goodPositionCallback = () => new TPoint(0, 0)
+        }
+    }
     
     resetVariableValues(): void {
         if (this.variables) {
