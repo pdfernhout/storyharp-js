@@ -138,7 +138,6 @@ export class ContextWizardView {
 
         this.newContextsTextToParseLastGenerated = this.contextWizardData.newContextsTextToParse
         this.commandPhraseLastGenerated = this.contextWizardData.commandPhrase
-        // this.newContextsTextToParse = ""
         this.wasGenerateRulesPressed = false
     }
     

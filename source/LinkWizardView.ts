@@ -9,13 +9,6 @@ import { TSRule } from "./TSRule";
 import { TSVariable } from "./TSVariable"
 import { TQuickFillComboBox } from "./TQuickFillComboBox"
 
-/* TODO use or remove:
-        if (this.FirstContextBox.Items.Count < 2) {
-            ShowMessage("You must create at least two contexts before using the link wizard.")
-            return result
-        }
-*/
-
 /* Example command and reply for house and yard:
 
 house : break through wall
@@ -237,9 +230,6 @@ export class LinkWizardView {
         this.secondCommandLastGenerated = this.linkWizardData.secondCommand
         this.secondReplyLastGenerated = this.linkWizardData.secondReply
 
-        // TODO: How to clear this out? Maybe add clear button?
-        // this.newContextsTextToParse = ""
-
         this.wasGenerateRulesPressed = false
     }
     
@@ -300,7 +290,7 @@ export class LinkWizardView {
 
                 help("Choose two contexts to move between."), //  The order doesn't matter."),
  
-                // TODO: FirstContextBox
+                // First Context
 
                 m("p", "First context (", Glyph.context, "):"),
 
@@ -317,7 +307,7 @@ export class LinkWizardView {
                 ),
                 this.firstContextError ? m("div.i.bg-yellow", this.firstContextError) : [],
 
-                // TODO: SecondContextBox
+                // Second Context
 
                 m("p", "Second context (", Glyph.context, "):"),
 
@@ -434,8 +424,6 @@ export class LinkWizardView {
                     )
                 ),
     
-                // m("p", "You have completed the information the wizard needs to generate new rules to link the two contexts you have chosen."),
-                
                 m("p", "Click the \"Generate Rules\" button to create the new rules."),
                 
                 m("div.ml2", 

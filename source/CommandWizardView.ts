@@ -206,15 +206,12 @@ export class CommandWizardView {
         this.contextNameLastGenerated = this.commandWizardData.contextName
         this.prefixLastGenerated = this.commandWizardData.prefix
         this.endSequenceGenerated = this.commandWizardData.endSequence
-        // this.newCommandsTextToParse = ""
         this.wasGenerateRulesPressed = false
     }
     
     // TODO use or remove:
 
     // usdomain.domain.world.addContextsToListBox(this.ContextBox)
-    
-    // "You must create at least one context before using the command wizard."
     
     // this.lastFloodedContextPrefix = ""
     // goNextClick(Sender: TObject): void {
