@@ -6,7 +6,7 @@ import { TSRule } from "./TSRule"
 import { TSDragRecord } from "./TSDragRecord"
 import { TSDraggableObject } from "./TSDraggableObject"
 
-/* TODO: FIX: this is used by loadSessionFromFile and needs to be rethought
+/* TODO: Use this code or remove: this is used by loadSessionFromFileContents and needs to be rethought
 function findCompleteWorldFileName(worldFileNameRead: string): string {
     let result = ""
     if (!FileExists(worldFileNameRead)) {
@@ -121,8 +121,6 @@ export class TWorld {
         }
     }
     
-    /* TODO: IMPLEMENT: loadWorldFromFile(name: string) using file */
-
     loadWorldFromFileContents(contents: string): boolean {
 
         // Emulate file reader
@@ -137,7 +135,7 @@ export class TWorld {
             return !lines.length
         }
         
-        // done by caller to allow merges
+        // reset is done by caller to allow merges
         // this.resetVariablesAndRules()
         let count = 0
         // unfinished - need better error checking
@@ -191,7 +189,6 @@ export class TWorld {
         return true
     }
 
-    /* TODO: IMPLEMENT: saveWorldToFile(name: string, saveOnlySelectedRules: boolean): void { */
     saveWorldToFileContents(rulesToExport: ExportRulesOption): string {
         // Emulate file writer
         const lines: string[] = []
@@ -230,8 +227,7 @@ export class TWorld {
         this.setInitialFocus()
     }
     
-    /* TODO: IMPLEMENT: loadSessionFromFile(name: string, worldFileName: string): boolean { */
-    loadSessionFromFile(worldFileName: string, contents: string): boolean {
+    loadSessionFromFileContents(worldFileName: string, contents: string): boolean {
         let focusNameRead: string
         let previousFocusNameRead: string
         
@@ -260,9 +256,8 @@ export class TWorld {
         }
         const worldFileNameRead = readln()
         if (worldFileNameRead !== worldFileName) {
-            // TODO: FIX THIS!!!!
             throw new Error("worldFileNameRead !== worldFileName")
-            /* TODO FIX
+            /* TODO: Use this code or remove
             const completeWorldFileName = findCompleteWorldFileName(worldFileNameRead)
             if (completeWorldFileName !== "") {
                 usruleeditorform.RuleEditorForm.openWorldFile(completeWorldFileName)
@@ -295,7 +290,6 @@ export class TWorld {
         return true
     }
     
-    /* TODO: IMPLEMENT: saveSessionToFile(name: string, worldFileName: string): void { */
     saveSessionToFileContents(worldFileName: string): string {
         // Emulate file writer
         const lines: string[] = []

@@ -52,7 +52,7 @@ o.spec("TSCommandList", () => {
     o("say command in GarTrek", () => {
         const world = new TWorld()
         world.loadWorldFromFileContents(GarTrekWorldContents)
-        world.loadSessionFromFile("GarTrek.wld", GarTrekSessionContents)
+        world.loadSessionFromFileContents("GarTrek.wld", GarTrekSessionContents)
 
         // Mocking
         const transcript: TranscriptLine[] = []

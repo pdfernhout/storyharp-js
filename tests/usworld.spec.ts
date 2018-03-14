@@ -56,7 +56,7 @@ o.spec("usworld", () => {
             const loadedWorld = world.loadWorldFromFileContents(GarTrekWorldContents)
             o(loadedWorld).equals(true)
             o(world.focus).equals(null)
-            const loadedSession = world.loadSessionFromFile("GarTrek.wld", GarTrekSessionContents)
+            const loadedSession = world.loadSessionFromFileContents("GarTrek.wld", GarTrekSessionContents)
             o(loadedSession).equals(true)
             if (!world.focus) throw "focus is null"
             o(world.focus.phrase).equals("<sphinx>")
@@ -66,7 +66,7 @@ o.spec("usworld", () => {
             // can't easily do this without commands
             const world = new TWorld()
             world.loadWorldFromFileContents(GarTrekWorldContents)
-            world.loadSessionFromFile("GarTrek.wld", GarTrekSessionContents)
+            world.loadSessionFromFileContents("GarTrek.wld", GarTrekSessionContents)
             if (!world.focus) throw "focus is null"
             o(world.focus.phrase).equals("<sphinx>")
             // Manually activate a rule -- normally a command would do this
