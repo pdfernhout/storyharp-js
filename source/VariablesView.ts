@@ -18,11 +18,11 @@ export enum Glyph {
     absent = "~", // "◻"
     present =  "+", // "⊞"
 
-    context = "⌂",
-    move = "⛹",
+    context = "🏠",
+    move = "🚶",
     requirements = "🔒",
-    changes = "⚿",
-    command = "！",
+    changes = "🔑",
+    command = "❗",
     reply = "💬",
 
     spacer = " ",
