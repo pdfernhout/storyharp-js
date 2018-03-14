@@ -477,7 +477,7 @@ export class TWorld {
     }
 
     getVariableNames(): string[] {
-        // TODO: Can have only one of each variable so do not need the set
+        // Should have only one of each variable so should not need the set
         const variableNames = new Set()
         this.variables.map(variable => variableNames.add(variable.phrase))
         return [...variableNames].sort()
