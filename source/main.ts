@@ -3,6 +3,9 @@
 import * as m from "mithril"
 import { TSApplication } from "./TSDomain"
 import { viewConsoleForm } from "./ConsoleForm"
+import { addExtraStylesBeyondTachyons } from "./extraStyles";
+
+addExtraStylesBeyondTachyons()
 
 const application = new TSApplication()
 

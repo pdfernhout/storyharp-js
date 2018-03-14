@@ -3,6 +3,7 @@ import { TWorld } from "./TWorld"
 import { TSRule } from "./TSRule"
 import { TSDomain } from "./TSDomain"
 import { ScrollIntoViewDirection } from "./common"
+import { Glyph } from "./VariablesView";
 
 export interface PendingTableScroll {
     rule: TSRule | null,
@@ -129,13 +130,13 @@ export class RuleTableView {
                 { style: "width: calc(100% - 2px)" },
                 m("tr",
                     { key: "header" },
-                    m("th.tc", {style: "width: 3%"}, "#"),
-                    m("th.w-10.pl1.bl.b--moon-gray", "context"),
-                    m("th.w-20.pl1.bl.b--moon-gray", "requirements"),
-                    m("th.pl1", {style: "width: 17%"}, "command"),
-                    m("th.w-20.pl1.bl.b--moon-gray", "reply"),
-                    m("th.w-10.pl1.bl.b--moon-gray", "move"),
-                    m("th.w-20.pl1.bl.b--moon-gray", "changes"),
+                    m("th.w-3.tc", "#"),
+                    m("th.w-15.pl1.bl.b--moon-gray", "context " +  Glyph.context),
+                    m("th.w-15.pl1.bl.b--moon-gray", "requirements " +  Glyph.requirements),
+                    m("th.w-17.pl1", "command " +  Glyph.command),
+                    m("th.w-25.pl1.bl.b--moon-gray", "reply " +  Glyph.reply),
+                    m("th.w-10.pl1.bl.b--moon-gray", "move " +  Glyph.move),
+                    m("th.w-15.pl1.bl.b--moon-gray", "changes " +  Glyph.changes),
                 ),
                 world.rules.map((rule, index) => 
                     m("tr" + color(rule, row++) + styleForSelected(rule),
@@ -145,13 +146,13 @@ export class RuleTableView {
                             oncreate: (vnode: m.Vnode) => this.scrollToRuleIfNeeded(vnode, rule),
                             onupdate: (vnode: m.Vnode) => this.scrollToRuleIfNeeded(vnode, rule),
                         },
-                        m("td.tc",{style: "width: 3%"}, index + 1),
-                        m("td.w-10.pl1.bl.b--moon-gray", rule.context.phrase),
-                        m("td.w-20.pl1.bl.b--moon-gray", rule.requirements.map(wrapper => m("div.nowrap", wrapper.displayString()))),
-                        m("td.pl1.i.bl.b--moon-gray", {style: "width: 17%"}, rule.command.phrase),
-                        m("td.w-20.pl1.bl.b--moon-gray", ellipsis(rule.reply)),
+                        m("td.w-3.tc", index + 1),
+                        m("td.w-15.pl1.bl.b--moon-gray", rule.context.phrase),
+                        m("td.w-15.pl1.bl.b--moon-gray", rule.requirements.map(wrapper => m("div.nowrap", wrapper.displayString()))),
+                        m("td.w-17.pl1.i.bl.b--moon-gray", rule.command.phrase),
+                        m("td.w-25.pl1.bl.b--moon-gray", ellipsis(rule.reply)),
                         m("td.w-10.pl1.bl.b--moon-gray", rule.move.phrase),
-                        m("td.w-20.pl1.bl.b--moon-gray", rule.changes.map(wrapper => m("div.nowrap", wrapper.displayString()))),
+                        m("td.w-15.pl1.bl.b--moon-gray", rule.changes.map(wrapper => m("div.nowrap", wrapper.displayString()))),
                     )
                 )   
             )

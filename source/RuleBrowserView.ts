@@ -121,10 +121,9 @@ export class RuleBrowserView {
             m("div", caption),
             m("div.ba.pa1.overflow-auto",
                 { style: "height: calc(100% - 1rem)" },
-                rules.map((rule, index) => m("div" + this.styleForSelected(rule),
+                rules.map((rule, index) => m("div.us-none" + this.styleForSelected(rule),
                     {
                         key: rule.uuid,
-                        style: "user-select: none",
                         onclick: (event: MouseEvent) => this.ruleClicked(event, rule, index),
                         oncreate: (vnode: m.Vnode) => scrollIntoViewIfNeeded(vnode, rule),
                         onupdate: (vnode: m.Vnode) => scrollIntoViewIfNeeded(vnode, rule),
