@@ -19,7 +19,7 @@ export class TSNewRulesCommand extends KfCommand {
     }
     
     doCommand(): void {
-        //already added at start
+        // already added rule at start
         super.doCommand()
         this.domain.ruleEditorForm.scrollGridSelectionsIntoView(ScrollIntoViewDirection.kFromBottom)
     }
@@ -32,7 +32,6 @@ export class TSNewRulesCommand extends KfCommand {
             rule.removeUseages()
         }
         super.undoCommand()
-        // TODO: A little uncertain about this extra guard check added for TS for a null current editedRule
         if (this.domain.editedRule) {
             if (this.rules.indexOf(this.domain.editedRule) >= 0) {
                 this.domain.editRule(null)
@@ -50,8 +49,9 @@ export class TSNewRulesCommand extends KfCommand {
         }
         super.doCommand()
         this.domain.ruleEditorForm.scrollGridSelectionsIntoView(ScrollIntoViewDirection.kFromBottom)
-        //if rules.count > 0 then
-        //  RuleEditorForm.editRule(rules[rules.count - 1])
+        if (this.rules.length > 0) {
+            this.domain.editRule(this.rules[this.rules.length - 1], ScrollIntoViewDirection.kFromBottom)
+        }
     }
     
     description(): string {
