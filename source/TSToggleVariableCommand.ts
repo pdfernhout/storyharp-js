@@ -23,7 +23,7 @@ export class TSToggleVariableCommand extends KfCommand {
     
     setVariableStateWithUpdate(state: TSVariableState): void {
         this.variable.setState(state)
-        /* TODO: Is this still needed? Seems to select ina list box, but not using that approach right now
+        /* TODO: Implement a current focused variable in variables list box and update this code
         if (this.domain.consoleForm.ShowOnlyTrueVariablesButton.Down) {
             this.domain.consoleForm.VariablesListBox.ItemIndex = this.domain.consoleForm.VariablesListBox.Items.IndexOfObject(this.variable)
         }
