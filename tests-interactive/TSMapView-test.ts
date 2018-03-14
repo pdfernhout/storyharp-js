@@ -39,8 +39,7 @@ const MyComponent = {
                 mapDrawer.drawArrowFromRectEdgeToRectEdge(context, r2, r3)
                 mapDrawer.drawArrowFromRectEdgeToRectEdge(context, r3, r1)
 
-                const p1 = new TPoint(r3.Left, r3.Top)
-                mapDrawer.drawCommandOrContext(context, "Hello, world!", r3, p1, false, false, false)
+                mapDrawer.drawCommandOrContext(context, "Hello, world!", r3, false, false, false)
             },
             onclick: () => mapDrawer.scroll.X -= 20,
         }),

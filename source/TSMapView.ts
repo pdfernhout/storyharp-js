@@ -454,19 +454,18 @@ export class TSMapView {
             for (let i = 0; i < world.rules.length; i++) {
                 // draw rectangles and text
                 const rule: TSRule = world.rules[i]
-                this.drawCommandOrContext(context, rule.displayNamePrefixed(showCommandPrefix), rule.bounds(), rule.position, rule.selected, rule === editedRule, kDrawCommand)
+                this.drawCommandOrContext(context, rule.displayNamePrefixed(showCommandPrefix), rule.bounds(), rule.selected, rule === editedRule, kDrawCommand)
             }
         }
         for (let i = 0; i < world.variables.length; i++) {
             const variable: TSVariable = world.variables[i]
             if (variable.meetsDisplayOptions(displayOptions)) {
-                this.drawCommandOrContext(context, variable.displayName(), variable.bounds(), variable.position, variable.selected, false, kDrawContext)
+                this.drawCommandOrContext(context, variable.displayName(), variable.bounds(), variable.selected, false, kDrawContext)
             }
         }
     }
 
-    // TODO: position parameter is unused -- remove it
-    drawCommandOrContext(context: CanvasRenderingContext2D, text: string, bounds: TRect, position: TPoint, selected: boolean, focused: boolean, isCommand: boolean): void {
+    drawCommandOrContext(context: CanvasRenderingContext2D, text: string, bounds: TRect, selected: boolean, focused: boolean, isCommand: boolean): void {
         let drawRect: TRect = new TRect()  
         drawRect.Left = bounds.Left - 2 + this.scroll.X
         drawRect.Top = bounds.Top - 1 + this.scroll.Y
