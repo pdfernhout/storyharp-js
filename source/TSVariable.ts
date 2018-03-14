@@ -27,12 +27,10 @@ export class TSVariable extends TSDraggableObject {
     }
     
     setState(newState: TSVariableState): void {
-        // TODO: Should we make a defensive copy?
         this.state = newState
     }
     
     getState(): TSVariableState {
-        // TODO: Should we make a defensive copy?
         return this.state
     }
     
