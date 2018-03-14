@@ -473,7 +473,7 @@ export class RuleMapView {
 
                 onmousedown: (event: MouseEvent) => {
                     this.canvas.focus()
-                    /* TODO: Fix scrolling
+                    /* TODO: Fix scrolling by dragging -- or remove
                     this.isDragging = true
                     ;(<any>event).redraw = false
                     this.lastMouseLocation = new TPoint(event.offsetX, event.offsetY)
@@ -483,7 +483,7 @@ export class RuleMapView {
                 },
 
                 onmousemove: (event: MouseEvent) => {
-                    /* TODO: Fix scrolling
+                    /* TODO: Fix scrolling by dragging -- or remove
                     if (this.isDragging) {
                         this.mapDrawer.scroll.X += (event.offsetX - this.lastMouseLocation.X)
                         this.mapDrawer.scroll.Y += (event.offsetY - this.lastMouseLocation.Y)
@@ -496,7 +496,7 @@ export class RuleMapView {
                 },
 
                 onmouseup: (event: MouseEvent) => {
-                    /* TODO: Fix scrolling
+                    /* TODO: Fix scrolling by dragging -- or remove
                     this.isDragging = false
                     ;(<any>event).redraw = false
                     */

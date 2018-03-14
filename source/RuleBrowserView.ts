@@ -218,7 +218,6 @@ export class RuleBrowserView {
         if (this.domain.editedRule !== null) {
             this.selectedVariable = this.domain.editedRule.variableForFieldWithSelections(
                 this.browseBy,
-                // TODO -- maybe move back to lists for requirments and changes?
                 0, /* TODO: this.RequirementsListBox.ItemIndex, */
                 0, /* TODO: this.ChangesListBox.ItemIndex */
             )
