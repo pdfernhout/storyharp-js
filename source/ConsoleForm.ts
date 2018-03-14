@@ -1,6 +1,6 @@
 import * as m from "mithril"
 
-import { Color, expander, makeFileNameWithWldExtension, makeFileNameWithoutWldExtension } from "./common"
+import { Color, expander, makeFileNameWithWldExtension, makeFileNameWithoutWldExtension, notebookTabButton } from "./common"
 import { TWorld, ExportRulesOption } from "./TWorld"
 import { VariablesView } from "./VariablesView"
 import { RuleEditorForm } from "./RuleEditorForm"
@@ -330,10 +330,6 @@ async function generateHTML(domain: TSDomain) {
 
 export function viewConsoleForm(domain: TSDomain) {
 
-    function buttonWithHighlight(selection: FormName) {
-        return "button.ml2.w4.bb-0.br3.br--top" + (domain.activeForm === selection ? ".bg-white" : "")
-    }
-
     function setActiveForm(event: any, formName: FormName) {
         domain.activeForm = formName
         event.target.blur()
@@ -349,10 +345,10 @@ export function viewConsoleForm(domain: TSDomain) {
             m("span.i.ml1", "" + makeFileNameWithoutWldExtension(domain.worldFileName))
         ),
         m("div.mb2",
-            m(buttonWithHighlight("console"), { onclick: (event: any) => setActiveForm(event, "console") }, "Player"),
-            m(buttonWithHighlight("ruleEditor"), { onclick: (event: any) => setActiveForm(event, "ruleEditor") }, "Editor"),
-            m(buttonWithHighlight("files"), { onclick: (event: any) => setActiveForm(event, "files") }, "Examples"),
-            m(buttonWithHighlight("about"), { onclick: (event: any) => setActiveForm(event, "about") }, "About"),
+            m(notebookTabButton(domain.activeForm === "console"), { onclick: (event: any) => setActiveForm(event, "console") }, "Player"),
+            m(notebookTabButton(domain.activeForm === "ruleEditor"), { onclick: (event: any) => setActiveForm(event, "ruleEditor") }, "Editor"),
+            m(notebookTabButton(domain.activeForm === "files"), { onclick: (event: any) => setActiveForm(event, "files") }, "Examples"),
+            m(notebookTabButton(domain.activeForm === "about"), { onclick: (event: any) => setActiveForm(event, "about") }, "About"),
             (domain.activeForm !== "about" && domain.activeForm !== "files")
                 ? m("button.ml4", { title: "Open a world file", onclick: () => loadWorldFromLocalFile(domain) }, "Load")
                 : [],
