@@ -283,9 +283,8 @@ export class IndividualRuleView {
             !this.expanded ? [] : !rule ? ["Please select a rule to edit it"] : [
                 m("div.Rule",
                     m(".Context.mt1",
-                        m("button.ContextSpeedButton.w4.mr1",
+                        m("button.ContextSpeedButton.pt1.w-10rem.w4.mr1",
                             {
-                                style: "width: 10rem",
                                 onclick: () => this.SpeedButtonClick(TSRuleField.kRuleContext),
                                 title: "Browse all rules with this context",
                             },
@@ -302,9 +301,8 @@ export class IndividualRuleView {
                         ),
                     ),
                     m(".Requirements.mt1",
-                        m("button.RequirementsSpeedButton.mr1.v-top",
+                        m("button.RequirementsSpeedButton.pt1.w-10rem.mr1.v-top",
                             {
-                                style: "width: 10rem",
                                 onclick: () => this.SpeedButtonClick(TSRuleField.kRuleRequirements),
                                 title: "Browse all rules with the selected requirement",
                             },
@@ -319,9 +317,8 @@ export class IndividualRuleView {
                         })
                     ),
                     m(".Command.mt1",
-                        m("button.CommandSpeedButton.mr1",
+                        m("button.CommandSpeedButton.pt1.w-10rem.mr1",
                             {
-                                style: "width: 10rem",
                                 onclick: () => this.SpeedButtonClick(TSRuleField.kRuleCommand),
                                 title: "Browse all rules with this command",
                             },
@@ -345,10 +342,7 @@ export class IndividualRuleView {
                             },
                         ),
                         */
-                        m("button.ReplySpeedButton.mr1",
-                            {
-                                style: "width: 10rem",
-                            },
+                        m("button.ReplySpeedButton.pt1.w-10rem.mr1",
                             Glyph.reply + " Reply",
                         ),
                         m("textarea.ReplyMemo.TMemo",
@@ -363,9 +357,8 @@ export class IndividualRuleView {
                         ),
                     ),
                     m(".Move.mt1",
-                        m("button.MoveSpeedButton.mr1",
+                        m("button.MoveSpeedButton.pt1.w-10rem.mr1",
                             {
-                                style: "width: 10rem",
                                 onclick: () => this.SpeedButtonClick(TSRuleField.kRuleMove),
                                 title: "Browse all rules with this move",
                             },
@@ -383,9 +376,8 @@ export class IndividualRuleView {
                     ),
                 ),
                 m(".Changes.mt1",
-                    m("button.ChangesSpeedButton.mr1.v-top",
+                    m("button.ChangesSpeedButton.pt1.w-10rem.mr1.v-top",
                         {
-                            style: "width: 10rem",
                             onclick: () => this.SpeedButtonClick(TSRuleField.kRuleChanges),
                             title: "Browse all rules with the selected change",
                         },
