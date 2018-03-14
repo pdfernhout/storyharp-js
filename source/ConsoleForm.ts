@@ -147,7 +147,7 @@ function viewAbout(domain: TSDomain) {
             A tool for authoring and playing Interactive Fiction adventure stories where the player picks from a list of choices.
         `),
         m("p", "Website: ", m("a", { href: "http://storyharp.com" }, "StoryHarp.com")),
-        m("p", { style: "clear: left" }),
+        m("p.cl"),
         m("div", { onclick: () => showAuthoringHelp = !showAuthoringHelp }, expander(showAuthoringHelp, "(Click for:) ") + "Authoring Help"),
         showAuthoringHelp ? authoringHelp.split("\n\n").map(text => m("p", text)) : [],
         m("hr"),
