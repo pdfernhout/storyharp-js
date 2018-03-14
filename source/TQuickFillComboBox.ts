@@ -126,7 +126,7 @@ export class TQuickFillComboBox {
             m("input" + extraStyling, {
                 value: this.textValue,
                 style: {
-                    width: "calc(100% - 3rem)",
+                    width: "calc(100% - 4rem)",
                 },
                 oncreate: (vnode: any) => {
                     this.inputElement = <HTMLInputElement>(vnode.dom)
