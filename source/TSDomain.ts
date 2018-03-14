@@ -140,7 +140,7 @@ export interface TSDomain {
     currentEditorView: EditorName
     currentEditorWizard: WizardName
 
-    editRule: (rule: TSRule | null) => void
+    editRule: (rule: TSRule | null, scrollDirection?: ScrollIntoViewDirection) => void
 
     browseBy: TSRuleField
     setOrganizeByField: (newValue: TSRuleField) => void
@@ -196,7 +196,7 @@ export class TSApplication implements TSDomain {
     currentEditorView: EditorName = "table"
     currentEditorWizard: WizardName = "context"
 
-    editRule(rule: TSRule | null) {
+    editRule(rule: TSRule | null, scrollDirection: ScrollIntoViewDirection = ScrollIntoViewDirection.kFromTop) {
         this.editedRule = rule
         if (rule) {
             // TODO: Improve scrolling behavior
@@ -207,7 +207,7 @@ export class TSApplication implements TSDomain {
             if (this.currentEditorView !== "table") {
                 this.pendingTableScroll = {
                     rule: rule,
-                    direction: ScrollIntoViewDirection.kFromTop,
+                    direction: scrollDirection,
                 }
             }
 
