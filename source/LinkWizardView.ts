@@ -313,7 +313,7 @@ export class LinkWizardView {
 
                 m("h3", "Forward"),
 
-                m("p", "What command (", Glyph.command, ") should the user say to move from ", m("i", (this.linkWizardData.firstContext || "the first context")), ":"),
+                m("p", "What command (", Glyph.command, ") should the user say to move from ", m("i", (this.linkWizardData.firstContext || "the first context")), " to ", m("i", (this.linkWizardData.secondContext || "the second context")), ":"),
                 m(TQuickFillComboBox,
                     <any>{
                         extraStyling: (this.firstCommandError ? ".ml2.bg-yellow" : ".ml2"),
@@ -351,7 +351,7 @@ export class LinkWizardView {
 
                 m("h3", "Backward"),
 
-                m("p", "What command (", Glyph.command, ") should the user say to move from ", m("i", (this.linkWizardData.secondContext || "the second context")), ":"),
+                m("p", "What command (", Glyph.command, ") should the user say to move from ", m("i", (this.linkWizardData.secondContext || "the second context"))," to ", m("i", (this.linkWizardData.firstContext || "the first context")), ":"),
                 m(TQuickFillComboBox,
                     <any>{
                         extraStyling: (this.secondCommandError ? ".ml2.bg-yellow" : ".ml2"),
