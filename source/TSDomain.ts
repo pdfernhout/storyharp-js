@@ -333,7 +333,8 @@ export class TSApplication implements TSDomain {
         return result
     }
 
-    /*
+    /* TODO: Use or remove
+
     options: DomainOptionsStructure = new DomainOptionsStructure()
     iniFileName: string = ""
     sessionOrWorldStartupFileName: string = ""
@@ -438,7 +439,7 @@ export class TSApplication implements TSDomain {
         }
     }
 
-    /*
+    /* TODO: Use or remove
     
     loadSession(fileName: string): void {
         this.sessionCommandList.clear()
