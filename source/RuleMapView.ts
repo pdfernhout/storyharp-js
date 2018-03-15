@@ -302,6 +302,8 @@ export class RuleMapView {
             )
             this.world.selectInRectangle(this.mapSelectionRect)
             this.MapPaintBoxChanged()
+        } else {
+            (<any>event).redraw = false
         }
     }
 
