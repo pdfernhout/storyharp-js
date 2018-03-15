@@ -8,11 +8,8 @@ import { RuleBrowserView } from "./RuleBrowserView"
 import { ContextWizardView } from "./ContextWizardView"
 import { CommandWizardView } from "./CommandWizardView"
 import { LinkWizardView } from "./LinkWizardView"
-import { TSDomain } from "./TSDomain"
+import { TSDomain, WizardName, EditorName } from "./TSDomain"
 import { notebookTabButton } from "./common"
-
-type ViewName = "table" | "map" | "browser" | "wizards"
-type WizardName = "context" | "command" | "link"
 
 // TODO: POSSIBLE BUG: What happens to undo/redo for console when delete rules? Or change rule? Maybe just ignore?
 // TODO: Should variables be deleted when they are no longer used by a rule?
@@ -48,8 +45,8 @@ export class RuleEditorForm {
         )
     }
 
-    setCurrentView(event: any, viewName: ViewName) {
-        this.domain.currentEditorView = viewName
+    setCurrentView(event: any, editorName: EditorName) {
+        this.domain.currentEditorView = editorName
         event.target.blur()
     }
 
