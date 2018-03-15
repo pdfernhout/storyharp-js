@@ -116,6 +116,8 @@ export class TQuickFillComboBox {
 
         const matchingItems = this.isMenuOpen ? getItemsForMatch(items, this.textValue, leadingCharacter) : []
 
+        // uses event.stopProagation() so TSLogicListBox or other enclosures won't get extra clicks
+        
         return m("div.dib.relative",
             {
                 style: vnode.attrs.style || "",
@@ -174,13 +176,14 @@ export class TQuickFillComboBox {
                 oncreate: (vnode: any) => {
                     this.buttonElement = <HTMLButtonElement>(vnode.dom)
                 },
-                onclick: () => {
+                onclick: (event: Event) => {
                     log("button onclick", this.isMenuOpen)
                     if (this.isMenuOpen) {
                         closeMenu()
                     } else {
                         openMenu(true)
                     }
+                    event.stopPropagation()
                 },
                 onblur: (event: FocusEvent) => {
                     log("onblur button", event, this.isMenuOpen)
@@ -226,9 +229,10 @@ export class TQuickFillComboBox {
                     },
                     matchingItems.length ? [] : m("li.focus-bg-light-blue", {
                         tabindex: 0,
-                        onclick: () => {
+                        onclick: (event: Event) => {
                             log("onclick")
                             closeMenu()
+                            event.stopPropagation()
                         },
                         onkeydown: (event: KeyboardEvent) => {
                             log("onkeydown", event)
@@ -258,9 +262,10 @@ export class TQuickFillComboBox {
                     }, "No matches..."),
                     matchingItems.map((item, index) => m("li.focus-bg-light-blue", {
                         tabindex: 0,
-                        onclick: () => {
+                        onclick: (event: Event) => {
                             log("on click in item", item)
                             closeMenu(leadingCharacter + item)
+                            event.stopPropagation()
                         },
                         onblur: (event: FocusEvent) => {
                             const relatedTarget: any = event.relatedTarget

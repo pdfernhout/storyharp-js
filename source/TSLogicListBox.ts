@@ -21,8 +21,7 @@ export class TSLogicListBox {
                         "-webkit-padding-start": "0px",
                     },
                     onclick: (event: any) => {
-                        // TODO: problem if do this as then combobox menu will not open (event bubbling?):
-                        // this.comboBox.inputElement.focus()
+                        this.comboBox.inputElement.focus()
                     },
                 },
                 selections.map((wrapper: TSDesiredStateVariableWrapper, i: number) => {
