@@ -61,16 +61,9 @@ export class CommandWizardView {
     commandWizardData: CommandWizardData
 
     newCommandsTextToParseError: string = ""
-    newCommandsTextToParseLastGenerated: string = ""
-
     contextNameError: string = ""
-    contextNameLastGenerated: string = ""
-
     prefixError: string = ""
-    prefixLastGenerated: string = ""
-
     endSequenceError: string = ""
-    endSequenceGenerated: string = ""
 
     wasGenerateRulesPressed = false
 
@@ -202,10 +195,6 @@ export class CommandWizardView {
             return
         }
 
-        this.newCommandsTextToParseLastGenerated = this.commandWizardData.newCommandsTextToParse
-        this.contextNameLastGenerated = this.commandWizardData.contextName
-        this.prefixLastGenerated = this.commandWizardData.prefix
-        this.endSequenceGenerated = this.commandWizardData.endSequence
         this.wasGenerateRulesPressed = false
     }
     

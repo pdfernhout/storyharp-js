@@ -52,10 +52,7 @@ export class ContextWizardView {
     contextWizardData: ContextWizardData
 
     newContextsTextToParseError: string = ""
-    newContextsTextToParseLastGenerated: string = ""
-
     commandPhraseError: string = ""
-    commandPhraseLastGenerated: string = ""
 
     wasGenerateRulesPressed = false
 
@@ -135,9 +132,6 @@ export class ContextWizardView {
             alert("No rules were generated")
             return
         }
-
-        this.newContextsTextToParseLastGenerated = this.contextWizardData.newContextsTextToParse
-        this.commandPhraseLastGenerated = this.contextWizardData.commandPhrase
         this.wasGenerateRulesPressed = false
     }
     

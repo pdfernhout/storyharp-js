@@ -46,22 +46,11 @@ export class LinkWizardView {
     linkWizardData: LinkWizardData
 
     firstContextError: string = ""
-    firstContextLastGenerated: string = ""
-
     firstCommandError: string = ""
-    firstCommandLastGenerated: string = ""
-
     firstReplyError: string = ""
-    firstReplyLastGenerated: string = ""
-
     secondContextError: string = ""
-    secondContextGenerated: string = ""
-
     secondCommandError: string = ""
-    secondCommandLastGenerated: string = ""
-
     secondReplyError: string = ""
-    secondReplyLastGenerated: string = ""
 
     wasGenerateRulesPressed = false
 
@@ -222,13 +211,6 @@ export class LinkWizardView {
             alert("No rules were generated")
             return
         }
-
-        this.firstContextLastGenerated = this.linkWizardData.firstContext
-        this.firstCommandLastGenerated = this.linkWizardData.firstCommand
-        this.firstReplyLastGenerated = this.linkWizardData.firstReply
-        this.secondContextGenerated = this.linkWizardData.secondContext
-        this.secondCommandLastGenerated = this.linkWizardData.secondCommand
-        this.secondReplyLastGenerated = this.linkWizardData.secondReply
 
         this.wasGenerateRulesPressed = false
     }
