@@ -191,8 +191,8 @@ export class RuleMapView {
 
     */
     
-    MapImageMouseDown(event: MouseEvent): void {
-        this.lastMapMouseDownPosition = new TPoint(event.offsetX - this.mapDrawer.scroll.X, event.offsetY - this.mapDrawer.scroll.Y)
+    MapImageMouseDown(offsetX: number, offsetY: number, ctrlKey: boolean, shiftKey: boolean): void {
+        this.lastMapMouseDownPosition = new TPoint(offsetX - this.mapDrawer.scroll.X, offsetY - this.mapDrawer.scroll.Y)
 
         // TODO: use or remove: this.FocusControl(this.PanelMap)
 
@@ -206,8 +206,8 @@ export class RuleMapView {
         displayOptions[TSRuleField.kRuleCommand] = true
 
         const draggedNode: TSDraggableObject | null = this.mapDrawer.nearestNode(new TPoint(
-            event.offsetX / this.mapDrawer.scale - this.mapDrawer.scroll.X,
-            event.offsetY / this.mapDrawer.scale - this.mapDrawer.scroll.Y
+            offsetX / this.mapDrawer.scale - this.mapDrawer.scroll.X,
+            offsetY / this.mapDrawer.scale - this.mapDrawer.scroll.Y
         ), displayOptions, this.world)
 
         /* TODO: use or remove -- for making a new item
@@ -219,7 +219,7 @@ export class RuleMapView {
                 centerPosition = new TPoint(draggedNode.center().X - this.mapDrawer.scroll.X, draggedNode.center().Y - this.mapDrawer.scroll.Y)
             } else {
                 showString = "new item"
-                centerPosition = new TPoint(event.offsetX, event.offsetY)
+                centerPosition = new TPoint(offsetX, offsetY)
             }
             this.MapImage.Canvas.Brush.Color = delphi_compatability.clAqua
             this.MapImage.Canvas.Pen.Style = delphi_compatability.TFPPenStyle.psSolid
@@ -239,11 +239,11 @@ export class RuleMapView {
         }
         */
 
-        const multipleSelect: boolean = event.ctrlKey
+        const multipleSelect: boolean = ctrlKey
         this.mapSelectionInProgress = false
         if (draggedNode === null) {
             this.makeChoice(null, multipleSelect)
-            this.mapSelectionRect = new TRect(event.offsetX, event.offsetY, event.offsetX, event.offsetY)
+            this.mapSelectionRect = new TRect(offsetX, offsetY, offsetX, offsetY)
             // TODO use or remove: this.XorRect(this.MapImage.Canvas, this.mapSelectionRect)
             this.mapSelectionInProgress = true
             return
@@ -252,7 +252,7 @@ export class RuleMapView {
         this.makeChoice(draggedNode, multipleSelect)
         
         // TODO: Remove this or maybe make shift into drag scrolling?
-        if (event.shiftKey) {
+        if (shiftKey) {
             this.MapPaintBoxChanged()
             // TODO use or remove: this.MapImage.BeginDrag(true)
             return
@@ -268,30 +268,31 @@ export class RuleMapView {
         const newCommand = new TSMapDragCommand(this.domain, 1 / this.mapDrawer.scale)
         // TODO: This notification may be unneeded -- check after converted design working
         newCommand.notifyProcedure = this.mapChangedNotification.bind(this)
-        this.actionInProgress = this.worldCommandList.mouseDown(newCommand, new TPoint(event.offsetX, event.offsetY))
+        this.actionInProgress = this.worldCommandList.mouseDown(newCommand, new TPoint(offsetX, offsetY))
     }
     
-    MapImageMouseMove(event: MouseEvent): void {
+    MapImageMouseMove(offsetX: number, offsetY: number): boolean {
         if (this.actionInProgress) {
-            this.worldCommandList.mouseMove(new TPoint(event.offsetX, event.offsetY))
+            this.worldCommandList.mouseMove(new TPoint(offsetX, offsetY))
         } else if (this.mapSelectionInProgress) {
             // TODO use or remove: this.XorRect(this.MapImage.Canvas, this.mapSelectionRect)
-            this.mapSelectionRect.Right = event.offsetX
-            this.mapSelectionRect.Bottom = event.offsetY
+            this.mapSelectionRect.Right = offsetX
+            this.mapSelectionRect.Bottom = offsetY
             // TODO use or remove: this.XorRect(this.MapImage.Canvas, this.mapSelectionRect)
         } else {
-            (<any>event).redraw = false
+            return false
         }
+        return true
     }
     
-    MapImageMouseUp(event: MouseEvent): void {
+    MapImageMouseUp(offsetX: number, offsetY: number, ctrlKey: boolean): boolean {
         if (this.actionInProgress) {
-            this.worldCommandList.mouseUp(new TPoint(event.offsetX, event.offsetY))
+            this.worldCommandList.mouseUp(new TPoint(offsetX, offsetY))
             this.actionInProgress = false
         } else if (this.mapSelectionInProgress) {
             // TODO use or remove: this.XorRect(this.MapImage.Canvas, this.mapSelectionRect)
             this.mapSelectionInProgress = false
-            if (!(event.ctrlKey)) {
+            if (!(ctrlKey)) {
                 this.world.deselectAllExcept(null)
             }
             this.mapSelectionRect = new TRect(
@@ -303,8 +304,9 @@ export class RuleMapView {
             this.world.selectInRectangle(this.mapSelectionRect)
             this.MapPaintBoxChanged()
         } else {
-            (<any>event).redraw = false
+            return false
         }
+        return true
     }
 
     MapPaintBoxChanged(): void {
@@ -446,6 +448,24 @@ export class RuleMapView {
             }
         }
 
+        // Function inspired by: https://stackoverflow.com/questions/1517924/javascript-mapping-touch-events-to-mouse-events
+        // Otherwise would need to calculate offsetX and offsetY
+        function dispatchMouseEventForTouchEvent(event: TouchEvent) {
+            const touches = event.changedTouches
+            const first = touches[0]
+            const map: { [eventname: string]: string } = {
+                touchstart: "mousedown",
+                touchmove: "mousemove",
+                touchend: "mouseup"
+            }
+            const type: string = map[event.type];
+            if (!type) return
+
+            const simulatedEvent = new MouseEvent(type, first)
+            first.target.dispatchEvent(simulatedEvent);
+            event.preventDefault();
+        }
+
         return m(".RuleMapView.h-100.w-100.overflow-hidden",
             m("canvas.ba.h-100.w-100.overflow-hidden", {
                 // set tabindex to make canvas focusable
@@ -480,7 +500,7 @@ export class RuleMapView {
                     ;(<any>event).redraw = false
                     this.lastMouseLocation = new TPoint(event.offsetX, event.offsetY)
                     */
-                    this.MapImageMouseDown(event)
+                    this.MapImageMouseDown(event.offsetX, event.offsetY, event.ctrlKey, event.shiftKey)
                     return false
                 },
 
@@ -494,7 +514,7 @@ export class RuleMapView {
                         (<any>event).redraw = false
                     }
                     */
-                   this.MapImageMouseMove(event)
+                   if (!this.MapImageMouseMove(event.offsetX, event.offsetY)) (<any>event).redraw = false
                 },
 
                 onmouseup: (event: MouseEvent) => {
@@ -502,11 +522,23 @@ export class RuleMapView {
                     this.isDragging = false
                     ;(<any>event).redraw = false
                     */
-                   this.MapImageMouseUp(event)
+                   if (!this.MapImageMouseUp(event.offsetX, event.offsetY, event.ctrlKey)) (<any>event).redraw = false
                 },
 
                 onmouseout: (event: MouseEvent) => {
-                    this.MapImageMouseUp(event)
+                    if (!this.MapImageMouseUp(event.offsetX, event.offsetY, event.ctrlKey)) (<any>event).redraw = false
+                },
+
+                ontouchstart: (event: TouchEvent) => {
+                    dispatchMouseEventForTouchEvent(event)
+                },
+
+                ontouchmove: (event: TouchEvent) => {
+                    dispatchMouseEventForTouchEvent(event)
+                },
+
+                ontouchend: (event: TouchEvent) => {
+                    dispatchMouseEventForTouchEvent(event)
                 },
 
                 onkeydown: (event: KeyboardEvent) => {
