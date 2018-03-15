@@ -46,66 +46,63 @@ function OffsetRect(rect: TRect, x: int, y: int): TRect {
     return new TRect(rect.Left + x, rect.Top + y, rect.Right + x, rect.Bottom + y)
 }
 
-//needs to have rectangle with center of 0,0 and origin adjusted to that coordinate system
+// needs to have rectangle with center of 0,0 and origin adjusted to that coordinate system
 function AdjustedIntersectionPointForLineAndRectangle(origin: TPoint, rect: TRect): TPoint {
-    // TODO: assigning a new TPoint here to satisfy compiler but it is not needed
-    let result: TPoint = new TPoint(0, 0)
-    
     if (rect.contains(origin)) {
-        result = new TPoint(0, 0)
-        return result
+        return new TPoint(0, 0)
     }
     if ((rect.Left === 0) || (rect.Top === 0) || (rect.Right === 0) || (rect.Bottom === 0)) {
-        result = new TPoint(0, 0)
-        return result
+       return new TPoint(0, 0)
     }
+    // do zero cases first to avoid divide by zero later
     if (origin.X === 0) {
         if (origin.Y < 0) {
-            //do zero cases to avoid divide by zero later
-            result = new TPoint(0, rect.Top)
+            return new TPoint(0, rect.Top)
         } else if (origin.Y === 0) {
             // pathalogical case
-            // origin.y > 0
-            result = new TPoint(0, 0)
+            return new TPoint(0, 0)
         } else {
-            result = new TPoint(0, rect.Bottom)
+            // origin.y > 0
+            return new TPoint(0, rect.Bottom)
         }
     } else if (origin.Y === 0) {
         if (origin.X < 0) {
-            // origin.x > 0
-            result = new TPoint(rect.Left, 0)
+            return new TPoint(rect.Left, 0)
         } else {
-            result = new TPoint(rect.Right, 0)
+            // origin.x > 0
+            return new TPoint(rect.Right, 0)
         }
     } else {
         const slope: double = (origin.Y * 1.0) / origin.X
         if ((origin.X > 0) && (origin.Y < 0)) {
             if (slope < rect.Top * 1.0 / rect.Right) {
-                result = new TPoint(intround(rect.Top / slope), rect.Top)
+                return new TPoint(intround(rect.Top / slope), rect.Top)
             } else {
-                result = new TPoint(rect.Right, intround(rect.Right * slope))
+                return new TPoint(rect.Right, intround(rect.Right * slope))
             }
         } else if ((origin.X > 0) && (origin.Y > 0)) {
             if (slope > rect.Bottom * 1.0 / rect.Right) {
-                result = new TPoint(intround(rect.Bottom / slope), rect.Bottom)
+                return new TPoint(intround(rect.Bottom / slope), rect.Bottom)
             } else {
-                result = new TPoint(rect.Right, intround(rect.Right * slope))
+                return new TPoint(rect.Right, intround(rect.Right * slope))
             }
         } else if ((origin.X < 0) && (origin.Y < 0)) {
             if (slope > rect.Top * 1.0 / rect.Left) {
-                result = new TPoint(intround(rect.Top / slope), rect.Top)
+                return new TPoint(intround(rect.Top / slope), rect.Top)
             } else {
-                result = new TPoint(rect.Left, intround(rect.Left * slope))
+                return new TPoint(rect.Left, intround(rect.Left * slope))
             }
         } else if ((origin.X < 0) && (origin.Y > 0)) {
             if (slope < rect.Bottom * 1.0 / rect.Left) {
-                result = new TPoint(intround(rect.Bottom / slope), rect.Bottom)
+                return new TPoint(intround(rect.Bottom / slope), rect.Bottom)
             } else {
-                result = new TPoint(rect.Left, intround(rect.Left * slope))
+                return new TPoint(rect.Left, intround(rect.Left * slope))
             }
+        } else {
+            // should not get here -- either origin.X or origin.Y or both must be zero, but we checked for that earlier
+            return new TPoint(0, 0)
         }
     }
-    return result
 }
 
 function IntersectionPointForLineAndRectangle(origin: TPoint, destRect: TRect): TPoint {
