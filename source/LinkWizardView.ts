@@ -41,6 +41,8 @@ export function newLinkWizardData(): LinkWizardData {
     }
 }
 
+// TODO: Figure out how to jump to newly non-disabled reply when leave command combobox before it
+
 export class LinkWizardView {
     domain: TSDomain
     linkWizardData: LinkWizardData
@@ -84,7 +86,7 @@ export class LinkWizardView {
         this.secondCommandError = ""
         this.secondReplyError = ""
 
-        if (this.linkWizardData.firstCommand.trim() === this.linkWizardData.secondContext.trim()) {
+        if (this.linkWizardData.firstContext.trim() === this.linkWizardData.secondContext.trim()) {
             this.firstContextError = "The two contexts must have different names."
             this.secondContextError = "The two contexts must have different names."
         }
@@ -219,30 +221,6 @@ export class LinkWizardView {
     // uschangelog.ChangeLogForm.addToLog(this.NewContextsMemo.Text)
     // Application.HelpJump("Making_new_rules_using_the_new_moves_wizard")
 
-    /* TODO: enabling/disabling and arrow glyphs
-        ForwardEditChange(Sender: TObject): void {
-            let haveText: boolean
-            
-            haveText = this.ForwardEdit.Text !== ""
-            this.forwardReplyArrow.Visible = haveText
-            this.forwardReplyLabel.Enabled = haveText
-            this.forwardReplyImage.Visible = haveText
-            this.ForwardMemo.Visible = haveText
-            this.forwardReplyNote.Enabled = haveText
-        }
-        
-        BackwardEditChange(Sender: TObject): void {
-            let haveText: boolean
-            
-            haveText = this.BackwardEdit.Text !== ""
-            this.backwardReplyArrow.Visible = haveText
-            this.backwardReplyLabel.Enabled = haveText
-            this.backwardReplyImage.Visible = haveText
-            this.BackwardMemo.Visible = haveText
-            this.backwardReplyNote.Enabled = haveText
-        }
-    */
-
     view() {
         function caption(text: string) { return text }
         const showHelp = this.domain.showWizardHelp
@@ -311,7 +289,7 @@ export class LinkWizardView {
 
                 ///////////////////////////////////////
 
-                m("h3", "Forward"),
+                m("h3", "Forward ➞"),
 
                 m("p", "What command (", Glyph.command, ") should the user say to move from ", m("i", (this.linkWizardData.firstContext || "the first context")), " to ", m("i", (this.linkWizardData.secondContext || "the second context")), ":"),
                 m(TQuickFillComboBox,
@@ -329,29 +307,34 @@ export class LinkWizardView {
 
                 help("Leave this blank if you don't want to move this way. Examples are \"move forward\", \"go east\", \"leap up\", \"enter the building\", and \"activate the transporter\"."),
 
-                m("p", "What should the computer reply (", Glyph.reply, ") after the user says the move command from ", m("i", (this.linkWizardData.firstContext || "the first context")), "?"),
+                m("div.ml2" + (this.linkWizardData.firstCommand ? "" : ".gray"),
 
-                m("textarea.ml2" + (this.firstReplyError ? ".bg-yellow" : ""),
-                    {
-                        rows: 10,
-                        cols: 60,
-                        value: this.linkWizardData.firstReply,
-                        onchange: (event: { target: HTMLInputElement }) => {
-                            this.linkWizardData.firstReply = event.target.value
-                            if (this.wasGenerateRulesPressed) this.checkInputForErrors()
-                        }
-                    },
+                    m("p", "What should the computer reply (", Glyph.reply, ") after the user says the move command from ", m("i", (this.linkWizardData.firstContext || "the first context")), "?"),
+
+                    m("textarea.ml2" + (this.firstReplyError ? ".bg-yellow" : ""),
+                        {
+                            rows: 10,
+                            cols: 60,
+                            value: this.linkWizardData.firstReply,
+                            onchange: (event: { target: HTMLInputElement }) => {
+                                this.linkWizardData.firstReply = event.target.value
+                                if (this.wasGenerateRulesPressed) this.checkInputForErrors()
+                            },
+                            disabled: !this.linkWizardData.firstCommand || null,
+                        },
+                    ),
+
+                    this.firstReplyError ? m("div.i.bg-yellow", this.firstReplyError) : [],
+
+                    help("Leave this blank to get a default reply of \"You\" plus the command phrase. For example, for \"go east\" the default would be \"You go east\"."),
+                
                 ),
-
-                this.firstReplyError ? m("div.i.bg-yellow", this.firstReplyError) : [],
-
-                help("Leave this blank to get a default reply of \"You\" plus the command phrase. For example, for \"go east\" the default would be \"You go east\"."),
 
                 ///////////////////////////////////////
 
-                m("h3", "Backward"),
+                m("h3", "Backward ↩"),
 
-                m("p", "What command (", Glyph.command, ") should the user say to move from ", m("i", (this.linkWizardData.secondContext || "the second context"))," to ", m("i", (this.linkWizardData.firstContext || "the first context")), ":"),
+                m("p", "What command (", Glyph.command, ") should the user say to move from ", m("i", (this.linkWizardData.secondContext || "the second context")), (this.linkWizardData.firstCommand ? " back" : []), " to ", m("i", (this.linkWizardData.firstContext || "the first context")), ":"),
                 m(TQuickFillComboBox,
                     <any>{
                         extraStyling: (this.secondCommandError ? ".ml2.bg-yellow" : ".ml2"),
@@ -367,24 +350,28 @@ export class LinkWizardView {
 
                 help("Leave this blank if you don't want to move this way. Examples are \"move forward\", \"go east\", \"leap up\", \"enter the building\", and \"activate the transporter\"."),
 
+                m("div.ml2" + (this.linkWizardData.secondCommand ? "" : ".gray"),
+
                 m("p", "What should the computer reply (", Glyph.reply, ") after the user says the move command from ", m("i", (this.linkWizardData.secondContext || "the second context")), "?"),
 
-                m("textarea.ml2" + (this.secondReplyError ? ".bg-yellow" : ""),
-                    {
-                        rows: 10,
-                        cols: 60,
-                        value: this.linkWizardData.secondReply,
-                        onchange: (event: { target: HTMLInputElement }) => {
-                            this.linkWizardData.secondReply = event.target.value
-                            if (this.wasGenerateRulesPressed) this.checkInputForErrors()
-                        }
-                    },
+                    m("textarea.ml2" + (this.secondReplyError ? ".bg-yellow" : ""),
+                        {
+                            rows: 10,
+                            cols: 60,
+                            value: this.linkWizardData.secondReply,
+                            onchange: (event: { target: HTMLInputElement }) => {
+                                this.linkWizardData.secondReply = event.target.value
+                                if (this.wasGenerateRulesPressed) this.checkInputForErrors()
+                            },
+                            disabled: !this.linkWizardData.secondCommand || null,
+                        },
+                    ),
+
+                    this.secondReplyError ? m("div.i.bg-yellow", this.secondReplyError) : [],
+
+                    help("Leave this blank to get a default reply of \"You\" plus the command phrase. For example, for \"go east\" the default would be \"You go east\"."),
+
                 ),
-
-                this.secondReplyError ? m("div.i.bg-yellow", this.secondReplyError) : [],
-
-                help("Leave this blank to get a default reply of \"You\" plus the command phrase. For example, for \"go east\" the default would be \"You go east\"."),
-
                 ///////////////////////////////////////
 
                 m("h3", "Generate Rules"),
