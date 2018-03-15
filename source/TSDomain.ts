@@ -45,7 +45,7 @@ export interface RuleEditorAPI {
     selectEditorField: (field: TSRuleField) => void
     lastChoice: TSDraggableObject | null
     previousChoice: TSDraggableObject | null
-    // TODO: Is lastCommand needed here?
+    // TODO: Use lastCommand to track current rule from console to editor
     lastCommand: TSRule | null
 }
 
