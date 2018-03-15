@@ -197,18 +197,6 @@ export class CommandWizardView {
 
         this.wasGenerateRulesPressed = false
     }
-    
-    // TODO use or remove:
-
-    // usdomain.domain.world.addContextsToListBox(this.ContextBox)
-    
-    // this.lastFloodedContextPrefix = ""
-    // goNextClick(Sender: TObject): void {
-    // } else if (this.notebook.PageIndex === kContextPage) {
-    // this.lastFloodedContextPrefix = this.ContextBox.Items[this.ContextBox.ItemIndex]
-    
-    // usdomain.domain.world.variables
-    // if (this.ContextBox.Items[j] === variable.phrase) {
 
     view() {
         function caption(text: string) { return text }
