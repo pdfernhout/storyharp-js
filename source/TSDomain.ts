@@ -249,7 +249,7 @@ export class TSApplication implements TSDomain {
 
     dataPath = "./data/"
 
-    // TODO: Fix these
+    // TODO: Rearchitect these so not called "Form"; rethink how domain is used to transfer this state
     consoleForm: ConsoleFormAPI
     ruleEditorForm: RuleEditorAPI
     changeLogForm: ChangeLogAPI
@@ -271,7 +271,7 @@ export class TSApplication implements TSDomain {
 
         this.mapViewState = newMapViewState()
 
-        // TODO: Fix these
+        // TODO: Rearchitect these so not called "Form"; rethink how domain is used to transfer this state
         this.consoleForm = {
             addLineToTranscript: (text: string, color: number) => this.transcript.push({uuid: nextTranscriptLineUUID++, text, color}),
             scrollTranscriptEndIntoView: () => null,
