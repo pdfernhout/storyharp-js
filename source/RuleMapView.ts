@@ -11,6 +11,8 @@ import { KfCommand, KfCommandChangeType } from "./KfCommand"
 import { TSVariableDisplayOptions, TSVariable } from "./TSVariable"
 import { TSDomain } from "./TSDomain"
 
+type MapMode = "select" | "drag" | "zoom" | "gesture"
+
 export class RuleMapView {
     domain: TSDomain
     world: TWorld
@@ -20,7 +22,10 @@ export class RuleMapView {
     mapDrawer: TSMapView
 
     isDragging = false
+    isZooming = false
     lastMouseLocation = new TPoint(0, 0)
+
+    mapMode: MapMode = "select"
 
     get previousChoice(): TSDraggableObject | null {
         return this.domain.ruleEditorForm.previousChoice
@@ -466,8 +471,37 @@ export class RuleMapView {
             event.preventDefault();
         }
 
+        const indicator = (choice: MapMode): string {
+            if (this.mapMode === choice) return ">" + choice + "<"
+            return choice 
+        }
+
+        const centerMap = () => {
+            const boundsCenter = this.world.boundsRect().center()
+            this.mapDrawer.scroll.X = Math.round(this.canvas.width / 2 / this.mapDrawer.scale) - boundsCenter.X
+            this.mapDrawer.scroll.Y = Math.round(this.canvas.height / 2 / this.mapDrawer.scale) - boundsCenter.Y
+        }
+
+        const resetMap = () => {
+            this.mapDrawer.scroll.X = 0
+            this.mapDrawer.scroll.Y = 0
+            this.mapDrawer.scale = defaultScale
+        }
+
         return m(".RuleMapView.h-100.w-100.overflow-hidden",
-            m("canvas.ba.h-100.w-100.overflow-hidden", {
+            m("div.h2", 
+                m("button.ml1.h-75.br-pill.w4.mt1", { onclick: () => this.mapMode = "select" }, indicator("select")),
+                m("button.ml1.h-75.br-pill.w4.mt1", { onclick: () => this.mapMode = "drag" }, indicator("drag")),
+                m("button.ml1.h-75.br-pill.w4.mt1", { onclick: () => this.mapMode = "zoom" }, indicator("zoom")),
+                m("button.ml1.h-75.br-pill.w4.mt1", { onclick: () => this.mapMode = "gesture", title: "allows mobile gestures" }, indicator("gesture")),
+                m("button.ml3.h-75.mt1", { onclick: () => centerMap() }, "center"),
+                m("button.ml1.h-75.mt1", { onclick: () => resetMap() }, "reset"),
+            ),
+            m("canvas.ba.w-100.overflow-hidden", {
+                style: {
+                    height: "calc(100% - 2rem)",
+                },
+
                 // set tabindex to make canvas focusable
                 tabindex: 0,
 
@@ -495,49 +529,64 @@ export class RuleMapView {
 
                 onmousedown: (event: MouseEvent) => {
                     this.canvas.focus()
-                    /* TODO: Fix scrolling by dragging -- or remove
-                    this.isDragging = true
-                    ;(<any>event).redraw = false
-                    this.lastMouseLocation = new TPoint(event.offsetX, event.offsetY)
-                    */
-                    this.MapImageMouseDown(event.offsetX, event.offsetY, event.ctrlKey, event.shiftKey)
+                    if (this.mapMode === "drag") {
+                        this.isDragging = true
+                        ;(<any>event).redraw = false
+                        this.lastMouseLocation = new TPoint(event.offsetX, event.offsetY)
+                    } else if (this.mapMode === "zoom") {
+                        this.isZooming = true
+                        ;(<any>event).redraw = false
+                        this.lastMouseLocation = new TPoint(event.offsetX, event.offsetY)
+                    } else {
+                        this.MapImageMouseDown(event.offsetX, event.offsetY, event.ctrlKey, event.shiftKey)
+                    }
                     return false
                 },
 
                 onmousemove: (event: MouseEvent) => {
-                    /* TODO: Fix scrolling by dragging -- or remove
                     if (this.isDragging) {
                         this.mapDrawer.scroll.X += (event.offsetX - this.lastMouseLocation.X)
                         this.mapDrawer.scroll.Y += (event.offsetY - this.lastMouseLocation.Y)
                         this.lastMouseLocation = new TPoint(event.offsetX, event.offsetY)
+                    } else if (this.isZooming) {
+                        const approximateDelta = event.offsetX - this.lastMouseLocation.X + event.offsetY - this.lastMouseLocation.Y
+                        this.mapDrawer.scale = Math.max(0.1, this.mapDrawer.scale + approximateDelta / 100)
+                        this.lastMouseLocation = new TPoint(event.offsetX, event.offsetY)
                     } else {
-                        (<any>event).redraw = false
+                        if (!this.MapImageMouseMove(event.offsetX, event.offsetY)) (<any>event).redraw = false
                     }
-                    */
-                   if (!this.MapImageMouseMove(event.offsetX, event.offsetY)) (<any>event).redraw = false
                 },
 
                 onmouseup: (event: MouseEvent) => {
-                    /* TODO: Fix scrolling by dragging -- or remove
-                    this.isDragging = false
-                    ;(<any>event).redraw = false
-                    */
-                   if (!this.MapImageMouseUp(event.offsetX, event.offsetY, event.ctrlKey)) (<any>event).redraw = false
+                    if (this.isDragging) {
+                        this.isDragging = false
+                        ;(<any>event).redraw = false
+                    } else if (this.isZooming) {
+                        this.isZooming = false
+                        ;(<any>event).redraw = false
+                    } else {
+                        if (!this.MapImageMouseUp(event.offsetX, event.offsetY, event.ctrlKey)) (<any>event).redraw = false
+                    }
                 },
 
                 onmouseout: (event: MouseEvent) => {
+                    this.isDragging = false
+                    this.isZooming = false
                     if (!this.MapImageMouseUp(event.offsetX, event.offsetY, event.ctrlKey)) (<any>event).redraw = false
                 },
 
                 ontouchstart: (event: TouchEvent) => {
+                    if (this.mapMode === "gesture") return
                     dispatchMouseEventForTouchEvent(event)
                 },
 
                 ontouchmove: (event: TouchEvent) => {
+                    if (this.mapMode === "gesture") return
                     dispatchMouseEventForTouchEvent(event)
                 },
 
                 ontouchend: (event: TouchEvent) => {
+                    if (this.mapMode === "gesture") return
                     dispatchMouseEventForTouchEvent(event)
                 },
 
@@ -563,9 +612,7 @@ export class RuleMapView {
                         break
                     case 67: // c 
                         // center map
-                        const boundsCenter = this.world.boundsRect().center()
-                        this.mapDrawer.scroll.X = Math.round(this.canvas.width / 2 / this.mapDrawer.scale) - boundsCenter.X
-                        this.mapDrawer.scroll.Y = Math.round(this.canvas.height / 2 / this.mapDrawer.scale) - boundsCenter.Y
+                        centerMap()
                         break
                     case 187: // plus +
                         this.mapDrawer.scale = this.mapDrawer.scale * 1.2
@@ -574,9 +621,7 @@ export class RuleMapView {
                         this.mapDrawer.scale = this.mapDrawer.scale / 1.2
                         break
                     case 82: // r to reset
-                        this.mapDrawer.scroll.X = 0
-                        this.mapDrawer.scroll.Y = 0
-                        this.mapDrawer.scale = defaultScale
+                        resetMap()
                         break
                     default:
                         (<any>event).redraw = false
