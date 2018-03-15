@@ -75,8 +75,10 @@ export class TSRule extends TSDraggableObject {
         if (this.context) {
             this.context.contextUseages -= 1
         }
-        // TODO: Seems like this and the other "setXYZ" methods will leak memory
-        // if the world holds onto variables which no longer have references
+        // This and the other "setXYZ" methods will leak a little memory
+        // if the world holds onto variables which no longer have references.
+        // This will be cleaned upwhen the next world is loaded.
+        // It is useful to keep these unused variables because they have a position.
         this.context = this.world.findOrCreateVariable(aString, false)
         this.context.contextUseages += 1
     }
