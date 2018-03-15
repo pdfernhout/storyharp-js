@@ -63,7 +63,7 @@ export interface SpeechSystemAPI {
 }
 
 export type FormName = "about" | "console" | "files" | "ruleEditor"
-export type EditorName = "table" | "map" | "browser" | "wizards"
+export type EditorName = "table" | "map" | "browser" | "wizards" | "log"
 export type WizardName = "context" | "command" | "link"
 
 // This is a seperate interface for testability

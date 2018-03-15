@@ -10,6 +10,7 @@ import { CommandWizardView } from "./CommandWizardView"
 import { LinkWizardView } from "./LinkWizardView"
 import { TSDomain, WizardName, EditorName } from "./TSDomain"
 import { notebookTabButton } from "./common"
+import { LogView } from "./LogView";
 
 // TODO: POSSIBLE BUG: What happens to undo/redo for console when delete rules? Or change rule? Maybe just ignore?
 // TODO: Should variables be deleted when they are no longer used by a rule?
@@ -62,6 +63,7 @@ export class RuleEditorForm {
                 m(notebookTabButton(currentView === "map"),  { onclick: (event: Event) => this.setCurrentView(event, "map") }, "Map"),
                 m(notebookTabButton(currentView === "browser"),  { onclick: (event: Event) => this.setCurrentView(event, "browser") }, "Browser"),
                 m(notebookTabButton(currentView === "wizards"),  { onclick: (event: Event) => this.setCurrentView(event, "wizards") }, "Wizards"),
+                m(notebookTabButton(currentView === "log"),  { onclick: (event: Event) => this.setCurrentView(event, "log") }, "Log"),
                 m("button.ml4.w3", {
                     disabled: !domain.worldCommandList.isUndoEnabled(),
                     onclick: () => domain.worldCommandList.undoLast(),
@@ -82,6 +84,7 @@ export class RuleEditorForm {
                         currentView === "table" ? m(RuleTableView, <any>{domain: domain}) : [],
                         currentView === "map" ? m(RuleMapView, <any>{domain: domain}) : [],
                         currentView === "browser" ? m(RuleBrowserView, <any>{domain: domain}) : [],
+                        currentView === "log" ? m(LogView, <any>{domain: domain}) : [],
                     ),
                     m("div.flex-none",
                         m(IndividualRuleView, <any>{domain: domain})
