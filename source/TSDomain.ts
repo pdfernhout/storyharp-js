@@ -147,9 +147,9 @@ export class TSApplication implements TSDomain {
         this.editedRule = rule
         if (rule) {
             // TODO: Improve scrolling behavior
-            // don't scroll for two forms because scrolling shifts
-            // even if item visible which is jumpy if click on rule
-            // however, this means undo/redo commands don't track properly
+            // Don't scroll for table and browser forms because scrolling shifts
+            // even if item visible -- which is jumpy if click on rule.
+            // But this means undo/redo commands don't track properly.
 
             if (this.currentEditorView !== "table") {
                 this.pendingTableScroll = {
