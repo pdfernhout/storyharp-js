@@ -208,6 +208,13 @@ export class IndividualRuleView {
             worldCommandList.ruleFieldChange(rule, TSRuleField.kRuleChanges, value)
         }
 
+        function testReply() {
+            if (!rule) throw new Error("Rule must be defined first")
+            const text = rule.reply
+            // TODO: Make this use the speech system if one is available
+            alert(text)
+        }
+
         return m(".IndividualRuleView.ba.bg-light-gray.w-100.pa1",
             m("div.PanelButtonBar.TPanel.ma1",
                 {
@@ -335,14 +342,11 @@ export class IndividualRuleView {
                         ),
                     ),
                     m(".Reply.flex.items-center.mt1",
-                        /*
-                        m("img.replyPicture.TImage",
-                            {
+                        m("button.ReplySpeedButton.pt1.w-10rem.mr1",
+                            {   
+                                onclick: testReply,
                                 title: "Test saying the reply",
                             },
-                        ),
-                        */
-                        m("button.ReplySpeedButton.pt1.w-10rem.mr1",
                             Glyph.reply + " Reply",
                         ),
                         m("textarea.ReplyMemo.TMemo",
