@@ -16,14 +16,12 @@ export class FileUtils {
     static callback: (a: any, b: any) => null
 
     static loadFromFile(convertToBase64: boolean, callback: any) {
-        console.log("loadFromFile")
         if (typeof convertToBase64 === "function") {
             callback = convertToBase64
             convertToBase64 = false
         }
         // Mithril can clobber the fileControl if it mounts something on the body
         // if (true && !FileUtils.fileControl) {
-            console.log("making file control")
             const fileControl = document.createElement("input")
             FileUtils.fileControl = <any>fileControl
             fileControl.type = "file"

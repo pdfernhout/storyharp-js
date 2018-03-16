@@ -136,7 +136,6 @@ export class RuleBrowserView {
 
     ruleClicked(event: MouseEvent, rule: TSRule, index: int): any {
         if (event.shiftKey) {
-            console.log("shift clicked", this.lastBrowserSingleRuleIndex, this.ruleSubset.length, index)
             if ((this.lastBrowserSingleRuleIndex >= 0)
                 && (this.lastBrowserSingleRuleIndex < this.ruleSubset.length)
                 // Was bug in Delphi version where used lastBrowserSingleRuleIndex !== index instead
@@ -156,7 +155,7 @@ export class RuleBrowserView {
                     }
                 }
             } else {
-                console.log("skipped")
+                // skipped as no last rule to select from
             }
         } else if (event.ctrlKey) {
             rule.selected = !rule.selected
