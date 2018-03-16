@@ -86,9 +86,11 @@ export class RuleEditorForm {
                         currentView === "browser" ? m(RuleBrowserView, <any>{domain: domain}) : [],
                         currentView === "log" ? m(LogView, <any>{domain: domain}) : [],
                     ),
-                    m("div.flex-none",
-                        m(IndividualRuleView, <any>{domain: domain})
-                    )
+                    currentView !== "log" 
+                        ? m("div.flex-none",
+                            m(IndividualRuleView, <any>{domain: domain}),
+                        )
+                        : []
                 ],
         )
     }
