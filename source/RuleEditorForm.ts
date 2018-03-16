@@ -32,13 +32,13 @@ export class RuleEditorForm {
         const domain = this.domain
 
         return m("div.flex-auto.h-100.overflow-hidden",
-            m("div",
+            m("div.mb2",
                 "Wizard:",
                 m(notebookTabButton(currentWizard === "context"), { onclick: (event: Event) => this.setCurrentWizard(event, "context") }, "Context"),
                 m(notebookTabButton(currentWizard === "command"),  { onclick: (event: Event) => this.setCurrentWizard(event, "command") }, "Command"),
                 m(notebookTabButton(currentWizard === "link"),  { onclick: (event: Event) => this.setCurrentWizard(event, "link") }, "Link"),
             ),
-            m("div.WizardHolder.mt2", { style: "height: calc(100% - 3rem)" },
+            m("div.WizardHolder", { style: "height: calc(100% - 3rem)" },
                 currentWizard === "context" ? m(ContextWizardView, <any>{domain: domain}) : [],
                 currentWizard === "command" ? m(CommandWizardView, <any>{domain: domain}) : [],
                 currentWizard === "link" ? m(LinkWizardView, <any>{domain: domain}) : [],
@@ -80,7 +80,7 @@ export class RuleEditorForm {
             currentView === "wizards"
                 ? this.viewWizards() 
                 : [
-                    m("div.mt2.flex-auto.h-100.w-100.overflow-hidden",
+                    m("div.flex-auto.h-100.w-100.overflow-hidden",
                         currentView === "table" ? m(RuleTableView, <any>{domain: domain}) : [],
                         currentView === "map" ? m(RuleMapView, <any>{domain: domain}) : [],
                         currentView === "browser" ? m(RuleBrowserView, <any>{domain: domain}) : [],

@@ -134,7 +134,7 @@ function confirmClearLog() {
 export class LogView {
     view() {
         return m("div.LogView.h-100.overflow-hidden",
-            m("div",
+            m("div.mb2",
                 m("button", {
                     onclick: confirmClearLog,
                     disabled: dbFailed || !db,
