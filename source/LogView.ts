@@ -39,7 +39,6 @@ function openLogDBIfNeeded(): Promise<void> {
 }
 
 function readAllItems(): Promise<void> {
-    console.log("readAllItems")
     return new Promise((resolve, reject) => {
         const cursorRequest = db
             .transaction(["log"], "readonly")
@@ -49,7 +48,6 @@ function readAllItems(): Promise<void> {
         cursorRequest.onsuccess = (event) => {
             var cursor = (<any>(event.target)).result
             if (cursor) {
-                console.log("got cursor", cursor)
                 log.push(cursor.value.text)
                 cursor.continue()
             } else {
