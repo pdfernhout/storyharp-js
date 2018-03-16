@@ -11,8 +11,10 @@ const application = new TSApplication()
 
 const MyComponent = { view: () => viewConsoleForm(application) }
 
-// loadTestWorld("GarTrek")
-application.loadWorldFromServerData("House and Yard").then(() => {
+// const worldName = "GarTrek"
+const worldName = "House and Yard"
+application.loadWorldFromServerData(worldName).then(() => {
+    application.updateForNewOrLoadedWorld(worldName, true)
     m.mount(document.body, MyComponent)
 })
 

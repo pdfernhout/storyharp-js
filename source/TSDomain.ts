@@ -411,11 +411,12 @@ export class TSApplication implements TSDomain {
         this.worldChangeCount = 0
         this.isWorldFileLoaded = isWorldFileLoaded
 
-        this.editRule(null)
         this.lastSingleRuleIndex = 0
-
         this.ruleEditorForm.lastChoice = null
         this.ruleEditorForm.previousChoice = null
+
+        const ruleToEdit = this.world.rules.length ? this.world.rules[0] : null
+        this.editRule(ruleToEdit)
 
         this.newSession()
     }
