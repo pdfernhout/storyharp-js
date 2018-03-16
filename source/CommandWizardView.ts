@@ -118,7 +118,6 @@ export class CommandWizardView {
         this.domain.addToLog(this.commandWizardData.contextName)
         this.domain.addToLog(this.commandWizardData.prefix)
         this.domain.addToLog(this.commandWizardData.newCommandsTextToParse)
-        this.domain.addToLog("---")
 
         const newRulesCommand = new TSNewRulesCommand(this.domain)
         newRulesCommand.creator = "command sequence wizard"

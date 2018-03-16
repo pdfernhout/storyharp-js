@@ -162,8 +162,6 @@ export class TSApplication implements TSDomain {
 
             // the map does not scroll if item is visible
             this.pendingMapScroll = true
-
-            this.addToLog("--- edit rule #" + (this.world.rules.indexOf(rule) + 1))
         }
     }
 

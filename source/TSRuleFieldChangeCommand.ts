@@ -45,12 +45,11 @@ export class TSRuleFieldChangeCommand extends KfCommand {
     doCommand(): void {
         this.domain.world.lastVariableCreated = ""
         this.rule.setTextForField(this.field, this.newValue)
-        if (this.field !== TSRuleField.kRuleReply) {
-            // log changes
-            this.domain.addToLog(this.domain.world.lastVariableCreated)
-        } else {
-            this.domain.addToLog(this.newValue)
-        }
+
+        // log changes
+        this.domain.addToLog("--- edit rule #" + (this.domain.world.rules.indexOf(this.rule) + 1) + " " + TSRuleField[this.field].substring(5))
+        this.domain.addToLog(this.rule.getTextForField(this.field))
+        
         this.updateEditorForChange()
         super.doCommand()
     }

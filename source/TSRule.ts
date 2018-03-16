@@ -12,8 +12,10 @@ export enum TSRuleField {
     kRuleReply = 2,
     kRuleMove = 3,
     kRuleRequirements = 4,
+    // Count of all fields
+    kLastRuleField = 5,
+    // This real field needs to come last so can lookup name from id instead of getting kLastRuleField
     kRuleChanges = 5,
-    kLastRuleField = 5
 }
 
 const textToDisplayForEmptyCommandPhrase = "...new command..."

@@ -90,7 +90,6 @@ export class ContextWizardView {
         this.domain.addToLog("--- context wizard")
         this.domain.addToLog(this.contextWizardData.commandPhrase)
         this.domain.addToLog(this.contextWizardData.newContextsTextToParse)
-        this.domain.addToLog("---"
 
         const newRulesCommand = new TSNewRulesCommand(this.domain)
         newRulesCommand.creator = "new context wizard"

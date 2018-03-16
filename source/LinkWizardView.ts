@@ -183,7 +183,6 @@ export class LinkWizardView {
         this.domain.addToLog(this.linkWizardData.secondContext)
         this.domain.addToLog(this.linkWizardData.secondCommand)
         this.domain.addToLog(this.linkWizardData.secondReply)
-        this.domain.addToLog("---")
 
         const newRulesCommand = new TSNewRulesCommand(this.domain)
         newRulesCommand.creator = "link wizard"
