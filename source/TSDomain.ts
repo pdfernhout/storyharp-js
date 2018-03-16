@@ -12,6 +12,7 @@ import { MapViewState, newMapViewState } from "./TSMapView"
 import { doCommand } from "./ConsoleForm";
 import { PendingTableScroll } from "./RuleTableView"
 import { TPoint } from "./TPoint"
+import { addToLog } from "./LogView"
 
 // const
 const kUnsavedWorldFileName = "untitled"
@@ -47,10 +48,6 @@ export interface RuleEditorAPI {
     previousChoice: TSDraggableObject | null
     // TODO: Use lastCommand to track current rule from console to editor
     lastCommand: TSRule | null
-}
-
-export interface ChangeLogAPI {
-    addToLog: (text: string) => void
 }
 
 export interface SpeechSystemAPI {
@@ -118,9 +115,10 @@ export interface TSDomain {
 
     dataPath: string
 
+    addToLog: (text: string) => void
+
     consoleForm: ConsoleFormAPI
     ruleEditorForm: RuleEditorAPI
-    changeLogForm: ChangeLogAPI
     speechSystem: SpeechSystemAPI
 }
 
@@ -164,6 +162,8 @@ export class TSApplication implements TSDomain {
 
             // the map does not scroll if item is visible
             this.pendingMapScroll = true
+
+            this.addToLog("--- edit rule #" + (this.world.rules.indexOf(rule) + 1))
         }
     }
 
@@ -196,10 +196,11 @@ export class TSApplication implements TSDomain {
 
     dataPath = "./data/"
 
+    addToLog = addToLog
+
     // TODO: Rearchitect these so not called "Form"; rethink how domain is used to transfer this state
     consoleForm: ConsoleFormAPI
     ruleEditorForm: RuleEditorAPI
-    changeLogForm: ChangeLogAPI
     speechSystem: SpeechSystemAPI
 
     constructor() {
@@ -236,10 +237,6 @@ export class TSApplication implements TSDomain {
             lastChoice: null,
             previousChoice: null,            
             lastCommand: null
-        }
-
-        this.changeLogForm = {
-            addToLog: (text: string) => null
         }
 
         this.speechSystem = {
@@ -404,6 +401,7 @@ export class TSApplication implements TSDomain {
 */
 
     updateForNewOrLoadedWorld(fileName: string, isWorldFileLoaded: boolean): void {
+        this.addToLog("--- world change: " + fileName)
         this.worldCommandList.clear()
         if (fileName) {
             this.worldFileName = fileName

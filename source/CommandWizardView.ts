@@ -102,8 +102,6 @@ export class CommandWizardView {
     }
     
     generateRules(): void {
-        console.log("generateRules", this.commandWizardData.endSequence)
-
         this.wasGenerateRulesPressed = true
         if (this.checkInputForErrors()) {
             setTimeout(() => alert("Please fix the highlighted issues and try again."), 50)
@@ -116,8 +114,11 @@ export class CommandWizardView {
         const world: TWorld = this.domain.world
         const ruleEditorForm = this.domain.ruleEditorForm
 
-        // TODO: save text to log
-        // uschangelog.ChangeLogForm.addToLog(this.newCommandsMemo.Text)
+        this.domain.addToLog("--- command wizard")
+        this.domain.addToLog(this.commandWizardData.contextName)
+        this.domain.addToLog(this.commandWizardData.prefix)
+        this.domain.addToLog(this.commandWizardData.newCommandsTextToParse)
+        this.domain.addToLog("---")
 
         const newRulesCommand = new TSNewRulesCommand(this.domain)
         newRulesCommand.creator = "command sequence wizard"
@@ -130,7 +131,6 @@ export class CommandWizardView {
         for (let line of lines) {
             line = line.trim()
             if (!line) continue
-            console.log("line", line)
 
             const pipeBarLocation = line.indexOf("|")
             let command
@@ -383,7 +383,7 @@ export class CommandWizardView {
 
                 help("After you have generated new rules, if you change your mind, you can choose Undo from the Edit menu to remove your new rules."),
                 help("The new rules will also initally be selected in the rules table."),
-                // TODO: use or remove: help("The command and reply text you entered here to generate rules will also be saved in the log file if you need to recover it later."),
+                help("The command and reply text you entered here to generate rules will also be saved in the log file if you need to recover it later."),
 
                 m("div.ml2.mt2.mb3", 
                     m("button", {

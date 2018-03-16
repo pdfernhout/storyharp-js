@@ -170,17 +170,20 @@ export class LinkWizardView {
     }
     
     generateRules(): void {
-        console.log("generateRules")
-
         this.wasGenerateRulesPressed = true
         if (this.checkInputForErrors()) {
             setTimeout(() => alert("Please fix the highlighted issues and try again."), 50)
             return
         }
 
-        // TODO: save text to log
-        // uschangelog.ChangeLogForm.addToLog(this.ForwardMemo.Text)
-        // uschangelog.ChangeLogForm.addToLog(this.BackwardMemo.Text)
+        this.domain.addToLog("--- link wizard")
+        this.domain.addToLog(this.linkWizardData.firstContext)
+        this.domain.addToLog(this.linkWizardData.firstCommand)
+        this.domain.addToLog(this.linkWizardData.firstReply)
+        this.domain.addToLog(this.linkWizardData.secondContext)
+        this.domain.addToLog(this.linkWizardData.secondCommand)
+        this.domain.addToLog(this.linkWizardData.secondReply)
+        this.domain.addToLog("---")
 
         const newRulesCommand = new TSNewRulesCommand(this.domain)
         newRulesCommand.creator = "link wizard"
@@ -217,8 +220,7 @@ export class LinkWizardView {
         this.wasGenerateRulesPressed = false
     }
     
-    // TODO:
-    // uschangelog.ChangeLogForm.addToLog(this.NewContextsMemo.Text)
+    // TODO: use or remove
     // Application.HelpJump("Making_new_rules_using_the_new_moves_wizard")
 
     view() {
@@ -403,7 +405,7 @@ export class LinkWizardView {
 
                 help("After you have generated new rules, if you change your mind, you can choose Undo from the Edit menu to remove your new rules."),
                 help("The new rules will also initally be selected in the rules table."),
-                // TODO: use or remove: help("The text you entered here to generate rules will also be saved in the log file if you need to recover it later."),
+                help("The text you entered here to generate rules will also be saved in the log file if you need to recover it later."),
 
                 m("div.ml2.mt2.mb3", 
                     m("button", {

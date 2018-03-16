@@ -50,7 +50,7 @@ export function doCommand(domain: TSDomain, commandPhrase: string) {
     // console.log("test", commandPhraseModified, availableCommands(domain.world, true))
     if ((availableCommands(domain.world, true).indexOf(commandPhraseModified) === -1)) {
         if (commandPhrase.startsWith("$")) {
-            // elimitate leading $
+            // eliminate leading $
             commandPhrase = commandPhrase.substring(1)
         }
         domain.consoleForm.addLineToTranscript("> " + commandPhrase, Color.clBlue)
@@ -257,7 +257,6 @@ function saveWorldToLocalFile(domain: TSDomain) {
     const world: TWorld = domain.world
     const fileName = makeFileNameWithoutWldExtension(domain.worldFileName)
     FileUtils.saveToFile(fileName, world.saveWorldToFileContents(ExportRulesOption.kSaveAllRules), ".wld", (fileName: string) => {
-        console.log("written", fileName)
         domain.worldFileName = makeFileNameWithWldExtension(fileName)
         domain.resetWorldChangeCount()
         m.redraw()
@@ -278,12 +277,11 @@ function loadWorldFromLocalFile(domain: TSDomain) {
 
     const world: TWorld = domain.world
     FileUtils.loadFromFile(false, (fileName: string, contents: string) => {
-        console.log("chose", fileName)
-
         world.resetVariablesAndRules()
 
         const loaded = world.loadWorldFromFileContents(contents)
-        console.log("load status", loaded)
+        domain.addToLog("--- Read: " + fileName + (loaded ? " OK" : " Failed"))
+        if (!loaded) alert("Something went wrong loading file: " + fileName)
 
         domain.updateForNewOrLoadedWorld(fileName, true)
 
@@ -324,6 +322,7 @@ async function generateHTML(domain: TSDomain) {
     const fileName = makeFileNameWithoutWldExtension(domain.worldFileName)
     FileUtils.saveToFile(fileName, htmlFile, ".html", (fileName: string) => {
         console.log("written", fileName)
+        domain.addToLog("--- Wrote: " + fileName)
         m.redraw()
     })
 }

@@ -76,8 +76,6 @@ export class ContextWizardView {
     }
     
     generateRules(): void {
-        console.log("generateRules")
-
         this.wasGenerateRulesPressed = true
         if (this.checkInputForErrors()) {
             setTimeout(() => alert("Please fix the highlighted issues and try again."), 50)
@@ -89,8 +87,10 @@ export class ContextWizardView {
         const world: TWorld = this.domain.world
         const ruleEditorForm = this.domain.ruleEditorForm
         
-        // TODO: save text to log
-        // uschangelog.ChangeLogForm.addToLog(this.NewContextsMemo.Text)
+        this.domain.addToLog("--- context wizard")
+        this.domain.addToLog(this.contextWizardData.commandPhrase)
+        this.domain.addToLog(this.contextWizardData.newContextsTextToParse)
+        this.domain.addToLog("---"
 
         const newRulesCommand = new TSNewRulesCommand(this.domain)
         newRulesCommand.creator = "new context wizard"
@@ -100,8 +100,7 @@ export class ContextWizardView {
         for (let line of lines) {
             line = line.trim()
             if (!line) continue
-            console.log("line", line)
-
+            
             const pipeBarLocation = line.indexOf("|")
             let context
             let reply
@@ -229,7 +228,7 @@ export class ContextWizardView {
 
                 help("After you have generated new rules, if you change your mind, you can choose Undo from the Edit menu to remove your new rules."),
                 help("The new rules will also initally be selected in the rules table."),
-                // TODO: use or remove: help("The text you entered here to generate rules will also be saved in the log file if you need to recover it later."),
+                help("The text you entered here to generate rules will also be saved in the log file if you need to recover it later."),
 
                 m("div.ml2.mt2.mb3", 
                     m("button", {

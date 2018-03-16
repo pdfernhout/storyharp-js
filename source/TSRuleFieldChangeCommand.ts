@@ -47,9 +47,9 @@ export class TSRuleFieldChangeCommand extends KfCommand {
         this.rule.setTextForField(this.field, this.newValue)
         if (this.field !== TSRuleField.kRuleReply) {
             // log changes
-            this.domain.changeLogForm.addToLog(this.domain.world.lastVariableCreated)
+            this.domain.addToLog(this.domain.world.lastVariableCreated)
         } else {
-            this.domain.changeLogForm.addToLog(this.newValue)
+            this.domain.addToLog(this.newValue)
         }
         this.updateEditorForChange()
         super.doCommand()
