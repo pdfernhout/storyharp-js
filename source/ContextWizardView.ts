@@ -7,6 +7,8 @@ import { Glyph } from "./VariablesView"
 import { TSDomain } from "./TSDomain"
 import { TQuickFillComboBox } from "./TQuickFillComboBox"
 
+// Previous help: "Making_new_rules_using_the_new_contexts_wizard"
+
 const exampleOne =`
 cave|You are in a big cave.
 forest|You are in a lively forest.
@@ -133,12 +135,6 @@ export class ContextWizardView {
         this.wasGenerateRulesPressed = false
     }
     
-    // TODO:
-    // uschangelog.ChangeLogForm.addToLog(this.NewContextsMemo.Text)
-    // Application.HelpJump("Making_new_rules_using_the_new_contexts_wizard")
-
-    // the good place | You're in the good place
-
     view() {
         function caption(text: string) { return text }
         const showHelp = this.domain.showWizardHelp

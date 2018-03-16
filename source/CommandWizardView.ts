@@ -8,6 +8,8 @@ import { TSRule } from "./TSRule"
 import { TSDomain } from "./TSDomain"
 import { TQuickFillComboBox } from "./TQuickFillComboBox"
 
+// Previous help: "Making_new_rules_using_the_new_commands_wizard"
+
 // the good place
 const exampleWithFiveRules = `
 tell Shawn you are angry | Shawn rolls up his cocoon.
@@ -28,8 +30,6 @@ talk to the grue | The grue devours you (except your bones of course).
 `.trim()
 
 const defaultReply = "Nothing happens."
-
-// TODO Application.HelpJump("Making_new_rules_using_the_new_commands_wizard")
 
 enum EndSequence {
     noSelection = "noSelection",

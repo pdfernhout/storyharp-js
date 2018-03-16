@@ -9,6 +9,8 @@ import { TSRule } from "./TSRule";
 import { TSVariable } from "./TSVariable"
 import { TQuickFillComboBox } from "./TQuickFillComboBox"
 
+// Previous help: "Making_new_rules_using_the_new_moves_wizard"
+
 /* Example command and reply for house and yard:
 
 house : break through wall
@@ -219,9 +221,6 @@ export class LinkWizardView {
         this.wasGenerateRulesPressed = false
     }
     
-    // TODO: use or remove
-    // Application.HelpJump("Making_new_rules_using_the_new_moves_wizard")
-
     view() {
         function caption(text: string) { return text }
         const showHelp = this.domain.showWizardHelp
