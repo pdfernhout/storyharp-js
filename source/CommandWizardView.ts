@@ -320,7 +320,6 @@ export class CommandWizardView {
 
                     help("Examples are: \"talking to sailor\", \"in boarding house\". By default the prefix is the same as the context."),
 
-                    // TODO img.sequenceEndArrow.TImage
                     m("p", "When the last command has been said,"),
 
                     m("input[type=radio]",
