@@ -8,7 +8,7 @@ export class TSLogicListBox {
     comboBox: TQuickFillComboBox
 
     view(vnode: any) {
-        const { selections, items, world, onchange: onchangeCallback, ...attrs } = vnode.attrs
+        const { selections, items, world, onchange: onchangeCallback, onselect: onselectCallback, ...attrs } = vnode.attrs
         
         return m("div.dib.LogicListBox.ba.bg-white",
             attrs,
@@ -52,7 +52,13 @@ export class TSLogicListBox {
                                 }
                             } 
                         }, wrapper.desiredState ? Glyph.present : Glyph.absent),
-                        m("span", { key: 2 }, wrapper.variable.phrase),
+                        m("span", {
+                            key: 2,
+                            onmousedown: () => {
+                                selections.splice(i, 1)
+                                if (onselectCallback) onselectCallback(wrapper.variable)
+                            },
+                        }, wrapper.variable.phrase),
                         m("span.ml2", {
                             tabindex: 0,
                             key: 3,

@@ -13,6 +13,7 @@ import { doCommand } from "./ConsoleForm";
 import { PendingTableScroll } from "./RuleTableView"
 import { TPoint } from "./TPoint"
 import { addToLog } from "./LogView"
+import { TSVariable } from "./TSVariable"
 
 // const
 const kUnsavedWorldFileName = "untitled"
@@ -87,7 +88,7 @@ export interface TSDomain {
     editRule: (rule: TSRule | null, scrollDirection?: ScrollIntoViewDirection) => void
 
     browseBy: TSRuleField
-    setOrganizeByField: (newValue: TSRuleField) => void
+    setOrganizeByField: (newValue: TSRuleField, selectedVariable: TSVariable | null) => void
 
     transcript: TranscriptLine[]
 
@@ -112,6 +113,7 @@ export interface TSDomain {
     pendingTableScroll: PendingTableScroll | null
     pendingMapScroll: boolean
     pendingBrowserScroll: boolean
+    pendingBrowserScrollSelectedVariable: TSVariable | null
 
     dataPath: string
 
@@ -165,8 +167,9 @@ export class TSApplication implements TSDomain {
         }
     }
 
-    setOrganizeByField(newValue: TSRuleField) {
+    setOrganizeByField(newValue: TSRuleField, selectedVariable: TSVariable | null) {
         this.browseBy = newValue
+        this.pendingBrowserScrollSelectedVariable = selectedVariable
         this.pendingBrowserScroll = true
     }
 
@@ -191,6 +194,7 @@ export class TSApplication implements TSDomain {
     pendingTableScroll: PendingTableScroll | null = null
     pendingMapScroll: boolean = false
     pendingBrowserScroll: boolean = false
+    pendingBrowserScrollSelectedVariable: TSVariable | null
 
     dataPath = "./data/"
 

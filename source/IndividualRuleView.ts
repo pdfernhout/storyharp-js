@@ -8,7 +8,7 @@ import { TSDomain } from "./TSDomain"
 import { TQuickFillComboBox } from "./TQuickFillComboBox"
 import { TSDesiredStateVariableWrapper } from "./TSDesiredStateVariableWrapper";
 import { Glyph } from "./VariablesView"
-import { TSVariableState } from "./TSVariable";
+import { TSVariableState, TSVariable } from "./TSVariable";
 import { TSLogicListBox } from "./TSLogicListBox";
 
 // TODO: Change capitalization on some method names
@@ -154,9 +154,9 @@ export class IndividualRuleView {
         worldCommandList.raiseSelectedRules()
     }
 
-    SpeedButtonClick(field: TSRuleField) {
+    SpeedButtonClick(field: TSRuleField, selectedVariable: TSVariable | null = null) {
         this.domain.currentEditorView = "browser"
-        this.domain.setOrganizeByField(field)
+        this.domain.setOrganizeByField(field, selectedVariable)
     }
 
     view() {
@@ -321,6 +321,9 @@ export class IndividualRuleView {
                             items: world.getVariableNames(),
                             world: world,
                             onchange: requirementsChange,
+                            onselect: (variable: TSVariable) => {
+                                this.SpeedButtonClick(TSRuleField.kRuleRequirements, variable)
+                            }
                         })
                     ),
                     m(".Command.mt1",
@@ -393,6 +396,9 @@ export class IndividualRuleView {
                         items: world.getVariableNames(),
                         world: world,
                         onchange: changesChange,
+                        onselect: (variable: TSVariable) => {
+                            this.SpeedButtonClick(TSRuleField.kRuleChanges, variable)
+                        },
                     })
                 ),
             ]

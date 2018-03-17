@@ -216,11 +216,16 @@ export class RuleBrowserView {
         this.domain.browseBy = newValue
         
         if (this.domain.editedRule !== null) {
-            this.selectedVariable = this.domain.editedRule.variableForFieldWithSelections(
-                this.browseBy,
-                0, /* TODO: this.RequirementsListBox.ItemIndex, */
-                0, /* TODO: this.ChangesListBox.ItemIndex */
-            )
+            if (this.domain.pendingBrowserScrollSelectedVariable) {
+                this.selectedVariable = this.domain.pendingBrowserScrollSelectedVariable
+                this.domain.pendingBrowserScrollSelectedVariable = null
+            } else {
+                this.selectedVariable = this.domain.editedRule.variableForFieldWithSelections(
+                    this.browseBy,
+                    0,
+                    0,
+                )
+            }
         } else {
             this.selectedVariable = null
         }
