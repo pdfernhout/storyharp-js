@@ -108,6 +108,8 @@ export class RuleBrowserView {
             }
         }
 
+        // TODO: Sort rules by command phrase and then index
+
         this.ruleSubset = rules
 
         const scrollIntoViewIfNeeded = (vnode: any, rule: TSRule) => {
