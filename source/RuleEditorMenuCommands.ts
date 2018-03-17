@@ -608,44 +608,7 @@ export class RuleEditorMenuCommands {
         }
         control.Enabled = enable
     }
-    
-    // --------------------------------------------------------------------- @Table
-    
-    ListPagesChange(Sender: TObject): void {
-        if (this.ListPages.ActivePage === this.TabSheetTable) {
-            if ((this.rule === null) || !this.rule.selected) {
-                // pass
-            } else {
-                //domain.world.deselectAllExcept(nil) pdf change - maybe contexts selected in map
-                this.scrollGridSelectionsIntoView(kFromTop)
-                this.RuleGrid.Invalidate()
-            }
-        } else if (this.ListPages.ActivePage === this.TabSheetMap) {
-            this.MapPaintBoxChanged()
-            this.scrollMapSelectionIntoView()
-        } else if (this.ListPages.ActivePage === this.TabSheetBrowse) {
-            this.setOrganizeByField(this.organizeByField)
-        }
-    }
-    
-    EditDragOver(Sender: TObject, Source: TObject, X: int, Y: int, State: TDragState, Accept: boolean): void {
-        //
-        return Accept
-    }
-    
-    TabSheetMapDragOver(Sender: TObject, Source: TObject, X: int, Y: int, State: TDragState, Accept: boolean): void {
-        //
-        return Accept
-    }
-    
-    TabSheetMapDragDrop(Sender: TObject, Source: TObject, X: int, Y: int): void {
-        //
-    }
-    
-    //graphs
-    // ----------------------------------------------------------------------- @Map
-
-    
+ 
     // --------------- search
 
     searchForAndSelectRule(aText: string, ignoreCase: boolean, goDown: boolean): void {
