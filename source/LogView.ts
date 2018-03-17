@@ -119,7 +119,7 @@ function clearLog() {
 
 function confirmClearLog() {
     if (dbFailed || !db) return alert("The log is not opened")
-    if (!confirm("This will remove eveything stored in the log. Proceed?")) return
+    if (!confirm("This will remove everything stored in the log. Proceed?")) return
     clearLog().then(() => {
         log.splice(0, log.length)
         m.redraw()
