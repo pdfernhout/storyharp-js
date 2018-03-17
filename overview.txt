@@ -1,7 +1,12 @@
+2018-03-12
 This is an overview of StoryHarp application source file sizes in lines of code.
 It shows a sense of the application structure and relative complexity.
 
 RuleEditorMenuCommands is commented converted code not yet used or deleted.
+
+2018-03-16 Update: Since this was written, the ConsoleForm was split
+into MainForm, AboutForm, DemoFilesForm, and ConsoleForm.
+Some other code has also been added and removed like creating a LogView.
 
 ~/workspace/storyharp-js/source$ date
 
