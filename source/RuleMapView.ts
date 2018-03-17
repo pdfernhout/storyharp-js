@@ -471,7 +471,7 @@ export class RuleMapView {
             event.preventDefault();
         }
 
-        const indicator = (choice: MapMode): string {
+        const indicator = (choice: MapMode): string => {
             if (this.mapMode === choice) return ">" + choice + "<"
             return choice 
         }
