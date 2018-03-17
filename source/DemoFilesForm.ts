@@ -1,6 +1,6 @@
 import * as m from "mithril"
 import { TSDomain, DemoEntry } from "./TSDomain"
-import { confirmUnsavedChangesLoss } from "./ConsoleForm"
+import { confirmUnsavedChangesLoss } from "./MainForm"
 
 export class DemoFilesForm {
     domain: TSDomain

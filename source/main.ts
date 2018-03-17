@@ -2,20 +2,20 @@
 // Exported from: ../../storyharp-js/converted_source/uscontextwizard.lfm
 import * as m from "mithril"
 import { TSApplication } from "./TSDomain"
-import { viewConsoleForm } from "./ConsoleForm"
+import { MainForm } from "./MainForm"
 import { addExtraStylesBeyondTachyons } from "./extraStyles";
 
 addExtraStylesBeyondTachyons()
 
 const application = new TSApplication()
 
-const MyComponent = { view: () => viewConsoleForm(application) }
+const BodyComponent = { view: () => m(MainForm, <any>{domain: application}) }
 
 // const worldName = "GarTrek"
 const worldName = "House and Yard"
 application.loadWorldFromServerData(worldName).then(() => {
     application.updateForNewOrLoadedWorld(worldName, true)
-    m.mount(document.body, MyComponent)
+    m.mount(document.body, BodyComponent)
 })
 
 // Add resize listener so canvas will get updated in RuleMapView
