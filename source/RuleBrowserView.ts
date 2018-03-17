@@ -36,8 +36,8 @@ export class RuleBrowserView {
         }
 
         // TODO: These two lists should be made navigable by keyboard
-        return m("div.h-100.overflow-hidden",
-            m("div",
+        return m("div.h-100.overflow-hidden.flex.flex-column",
+            m("div.flex-none",
                 {
                     onclick: () => this.firstListBoxImageClick(),
                 },
@@ -45,8 +45,7 @@ export class RuleBrowserView {
                 " All ",
                 label
             ),
-            m("div.ba.pa1.overflow-auto",
-                { style: "height: calc(100% - 1rem)" },
+            m("div.ba.pa1.flex-auto.overflow-auto",
                 this.domain.world.variables
                     .filter((variable: TSVariable) => variable.hasUseagesForField(this.browseBy))
                     .sort((a: TSVariable, b: TSVariable) => a.phrase.localeCompare(b.phrase)) 
@@ -254,12 +253,6 @@ export class RuleBrowserView {
             m("div.w-30.h-100.overflow-hidden",
                 this.viewFirstListBox(),
             ),
-            /*
-            m("div.SplitterLists.TSplitter",
-                {
-                },
-            ),
-            */
             m("div.w-70.h-100.overflow-hidden",
                 this.viewSecondListBox(),
             ),

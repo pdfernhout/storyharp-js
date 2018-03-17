@@ -133,20 +133,15 @@ function confirmClearLog() {
 
 export class LogView {
     view() {
-        return m("div.LogView.h-100.overflow-hidden",
-            m("div.mb2",
+        return m("div.LogView.h-100.overflow-hidden.flex.flex-column",
+            m("div.mb2.flex-none",
                 m("button", {
                     onclick: confirmClearLog,
                     disabled: dbFailed || !db,
                 }, "Clear log"),
             ),
-            dbFailed ? m("div.red", "Something went wrong with the log") : [],
-            m("div.overflow-auto",
-                {
-                    style: {
-                        height: "calc(100% - 2rem)"
-                    }
-                },
+            dbFailed ? m("div.red.flex-none", "Something went wrong with the log") : [],
+            m("div.overflow-auto.flex-auto",
                 log.map(text => m("pre.pre-wrap", text))
             )
         )
