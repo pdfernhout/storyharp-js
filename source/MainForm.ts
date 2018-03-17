@@ -107,7 +107,7 @@ export class MainForm {
             }
         }
     
-        return m(".ConsoleForm.ml3.h-100.overflow-hidden",
+        return m(".MainForm.ml3.h-100.overflow-hidden",
             m("div.mt1.mb1",
                 m("span.f5.b", "StoryHarp:"),
                 // m("span.ml1", "World:"),
