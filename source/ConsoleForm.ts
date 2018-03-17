@@ -5,9 +5,10 @@ import { TWorld, ExportRulesOption } from "./TWorld"
 import { VariablesView } from "./VariablesView"
 import { RuleEditorForm } from "./RuleEditorForm"
 import { FileUtils } from "./FileUtils"
-import { TSDomain, DemoEntry, TranscriptLine, FormName } from "./TSDomain"
+import { TSDomain, TranscriptLine, FormName } from "./TSDomain"
 import { TSJavaScriptWriter } from "./TSJavaScriptWriter"
 import { AboutForm } from "./AboutForm"
+import { DemoFilesForm } from "./DemoFilesForm"
 
 const firstRiddleAnswer = "say an answer for a riddle"
 
@@ -108,32 +109,6 @@ function color(color: Color) {
         case Color.clRed: return ".red"
         default: return ""
     }
-}
-
-function viewDemoFiles(domain: TSDomain) {
-    return m("div.overflow-auto", { style: "height: calc(100% - 7rem)" },
-        m("div", "Choose a demo world file to load:"),
-        m("br"),
-        m("table.ml2", { style: "border-spacing: 0.5rem" },
-            m("tr",
-                m("th", "Name"),
-                m("th.ml2", "Description")
-            ),
-            domain.demoConfig.demoWorldFiles.map((entry: DemoEntry) => 
-                m("tr.mt1", 
-                    { onclick: () => {
-                        if (!confirmUnsavedChangesLoss(domain)) return
-                        domain.loadWorldFromServerData(entry.name).then((loaded) => {
-                            if (loaded) domain.activeForm = "console"
-                        })
-                    }
-                },
-                    m("td.nowrap.tr.f4", entry.name),
-                    m("td.ml2.i", entry.description)
-                )
-            )
-        )
-    )
 }
 
 enum SegmentType {
@@ -241,7 +216,7 @@ function saveWorldToLocalFile(domain: TSDomain) {
     })
 }
 
-function confirmUnsavedChangesLoss(domain: TSDomain) {
+export function confirmUnsavedChangesLoss(domain: TSDomain) {
     if (domain.isWorldFileChanged()) {
         if (!confirm("You have unsaved changes to the current world which will be lost; proceed anyway?")) {
             return false
@@ -341,7 +316,7 @@ export function viewConsoleForm(domain: TSDomain) {
                 : []
         ),
         domain.activeForm === "about" ? m(AboutForm) : [],
-        domain.activeForm === "files" ? viewDemoFiles(domain) : [],
+        domain.activeForm === "files" ? m(DemoFilesForm, <any>{domain: domain}) : [],
         // TODO: Probably should wrap these with hidden divs so the component state is preserved
         domain.activeForm === "console" ? viewConsole(domain) : [],
         domain.activeForm === "ruleEditor" ? m(RuleEditorForm, <any>{domain: domain}) : [],
