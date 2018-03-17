@@ -134,7 +134,6 @@ export class MainForm {
             ),
             domain.activeForm === "about" ? m(AboutForm) : [],
             domain.activeForm === "files" ? m(DemoFilesForm, <any>{domain: domain}) : [],
-            // TODO: Probably should wrap these with hidden divs so the component state is preserved
             domain.activeForm === "console" ? m(ConsoleForm, <any>{domain: domain}) : [],
             domain.activeForm === "ruleEditor" ? m(RuleEditorForm, <any>{domain: domain}) : [],
         )

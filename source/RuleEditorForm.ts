@@ -76,7 +76,6 @@ export class RuleEditorForm {
                 }, "Redo"),
                 m("span.ml2.i", domain.isWorldFileChanged() ? `<changes: ${domain.worldChangeCount}>` : "")
             ),
-            // TODO: Probably should wrap these with hidden divs so the component state is preserved
             currentView === "wizards"
                 ? this.viewWizards() 
                 : [
