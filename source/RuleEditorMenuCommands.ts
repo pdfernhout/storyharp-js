@@ -967,21 +967,5 @@ export class RuleEditorMenuCommands {
         }
     }
     
-    MenuToolsGenerateJavaClick(Sender: TObject): void {
-        let javaWriter: TSJavaWriter
-        let response: int
-        
-        response = MessageDialog("StoryHarp will compile the world file " + chr(13) + chr(13) + "    " + usdomain.domain.worldFileName + chr(13) + chr(13) + "into a Java applet source code file " + chr(13) + chr(13) + "    " + UNRESOLVED.GetCurrentDir + "\Story.java" + chr(13) + chr(13) + "To produce a Java applet, you will need to compile" + chr(13) + "the Java source with a Java development system." + chr(13) + chr(13) + "See the help system under \"Java\" for details.", mtConfirmation, {mbOK, mbCancel, }, 0)
-        if (response !== delphi_compatability.IDOK) {
-            return
-        }
-        javaWriter = usjavawriter.TSJavaWriter.create
-        try {
-            javaWriter.writeJavaProgram("Story.java")
-        } finally {
-            javaWriter.free
-        }
-        MessageDialog("File " + UNRESOLVED.GetCurrentDir + "\Story.java was written.", mtInformation, {mbOK, }, 0)
-    }
     */  
 }
