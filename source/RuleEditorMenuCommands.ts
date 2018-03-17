@@ -499,18 +499,6 @@ export class RuleEditorMenuCommands {
         this.Resize()
     }
     
-    // ---------------------------------------------------------------- @Tools menu
-    MenuToolsSearchClick(Sender: TObject): void {
-        this.commitChangesToRule()
-        this.FindDialog.execute
-    }
-    
-    FindDialogFind(Sender: TObject): void {
-        if (this.FindDialog.findText !== "") {
-            this.searchForAndSelectRule(this.FindDialog.findText, !(delphi_compatability.TFindOption.frMatchCase in this.FindDialog.options), delphi_compatability.TFindOption.frDown in this.FindDialog.options)
-        }
-    }
-    
     // ------------------------------------------------------------------ @Commands
     
     trackLastCommand(): void {
@@ -607,51 +595,6 @@ export class RuleEditorMenuCommands {
             (control).Color = aColor
         }
         control.Enabled = enable
-    }
- 
-    // --------------- search
-
-    searchForAndSelectRule(aText: string, ignoreCase: boolean, goDown: boolean): void {
-        let row: int
-        let count: int
-        let rule: TSRule
-        let ruleIndex: int
-        let match: boolean
-        let matchText: string
-        
-        count = 1
-        ruleIndex = usdomain.domain.world.rules.IndexOf(this.rule)
-        if (ignoreCase) {
-            matchText = lowercase(aText)
-        } else {
-            matchText = aText
-        }
-        while ((count <= usdomain.domain.world.rules.Count)) {
-            if (goDown) {
-                row = (ruleIndex + count) % usdomain.domain.world.rules.Count
-            } else {
-                row = ((usdomain.domain.world.rules.Count * 2) + (ruleIndex - count)) % usdomain.domain.world.rules.Count
-            }
-            rule = usdomain.domain.world.rules[row]
-            if (ignoreCase) {
-                // unfinished - need to check requirements & changes
-                match = (UNRESOLVED.pos(matchText, lowercase(rule.context.phrase)) > 0) || (UNRESOLVED.pos(matchText, lowercase(rule.command.phrase)) > 0) || (UNRESOLVED.pos(matchText, lowercase(rule.reply)) > 0) || (UNRESOLVED.pos(matchText, lowercase(rule.move.phrase)) > 0) || (UNRESOLVED.pos(matchText, lowercase(rule.requirementsString)) > 0) || (UNRESOLVED.pos(matchText, lowercase(rule.changesString)) > 0)
-            } else {
-                match = (UNRESOLVED.pos(matchText, rule.context.phrase) > 0) || (UNRESOLVED.pos(matchText, rule.command.phrase) > 0) || (UNRESOLVED.pos(matchText, rule.reply) > 0) || (UNRESOLVED.pos(matchText, rule.move.phrase) > 0) || (UNRESOLVED.pos(matchText, rule.requirementsString) > 0) || (UNRESOLVED.pos(matchText, rule.changesString) > 0)
-            }
-            if (match) {
-                usdomain.domain.world.deselectAllExcept(rule)
-                this.editRule(rule)
-                this.updateForRuleChange()
-                rule.selected = true
-                this.scrollGridSelectionsIntoView(kFromBottom)
-                this.MapPaintBoxChanged()
-                this.scrollMapSelectionIntoView()
-                return
-            }
-            count += 1
-        }
-        ShowMessage("Search string \"" + aText + "\" not found.")
     }
     
     // -------------- more menus

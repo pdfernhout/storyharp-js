@@ -9,14 +9,16 @@ import { ContextWizardView } from "./ContextWizardView"
 import { CommandWizardView } from "./CommandWizardView"
 import { LinkWizardView } from "./LinkWizardView"
 import { TSDomain, WizardName, EditorName } from "./TSDomain"
-import { notebookTabButton } from "./common"
-import { LogView } from "./LogView";
+import { notebookTabButton, ScrollIntoViewDirection } from "./common"
+import { LogView } from "./LogView"
+import { TSRule } from "./TSRule"
 
 // TODO: POSSIBLE BUG: What happens to undo/redo for console when delete rules? Or change rule? Maybe just ignore?
 // TODO: Should variables be deleted when they are no longer used by a rule?
 
 export class RuleEditorForm {
     domain: TSDomain
+    lastSearchString = ""
 
     constructor(vnode: m.Vnode) {
         this.domain = (<any>vnode.attrs).domain
@@ -51,6 +53,65 @@ export class RuleEditorForm {
         event.target.blur()
     }
 
+    search() {
+        const newSearchString = prompt("Search string? [case insensitive]", this.lastSearchString)
+        if (!newSearchString) return
+        this.lastSearchString = newSearchString
+        // TODO: Support searching backwards
+        // TODO: Pick fields to search on
+        // TODO: Support mixed-case searches
+        // TODO: Support regex searches
+        this.searchForAndSelectRule(newSearchString, true, true)
+    }
+
+    searchForAndSelectRule(aText: string, ignoreCase: boolean, goDown: boolean): void {
+        const domain = this.domain
+        let match: boolean
+        
+        let ruleIndex = 0
+        if (domain.editedRule) {
+            ruleIndex = domain.world.rules.indexOf(domain.editedRule)
+        }
+
+        const matchText = ignoreCase ? aText.toLocaleLowerCase() : aText
+
+        let count = 1
+        let row = 0
+        while ((count <= domain.world.rules.length)) {
+            if (goDown) {
+                row = (ruleIndex + count) % domain.world.rules.length
+            } else {
+                row = ((domain.world.rules.length * 2) + (ruleIndex - count)) % domain.world.rules.length
+            }
+            const rule: TSRule = domain.world.rules[row]
+
+            let textForRule = [
+                rule.context.phrase,
+                rule.command.phrase,
+                rule.reply,
+                rule.move.phrase,
+                rule.changesString,
+                rule.requirementsString
+            ].join("|")
+
+            if (ignoreCase) textForRule = textForRule.toLocaleLowerCase()
+
+            const match = textForRule.includes(matchText)
+
+            if (match) {
+                domain.world.deselectAllExcept(rule)
+                domain.editRule(rule)
+                rule.selected = true
+                if (domain.currentEditorView === "table") {
+                    this.domain.ruleEditorForm.scrollGridSelectionsIntoView(ScrollIntoViewDirection.kFromTop)
+                }
+                return
+            }
+            count += 1
+        }
+        alert("Search string \"" + aText + "\" not found.")
+    }
+
     view() {
         const currentView = this.domain.currentEditorView
         const domain = this.domain
@@ -65,6 +126,10 @@ export class RuleEditorForm {
                 m(notebookTabButton(currentView === "wizards"),  { onclick: (event: Event) => this.setCurrentView(event, "wizards") }, "Wizards"),
                 m(notebookTabButton(currentView === "log"),  { onclick: (event: Event) => this.setCurrentView(event, "log") }, "Log"),
                 m("button.ml4.w3", {
+                    onclick: () => this.search(),
+                    title: "Search for a rule containing some text"
+                }, "Search"),
+                m("button.ml4.w3", {
                     disabled: !domain.worldCommandList.isUndoEnabled(),
                     onclick: () => domain.worldCommandList.undoLast(),
                     title: "Undo " + domain.worldCommandList.undoDescription()
@@ -74,7 +139,7 @@ export class RuleEditorForm {
                     onclick: () => domain.worldCommandList.redoLast(),
                     title: "Redo " + domain.worldCommandList.redoDescription()
                 }, "Redo"),
-                m("span.ml2.i", domain.isWorldFileChanged() ? `<changes: ${domain.worldChangeCount}>` : "")
+                m("span.ml2.i", { title: "change count" }, domain.isWorldFileChanged() ? `<${domain.worldChangeCount}>` : "")
             ),
             currentView === "wizards"
                 ? this.viewWizards() 
