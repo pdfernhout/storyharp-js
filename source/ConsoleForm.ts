@@ -109,11 +109,12 @@ function color(color: Color) {
     }
 }
 
-enum SegmentType {
+export enum SegmentType {
     speakText,
     sayOptionsMacroInForce,
     showPicture,
-    speakSound
+    speakSound,
+    speakMusic
 }
 
 interface Segment {
@@ -121,7 +122,7 @@ interface Segment {
     text: string
 }
 
-function parseTextWithMacros(aString: string): Segment[] { 
+export function parseTextWithMacros(aString: string): Segment[] { 
     const result: Segment[] = []   
     let remaining = aString
     const wholeLength = aString.length
@@ -154,6 +155,8 @@ function parseTextWithMacros(aString: string): Segment[] {
             result.push({type: SegmentType.sayOptionsMacroInForce, text: ""})
         } else if (macro.startsWith("picture ")) {
             result.push({type: SegmentType.showPicture, text: macro.substring("picture ".length)})
+        } else if (macro.startsWith("music ")) {
+            result.push({type: SegmentType.speakMusic, text: macro.substring("music ".length)})
         } else if (macro.startsWith("sound ")) {
             // TODO: legacy from when did not prefix sounds? Maybe should require that? 
             result.push({type: SegmentType.speakSound, text: macro.substring("sound ".length)})
@@ -181,6 +184,9 @@ function viewTranscriptItem(item: TranscriptLine) {
                     return m("div", m("img", {src: segment.text}))
                 case SegmentType.speakSound:
                     // console.log("Unfinished sound handling", segment)
+                    return []
+                case SegmentType.speakMusic:
+                    // console.log("Unfinished music handling", segment)
                     return []
                 default:
                     throw new Error("unexpected segment type: " + JSON.stringify(segment))

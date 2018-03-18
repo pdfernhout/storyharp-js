@@ -9,7 +9,7 @@ import { LinkWizardData, newLinkWizardData } from "./LinkWizardView"
 import { ContextWizardData, newContextWizardData } from "./ContextWizardView"
 import { CommandWizardData, newCommandWizardData } from "./CommandWizardView"
 import { MapViewState, newMapViewState } from "./TSMapView"
-import { doCommand } from "./ConsoleForm";
+import { doCommand, parseTextWithMacros, SegmentType } from "./ConsoleForm";
 import { PendingTableScroll } from "./RuleTableView"
 import { TPoint } from "./TPoint"
 import { addToLog } from "./LogView"
@@ -251,7 +251,19 @@ export class TSApplication implements TSDomain {
         this.speechSystem = {
             lastSaidTextWithMacros: "TEST",
             stripMacros: (text: string) => text,
-            sayTextWithMacros: (text: string) => null,
+            sayTextWithMacros: (text: string) => {
+                // TODO: Move this into a function elsewhere
+                const segments = parseTextWithMacros(text)
+                for (let segment of segments) {
+                    if (segment.type === SegmentType.speakSound || segment.type === SegmentType.speakMusic) {
+                        // TODO: a way to shut down previous audio
+                        const audio = new Audio(segment.text)
+                        audio.play()
+                    } else {
+                        // TODO: TTS for web
+                    }
+                }
+            },
             listenForAvailableCommands: () => null,
             checkForSayOptionsMacro: () => null,
             speakText: (text: string) => null,
