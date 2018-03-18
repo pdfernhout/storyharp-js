@@ -255,6 +255,7 @@ export class TSApplication implements TSDomain {
             lastSaidTextWithMacros: "TEST",
             stripMacros: (text: string) => text,
             sayTextWithMacros: (text: string) => {
+                if (window.speechSynthesis) window.speechSynthesis.cancel()
                 // TODO: Move this into a function elsewhere
                 const segments = parseTextWithMacros(text)
                 for (let segment of segments) {
@@ -279,7 +280,13 @@ export class TSApplication implements TSDomain {
                             musicPlayed.play()
                         }
                     } else {
-                        // TODO: TTS for web
+                        // TODO: need scheduling to interweave sound and TTS
+                        const synth = window.speechSynthesis
+                        if (synth) {
+                            synth.cancel()
+                            const utterance = new SpeechSynthesisUtterance(segment.text)
+                            synth.speak(utterance)
+                        }
                     }
                 }
             },
