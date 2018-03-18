@@ -124,7 +124,8 @@ export class MainForm {
             m("div.mt1.mb1",
                 m("span.f5.b", "StoryHarp:"),
                 // m("span.ml1", "World:"),
-                m("span.i.ml1", "" + makeFileNameWithoutWldExtension(domain.worldFileName))
+                m("span.i.ml1", "" + makeFileNameWithoutWldExtension(domain.worldFileName)),
+                m("span.ml1.i", { title: "world change count" }, domain.isWorldFileChanged() ? `<${domain.worldChangeCount}>` : "")
             ),
             m("div.mb2",
                 m(notebookTabButton(domain.activeForm === "console"), { onclick: (event: any) => setActiveForm(event, "console") }, "Player"),

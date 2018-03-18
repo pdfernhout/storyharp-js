@@ -132,7 +132,6 @@ export class RuleEditorForm {
                     onclick: () => domain.worldCommandList.redoLast(),
                     title: "Redo " + domain.worldCommandList.redoDescription()
                 }, "Redo"),
-                m("span.ml2.i", { title: "change count" }, domain.isWorldFileChanged() ? `<${domain.worldChangeCount}>` : "")
             ),
             currentView === "wizards"
                 ? this.viewWizards() 
