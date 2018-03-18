@@ -32,6 +32,7 @@ function availableCommands(world: TWorld, showRiddleAnswers=false): string[] {
 }
 
 export function doCommand(domain: TSDomain, commandPhrase: string) {
+    if (window.speechSynthesis && window.speechSynthesis.speaking) window.speechSynthesis.cancel()
     // console.log("doCommand", commandPhrase)
     if (commandPhrase === firstRiddleAnswer) {
         // for riddles - need to be reassembled into command string first

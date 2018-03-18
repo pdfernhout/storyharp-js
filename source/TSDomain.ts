@@ -255,7 +255,6 @@ export class TSApplication implements TSDomain {
             lastSaidTextWithMacros: "TEST",
             stripMacros: (text: string) => text,
             sayTextWithMacros: (text: string) => {
-                if (window.speechSynthesis) window.speechSynthesis.cancel()
                 // TODO: Move this into a function elsewhere
                 const segments = parseTextWithMacros(text)
                 for (let segment of segments) {
@@ -265,7 +264,8 @@ export class TSApplication implements TSDomain {
                             soundPlayed.pause()
                             soundPlayed = null
                         }
-                        if (segment.text) {
+                        // Filter out old files from demos
+                        if (segment.text && (segment.text.startsWith("http") || segment.text.startsWith("/"))) {
                             soundPlayed = new Audio(segment.text)
                             soundPlayed.play()
                         }
@@ -275,7 +275,8 @@ export class TSApplication implements TSDomain {
                             musicPlayed.pause()
                             musicPlayed = null
                         }
-                        if (segment.text) {
+                        // Filter out old files from demos
+                        if (segment.text && (segment.text.startsWith("http") || segment.text.startsWith("/"))) {
                             musicPlayed = new Audio(segment.text)
                             musicPlayed.play()
                         }
@@ -283,7 +284,6 @@ export class TSApplication implements TSDomain {
                         // TODO: need scheduling to interweave sound and TTS
                         const synth = window.speechSynthesis
                         if (synth) {
-                            synth.cancel()
                             const sentences = segment.text.match( /[^\.!\?]+[\.!\?]+/g)
                             if (sentences) {
                                 for (let sentence of sentences) { 
@@ -301,6 +301,7 @@ export class TSApplication implements TSDomain {
             checkForSayOptionsMacro: () => null,
             speakText: (text: string) => null,
             haltSpeechAndSoundAndMusic: () => {
+                if (window.speechSynthesis && window.speechSynthesis.speaking) window.speechSynthesis.cancel()
                 if (musicPlayed) musicPlayed.pause()
                 if (soundPlayed) soundPlayed.pause()
             },
