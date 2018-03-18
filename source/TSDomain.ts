@@ -15,6 +15,11 @@ import { TPoint } from "./TPoint"
 import { addToLog } from "./LogView"
 import { TSVariable } from "./TSVariable"
 
+// At the dawn of the third millenium,
+// the laws of space and time keep humans close to Sol.
+// Most of them live in billions of space habitats called 'gardens'.
+// These are their stories...
+
 // const
 const kUnsavedWorldFileName = "untitled"
 const kUnsavedSessionFileName = "untitled"
@@ -58,6 +63,7 @@ export interface SpeechSystemAPI {
     checkForSayOptionsMacro: () => void
     listenForAvailableCommands: () => void
     stripMacros: (textWithMacros: string) => string
+    haltSpeechAndSoundAndMusic: () => void
 }
 
 export type FormName = "about" | "console" | "files" | "ruleEditor"
@@ -102,6 +108,7 @@ export interface TSDomain {
     showCommandPrefixInMap: boolean
 
     newSession: () => void
+    isSessionFileChanged: () => boolean
 
     linkWizardData: LinkWizardData
     contextWizardData: ContextWizardData
@@ -209,10 +216,11 @@ export class TSApplication implements TSDomain {
 
         this.sessionCommandList = new TSCommandList(this)
         this.sessionCommandList.setNewUndoLimit(1000)
+        this.sessionCommandList.notifyProcedure = this.sessionCommandChangedNotification.bind(this)
 
         this.worldCommandList = new TSCommandList(this)
         this.worldCommandList.setNewUndoLimit(1000)
-        this.worldCommandList.notifyProcedure = this.commandChangedNotification.bind(this)
+        this.worldCommandList.notifyProcedure = this.worldCommandChangedNotification.bind(this)
 
         this.linkWizardData = newLinkWizardData()
         this.contextWizardData = newContextWizardData()
@@ -247,6 +255,7 @@ export class TSApplication implements TSDomain {
             listenForAvailableCommands: () => null,
             checkForSayOptionsMacro: () => null,
             speakText: (text: string) => null,
+            haltSpeechAndSoundAndMusic: () => null,
         }
     }
 
@@ -403,6 +412,7 @@ export class TSApplication implements TSDomain {
 
     updateForNewOrLoadedWorld(fileName: string, isWorldFileLoaded: boolean): void {
         this.addToLog("--- world change: " + fileName)
+        this.speechSystem.haltSpeechAndSoundAndMusic()
         this.worldCommandList.clear()
         if (fileName) {
             this.worldFileName = fileName
@@ -425,6 +435,13 @@ export class TSApplication implements TSDomain {
         }
 
         this.newSession()
+
+        // Reset map partially
+        // this.mapViewState = newMapViewState()
+        this.mapViewState.scroll.X = 0
+        this.mapViewState.scroll.Y = 0
+
+        // TODO keep track of most recent world: this.options.mostRecentWorld = fileName
     }
 
     newSession(): void {
@@ -459,9 +476,26 @@ export class TSApplication implements TSDomain {
         this.options.mostRecentWorld = this.worldFileName
     }
     
+    */
+
     isSessionFileChanged(): boolean {
         return this.sessionChangeCount !== 0
     }
+
+    sessionCommandChangedNotification(command: KfCommand, state: KfCommandChangeType): void {
+        switch (state) {
+            case KfCommandChangeType.commandDone:
+                this.sessionChangeCount += 1
+                break
+            case KfCommandChangeType.commandUndone:
+                this.sessionChangeCount -= 1
+                break
+            default:
+                throw new Error("sessionCommandChangedNotification: unexpected case")
+        }
+    }
+    
+    /*
     
     mergeWorld(fileName: string): void {
         // don't clear things
@@ -475,15 +509,17 @@ export class TSApplication implements TSDomain {
     
     */
 
-    commandChangedNotification(command: KfCommand, state: KfCommandChangeType): void {
-        switch (state) {
-            case KfCommandChangeType.commandDone:
-                this.worldChangeDone()
-                break
-            case KfCommandChangeType.commandUndone:
-                this.worldChangeUndone()
-                break
-            }
+   worldCommandChangedNotification(command: KfCommand, state: KfCommandChangeType): void {
+    switch (state) {
+        case KfCommandChangeType.commandDone:
+            this.worldChangeDone()
+            break
+        case KfCommandChangeType.commandUndone:
+            this.worldChangeUndone()
+            break
+        default:
+            throw new Error("worldCommandChangedNotification: unexpected case")
+        }
     }
 
     isWorldFileChanged(): boolean {

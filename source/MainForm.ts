@@ -25,12 +25,23 @@ function saveWorldToLocalFile(domain: TSDomain) {
     })
 }
 
+// TODO: Save As... But maybe can't do with browser file model?
+
 export function confirmUnsavedChangesLoss(domain: TSDomain) {
     if (domain.isWorldFileChanged()) {
         if (!confirm("You have unsaved changes to the current world which will be lost; proceed anyway?")) {
             return false
         }
     }
+
+    /* TODO: Maybe check for session changes if can save session
+    if (domain.isSessionFileChanged()) {
+        if (!confirm("You have unsaved changes to the current session which will be lost; proceed anyway?")) {
+            return false
+        }
+    }
+    */
+
     return true
 }
 
