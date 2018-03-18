@@ -10,8 +10,12 @@ import { TSMapDragCommand } from "./TSMapDragCommand"
 import { KfCommand, KfCommandChangeType } from "./KfCommand"
 import { TSVariableDisplayOptions, TSVariable } from "./TSVariable"
 import { TSDomain } from "./TSDomain"
+import { TSNewRulesCommand } from "./TSNewRulesCommand";
 
 type MapMode = "select" | "drag" | "zoom" | "gesture"
+
+// TODO: Maybe move this into domain
+let numNewContextsMadeByPopupMenuThisSession = 0
 
 export class RuleMapView {
     domain: TSDomain
@@ -196,38 +200,36 @@ export class RuleMapView {
 
     */
 
-    /* TODO: implement
+    PopupNewContextClick(): void {
+        while (this.domain.world.findVariable("new context " + (numNewContextsMadeByPopupMenuThisSession + 1)) !== null) {
+            numNewContextsMadeByPopupMenuThisSession += 1
+        }
 
-    PopupNewContextClick(Sender: TObject): void {
-        let newRule: TSRule
-        let newRulesCommand: TSNewRulesCommand
-        
-        if (delphi_compatability.Application.terminated) {
-            return
-        }
-        this.commitChangesToRule()
-        newRulesCommand = uscommands.TSNewRulesCommand().create()
-        newRule = usdomain.domain.world.newRule()
+        const newContextName = prompt("New context name?", "new context " + numNewContextsMadeByPopupMenuThisSession)
+        if (!newContextName) return
+
+        const newRulesCommand: TSNewRulesCommand = new TSNewRulesCommand(this.domain)
+        const newRule: TSRule = this.domain.world.newRule()
         newRulesCommand.addRule(newRule)
-        while (usdomain.domain.world.findVariable("new context " + IntToStr(this.numNewContextsMadeByPopupMenuThisSession)) !== null) {
-            this.numNewContextsMadeByPopupMenuThisSession += 1
-        }
-        newRule.setContext("new context " + IntToStr(this.numNewContextsMadeByPopupMenuThisSession))
+
+        newRule.setContext(newContextName)
         newRule.setCommand("look")
         newRule.setReply("There is nothing of interest here.")
-        newRule.position = Point(this.lastMapMouseDownPosition.X + 30, this.lastMapMouseDownPosition.Y + 30)
+        newRule.position = new TPoint(this.lastMapMouseDownPosition.X + 30, this.lastMapMouseDownPosition.Y + 30)
         newRule.context.position = this.lastMapMouseDownPosition
-        usdomain.domain.world.deselectAllExcept(newRule)
+        this.domain.world.deselectAllExcept(newRule)
         newRule.selected = true
-        usdomain.domain.worldCommandList.doCommand(newRulesCommand)
-        this.editRule(newRule)
+        this.domain.worldCommandList.doCommand(newRulesCommand)
+        this.domain.editRule(newRule)
+        /* TODO: select context edit
         this.ActiveControl = this.ContextEdit
         this.ContextEdit.SelStart = 0
         this.ContextEdit.SelLength = len(this.ContextEdit.Text)
-        this.MapPaintBoxChanged()
+        */
     }
 
-    PopupNewCommandClick(Sender: TObject): void {
+    /*
+    PopupNewCommandClick(): void {
         let rule: TSRule
         let newRule: TSRule
         let newRulesCommand: TSNewRulesCommand
@@ -235,10 +237,6 @@ export class RuleMapView {
         let i: int
         let newRuleCount: int
         
-        if (delphi_compatability.Application.terminated) {
-            return
-        }
-        this.commitChangesToRule()
         while (usdomain.domain.world.findVariable("new command " + IntToStr(this.numNewCommandsMadeByPopupMenuThisSession)) !== null) {
             this.numNewCommandsMadeByPopupMenuThisSession += 1
         }
@@ -286,7 +284,7 @@ export class RuleMapView {
         this.MapPaintBoxChanged()
     }
 
-    PopupNewLinkClick(Sender: TObject): void {
+    PopupNewLinkClick(): void {
         let draggableNode: TSDraggableObject
         let contextToMoveTo: TSVariable
         let newRulesCommand: TSNewRulesCommand
@@ -298,10 +296,6 @@ export class RuleMapView {
         let i: int
         let atLeastOneRuleChanged: boolean
         
-        if (delphi_compatability.Application.terminated) {
-            return
-        }
-        this.commitChangesToRule()
         mapView = this.currentGraphView()
         if (mapView === null) {
             return
@@ -360,11 +354,10 @@ export class RuleMapView {
             this.MapPaintBoxChanged()
         }
     }
-
     */
     
     MapImageMouseDown(offsetX: number, offsetY: number, ctrlKey: boolean, shiftKey: boolean): void {
-        this.lastMapMouseDownPosition = new TPoint(offsetX - this.mapDrawer.scroll.X, offsetY - this.mapDrawer.scroll.Y)
+        this.lastMapMouseDownPosition = new TPoint(offsetX / this.mapDrawer.scale - this.mapDrawer.scroll.X, offsetY / this.mapDrawer.scale - this.mapDrawer.scroll.Y)
 
         // TODO: use or remove: this.FocusControl(this.PanelMap)
 
@@ -663,6 +656,7 @@ export class RuleMapView {
                 m("button.ml1.h-75.br-pill.w4.mt1", { onclick: () => this.mapMode = "gesture", title: "allows mobile gestures" }, indicator("gesture")),
                 m("button.ml3.h-75.mt1", { onclick: () => centerMap() }, "center"),
                 m("button.ml1.h-75.mt1", { onclick: () => resetMap() }, "reset"),
+                m("button.ml3.h-75.mt1", { onclick: () => this.PopupNewContextClick() }, "+context"),
             ),
             m("canvas.ba.flex-auto", {
                 // set tabindex to make canvas focusable
