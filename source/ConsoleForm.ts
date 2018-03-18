@@ -67,35 +67,20 @@ export function doCommand(domain: TSDomain, commandPhrase: string) {
 
 }
 
-function scrollIntoView() {
-    const buttons = document.getElementById("undoRedoButtons")
-    if (buttons) buttons.scrollIntoView()
-}
-
-function viewChoices(domain: TSDomain) {
+function viewChoices(domain: TSDomain, scrollCallback: () => void) {
     const commands = availableCommands(domain.world)
-    Promise.resolve().then(scrollIntoView)
+    // Promise.resolve().then(scrollIntoView)
     return m("div", 
         m("hr"),
-        [ // Put this in an array to keep keys seperate from non-keyed items
-            commands.sort().map(command => m("div.ma2.dark-blue.hover-blue", {
+        [ // Put this in an array to keep keys separate from non-keyed items
+            commands.sort().map(command => m("button.ma2.dark-blue.hover-blue", {
                 key: command,
-                onclick: () => doCommand(domain, command),
+                onclick: () => {
+                    doCommand(domain, command)
+                    scrollCallback()
+                },
             }, command)),
         ],
-        m("hr"),
-        m("div#undoRedoButtons.ma2",
-            m("button.ml2.w4", {
-                disabled: !domain.sessionCommandList.isUndoEnabled(),
-                onclick: () => domain.sessionCommandList.undoLast(),
-                title: "Undo " + domain.sessionCommandList.undoDescription()
-            }, "Undo"),
-            m("button.ml2.w4", { 
-                disabled: !domain.sessionCommandList.isRedoEnabled(),
-                onclick: () => domain.sessionCommandList.redoLast(),
-                title: "Redo " + domain.sessionCommandList.redoDescription()
-            }, "Redo"), 
-        )
     )
 }
 
@@ -173,15 +158,27 @@ function viewTranscriptItem(item: TranscriptLine) {
     // {picture https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/Kitten_in_Rizal_Park%2C_Manila.jpg/345px-Kitten_in_Rizal_Park%2C_Manila.jpg}
     const segments = parseTextWithMacros(item.text)
     return m("div.mw6" + color(item.color),
-        { key: item.uuid },
+        {
+            key: item.uuid,
+        },
         segments.map(segment => {
             switch (segment.type) {
                 case SegmentType.speakText:
-                    return segment.text
+                    if (item.color === Color.clBlue) return m("div.ma2", segment.text)
+                    return m("div.ma1.ml3", segment.text)
                 case SegmentType.sayOptionsMacroInForce:
                     return []
                 case SegmentType.showPicture:
-                    return m("div", m("img", {src: segment.text}))
+                    return m("div", m("img.ml3", {
+                        src: segment.text,
+                        /* to center the image
+                        style: {
+                            display: "block",
+                            "margin-left": "auto",
+                            "margin-right": "auto",
+                        }
+                        */
+                    }))
                 case SegmentType.speakSound:
                     // console.log("Unfinished sound handling", segment)
                     return []
@@ -202,23 +199,59 @@ function resetConsole(domain: TSDomain) {
 
 export class ConsoleForm {
     domain: TSDomain
+    transcriptDiv: HTMLDivElement
 
     constructor(vnode: m.Vnode) {
         this.domain = (<any>vnode.attrs).domain
     }
 
+    scrollEndOfTranscriptIntoView() {
+        if (this.transcriptDiv) {
+            const transcriptDiv = this.transcriptDiv
+            setTimeout(() => {
+                transcriptDiv.scrollTop = transcriptDiv.scrollHeight
+            }, 0)
+        }
+    }
+
     view() {
         const domain = this.domain
 
-        return m("div.ConsoleForm.overflow-auto", { style: "height: calc(100% - 5rem)" },
-            m("div.ml2.mb2",
+        return m("div.ConsoleForm.flex.flex-column", { style: "height: calc(100% - 5rem)" },
+            m("div.ml2.mb2.flex-none",
                 // m("button", { title: "Open a world file", onclick: () => loadWorldFromLocalFile(domain) }, "Load"),
-                m("button.ml2.mr4", { title: "Reset current world", onclick: () => resetConsole(domain) }, "Restart session"),
+                m("button.ml2.mr4", {
+                    title: "Reset current world",
+                    onclick: () => resetConsole(domain)
+                }, "Restart session"),
+                m("button.ml3.w4", {
+                    disabled: !domain.sessionCommandList.isUndoEnabled(),
+                    onclick: () => {
+                        domain.sessionCommandList.undoLast()
+                        this.scrollEndOfTranscriptIntoView()
+                    },
+                    title: "Undo " + domain.sessionCommandList.undoDescription()
+                }, "Undo"),
+                m("button.ml1.w4", { 
+                    disabled: !domain.sessionCommandList.isRedoEnabled(),
+                    onclick: () => {
+                        domain.sessionCommandList.redoLast()
+                        this.scrollEndOfTranscriptIntoView()
+                    },
+                    title: "Redo " + domain.sessionCommandList.redoDescription()
+                }, "Redo"), 
             ),
-            m("div",
+            m("div.flex-auto.overflow-auto",
+                {
+                    oncreate: (vnode: any) => {
+                    this.transcriptDiv = <HTMLDivElement>(vnode.dom)
+                    },
+                },
                 domain.transcript.map(viewTranscriptItem),
             ),
-            viewChoices(domain),
+            m("div.flex-none",
+                viewChoices(domain, this.scrollEndOfTranscriptIntoView.bind(this)),
+            ),
             m(VariablesView, <any>{domain}),
         )
     }
