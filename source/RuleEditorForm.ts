@@ -100,11 +100,8 @@ export class RuleEditorForm {
 
             if (match) {
                 domain.world.deselectAllExcept(rule)
-                domain.editRule(rule)
+                domain.editRule(rule, ScrollIntoViewDirection.kFromTop, true)
                 rule.selected = true
-                if (domain.currentEditorView === "table") {
-                    this.domain.ruleEditorForm.scrollGridSelectionsIntoView(ScrollIntoViewDirection.kFromTop)
-                }
                 return
             }
             count += 1

@@ -85,7 +85,7 @@ export interface TSDomain {
     currentEditorView: EditorName
     currentEditorWizard: WizardName
 
-    editRule: (rule: TSRule | null, scrollDirection?: ScrollIntoViewDirection) => void
+    editRule: (rule: TSRule | null, scrollDirection?: ScrollIntoViewDirection, force?: boolean) => void
 
     browseBy: TSRuleField
     setOrganizeByField: (newValue: TSRuleField, selectedVariable: TSVariable | null) => void
@@ -143,7 +143,7 @@ export class TSApplication implements TSDomain {
     currentEditorView: EditorName = "table"
     currentEditorWizard: WizardName = "context"
 
-    editRule(rule: TSRule | null, scrollDirection: ScrollIntoViewDirection = ScrollIntoViewDirection.kFromTop) {
+    editRule(rule: TSRule | null, scrollDirection: ScrollIntoViewDirection = ScrollIntoViewDirection.kFromTop, force = false) {
         this.editedRule = rule
         if (rule) {
             // TODO: Improve scrolling behavior
@@ -151,14 +151,14 @@ export class TSApplication implements TSDomain {
             // even if item visible -- which is jumpy if click on rule.
             // But this means undo/redo commands don't track properly.
 
-            if (this.currentEditorView !== "table") {
+            if (force || this.currentEditorView !== "table") {
                 this.pendingTableScroll = {
                     rule: rule,
                     direction: scrollDirection,
                 }
             }
 
-            if (this.currentEditorView !== "browser") {
+            if (force || this.currentEditorView !== "browser") {
                 this.pendingBrowserScroll = true
             }
 
