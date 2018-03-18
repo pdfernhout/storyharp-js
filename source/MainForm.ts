@@ -9,6 +9,7 @@ import { RuleEditorForm } from "./RuleEditorForm"
 import { FileUtils } from "./FileUtils"
 import { TSJavaScriptWriter } from "./TSJavaScriptWriter"
 import { ConsoleForm } from "./ConsoleForm"
+import { FileForm } from "./FileForm"
 
 function saveWorldToLocalFile(domain: TSDomain) {
     const world: TWorld = domain.world
@@ -126,6 +127,7 @@ export class MainForm {
                 m(notebookTabButton(domain.activeForm === "console"), { onclick: (event: any) => setActiveForm(event, "console") }, "Player"),
                 m(notebookTabButton(domain.activeForm === "ruleEditor"), { onclick: (event: any) => setActiveForm(event, "ruleEditor") }, "Editor"),
                 m(notebookTabButton(domain.activeForm === "demos"), { onclick: (event: any) => setActiveForm(event, "demos") }, "Examples"),
+                m(notebookTabButton(domain.activeForm === "file"), { onclick: (event: any) => setActiveForm(event, "file") }, "File"),
                 m(notebookTabButton(domain.activeForm === "about"), { onclick: (event: any) => setActiveForm(event, "about") }, "About"),
                 domain.activeForm === "ruleEditor" 
                     ? [
@@ -140,6 +142,7 @@ export class MainForm {
             domain.activeForm === "demos" ? m(DemoFilesForm, <any>{domain: domain}) : [],
             domain.activeForm === "console" ? m(ConsoleForm, <any>{domain: domain}) : [],
             domain.activeForm === "ruleEditor" ? m(RuleEditorForm, <any>{domain: domain}) : [],
+            domain.activeForm === "file" ? m(FileForm, <any>{domain: domain}) : [],
         )
     }
 }
