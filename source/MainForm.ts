@@ -20,7 +20,9 @@ function saveWorldToLocalFile(domain: TSDomain) {
     const fileName = makeFileNameWithoutWldExtension(domain.worldFileName)
     FileUtils.saveToFile(fileName, world.saveWorldToFileContents(ExportRulesOption.kSaveAllRules), ".wld", (fileName: string) => {
         domain.worldFileName = makeFileNameWithWldExtension(fileName)
+        // TODO: Figure out how to support undo after save where changecount is not negative and confused when make new changes
         domain.resetWorldChangeCount()
+        domain.worldCommandList.clear()
         m.redraw()
     })
 }
