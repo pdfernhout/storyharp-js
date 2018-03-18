@@ -12,7 +12,8 @@ const application = new TSApplication()
 const BodyComponent = { view: () => m(MainForm, <any>{domain: application}) }
 
 // const worldName = "GarTrek"
-const worldName = "House and Yard"
+// const worldName = "House and Yard"
+const worldName = "House and Yard with media"
 application.loadWorldFromServerData(worldName).then(() => {
     m.mount(document.body, BodyComponent)
 })
