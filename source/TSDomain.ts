@@ -414,6 +414,7 @@ export class TSApplication implements TSDomain {
         this.addToLog("--- world change: " + fileName)
         this.speechSystem.haltSpeechAndSoundAndMusic()
         this.worldCommandList.clear()
+        this.resetWorldChangeCount()
         if (fileName) {
             this.worldFileName = fileName
             // TODO: use or remove: this.options.mostRecentWorld = this.worldFileName
@@ -421,7 +422,6 @@ export class TSApplication implements TSDomain {
             this.worldFileName = kUnsavedWorldFileName + "." + kWorldExtension
             // TODO: use or remove: this.options.mostRecentSession = ""
         }
-        this.worldChangeCount = 0
         this.isWorldFileLoaded = isWorldFileLoaded
 
         this.lastSingleRuleIndex = 0
