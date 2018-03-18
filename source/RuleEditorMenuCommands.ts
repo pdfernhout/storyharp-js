@@ -222,23 +222,6 @@ export class RuleEditorMenuCommands {
     
     // -------------- more menus
     
-    MenuFileExportClick(Sender: TObject): void {
-        let fileInfo: SaveFileNamesStructure
-        
-        this.commitChangesToRule()
-        this.lastSaveProceeded = ufilesupport.getFileSaveInfo(ufilesupport.kFileTypeWorld, ufilesupport.kAskForFileName, "export" + "." + usdomain.kWorldExtension, fileInfo)
-        if (!this.lastSaveProceeded) {
-            return
-        }
-        try {
-            ufilesupport.startFileSave(fileInfo)
-            usdomain.domain.world.saveWorldToFile(fileInfo.tempFile, usworld.kSaveOnlySelectedRules)
-            fileInfo.writingWasSuccessful = true
-        } finally {
-            this.lastSaveProceeded = ufilesupport.cleanUpAfterFileSave(fileInfo)
-        }
-    }
-    
     MenuEditInsertSoundClick(Sender: TObject): void {
         let fileNameWithPath: string
         let shortFileName: string

@@ -21,6 +21,14 @@ function saveWorldToLocalFile(domain: TSDomain) {
     })
 }
 
+function exportSelectedRulesToLocalFile(domain: TSDomain) {
+    const world: TWorld = domain.world
+    const fileName = makeFileNameWithoutWldExtension(domain.worldFileName)
+    FileUtils.saveToFile(fileName, world.saveWorldToFileContents(ExportRulesOption.kSaveOnlySelectedRules), ".wld", (fileName: string) => {
+        m.redraw()
+    })
+}
+
 // TODO: Save As... But maybe can't do with browser file model?
 
 export function confirmUnsavedChangesLoss(domain: TSDomain) {
@@ -152,7 +160,7 @@ export class FileForm {
     
     view() {
         const domain = this.domain
-
+        
         return m("div.FileForm",
             m("p"),
             m("button.ml3", { title: "Make a new world", onclick: () => newWorld(domain) }, "Make a new world"),
@@ -162,6 +170,8 @@ export class FileForm {
             m("button.ml3", { title: "Merge in another world file", onclick: () => mergeWorldFromLocalFile(domain) }, "Merge in another world from local filesystem"),
             m("p"),
             m("button.ml3", { title: "Save a world file", onclick: () => saveWorldToLocalFile(domain) }, "Save a world to local filesystem"),
+            m("p"),
+            m("button.ml3", { title: "Export selected rules to a world file", onclick: () => exportSelectedRulesToLocalFile(domain) }, "Export only selected rules to local filesystem"),
             m("p"),
             m("button.ml3", { title: "Generate a standalone HTML file for this world", onclick: () => generateHTML(domain) }, "Generate a standalone HTML file for this world"),
         )
