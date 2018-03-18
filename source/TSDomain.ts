@@ -420,6 +420,9 @@ export class TSApplication implements TSDomain {
 
         const ruleToEdit = this.world.rules.length ? this.world.rules[0] : null
         this.editRule(ruleToEdit)
+        if (ruleToEdit) {
+            ruleToEdit.selected = true
+        }
 
         this.newSession()
     }

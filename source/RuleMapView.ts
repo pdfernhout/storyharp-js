@@ -16,6 +16,7 @@ type MapMode = "select" | "drag" | "zoom" | "gesture"
 
 // TODO: Maybe move this into domain
 let numNewContextsMadeByPopupMenuThisSession = 0
+let numNewCommandsMadeByPopupMenuThisSession = 0
 
 export class RuleMapView {
     domain: TSDomain
@@ -228,62 +229,59 @@ export class RuleMapView {
         */
     }
 
-    /*
     PopupNewCommandClick(): void {
-        let rule: TSRule
-        let newRule: TSRule
-        let newRulesCommand: TSNewRulesCommand
-        let variable: TSVariable
-        let i: int
-        let newRuleCount: int
-        
-        while (usdomain.domain.world.findVariable("new command " + IntToStr(this.numNewCommandsMadeByPopupMenuThisSession)) !== null) {
-            this.numNewCommandsMadeByPopupMenuThisSession += 1
+        while (this.domain.world.findVariable("new command " + (numNewCommandsMadeByPopupMenuThisSession + 1)) !== null) {
+            numNewCommandsMadeByPopupMenuThisSession += 1
         }
-        newRule = null
-        newRuleCount = 0
-        for (i = 0; i <= usdomain.domain.world.variables.Count - 1; i++) {
-            variable = usworld.TSVariable(usdomain.domain.world.variables[i])
+
+        const newCommandName = prompt("New command phrase?", "new command " + numNewCommandsMadeByPopupMenuThisSession)
+        if (!newCommandName) return
+
+        let newRuleCount = 0
+        const newRulesCommand = new TSNewRulesCommand(this.domain)
+        for (let i = 0; i < this.domain.world.variables.length; i++) {
+            const variable: TSVariable = this.domain.world.variables[i]
             if (variable.selected) {
-                newRulesCommand = uscommands.TSNewRulesCommand().create()
-                newRule = usdomain.domain.world.newRule()
+                const newRule = this.domain.world.newRule()
                 newRulesCommand.addRule(newRule)
                 newRule.setContext(variable.phrase)
-                newRule.setCommand("new command " + IntToStr(this.numNewCommandsMadeByPopupMenuThisSession))
+                newRule.setCommand(newCommandName)
                 newRule.setReply("Nothing happens.")
-                newRule.position = Point(this.lastMapMouseDownPosition.X, this.lastMapMouseDownPosition.Y + 30 * newRuleCount)
-                usdomain.domain.worldCommandList.doCommand(newRulesCommand)
+                newRule.position = new TPoint(this.lastMapMouseDownPosition.X, this.lastMapMouseDownPosition.Y + 30 * newRuleCount)
                 newRuleCount += 1
             }
         }
-        for (i = 0; i <= usdomain.domain.world.rules.Count - 1; i++) {
-            rule = usworld.TSRule(usdomain.domain.world.rules[i])
+        for (let i = 0; i < this.domain.world.rules.length; i++) {
+            const rule: TSRule = this.domain.world.rules[i]
             if (rule.selected) {
-                newRulesCommand = uscommands.TSNewRulesCommand().create()
-                newRule = usdomain.domain.world.newRule()
+                const newRule = this.domain.world.newRule()
                 newRulesCommand.addRule(newRule)
                 newRule.setContext(rule.context.phrase)
-                newRule.setCommand("new command " + IntToStr(this.numNewCommandsMadeByPopupMenuThisSession))
+                newRule.setCommand(newCommandName)
                 newRule.setReply("Nothing happens.")
-                newRule.position = Point(this.lastMapMouseDownPosition.X, this.lastMapMouseDownPosition.Y + 30 * newRuleCount)
-                usdomain.domain.worldCommandList.doCommand(newRulesCommand)
+                newRule.position = new TPoint(this.lastMapMouseDownPosition.X, this.lastMapMouseDownPosition.Y + 30 * newRuleCount)
                 newRuleCount += 1
             }
         }
-        if (newRule === null) {
-            MessageDialog("To make a new command," + chr(13) + "select at least one context or command" + chr(13) + "and right-click where you want to place the new command.", mtInformation, {mbOK, }, 0)
-            this.MapPaintBoxChanged()
+        if (!newRuleCount) {
+            alert("To make a new command,\nselect at least one context or command\nand then click where you want to place the new command.")
             return
         }
-        usdomain.domain.world.deselectAllExcept(newRule)
-        newRule.selected = true
-        this.editRule(newRule)
+        this.domain.world.deselectAllExcept(null)
+        this.domain.worldCommandList.doCommand(newRulesCommand)
+        for (let newRule of newRulesCommand.rules) {
+            newRule.selected = true
+        }
+        this.domain.editRule(newRulesCommand.rules[newRulesCommand.rules.length - 1])
+
+        /* TODO: select command edit
         this.ActiveControl = this.CommandEdit
         this.CommandEdit.SelStart = 0
         this.CommandEdit.SelLength = len(this.CommandEdit.Text)
-        this.MapPaintBoxChanged()
+        */
     }
 
+    /* 
     PopupNewLinkClick(): void {
         let draggableNode: TSDraggableObject
         let contextToMoveTo: TSVariable
@@ -657,6 +655,7 @@ export class RuleMapView {
                 m("button.ml3.h-75.mt1", { onclick: () => centerMap() }, "center"),
                 m("button.ml1.h-75.mt1", { onclick: () => resetMap() }, "reset"),
                 m("button.ml3.h-75.mt1", { onclick: () => this.PopupNewContextClick() }, "+context"),
+                m("button.ml1.h-75.mt1", { onclick: () => this.PopupNewCommandClick() }, "+command"),
             ),
             m("canvas.ba.flex-auto", {
                 // set tabindex to make canvas focusable
