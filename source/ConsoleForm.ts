@@ -241,13 +241,14 @@ export class ConsoleForm {
                     title: "Redo " + domain.sessionCommandList.redoDescription()
                 }, "Redo"), 
             ),
-            m("div.flex-auto.overflow-auto",
+            m("div.flex-auto.overflow-auto.flex.flex-column-reverse",
                 {
                     oncreate: (vnode: any) => {
                     this.transcriptDiv = <HTMLDivElement>(vnode.dom)
                     },
                 },
-                domain.transcript.map(viewTranscriptItem),
+                // TODO: Improve this inefficinct full copy and reverse
+                domain.transcript.slice(0).reverse().map(viewTranscriptItem),
             ),
             m("div.flex-none",
                 viewChoices(domain, this.scrollEndOfTranscriptIntoView.bind(this)),
