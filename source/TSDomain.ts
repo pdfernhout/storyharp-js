@@ -66,7 +66,7 @@ export interface SpeechSystemAPI {
     haltSpeechAndSoundAndMusic: () => void
 }
 
-export type FormName = "about" | "console" | "files" | "ruleEditor"
+export type FormName = "about" | "console" | "demos" | "ruleEditor"
 export type EditorName = "table" | "map" | "browser" | "wizards" | "log"
 export type WizardName = "context" | "command" | "link"
 

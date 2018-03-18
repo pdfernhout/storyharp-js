@@ -130,9 +130,9 @@ export class MainForm {
             m("div.mb2",
                 m(notebookTabButton(domain.activeForm === "console"), { onclick: (event: any) => setActiveForm(event, "console") }, "Player"),
                 m(notebookTabButton(domain.activeForm === "ruleEditor"), { onclick: (event: any) => setActiveForm(event, "ruleEditor") }, "Editor"),
-                m(notebookTabButton(domain.activeForm === "files"), { onclick: (event: any) => setActiveForm(event, "files") }, "Examples"),
+                m(notebookTabButton(domain.activeForm === "demos"), { onclick: (event: any) => setActiveForm(event, "demos") }, "Examples"),
                 m(notebookTabButton(domain.activeForm === "about"), { onclick: (event: any) => setActiveForm(event, "about") }, "About"),
-                (domain.activeForm !== "about" && domain.activeForm !== "files")
+                (domain.activeForm !== "about" && domain.activeForm !== "demos")
                     ? m("button.ml4", { title: "Open a world file", onclick: () => loadWorldFromLocalFile(domain) }, "Load")
                     : [],
                 domain.activeForm === "console" 
@@ -147,7 +147,7 @@ export class MainForm {
                     : []
             ),
             domain.activeForm === "about" ? m(AboutForm) : [],
-            domain.activeForm === "files" ? m(DemoFilesForm, <any>{domain: domain}) : [],
+            domain.activeForm === "demos" ? m(DemoFilesForm, <any>{domain: domain}) : [],
             domain.activeForm === "console" ? m(ConsoleForm, <any>{domain: domain}) : [],
             domain.activeForm === "ruleEditor" ? m(RuleEditorForm, <any>{domain: domain}) : [],
         )
