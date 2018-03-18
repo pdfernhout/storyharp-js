@@ -312,7 +312,7 @@ export class RuleMapView {
             return
         }
 
-        const commandPhrase = prompt("command to move?", "move to " + toNode.phrase)
+        const commandPhrase = prompt("command to move?", "go to " + toNode.phrase)
         if (!commandPhrase) return
 
         // Remove this if implement other approach
@@ -340,8 +340,8 @@ export class RuleMapView {
                 const newRule = this.domain.world.newRule()
                 newRulesCommand.addRule(newRule)
                 newRule.setContext(variable.phrase)
-                newRule.setCommand("move to " + contextToMoveTo.phrase)
-                newRule.setReply("You move to " + contextToMoveTo.phrase + ".")
+                newRule.setCommand("go to " + contextToMoveTo.phrase)
+                newRule.setReply("You go to " + contextToMoveTo.phrase + ".")
                 newRule.setMove(contextToMoveTo.phrase)
                 newRule.position.X = (variable.position.X + contextToMoveTo.position.X) / 2
                 newRule.position.Y = (variable.position.Y + contextToMoveTo.position.Y) / 2
