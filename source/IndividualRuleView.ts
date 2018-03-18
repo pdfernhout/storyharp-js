@@ -470,7 +470,6 @@ export class IndividualRuleView {
                                     height: "5em",
                                 },
                                 oncreate: (vnode: any) => {
-                                    console.log("on create reply memo")
                                     this.replyTextArea = <HTMLTextAreaElement>(vnode.dom)
                                 },
                                 value: rule.reply,
