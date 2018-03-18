@@ -162,6 +162,108 @@ export class IndividualRuleView {
         this.domain.setOrganizeByField(field, selectedVariable)
     }
 
+    /*
+
+    MenuEditInsertSoundClick(Sender: TObject): void {
+        let fileNameWithPath: string
+        let shortFileName: string
+        
+        this.commitChangesToRule()
+        if (this.ActiveControl !== this.ReplyMemo) {
+            ShowMessage("The reply field must be selected to insert a sound file.")
+            return
+        }
+        fileNameWithPath = ufilesupport.getFileOpenInfo(ufilesupport.kFileTypeSound, ufilesupport.kNoSuggestedFile, "Choose a sound file", ufilesupport.kOtherExtOK)
+        if (fileNameWithPath === "") {
+            return
+        }
+        shortFileName = ExtractFileName(fileNameWithPath)
+        if (UNRESOLVED.pos(".WAV", uppercase(shortFileName)) === len(shortFileName) - 3) {
+            shortFileName = UNRESOLVED.copy(shortFileName, 1, len(shortFileName) - 4)
+        }
+        this.ReplyMemo.SelText = " {" + kPlaySoundMacroStart + shortFileName + "} "
+    }
+    
+    insertSoundClick(Sender: TObject): void {
+        this.MenuEditInsertSoundClick(this)
+    }
+    
+    InsertMusicButtonClick(Sender: TObject): void {
+        this.MenuEditInsertMusicClick(this)
+    }
+    
+    MenuEditInsertMusicClick(Sender: TObject): void {
+        let fileNameWithPath: string
+        let shortFileName: string
+        
+        this.commitChangesToRule()
+        if (this.ActiveControl !== this.ReplyMemo) {
+            ShowMessage("The reply field must be selected to insert a music file.")
+            return
+        }
+        fileNameWithPath = ufilesupport.getFileOpenInfo(ufilesupport.kFileTypeMusic, ufilesupport.kNoSuggestedFile, "Choose a music file", ufilesupport.kOtherExtOK)
+        if (fileNameWithPath === "") {
+            return
+        }
+        shortFileName = ExtractFileName(fileNameWithPath)
+        if (UNRESOLVED.pos(".MID", uppercase(shortFileName)) === len(shortFileName) - 3) {
+            shortFileName = UNRESOLVED.copy(shortFileName, 1, len(shortFileName) - 4)
+        }
+        this.ReplyMemo.SelText = " {" + kPlayMusicMacroStart + shortFileName + "} "
+    }
+    
+    MenuEditInsertPictureClick(Sender: TObject): void {
+        let fileNameWithPath: string
+        let shortFileName: string
+        
+        this.commitChangesToRule()
+        if (this.ActiveControl !== this.ReplyMemo) {
+            ShowMessage("The reply field must be selected to insert a picture file.")
+            return
+        }
+        fileNameWithPath = ufilesupport.getFileOpenInfo(ufilesupport.kFileTypeBitmap, ufilesupport.kNoSuggestedFile, "Choose a bitmap file", ufilesupport.kOtherExtNotOK)
+        if (fileNameWithPath === "") {
+            return
+        }
+        shortFileName = ExtractFileName(fileNameWithPath)
+        if (UNRESOLVED.pos(".BMP", uppercase(shortFileName)) === len(shortFileName) - 3) {
+            shortFileName = UNRESOLVED.copy(shortFileName, 1, len(shortFileName) - 4)
+        }
+        this.ReplyMemo.SelText = " {" + kShowPictureMacroStart + shortFileName + "} "
+    }
+    
+    MenuRuleTestReplyClick(Sender: TObject): void {
+        let oldSpeak: boolean
+        let oldPlayMusic: boolean
+        let oldPlaySounds: boolean
+        
+        this.commitChangesToRule()
+        usconsoleform.ConsoleForm.speechSystem.haltSpeechAndSound()
+        if (this.rule === null) {
+            return
+        }
+        // temporarily turn on these options to test the reply
+        oldSpeak = usdomain.domain.options.playerSpeak
+        oldPlaySounds = usdomain.domain.options.playerPlaySounds
+        oldPlayMusic = usdomain.domain.options.playerPlayMusic
+        usdomain.domain.options.playerSpeak = true
+        usdomain.domain.options.playerPlaySounds = true
+        usdomain.domain.options.playerPlayMusic = true
+        try {
+            usconsoleform.ConsoleForm.speechSystem.sayTextWithMacros(this.rule.reply)
+        } finally {
+            usdomain.domain.options.playerSpeak = oldSpeak
+            usdomain.domain.options.playerPlaySounds = oldPlaySounds
+            usdomain.domain.options.playerPlayMusic = oldPlayMusic
+        }
+    }
+    
+    ReplyMemoMouseUp(Sender: TObject, Button: TMouseButton, Shift: TShiftState, X: int, Y: int): void {
+        // more fine grained tracking of changes to this field...
+        this.commitChangesToRule()
+    }
+    */
+
     view() {
         const world: TWorld = this.domain.world
         const worldCommandList: TSCommandList = this.domain.worldCommandList
