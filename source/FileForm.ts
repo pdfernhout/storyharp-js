@@ -5,6 +5,9 @@ import { TSDomain } from "./TSDomain"
 import { TWorld, ExportRulesOption } from "./TWorld"
 import { FileUtils } from "./FileUtils"
 import { TSJavaScriptWriter } from "./TSJavaScriptWriter"
+import { TSNewRulesCommand } from "./TSNewRulesCommand"
+import { TSRule } from "./TSRule";
+import { TSVariable } from "./TSVariable";
 
 function saveWorldToLocalFile(domain: TSDomain) {
     const world: TWorld = domain.world
@@ -65,6 +68,53 @@ function newWorld(domain: TSDomain) {
     domain.updateForNewOrLoadedWorld(makeFileNameWithWldExtension(fileName), false)
 }
 
+function mergeWorldFromLocalFile(domain: TSDomain): void {    
+    const world: TWorld = domain.world
+    const oldRuleCount = world.rules.length
+    const oldVariablesCount = world.variables.length
+
+    FileUtils.loadFromFile(false, (fileName: string, contents: string) => {
+        // Don't reset anything because we are merging
+        const loaded = world.loadWorldFromFileContents(contents)
+        domain.addToLog("--- Load for merge: " + fileName + (loaded ? " OK" : " Failed"))
+
+        if (!loaded) {
+            alert("Something went wrong merging file: " + fileName)
+            world.rules.length = oldRuleCount
+            world.variables.length = oldVariablesCount
+            m.redraw()
+            return
+        }
+
+        const newRulesCommand = new TSNewRulesCommand(domain)
+        newRulesCommand.creator = "merging " + makeFileNameWithoutWldExtension(fileName)
+
+        world.deselectAllExcept(null)
+
+        for (let i = oldRuleCount; i < world.rules.length; i++) {
+            // select new items
+            const rule: TSRule = world.rules[i]
+            newRulesCommand.addRule(rule)
+            rule.selected = true
+        }
+
+        for (let i = oldVariablesCount; i < world.variables.length; i++) {
+            const variable: TSVariable = world.variables[i]
+            variable.selected = true
+        }
+
+        domain.worldCommandList.doCommand(newRulesCommand)
+
+        if (world.rules.length > 0) {
+            domain.editRule(world.rules[world.rules.length - 1])
+        } else {
+            domain.editRule(null)
+        }
+
+        m.redraw()
+    })
+}
+
 async function generateHTML(domain: TSDomain) {
     const writer = new TSJavaScriptWriter()
     const programText = writer.writeJavaScriptProgram(domain.world)
@@ -105,13 +155,15 @@ export class FileForm {
 
         return m("div.FileForm",
             m("p"),
+            m("button.ml3", { title: "Make a new world", onclick: () => newWorld(domain) }, "Make a new world"),
+            m("p"),
             m("button.ml3", { title: "Open a world file", onclick: () => loadWorldFromLocalFile(domain) }, "Load a world from local filesystem"),
+            m("p"),
+            m("button.ml3", { title: "Merge in another world file", onclick: () => mergeWorldFromLocalFile(domain) }, "Merge in another world from local filesystem"),
             m("p"),
             m("button.ml3", { title: "Save a world file", onclick: () => saveWorldToLocalFile(domain) }, "Save a world to local filesystem"),
             m("p"),
             m("button.ml3", { title: "Generate a standalone HTML file for this world", onclick: () => generateHTML(domain) }, "Generate a standalone HTML file for this world"),
-            m("p"),
-            m("button.ml3.mt3", { title: "Make a new world", onclick: () => newWorld(domain) }, "Make a new world"),
         )
     }
 }

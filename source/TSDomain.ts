@@ -494,20 +494,6 @@ export class TSApplication implements TSDomain {
                 throw new Error("sessionCommandChangedNotification: unexpected case")
         }
     }
-    
-    /*
-    
-    mergeWorld(fileName: string): void {
-        // don't clear things
-        this.world.loadWorldFromFile(fileName)
-        this.worldChangeCount += 1
-    }
-    
-    saveWorld(fileName: string): void {
-        this.world.saveWorldToFile(fileName, usworld.kSaveAllRules)
-    }
-    
-    */
 
    worldCommandChangedNotification(command: KfCommand, state: KfCommandChangeType): void {
     switch (state) {
