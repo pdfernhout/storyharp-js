@@ -10,14 +10,17 @@ import { TSDesiredStateVariableWrapper } from "./TSDesiredStateVariableWrapper";
 import { Glyph } from "./VariablesView"
 import { TSVariableState, TSVariable } from "./TSVariable";
 import { TSLogicListBox } from "./TSLogicListBox";
+import { RuleEditorForm } from "./RuleEditorForm";
 
 // TODO: Change capitalization on some method names
 export class IndividualRuleView {
     domain: TSDomain
+    ruleEditorForm: RuleEditorForm
     expanded = true
 
     constructor(vnode: m.Vnode) {
         this.domain = (<any>vnode.attrs).domain
+        this.ruleEditorForm = (<any>vnode.attrs).ruleEditorForm
     }
 
     /*
@@ -286,6 +289,10 @@ export class IndividualRuleView {
                     "Music",
                 ),
                 */
+                m("button.ml4.w3", {
+                    onclick: () => this.ruleEditorForm.search(),
+                    title: "Search for a rule containing some text"
+                }, "Search"),
             ),
             !this.expanded ? [] : !rule ? ["Please select a rule to edit it"] : [
                 m("div.Rule",

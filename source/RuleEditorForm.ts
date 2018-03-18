@@ -123,10 +123,6 @@ export class RuleEditorForm {
                 m(notebookTabButton(currentView === "wizards"),  { onclick: (event: Event) => this.setCurrentView(event, "wizards") }, "Wizards"),
                 m(notebookTabButton(currentView === "log"),  { onclick: (event: Event) => this.setCurrentView(event, "log") }, "Log"),
                 m("button.ml4.w3", {
-                    onclick: () => this.search(),
-                    title: "Search for a rule containing some text"
-                }, "Search"),
-                m("button.ml4.w3", {
                     disabled: !domain.worldCommandList.isUndoEnabled(),
                     onclick: () => domain.worldCommandList.undoLast(),
                     title: "Undo " + domain.worldCommandList.undoDescription()
@@ -149,7 +145,7 @@ export class RuleEditorForm {
                     ),
                     currentView !== "log" 
                         ? m("div.flex-none",
-                            m(IndividualRuleView, <any>{domain: domain}),
+                            m(IndividualRuleView, <any>{domain: domain, ruleEditorForm: this}),
                         )
                         : []
                 ],
