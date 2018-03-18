@@ -423,18 +423,6 @@ export class RuleEditorMenuCommands {
         this.updateViews()
     }
     
-    MenuFileExitClick(Sender: TObject): void {
-        this.commitChangesToRule()
-        if (!this.askForSaveWorldAndProceed()) {
-            return
-        }
-        if (!usconsoleform.ConsoleForm.askForSaveSessionAndProceed()) {
-            return
-        }
-        usconsoleform.ConsoleForm.cleanUpBeforeExit()
-        delphi_compatability.Application.Terminate()
-    }
-    
     // ----------------------------------------------------------------- @Edit menu
     
     MenuEditPreferencesClick(Sender: TObject): void {
@@ -472,31 +460,6 @@ export class RuleEditorMenuCommands {
             //canvas.
             this.RuleGrid.Font = this.FontDialog.Font
         }
-    }
-    
-    MenuDisplayShowButtonBarClick(Sender: TObject): void {
-        this.commitChangesToRule()
-        usdomain.domain.options.showButtonBar = !usdomain.domain.options.showButtonBar
-        this.MenuDisplayShowButtonBar.checked = usdomain.domain.options.showButtonBar
-        this.PanelButtonBar.Visible = usdomain.domain.options.showButtonBar
-    }
-    
-    MenuOptionsShowRuleEditorClick(Sender: TObject): void {
-        this.commitChangesToRule()
-        usdomain.domain.options.showRuleEditor = !usdomain.domain.options.showRuleEditor
-        this.MenuOptionsShowRuleEditor.checked = usdomain.domain.options.showRuleEditor
-        if (usdomain.domain.options.showRuleEditor) {
-            this.PanelEditor.Height = usdomain.domain.options.editorPanelEditorHeight
-            if (this.PanelEditor.Height === 1) {
-                this.PanelEditor.Height = 2
-            }
-            this.PanelEditor.Enabled = true
-        } else {
-            usdomain.domain.options.editorPanelEditorHeight = this.PanelEditor.Height
-            this.PanelEditor.Height = 1
-            this.PanelEditor.Enabled = false
-        }
-        this.Resize()
     }
     
     // ------------------------------------------------------------------ @Commands
@@ -624,15 +587,6 @@ export class RuleEditorMenuCommands {
             usdomain.domain.options.playerPlaySounds = oldPlaySounds
             usdomain.domain.options.playerPlayMusic = oldPlayMusic
         }
-    }
-    
-    replyPictureMouseUp(Sender: TObject, Button: TMouseButton, Shift: TShiftState, X: int, Y: int): void {
-        this.MenuRuleTestReplyClick(this)
-    }
-    
-    MenuEditClick(Sender: TObject): void {
-        // keep the undo menu up to date...
-        this.commitChangesToRule()
     }
     
     ReplyMemoMouseUp(Sender: TObject, Button: TMouseButton, Shift: TShiftState, X: int, Y: int): void {
