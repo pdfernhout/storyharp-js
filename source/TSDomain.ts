@@ -279,14 +279,21 @@ export class TSApplication implements TSDomain {
                             musicPlayed = new Audio(segment.text)
                             musicPlayed.play()
                         }
-                    } else {
+                    } else if (segment.type === SegmentType.speakText) {
                         // TODO: need scheduling to interweave sound and TTS
                         const synth = window.speechSynthesis
                         if (synth) {
                             synth.cancel()
-                            const utterance = new SpeechSynthesisUtterance(segment.text)
-                            synth.speak(utterance)
+                            const sentences = segment.text.match( /[^\.!\?]+[\.!\?]+/g)
+                            if (sentences) {
+                                for (let sentence of sentences) { 
+                                    const utterance = new SpeechSynthesisUtterance(sentence)
+                                    synth.speak(utterance)
+                                }
+                            }
                         }
+                    } else {
+                        // image
                     }
                 }
             },
