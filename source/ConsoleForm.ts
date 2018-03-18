@@ -5,6 +5,8 @@ import { TWorld } from "./TWorld"
 import { VariablesView } from "./VariablesView"
 import { TSDomain, TranscriptLine } from "./TSDomain"
 
+// TODO: Shutdown sound when press escape key
+
 const firstRiddleAnswer = "say an answer for a riddle"
 
 function availableCommands(world: TWorld, showRiddleAnswers=false): string[] {

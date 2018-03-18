@@ -412,21 +412,5 @@ export class RuleEditorMenuCommands {
         this.commitChangesToRule()
     }
     
-    FormKeyDown(Sender: TObject, Key: byte, Shift: TShiftState): void {
-        if (Key === delphi_compatability.VK_ESCAPE) {
-            usconsoleform.ConsoleForm.speechSystem.haltSpeechAndSound()
-        } else if ((delphi_compatability.TShiftStateEnum.ssCtrl in Shift) && ((Key === ord("c")) || (Key === ord("C")))) {
-            this.MenuEditCopyClick(this)
-            Key = 0
-        } else if ((delphi_compatability.TShiftStateEnum.ssCtrl in Shift) && ((Key === ord("v")) || (Key === ord("V")))) {
-            this.MenuEditPasteClick(this)
-            Key = 0
-        } else if ((delphi_compatability.TShiftStateEnum.ssCtrl in Shift) && ((Key === ord("x")) || (Key === ord("X")))) {
-            this.MenuEditCutClick(this)
-            Key = 0
-        }
-        return Key
-    }
-    
     */  
 }
