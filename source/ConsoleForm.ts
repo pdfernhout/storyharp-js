@@ -4,7 +4,7 @@ import { Color } from "./common"
 import { TWorld } from "./TWorld"
 import { VariablesView } from "./VariablesView"
 import { TSDomain, TranscriptLine } from "./TSDomain"
-import { loadWorldFromLocalFile } from "./MainForm"
+import { loadWorldFromLocalFile } from "./FileForm";
 
 // TODO: Shutdown sound when press escape key
 
