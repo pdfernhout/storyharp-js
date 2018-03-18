@@ -22,7 +22,19 @@ export class TSNewRulesCommand extends KfCommand {
         // already added rule at start
         super.doCommand()
         this.domain.ruleEditorForm.scrollGridSelectionsIntoView(ScrollIntoViewDirection.kFromBottom)
-        this.domain.addToLog("--- new rule")
+
+        for (let rule of this.rules) {
+            this.domain.addToLog("--- new rule")
+            let textForRule = [
+                rule.context.phrase,
+                rule.command.phrase,
+                rule.reply,
+                rule.move.phrase,
+                rule.changesString,
+                rule.requirementsString
+            ].join("\n")
+            this.domain.addToLog(textForRule)
+        }
     }
     
     undoCommand(): void {

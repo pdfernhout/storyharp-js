@@ -14,7 +14,6 @@ const BodyComponent = { view: () => m(MainForm, <any>{domain: application}) }
 // const worldName = "GarTrek"
 const worldName = "House and Yard"
 application.loadWorldFromServerData(worldName).then(() => {
-    application.updateForNewOrLoadedWorld(worldName, true)
     m.mount(document.body, BodyComponent)
 })
 
