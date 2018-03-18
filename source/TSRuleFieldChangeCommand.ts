@@ -1,4 +1,4 @@
-import { int } from "./common"
+import { int, ScrollIntoViewDirection } from "./common"
 import { KfCommand } from "./KfCommand"
 import { TWorld } from "./TWorld"
 import { TSRule, TSRuleField } from "./TSRule"
@@ -21,25 +21,7 @@ export class TSRuleFieldChangeCommand extends KfCommand {
     }
     
     updateEditorForChange(): void {
-        /* TODO: Maybe most or all of this is no longer needed with Mithril? Perhaps the map invalidation is still needed?
-        this.domain.ruleEditorForm.rule = this.rule
-        this.domain.ruleEditorForm.loadAllRuleFields()
-        // TODO: This locationCacheValid field probably can be removed along with consoleForm after finish refactoring
-        if ((this.field === TSRuleField.kRuleContext) || (this.field === TSRuleField.kRuleMove)) {
-            this.domain.consoleForm.locationCacheValid = false
-        }
-        if (this.field === TSRuleField.kRuleRequirements) {
-            //wrapper entries will get freed if list box - so reset them
-            this.domain.ruleEditorForm.fillListBox(this.domain.ruleEditorForm.RequirementsListBox, this.rule.requirements)
-        } else if (this.field === TSRuleField.kRuleChanges) {
-            this.domain.ruleEditorForm.fillListBox(this.domain.ruleEditorForm.ChangesListBox, this.rule.changes)
-        }
-        this.domain.ruleEditorForm.MapPaintBoxChanged()
-        if (this.domain.ruleEditorForm.organizeByField === this.field) {
-            // could optimize to only do when browser visible
-            this.domain.ruleEditorForm.setOrganizeByField(this.domain.ruleEditorForm.organizeByField)
-        }
-        */
+        this.domain.editRule(this.rule, ScrollIntoViewDirection.kFromTop, true)
     }
     
     doCommand(): void {

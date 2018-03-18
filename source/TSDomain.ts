@@ -146,10 +146,9 @@ export class TSApplication implements TSDomain {
     editRule(rule: TSRule | null, scrollDirection: ScrollIntoViewDirection = ScrollIntoViewDirection.kFromTop, force = false) {
         this.editedRule = rule
         if (rule) {
-            // TODO: Improve scrolling behavior
-            // Don't scroll for table and browser forms because scrolling shifts
+            // Don't normally scroll for table and browser forms when visible because scrolling shifts table
             // even if item visible -- which is jumpy if click on rule.
-            // But this means undo/redo commands don't track properly.
+            // Use force flag so undo/redo commands track properly even if editor is visible.
 
             if (force || this.currentEditorView !== "table") {
                 this.pendingTableScroll = {

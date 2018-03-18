@@ -40,10 +40,9 @@ export class TSDeleteRulesCommand extends KfCommand {
             wrapper.rule.selected = true
         }
         if (this.ruleWrappers.length > 0) {
-            this.domain.editRule(this.ruleWrappers[0].rule)
+            this.domain.editRule(this.ruleWrappers[0].rule, ScrollIntoViewDirection.kFromTop, true)
         }
         super.undoCommand()
-        this.domain.ruleEditorForm.scrollGridSelectionsIntoView(ScrollIntoViewDirection.kFromTop)
     }
     
     redoCommand(): void {
