@@ -114,7 +114,7 @@ export function parseTextWithMacros(aString: string): Segment[] {
     while (remaining.length > 0) {
         const startPosition = remaining.indexOf("{")
         if (startPosition !== -1) {
-            const toSay = remaining.substring(0, startPosition - 1)
+            const toSay = remaining.substring(0, startPosition)
             if (toSay.trim() !== "") {
                 result.push({type: SegmentType.speakText, text: toSay})
             }
@@ -138,16 +138,15 @@ export function parseTextWithMacros(aString: string): Segment[] {
             // cfk added
             // TODO: use or remove: sayOptionsMacroInForce = true
             result.push({type: SegmentType.sayOptionsMacroInForce, text: ""})
-        } else if (macro.startsWith("picture ")) {
-            result.push({type: SegmentType.showPicture, text: macro.substring("picture ".length)})
-        } else if (macro.startsWith("music ")) {
-            result.push({type: SegmentType.speakMusic, text: macro.substring("music ".length)})
-        } else if (macro.startsWith("sound ")) {
-            // TODO: legacy from when did not prefix sounds? Maybe should require that? 
-            result.push({type: SegmentType.speakSound, text: macro.substring("sound ".length)})
+        } else if (macro.startsWith("picture")) {
+            result.push({type: SegmentType.showPicture, text: macro.substring("picture".length).trim()})
+        } else if (macro.startsWith("music")) {
+            result.push({type: SegmentType.speakMusic, text: macro.substring("music".length).trim()})
+        } else if (macro.startsWith("sound")) {
+            result.push({type: SegmentType.speakSound, text: macro.substring("sound".length).trim()})
         } else {
             // TODO: legacy from when did not prefix sounds? Maybe should require that? 
-            result.push({type: SegmentType.speakSound, text: macro})
+            result.push({type: SegmentType.speakSound, text: macro.trim()})
         }
     }
     return result

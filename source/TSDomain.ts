@@ -70,6 +70,9 @@ export type FormName = "about" | "console" | "demos" | "ruleEditor" | "file"
 export type EditorName = "table" | "map" | "browser" | "wizards" | "log"
 export type WizardName = "context" | "command" | "link"
 
+let musicPlayed: HTMLAudioElement | null = null
+let soundPlayed: HTMLAudioElement | null = null
+
 // This is a seperate interface for testability
 export interface TSDomain {
     world: TWorld
@@ -255,10 +258,26 @@ export class TSApplication implements TSDomain {
                 // TODO: Move this into a function elsewhere
                 const segments = parseTextWithMacros(text)
                 for (let segment of segments) {
-                    if (segment.type === SegmentType.speakSound || segment.type === SegmentType.speakMusic) {
-                        // TODO: a way to shut down previous audio
-                        const audio = new Audio(segment.text)
-                        audio.play()
+                    if (segment.type === SegmentType.speakSound) {
+                        // TODO: let sounds play over each other
+                        if (soundPlayed) {
+                            soundPlayed.pause()
+                            soundPlayed = null
+                        }
+                        if (segment.text) {
+                            soundPlayed = new Audio(segment.text)
+                            soundPlayed.play()
+                        }
+                    } else if (segment.type === SegmentType.speakMusic) {
+                        // Only one music can play at a time
+                        if (musicPlayed) {
+                            musicPlayed.pause()
+                            musicPlayed = null
+                        }
+                        if (segment.text) {
+                            musicPlayed = new Audio(segment.text)
+                            musicPlayed.play()
+                        }
                     } else {
                         // TODO: TTS for web
                     }
@@ -267,7 +286,10 @@ export class TSApplication implements TSDomain {
             listenForAvailableCommands: () => null,
             checkForSayOptionsMacro: () => null,
             speakText: (text: string) => null,
-            haltSpeechAndSoundAndMusic: () => null,
+            haltSpeechAndSoundAndMusic: () => {
+                if (musicPlayed) musicPlayed.pause()
+                if (soundPlayed) soundPlayed.pause()
+            },
         }
     }
 
