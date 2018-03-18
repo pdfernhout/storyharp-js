@@ -670,9 +670,7 @@ export class RuleMapView {
         }
 
         const resetMap = () => {
-            this.mapDrawer.scroll.X = 0
-            this.mapDrawer.scroll.Y = 0
-            this.mapDrawer.scale = defaultScale
+            this.mapDrawer.reset()
         }
 
         return m(".RuleMapView.h-100.w-100.overflow-hidden.flex.flex-column",

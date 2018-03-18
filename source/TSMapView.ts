@@ -150,6 +150,12 @@ export class TSMapView {
         this.state.scale = value
     }
 
+    reset(): void {
+        this.scroll.X = 0
+        this.scroll.Y = 0
+        this.scale = defaultScale
+    }
+
     /* TODO: this code is not used
 
     drawBogusArrow(canvas: TCanvas, a: TPoint, b: TPoint): void {
