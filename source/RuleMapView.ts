@@ -227,6 +227,7 @@ export class RuleMapView {
         this.ContextEdit.SelStart = 0
         this.ContextEdit.SelLength = len(this.ContextEdit.Text)
         */
+        this.MapPaintBoxChanged()
     }
 
     PopupNewCommandClick(): void {
@@ -279,44 +280,64 @@ export class RuleMapView {
         this.CommandEdit.SelStart = 0
         this.CommandEdit.SelLength = len(this.CommandEdit.Text)
         */
+        this.MapPaintBoxChanged()
     }
 
-    /* 
     PopupNewLinkClick(): void {
-        let draggableNode: TSDraggableObject
-        let contextToMoveTo: TSVariable
-        let newRulesCommand: TSNewRulesCommand
         let variable: TSVariable
         let rule: TSRule
-        let newRule: TSRule
         let mapView: TSMapView
-        let displayOptions: TSVariableDisplayOptions
-        let i: int
-        let atLeastOneRuleChanged: boolean
-        
-        mapView = this.currentGraphView()
-        if (mapView === null) {
-            return
-        }
-        for (i = 0; i <= 5; i++) {
+
+        /* TODO -- decide if can support old linking system with right click and multiple selections
+        const displayOptions: TSVariableDisplayOptions = []
+        for (let i = 0; i <= 5; i++) {
             displayOptions[i] = false
         }
-        displayOptions[usworld.kRuleContext] = true
-        displayOptions[usworld.kRuleMove] = true
-        displayOptions[usworld.kRuleCommand] = this.MenuMapsShowCommands.checked
-        draggableNode = mapView.nearestNode(this.lastMapMouseDownPosition, displayOptions)
-        if ((draggableNode === null) || !(draggableNode instanceof usworld.TSVariable)) {
-            MessageDialog("To build a link," + chr(13) + "select at least one context or command" + chr(13) + "and right-click on a context.", mtInformation, {mbOK, }, 0)
-            this.MapPaintBoxChanged()
+        displayOptions[TSRuleField.kRuleContext] = true
+        displayOptions[TSRuleField.kRuleMove] = true
+        // displayOptions[TSRuleField.kRuleCommand] = true // TODO:this.MenuMapsShowCommands.checked
+
+        // const draggableNode: TSDraggableObject | null = this.mapDrawer.nearestNode(this.lastMapMouseDownPosition, displayOptions, this.domain.world)
+        */
+       
+        const fromNode = this.previousChoice
+        if ((fromNode === null) || !(fromNode instanceof TSVariable)) {
+             alert("To build a link,\nselect two contexts.")
             return
         }
-        contextToMoveTo = draggableNode
-        newRule = null
-        for (i = 0; i <= usdomain.domain.world.variables.Count - 1; i++) {
-            variable = usworld.TSVariable(usdomain.domain.world.variables[i])
+
+        const toNode = this.lastChoice
+        if ((toNode === null) || !(toNode instanceof TSVariable) || (fromNode === toNode)) {
+             alert("To build a link,\nselect two contexts.")
+            return
+        }
+
+        const commandPhrase = prompt("command to move?", "move to " + toNode.phrase)
+        if (!commandPhrase) return
+
+        // Remove this if implement other approach
+        const newRulesCommand: TSNewRulesCommand = new TSNewRulesCommand(this.domain)
+        const newRule = this.domain.world.newRule()
+        newRulesCommand.addRule(newRule)
+        newRule.setContext(fromNode.phrase)
+        newRule.setCommand(commandPhrase)
+        newRule.setReply("You " + commandPhrase + ".")
+        newRule.setMove(toNode.phrase)
+        newRule.position.X = (fromNode.position.X + toNode.position.X) / 2
+        newRule.position.Y = (fromNode.position.Y + toNode.position.Y) / 2
+
+        /* TODO
+        const draggableNode = this.previousChoice
+        if ((draggableNode === null) || !(draggableNode instanceof TSVariable)) {
+            alert("To build a link,\nselect at least one context or command\nand then select others to connect to it.")
+            return
+        }
+        const contextToMoveTo: TSVariable = draggableNode
+        const newRulesCommand: TSNewRulesCommand = new TSNewRulesCommand(this.domain)
+        for (let i = 0; i < this.domain.world.variables.length; i++) {
+            const variable: TSVariable = this.domain.world.variables[i]
             if (variable.selected) {
-                newRulesCommand = uscommands.TSNewRulesCommand().create()
-                newRule = usdomain.domain.world.newRule()
+                const newRule = this.domain.world.newRule()
                 newRulesCommand.addRule(newRule)
                 newRule.setContext(variable.phrase)
                 newRule.setCommand("move to " + contextToMoveTo.phrase)
@@ -324,35 +345,43 @@ export class RuleMapView {
                 newRule.setMove(contextToMoveTo.phrase)
                 newRule.position.X = (variable.position.X + contextToMoveTo.position.X) / 2
                 newRule.position.Y = (variable.position.Y + contextToMoveTo.position.Y) / 2
-                usdomain.domain.worldCommandList.doCommand(newRulesCommand)
             }
         }
-        atLeastOneRuleChanged = false
-        for (i = 0; i <= usdomain.domain.world.rules.Count - 1; i++) {
-            rule = usworld.TSRule(usdomain.domain.world.rules[i])
+        */
+
+        let atLeastOneRuleChanged = false
+        /* TODO -- if coudl get right click to work
+        for (let i = 0; i < this.domain.world.rules.length; i++) {
+            const rule: TSRule = this.domain.world.rules[i]
             if (rule.selected) {
                 if (contextToMoveTo.phrase !== rule.move.phrase) {
-                    usdomain.domain.worldCommandList.ruleFieldChange(rule, usworld.kRuleMove, contextToMoveTo.phrase)
+                    this.domain.worldCommandList.ruleFieldChange(rule, TSRuleField.kRuleMove, contextToMoveTo.phrase)
                 }
                 atLeastOneRuleChanged = true
             }
         }
-        if (newRule !== null) {
-            usdomain.domain.world.deselectAllExcept(newRule)
-            newRule.selected = true
-            this.editRule(newRule)
+        */
+
+        if (newRulesCommand.rules.length) {
+            this.domain.worldCommandList.doCommand(newRulesCommand)
+            this.domain.world.deselectAllExcept(null)
+            for (let newRule of newRulesCommand.rules) {
+                newRule.selected = true
+            }
+            this.domain.editRule(newRulesCommand.rules[newRulesCommand.rules.length - 1])
+            /* TODO: select command edit
             this.ActiveControl = this.CommandEdit
             this.CommandEdit.SelStart = 0
             this.CommandEdit.SelLength = len(this.CommandEdit.Text)
+            */
         }
-        if ((newRule !== null) || (atLeastOneRuleChanged)) {
-            this.MapPaintBoxChanged()
+        if (!newRulesCommand.rules.length && !atLeastOneRuleChanged) {
+            // alert("To build a link,\nselect at least one context or command\nand then select others to connect to it.")
+            alert("To build a link,\nselect two contexts.")
         } else {
-            MessageDialog("To build a link," + chr(13) + "select at least one context or command" + chr(13) + "and right-click on a context.", mtInformation, {mbOK, }, 0)
             this.MapPaintBoxChanged()
         }
     }
-    */
     
     MapImageMouseDown(offsetX: number, offsetY: number, ctrlKey: boolean, shiftKey: boolean): void {
         this.lastMapMouseDownPosition = new TPoint(offsetX / this.mapDrawer.scale - this.mapDrawer.scroll.X, offsetY / this.mapDrawer.scale - this.mapDrawer.scroll.Y)
@@ -652,10 +681,11 @@ export class RuleMapView {
                 m("button.ml1.h-75.br-pill.w4.mt1", { onclick: () => this.mapMode = "drag" }, indicator("drag")),
                 m("button.ml1.h-75.br-pill.w4.mt1", { onclick: () => this.mapMode = "zoom" }, indicator("zoom")),
                 m("button.ml1.h-75.br-pill.w4.mt1", { onclick: () => this.mapMode = "gesture", title: "allows mobile gestures" }, indicator("gesture")),
-                m("button.ml3.h-75.mt1", { onclick: () => centerMap() }, "center"),
-                m("button.ml1.h-75.mt1", { onclick: () => resetMap() }, "reset"),
-                m("button.ml3.h-75.mt1", { onclick: () => this.PopupNewContextClick() }, "+context"),
-                m("button.ml1.h-75.mt1", { onclick: () => this.PopupNewCommandClick() }, "+command"),
+                m("button.ml3.h-75.mt1", { title: "Center the map", onclick: () => centerMap() }, "center"),
+                m("button.ml1.h-75.mt1", { title: "Change scale and scrolling to default value", onclick: () => resetMap() }, "reset"),
+                m("button.ml3.h-75.mt1", { title: "Make a new context", onclick: () => this.PopupNewContextClick() }, "+context"),
+                m("button.ml1.h-75.mt1", { title: "Make a new command", onclick: () => this.PopupNewCommandClick() }, "+command"),
+                m("button.ml1.h-75.mt1", { title: "Make a new link", onclick: () => this.PopupNewLinkClick() }, "+link"),
             ),
             m("canvas.ba.flex-auto", {
                 // set tabindex to make canvas focusable
@@ -684,6 +714,8 @@ export class RuleMapView {
                 },
 
                 onmousedown: (event: MouseEvent) => {
+                    // Ignore right clicks
+                    if (event.button !== 0) return
                     this.canvas.focus()
                     if (this.mapMode === "drag") {
                         this.isDragging = true
