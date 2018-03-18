@@ -1,10 +1,5 @@
 // TODO: Menu commands -- use or remove
 
-// const
-const kPlaySoundMacroStart = "sound "
-const kPlayMusicMacroStart = "music "
-const kShowPictureMacroStart = "picture "
-
 //INDEX (search for at symbol and name)
 //Local
 //Creation/destruction

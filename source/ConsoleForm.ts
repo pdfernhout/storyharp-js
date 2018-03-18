@@ -146,7 +146,7 @@ function parseTextWithMacros(aString: string): Segment[] {
             result.push({type: SegmentType.speakText, text: remaining})
             return result
         }
-        const macro = remaining.substring(0, endPosition - 1).trim()
+        const macro = remaining.substring(0, endPosition).trim()
         remaining = remaining.substring(endPosition + 1)
         if (macro.startsWith("options")) {
             // cfk added

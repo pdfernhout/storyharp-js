@@ -12,11 +12,34 @@ import { TSVariableState, TSVariable } from "./TSVariable";
 import { TSLogicListBox } from "./TSLogicListBox";
 import { RuleEditorForm } from "./RuleEditorForm";
 
+// const
+const kPlaySoundMacroStart = "sound "
+const kPlayMusicMacroStart = "music "
+const kShowPictureMacroStart = "picture "
+
+function insertTextAtCursor(element: HTMLTextAreaElement | HTMLInputElement, textToInsert: string) {
+    let newText
+    if (element.selectionStart || element.selectionStart === 0) {
+        var startPos = element.selectionStart
+        var endPos = element.selectionEnd
+        newText = element.value.substring(0, startPos) + textToInsert + element.value.substring(endPos, element.value.length)
+        element.value = newText
+        element.selectionStart = startPos + textToInsert.length
+        element.selectionEnd = startPos + textToInsert.length
+    } else {
+        newText = element.value + textToInsert
+        element.value = newText
+    }
+    return newText
+}
+
 // TODO: Change capitalization on some method names
 export class IndividualRuleView {
     domain: TSDomain
     ruleEditorForm: RuleEditorForm
     expanded = true
+
+    replyTextArea: HTMLTextAreaElement
 
     constructor(vnode: m.Vnode) {
         this.domain = (<any>vnode.attrs).domain
@@ -162,76 +185,47 @@ export class IndividualRuleView {
         this.domain.setOrganizeByField(field, selectedVariable)
     }
 
-    /*
+    insertSoundClick(): void {
+        const url = prompt("Sound file URL?")
+        if (!url) return
 
-    MenuEditInsertSoundClick(Sender: TObject): void {
-        let fileNameWithPath: string
-        let shortFileName: string
-        
-        this.commitChangesToRule()
-        if (this.ActiveControl !== this.ReplyMemo) {
-            ShowMessage("The reply field must be selected to insert a sound file.")
-            return
+        const textToInsert = " {" + kPlaySoundMacroStart + url + "} "
+
+        const rule: TSRule | null = this.domain.editedRule
+        if (rule) {
+            const newText = insertTextAtCursor(this.replyTextArea, textToInsert)
+            rule.setReply(newText)
         }
-        fileNameWithPath = ufilesupport.getFileOpenInfo(ufilesupport.kFileTypeSound, ufilesupport.kNoSuggestedFile, "Choose a sound file", ufilesupport.kOtherExtOK)
-        if (fileNameWithPath === "") {
-            return
+    }
+
+    insertMusicClick(): void {
+        const url = prompt("Music file URL?")
+        if (!url) return
+
+        const textToInsert = " {" + kPlayMusicMacroStart + url + "} "
+
+        const rule: TSRule | null = this.domain.editedRule
+        if (rule) {
+            const newText = insertTextAtCursor(this.replyTextArea, textToInsert)
+            rule.setReply(newText)
         }
-        shortFileName = ExtractFileName(fileNameWithPath)
-        if (UNRESOLVED.pos(".WAV", uppercase(shortFileName)) === len(shortFileName) - 3) {
-            shortFileName = UNRESOLVED.copy(shortFileName, 1, len(shortFileName) - 4)
+    }
+
+    insertImageClick(): void {
+        const url = prompt("Image file URL?")
+        if (!url) return
+
+        const textToInsert = " {" + kShowPictureMacroStart + url + "} "
+
+        const rule: TSRule | null = this.domain.editedRule
+        if (rule) {
+            const newText = insertTextAtCursor(this.replyTextArea, textToInsert)
+            rule.setReply(newText)
         }
-        this.ReplyMemo.SelText = " {" + kPlaySoundMacroStart + shortFileName + "} "
     }
     
-    insertSoundClick(Sender: TObject): void {
-        this.MenuEditInsertSoundClick(this)
-    }
-    
-    InsertMusicButtonClick(Sender: TObject): void {
-        this.MenuEditInsertMusicClick(this)
-    }
-    
-    MenuEditInsertMusicClick(Sender: TObject): void {
-        let fileNameWithPath: string
-        let shortFileName: string
-        
-        this.commitChangesToRule()
-        if (this.ActiveControl !== this.ReplyMemo) {
-            ShowMessage("The reply field must be selected to insert a music file.")
-            return
-        }
-        fileNameWithPath = ufilesupport.getFileOpenInfo(ufilesupport.kFileTypeMusic, ufilesupport.kNoSuggestedFile, "Choose a music file", ufilesupport.kOtherExtOK)
-        if (fileNameWithPath === "") {
-            return
-        }
-        shortFileName = ExtractFileName(fileNameWithPath)
-        if (UNRESOLVED.pos(".MID", uppercase(shortFileName)) === len(shortFileName) - 3) {
-            shortFileName = UNRESOLVED.copy(shortFileName, 1, len(shortFileName) - 4)
-        }
-        this.ReplyMemo.SelText = " {" + kPlayMusicMacroStart + shortFileName + "} "
-    }
-    
-    MenuEditInsertPictureClick(Sender: TObject): void {
-        let fileNameWithPath: string
-        let shortFileName: string
-        
-        this.commitChangesToRule()
-        if (this.ActiveControl !== this.ReplyMemo) {
-            ShowMessage("The reply field must be selected to insert a picture file.")
-            return
-        }
-        fileNameWithPath = ufilesupport.getFileOpenInfo(ufilesupport.kFileTypeBitmap, ufilesupport.kNoSuggestedFile, "Choose a bitmap file", ufilesupport.kOtherExtNotOK)
-        if (fileNameWithPath === "") {
-            return
-        }
-        shortFileName = ExtractFileName(fileNameWithPath)
-        if (UNRESOLVED.pos(".BMP", uppercase(shortFileName)) === len(shortFileName) - 3) {
-            shortFileName = UNRESOLVED.copy(shortFileName, 1, len(shortFileName) - 4)
-        }
-        this.ReplyMemo.SelText = " {" + kShowPictureMacroStart + shortFileName + "} "
-    }
-    
+    /* TODO: use or remove -- testing reply with sound
+
     MenuRuleTestReplyClick(Sender: TObject): void {
         let oldSpeak: boolean
         let oldPlayMusic: boolean
@@ -257,7 +251,9 @@ export class IndividualRuleView {
             usdomain.domain.options.playerPlayMusic = oldPlayMusic
         }
     }
-    
+    */
+
+    /* TODO: use or remove -- more fine grained tracking of editing reply -- maybe timed autosave?
     ReplyMemoMouseUp(Sender: TObject, Button: TMouseButton, Shift: TShiftState, X: int, Y: int): void {
         // more fine grained tracking of changes to this field...
         this.commitChangesToRule()
@@ -278,8 +274,6 @@ export class IndividualRuleView {
         }
 
         function InsertMusicButtonClick() { console.log("InsertMusicButtonClick") }
-
-        function InsertSoundClick() { console.log("insertSoundClick") }
 
         function contextChange(event: { target: HTMLInputElement }) {
             if (!rule) throw new Error("Rule must be defined first")
@@ -373,24 +367,32 @@ export class IndividualRuleView {
                     },
                     "Lower",
                 ),
-                /* TODO: use or remove
-                m("button.insertSound.TSpeedButton.ml1",
-                    {
-                        onclick: InsertSoundClick,
-                        disabled: !rule,
-                        title: "Insert a sound into a reply",
-                    },
-                    "Sound",
-                ),
-                m("button.InsertMusicButton.TSpeedButton.ml1",
-                    {
-                        onclick: InsertMusicButtonClick,
-                        disabled: !rule,
-                        title: "Insert music into a reply",
-                    },
-                    "Music",
-                ),
-                */
+                (this.expanded && this.domain.editedRule) ? [
+                    m("button.insertSound.TSpeedButton.ml1",
+                        {
+                            onclick: () => this.insertSoundClick(),
+                            disabled: !rule,
+                            title: "Insert a sound into a reply",
+                        },
+                        "+Sound",
+                    ),
+                    m("button.InsertMusicButton.TSpeedButton.ml1",
+                        {
+                            onclick: () => this.insertMusicClick(),
+                            disabled: !rule,
+                            title: "Insert music into a reply",
+                        },
+                        "+Music",
+                    ),
+                    m("button.InsertImageButton.TSpeedButton.ml1",
+                        {
+                            onclick: () => this.insertImageClick(),
+                            disabled: !rule,
+                            title: "Insert picture image into a reply",
+                        },
+                        "+Picture",
+                    ),
+                ] : [],
                 m("button.ml4.w3", {
                     onclick: () => this.ruleEditorForm.search(),
                     title: "Search for a rule containing some text"
@@ -466,6 +468,10 @@ export class IndividualRuleView {
                                 style: {
                                     width: "35rem",
                                     height: "5em",
+                                },
+                                oncreate: (vnode: any) => {
+                                    console.log("on create reply memo")
+                                    this.replyTextArea = <HTMLTextAreaElement>(vnode.dom)
                                 },
                                 value: rule.reply,
                                 onchange: replyChange
