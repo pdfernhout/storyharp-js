@@ -206,7 +206,7 @@ export class ConsoleForm {
 
         return m("div.ConsoleForm.overflow-auto", { style: "height: calc(100% - 5rem)" },
             m("div.ml2.mb2",
-                m("button", { title: "Open a world file", onclick: () => loadWorldFromLocalFile(domain) }, "Load"),
+                // m("button", { title: "Open a world file", onclick: () => loadWorldFromLocalFile(domain) }, "Load"),
                 m("button.ml2.mr4", { title: "Reset current world", onclick: () => resetConsole(domain) }, "Restart"),
             ),
             m("div",

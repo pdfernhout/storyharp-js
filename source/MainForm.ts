@@ -34,10 +34,10 @@ export class MainForm {
                 m("span.ml1.i", { title: "world change count" }, domain.isWorldFileChanged() ? `<${domain.worldChangeCount}>` : "")
             ),
             m("div.mb2",
+                m(notebookTabButton(domain.activeForm === "file"), { onclick: (event: any) => setActiveForm(event, "file") }, "File"),
                 m(notebookTabButton(domain.activeForm === "console"), { onclick: (event: any) => setActiveForm(event, "console") }, "Player"),
                 m(notebookTabButton(domain.activeForm === "ruleEditor"), { onclick: (event: any) => setActiveForm(event, "ruleEditor") }, "Editor"),
-                m(notebookTabButton(domain.activeForm === "demos"), { onclick: (event: any) => setActiveForm(event, "demos") }, "Examples"),
-                m(notebookTabButton(domain.activeForm === "file"), { onclick: (event: any) => setActiveForm(event, "file") }, "File"),
+                m(notebookTabButton(domain.activeForm === "demos"), { onclick: (event: any) => setActiveForm(event, "demos") }, "Demos"),
                 m(notebookTabButton(domain.activeForm === "about"), { onclick: (event: any) => setActiveForm(event, "about") }, "About"),
             ),
             domain.activeForm === "about" ? m(AboutForm) : [],
