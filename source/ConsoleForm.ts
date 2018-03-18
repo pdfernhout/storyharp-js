@@ -4,6 +4,7 @@ import { Color } from "./common"
 import { TWorld } from "./TWorld"
 import { VariablesView } from "./VariablesView"
 import { TSDomain, TranscriptLine } from "./TSDomain"
+import { loadWorldFromLocalFile } from "./MainForm"
 
 // TODO: Shutdown sound when press escape key
 
@@ -188,6 +189,11 @@ function viewTranscriptItem(item: TranscriptLine) {
     )
 }
 
+function resetConsole(domain: TSDomain) {
+    if (!confirm("Are you sure you want to restart the world?")) return
+    domain.newSession()
+}
+
 export class ConsoleForm {
     domain: TSDomain
 
@@ -198,7 +204,11 @@ export class ConsoleForm {
     view() {
         const domain = this.domain
 
-        return m("div.overflow-auto", { style: "height: calc(100% - 5rem)" },
+        return m("div.ConsoleForm.overflow-auto", { style: "height: calc(100% - 5rem)" },
+            m("div.ml2.mb2",
+                m("button", { title: "Open a world file", onclick: () => loadWorldFromLocalFile(domain) }, "Load"),
+                m("button.ml2.mr4", { title: "Reset current world", onclick: () => resetConsole(domain) }, "Restart"),
+            ),
             m("div",
                 domain.transcript.map(viewTranscriptItem),
             ),

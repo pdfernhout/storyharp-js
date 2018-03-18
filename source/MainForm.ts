@@ -10,11 +10,6 @@ import { FileUtils } from "./FileUtils"
 import { TSJavaScriptWriter } from "./TSJavaScriptWriter"
 import { ConsoleForm } from "./ConsoleForm"
 
-function resetConsole(domain: TSDomain) {
-    if (!confirm("Are you sure you want to restart the world?")) return
-    domain.newSession()
-}
-
 function saveWorldToLocalFile(domain: TSDomain) {
     const world: TWorld = domain.world
     const fileName = makeFileNameWithoutWldExtension(domain.worldFileName)
@@ -47,7 +42,7 @@ export function confirmUnsavedChangesLoss(domain: TSDomain) {
     return true
 }
 
-function loadWorldFromLocalFile(domain: TSDomain) {
+export function loadWorldFromLocalFile(domain: TSDomain) {
     if (!confirmUnsavedChangesLoss(domain)) return
 
     const world: TWorld = domain.world
@@ -132,14 +127,9 @@ export class MainForm {
                 m(notebookTabButton(domain.activeForm === "ruleEditor"), { onclick: (event: any) => setActiveForm(event, "ruleEditor") }, "Editor"),
                 m(notebookTabButton(domain.activeForm === "demos"), { onclick: (event: any) => setActiveForm(event, "demos") }, "Examples"),
                 m(notebookTabButton(domain.activeForm === "about"), { onclick: (event: any) => setActiveForm(event, "about") }, "About"),
-                (domain.activeForm !== "about" && domain.activeForm !== "demos")
-                    ? m("button.ml4", { title: "Open a world file", onclick: () => loadWorldFromLocalFile(domain) }, "Load")
-                    : [],
-                domain.activeForm === "console" 
-                    ? m("button.ml2.mr4", { title: "Reset current world", onclick: () => resetConsole(domain) }, "Restart")
-                    : [],
                 domain.activeForm === "ruleEditor" 
                     ? [
+                        m("button.ml3", { title: "Open a world file", onclick: () => loadWorldFromLocalFile(domain) }, "Load"),
                         m("button.ml1", { title: "Save a world file", onclick: () => saveWorldToLocalFile(domain) }, "Save"),
                         m("button.ml3", { title: "Generate a standalone HTML file for this world", onclick: () => generateHTML(domain) }, "Generate"),
                         m("button.ml3", { title: "Make a new world", onclick: () => newWorld(domain) }, "New"),
