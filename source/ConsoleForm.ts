@@ -190,7 +190,7 @@ function viewTranscriptItem(item: TranscriptLine) {
 }
 
 function resetConsole(domain: TSDomain) {
-    if (!confirm("Are you sure you want to restart the world?")) return
+    if (!confirm("Are you sure you want to restart playing the world?")) return
     domain.newSession()
 }
 
@@ -207,7 +207,7 @@ export class ConsoleForm {
         return m("div.ConsoleForm.overflow-auto", { style: "height: calc(100% - 5rem)" },
             m("div.ml2.mb2",
                 // m("button", { title: "Open a world file", onclick: () => loadWorldFromLocalFile(domain) }, "Load"),
-                m("button.ml2.mr4", { title: "Reset current world", onclick: () => resetConsole(domain) }, "Restart"),
+                m("button.ml2.mr4", { title: "Reset current world", onclick: () => resetConsole(domain) }, "Restart session"),
             ),
             m("div",
                 domain.transcript.map(viewTranscriptItem),
