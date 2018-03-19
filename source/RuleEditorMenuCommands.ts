@@ -202,11 +202,6 @@ export class RuleEditorMenuCommands {
     
     // ------------------------------------------------------------------ @Commands
     
-    trackLastCommand(): void {
-        this.editRule(this.lastCommand)
-        this.updateForRuleChange()
-    }
-    
     MediaPlayerNotify(Sender: TObject): void {
         if (this.loopMusic && (this.MediaPlayer.FileName !== "") && (this.MediaPlayer.notifyValue === UNRESOLVED.nvSuccessful)) {
             this.MediaPlayer.Notify = true

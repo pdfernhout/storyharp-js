@@ -25,6 +25,7 @@ import { TSVariable } from "./TSVariable"
 // TODO: Track usage time: startTimeThisSession
 // TODO: Load mostRecentWorld on startup and maybe mostRecentSession: sessionOrWorldStartupFileName
 // TODO: Keep track of options: DomainOptionsStructure
+// TODO: Make a checkbox option somewhere for trackLastCommand
 
 // const
 const kUnsavedWorldFileName = "untitled"
@@ -120,6 +121,8 @@ export interface TSDomain {
 
     showCommandPrefixInMap: boolean
     showCommandsInMap: boolean
+
+    updateEditorAfterCommandDone: boolean
 
     newSession: () => void
     isSessionFileChanged: () => boolean
@@ -218,6 +221,8 @@ export class TSApplication implements TSDomain {
 
     showCommandPrefixInMap = false
     showCommandsInMap = true
+
+    updateEditorAfterCommandDone = true
 
     linkWizardData: LinkWizardData
     contextWizardData: ContextWizardData

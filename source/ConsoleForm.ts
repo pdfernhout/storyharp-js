@@ -1,6 +1,6 @@
 import * as m from "mithril"
 
-import { Color } from "./common"
+import { Color, ScrollIntoViewDirection } from "./common"
 import { TWorld } from "./TWorld"
 import { VariablesView } from "./VariablesView"
 import { TSDomain, TranscriptLine, fixupPath, isMediaOK } from "./TSDomain"
@@ -57,13 +57,9 @@ export function doCommand(domain: TSDomain, commandPhrase: string) {
     }   
     domain.sessionCommandList.doCommandPhrase(commandPhraseModified)
 
-    // TODO: Track last command where editor switches the edited rule
-    /*
-    if domain.options.updateEditorAfterCommandDone then
-        RuleEditorForm.trackLastCommand
-        end
-    */
-
+    if (domain.updateEditorAfterCommandDone) {
+        domain.editRule(domain.ruleEditorForm.lastCommand, ScrollIntoViewDirection.kFromTop, true)
+    }
 }
 
 function viewChoices(domain: TSDomain, scrollCallback: () => void) {
