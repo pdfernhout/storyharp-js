@@ -394,8 +394,7 @@ export class RuleMapView {
         }
         displayOptions[TSRuleField.kRuleContext] = true
         displayOptions[TSRuleField.kRuleMove] = true
-        // TODO replace below with: displayOptions[TSRuleField.kRuleCommand] = this.MenuMapsShowCommands.checked
-        displayOptions[TSRuleField.kRuleCommand] = true
+        displayOptions[TSRuleField.kRuleCommand] = this.domain.showCommandsInMap
 
         const draggedNode: TSDraggableObject | null = this.mapDrawer.nearestNode(new TPoint(
             offsetX / this.mapDrawer.scale - this.mapDrawer.scroll.X,
@@ -624,7 +623,8 @@ export class RuleMapView {
             if (!context) return
             const displayOptions = []
             displayOptions[TSRuleField.kRuleContext] = true
-            displayOptions[TSRuleField.kRuleCommand] = true
+            displayOptions[TSRuleField.kRuleMove] = true
+            displayOptions[TSRuleField.kRuleCommand] = this.domain.showCommandsInMap
             context.setLineDash([])
             context.lineDashOffset = 0
             this.mapDrawer.displayOn(context, displayOptions, null, null, world, this.domain.editedRule, this.domain.showCommandPrefixInMap)
@@ -691,6 +691,15 @@ export class RuleMapView {
                     m("button.h-75.mt1", { title: "Make a new context", onclick: () => this.PopupNewContextClick() }, "+context"),
                     m("button.ml1.h-75.mt1", { title: "Make a new command", onclick: () => this.PopupNewCommandClick() }, "+command"),
                     m("button.ml1.h-75.mt1", { title: "Make a new link", onclick: () => this.PopupNewLinkClick() }, "+link"),
+                ),
+                m("label.dib.ml2", 
+                    m("input[type=checkbox]", {
+                        checked: this.domain.showCommandsInMap || undefined,
+                        onchange: (event: { target: HTMLInputElement }) => { 
+                            this.domain.showCommandsInMap = event.target.checked
+                        }
+                    }),
+                    "commands"
                 ),
             ),
             m("div.flex-auto.ba.h-100.w-100",

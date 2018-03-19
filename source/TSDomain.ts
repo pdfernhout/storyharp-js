@@ -119,6 +119,7 @@ export interface TSDomain {
     loadWorldFromServerData: (name: string) => Promise<boolean>
 
     showCommandPrefixInMap: boolean
+    showCommandsInMap: boolean
 
     newSession: () => void
     isSessionFileChanged: () => boolean
@@ -216,6 +217,7 @@ export class TSApplication implements TSDomain {
     demoConfig: DemoConfig
 
     showCommandPrefixInMap = false
+    showCommandsInMap = true
 
     linkWizardData: LinkWizardData
     contextWizardData: ContextWizardData

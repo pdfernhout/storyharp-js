@@ -184,14 +184,6 @@ export class RuleEditorMenuCommands {
     }
 
     // -------------------------------------------------------------- @Display menu
-    MenuMapsShowCommandsClick(Sender: TObject): void {
-        this.commitChangesToRule()
-        usdomain.domain.options.showCommandsInMap = !usdomain.domain.options.showCommandsInMap
-        this.MenuMapsShowCommands.checked = usdomain.domain.options.showCommandsInMap
-        if (!this.switchToPage(this.TabSheetMap)) {
-            this.MapPaintBoxChanged()
-        }
-    }
     
     MenuMapFontClick(Sender: TObject): void {
         this.switchToPage(this.TabSheetMap)
