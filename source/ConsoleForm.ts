@@ -227,12 +227,12 @@ export class ConsoleForm {
         return m("div.ConsoleForm.h-100.w-100.flex.flex-column",
             m("div.ml2.mb2.flex-none",
                 // m("button", { title: "Open a world file", onclick: () => loadWorldFromLocalFile(domain) }, "Load"),
-                m("button.ml2.mt1.mr4", {
+                m("button.ml1.mt1", {
                     title: "Reset current world",
                     onclick: () => resetConsole(domain)
                 }, "Restart session"),
-                m("div.dib.ml2",
-                    m("button.mt1.w4", {
+                m("div.dib.ml3",
+                    m("button.mt1.w3", {
                         disabled: !domain.sessionCommandList.isUndoEnabled() || domain.sessionChangeCount <= 1,
                         onclick: () => {
                             domain.sessionCommandList.undoLast()
@@ -241,7 +241,7 @@ export class ConsoleForm {
                         },
                         title: "Undo " + domain.sessionCommandList.undoDescription()
                     }, "Undo"),
-                    m("button.ml1.mt1.w4", { 
+                    m("button.ml1.mt1.w3", { 
                         disabled: !domain.sessionCommandList.isRedoEnabled(),
                         onclick: () => {
                             domain.sessionCommandList.redoLast()
@@ -250,7 +250,7 @@ export class ConsoleForm {
                         title: "Redo " + domain.sessionCommandList.redoDescription()
                     }, "Redo"),
                 ),
-                m("div.dib.ml2",
+                m("div.dib.ml3",
                     m("label.dib.mt1",
                         m("input[type=checkbox]", {
                             checked: domain.speechSystem.optionSound || undefined,
