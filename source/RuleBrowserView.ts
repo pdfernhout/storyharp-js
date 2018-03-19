@@ -118,10 +118,9 @@ export class RuleBrowserView {
             }
         }
 
-        return m("div.h-100.overflow-hidden",
-            m("div", caption),
-            m("div.ba.pa1.overflow-auto",
-                { style: "height: calc(100% - 1rem)" },
+        return m("div.h-100.w-100.overflow-hidden.flex.flex-column",
+            m("div.flex-none", caption),
+            m("div.ba.pa1.h-100.w-100.flex-auto.overflow-auto",
                 rules.map((rule, index) => m("div.us-none" + this.styleForSelected(rule),
                     {
                         key: rule.uuid,
