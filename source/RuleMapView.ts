@@ -604,11 +604,12 @@ export class RuleMapView {
             const canvas = this.canvas
 
             // Canvas is cleared as side-effect by resizing in update
+            // Use scrollWidth & scrollHeight to prevent canvas from stretching
             this.canvas.width = this.canvas.scrollWidth
             this.canvas.height = this.canvas.scrollHeight
 
             // Keep viewportSize up-to-date as it is needed by goodPosition algorithm
-            this.domain.mapViewState.viewportSize.X = this.canvas.scrollWidth
+            this.domain.mapViewState.viewportSize.X = this.canvas.width
             this.domain.mapViewState.viewportSize.Y = this.canvas.height
 
             if (this.domain.pendingMapScroll) {
