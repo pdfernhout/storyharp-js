@@ -605,8 +605,11 @@ export class RuleMapView {
 
             // Canvas is cleared as side-effect by resizing in update
             // Use scrollWidth & scrollHeight to prevent canvas from stretching
-            this.canvas.width = this.canvas.scrollWidth
-            this.canvas.height = this.canvas.scrollHeight
+            const parentDiv: HTMLDivElement | null = <HTMLDivElement>this.canvas.parentElement
+            if (parentDiv) {
+                this.canvas.width = parentDiv.clientWidth
+                this.canvas.height = parentDiv.clientHeight
+            }
 
             // Keep viewportSize up-to-date as it is needed by goodPosition algorithm
             this.domain.mapViewState.viewportSize.X = this.canvas.width
@@ -686,141 +689,143 @@ export class RuleMapView {
                 m("button.ml1.h-75.mt1", { title: "Make a new command", onclick: () => this.PopupNewCommandClick() }, "+command"),
                 m("button.ml1.h-75.mt1", { title: "Make a new link", onclick: () => this.PopupNewLinkClick() }, "+link"),
             ),
-            m("canvas.ba.flex-auto", {
-                // set tabindex to make canvas focusable
-                tabindex: 0,
+            m("div.flex-auto.ba",
+                m("canvas", {
+                    // set tabindex to make canvas focusable
+                    tabindex: 0,
 
-                /* Experiment that does not work to show when canvas has focus via border change:
-                style: {
-                    "border-color": (this.canvas && this.canvas === document.activeElement)
-                        ? "black"
-                        : "white",
-                    // "box-sizing": "border-box",
-                },
-                */
+                    /* Experiment that does not work to show when canvas has focus via border change:
+                    style: {
+                        "border-color": (this.canvas && this.canvas === document.activeElement)
+                            ? "black"
+                            : "white",
+                        // "box-sizing": "border-box",
+                    },
+                    */
 
-                oncreate: (vnode: m.VnodeDOM) => {       
-                    this.canvas = <HTMLCanvasElement>vnode.dom
-                    drawWorld()
-                },
+                    oncreate: (vnode: m.VnodeDOM) => {       
+                        this.canvas = <HTMLCanvasElement>vnode.dom
+                        drawWorld()
+                    },
 
-                onupdate: (vnode: m.VnodeDOM) => {
-                    drawWorld()
-                },
+                    onupdate: (vnode: m.VnodeDOM) => {
+                        drawWorld()
+                    },
 
-                onblur: () => {
-                    drawWorld()
-                },
+                    onblur: () => {
+                        drawWorld()
+                    },
 
-                onmousedown: (event: MouseEvent) => {
-                    // Ignore right clicks
-                    if (event.button !== 0) return
-                    this.canvas.focus()
-                    if (this.mapMode === "drag") {
-                        this.isDragging = true
-                        ;(<any>event).redraw = false
-                        this.lastMouseLocation = new TPoint(event.offsetX, event.offsetY)
-                    } else if (this.mapMode === "zoom") {
-                        this.isZooming = true
-                        ;(<any>event).redraw = false
-                        this.lastMouseLocation = new TPoint(event.offsetX, event.offsetY)
-                    } else {
-                        this.MapImageMouseDown(event.offsetX, event.offsetY, event.ctrlKey, event.shiftKey)
-                    }
-                    return false
-                },
+                    onmousedown: (event: MouseEvent) => {
+                        // Ignore right clicks
+                        if (event.button !== 0) return
+                        this.canvas.focus()
+                        if (this.mapMode === "drag") {
+                            this.isDragging = true
+                            ;(<any>event).redraw = false
+                            this.lastMouseLocation = new TPoint(event.offsetX, event.offsetY)
+                        } else if (this.mapMode === "zoom") {
+                            this.isZooming = true
+                            ;(<any>event).redraw = false
+                            this.lastMouseLocation = new TPoint(event.offsetX, event.offsetY)
+                        } else {
+                            this.MapImageMouseDown(event.offsetX, event.offsetY, event.ctrlKey, event.shiftKey)
+                        }
+                        return false
+                    },
 
-                onmousemove: (event: MouseEvent) => {
-                    if (this.isDragging) {
-                        this.mapDrawer.scroll.X += (event.offsetX - this.lastMouseLocation.X)
-                        this.mapDrawer.scroll.Y += (event.offsetY - this.lastMouseLocation.Y)
-                        this.lastMouseLocation = new TPoint(event.offsetX, event.offsetY)
-                    } else if (this.isZooming) {
-                        const approximateDelta = event.offsetX - this.lastMouseLocation.X + event.offsetY - this.lastMouseLocation.Y
-                        this.mapDrawer.scale = Math.max(0.1, this.mapDrawer.scale + approximateDelta / 100)
-                        this.lastMouseLocation = new TPoint(event.offsetX, event.offsetY)
-                    } else {
-                        if (!this.MapImageMouseMove(event.offsetX, event.offsetY)) (<any>event).redraw = false
-                    }
-                },
+                    onmousemove: (event: MouseEvent) => {
+                        if (this.isDragging) {
+                            this.mapDrawer.scroll.X += (event.offsetX - this.lastMouseLocation.X)
+                            this.mapDrawer.scroll.Y += (event.offsetY - this.lastMouseLocation.Y)
+                            this.lastMouseLocation = new TPoint(event.offsetX, event.offsetY)
+                        } else if (this.isZooming) {
+                            const approximateDelta = event.offsetX - this.lastMouseLocation.X + event.offsetY - this.lastMouseLocation.Y
+                            this.mapDrawer.scale = Math.max(0.1, this.mapDrawer.scale + approximateDelta / 100)
+                            this.lastMouseLocation = new TPoint(event.offsetX, event.offsetY)
+                        } else {
+                            if (!this.MapImageMouseMove(event.offsetX, event.offsetY)) (<any>event).redraw = false
+                        }
+                    },
 
-                onmouseup: (event: MouseEvent) => {
-                    if (this.isDragging) {
+                    onmouseup: (event: MouseEvent) => {
+                        if (this.isDragging) {
+                            this.isDragging = false
+                            ;(<any>event).redraw = false
+                        } else if (this.isZooming) {
+                            this.isZooming = false
+                            ;(<any>event).redraw = false
+                        } else {
+                            if (!this.MapImageMouseUp(event.offsetX, event.offsetY, event.ctrlKey)) (<any>event).redraw = false
+                        }
+                    },
+
+                    onmouseout: (event: MouseEvent) => {
                         this.isDragging = false
-                        ;(<any>event).redraw = false
-                    } else if (this.isZooming) {
                         this.isZooming = false
-                        ;(<any>event).redraw = false
-                    } else {
                         if (!this.MapImageMouseUp(event.offsetX, event.offsetY, event.ctrlKey)) (<any>event).redraw = false
-                    }
-                },
+                    },
 
-                onmouseout: (event: MouseEvent) => {
-                    this.isDragging = false
-                    this.isZooming = false
-                    if (!this.MapImageMouseUp(event.offsetX, event.offsetY, event.ctrlKey)) (<any>event).redraw = false
-                },
+                    ontouchstart: (event: TouchEvent) => {
+                        if (this.mapMode === "gesture") return
+                        dispatchMouseEventForTouchEvent(event)
+                    },
 
-                ontouchstart: (event: TouchEvent) => {
-                    if (this.mapMode === "gesture") return
-                    dispatchMouseEventForTouchEvent(event)
-                },
+                    ontouchmove: (event: TouchEvent) => {
+                        if (this.mapMode === "gesture") return
+                        dispatchMouseEventForTouchEvent(event)
+                    },
 
-                ontouchmove: (event: TouchEvent) => {
-                    if (this.mapMode === "gesture") return
-                    dispatchMouseEventForTouchEvent(event)
-                },
+                    ontouchend: (event: TouchEvent) => {
+                        if (this.mapMode === "gesture") return
+                        dispatchMouseEventForTouchEvent(event)
+                    },
 
-                ontouchend: (event: TouchEvent) => {
-                    if (this.mapMode === "gesture") return
-                    dispatchMouseEventForTouchEvent(event)
-                },
+                    onkeydown: (event: KeyboardEvent) => {
+                        // Support scrollinf map with arrow keys or WASD
+                        const scrollDelta = 50
+                        switch(event.keyCode) {
+                        case 37: // left arrow
+                        case 65: // a
+                            this.mapDrawer.scroll.X += scrollDelta
+                            break
+                        case 38: // up arrow
+                        case 87: // w
+                            this.mapDrawer.scroll.Y += scrollDelta
+                            break
+                        case 39: // right arrow
+                        case 68: // d
+                            this.mapDrawer.scroll.X -= scrollDelta
+                            break
+                        case 40: // down arrow
+                        case 83: // s
+                            this.mapDrawer.scroll.Y -= scrollDelta
+                            break
+                        case 67: // c 
+                            // center map
+                            centerMap()
+                            break
+                        case 187: // plus +
+                            this.mapDrawer.scale = this.mapDrawer.scale * 1.2
+                            break
+                        case 189: // minus -
+                            this.mapDrawer.scale = this.mapDrawer.scale / 1.2
+                            break
+                        case 82: // r to reset
+                            resetMap()
+                            break
+                        default:
+                            (<any>event).redraw = false
+                            break
+                        }
+                    },
 
-                onkeydown: (event: KeyboardEvent) => {
-                    // Support scrollinf map with arrow keys or WASD
-                    const scrollDelta = 50
-                    switch(event.keyCode) {
-                    case 37: // left arrow
-                    case 65: // a
-                        this.mapDrawer.scroll.X += scrollDelta
-                        break
-                    case 38: // up arrow
-                    case 87: // w
-                        this.mapDrawer.scroll.Y += scrollDelta
-                        break
-                    case 39: // right arrow
-                    case 68: // d
-                        this.mapDrawer.scroll.X -= scrollDelta
-                        break
-                    case 40: // down arrow
-                    case 83: // s
-                        this.mapDrawer.scroll.Y -= scrollDelta
-                        break
-                    case 67: // c 
-                        // center map
-                        centerMap()
-                        break
-                    case 187: // plus +
-                        this.mapDrawer.scale = this.mapDrawer.scale * 1.2
-                        break
-                    case 189: // minus -
-                        this.mapDrawer.scale = this.mapDrawer.scale / 1.2
-                        break
-                    case 82: // r to reset
-                        resetMap()
-                        break
-                    default:
-                        (<any>event).redraw = false
-                        break
-                    }
-                },
-
-                onmousewheel: (event: MouseWheelEvent) => {
-                    this.mapDrawer.scroll.X -= (event.deltaX / this.mapDrawer.scale)
-                    this.mapDrawer.scroll.Y -= (event.deltaY / this.mapDrawer.scale)
-                },
-            }),
+                    onmousewheel: (event: MouseWheelEvent) => {
+                        this.mapDrawer.scroll.X -= (event.deltaX / this.mapDrawer.scale)
+                        this.mapDrawer.scroll.Y -= (event.deltaY / this.mapDrawer.scale)
+                    },
+                }),
+            )
         )
     }
 }
