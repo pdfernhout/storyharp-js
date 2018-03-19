@@ -124,7 +124,7 @@ export class RuleTableView {
             this.findSelectedRuleToBeScrolledIntoView(this.domain.pendingTableScroll.direction)
         }
 
-        return m(".RuleTableView.h-100.overflow-auto",
+        return m(".RuleTableView.h-100.w-100.overflow-auto",
             m("table.collapse",
                 // Ensure room for borders to avoid scroller
                 { style: "width: calc(100% - 2px)" },

@@ -254,7 +254,7 @@ export class RuleBrowserView {
         if (this.domain.pendingBrowserScroll) {
             this.setOrganizeByField(this.domain.browseBy)
         }
-        return m(".RuleBrowserView.div.flex.flex-row.h-100.overflow-hidden",
+        return m(".RuleBrowserView.div.flex.flex-row.h-100.w-100.overflow-hidden",
             m("div.w-30.h-100.overflow-hidden",
                 this.viewFirstListBox(),
             ),
