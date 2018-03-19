@@ -26,6 +26,12 @@ import { TSVariable } from "./TSVariable"
 // TODO: Load mostRecentWorld on startup and maybe mostRecentSession: sessionOrWorldStartupFileName
 // TODO: Keep track of options: DomainOptionsStructure
 // TODO: Make a checkbox option somewhere for trackLastCommand
+// TODO: Implement music looping as option (maybe)
+// TODO: Make the map font selectable
+// TODO: Make the player font selectable
+// TODO: Make the editor font selectable
+// TODO: Maybe make preferences panel and save them to localStorage
+// TODO: Maybe support alternative glyphs as images (buttonSymbols)
 
 // const
 const kUnsavedWorldFileName = "untitled"
