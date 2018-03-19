@@ -149,7 +149,7 @@ look at the sky some more
 The sky is still the same. Except for the pterodactyl circling, nothing much is happening. You're glad Harold is getting some exercise in the good weather. Maybe he'll stop chewing on the bedpost.
 
 saw harold
-looked at sky & ~saw harold & found toy
+looked at sky & ~saw harold & looked at toy
 255,359|201,172|0,0
 ====================
 yard
@@ -202,7 +202,7 @@ poked around in the herb garden
 ====================
 yard
 turn over the herb garden
-You think about turning over the herb garden, maybe just a little of it, right now. Why not? It's a beautiful day, Harold is busy, and you've got the time. You go and get your trowel. What's this? Oh, Harold's been out here hiding his toys again. Here's one of his diamond rings. Where does he get these things? The ring's sparkle dims for a moment as a shadow passes by from above.
+You think about turning over the herb garden, maybe just a little of it, right now. Why not? It's a beautiful day, Harold is busy, and you've got the time. You go and get your trowel. What's this? Oh, Harold's been out here hiding his toys again. Here's one of his diamond rings. Where does he get these things?
 
 found toy
 poked around in the herb garden & ~found toy
@@ -210,7 +210,7 @@ poked around in the herb garden & ~found toy
 ====================
 yard
 look at the diamond ring
-You clean off the diamond ring with your bathrobe. Yeah, it's another one of the jewel-heist rings. It would be a lot easier if he could keep his toys in the toy box. You put it in your pocket to put it away later.
+You clean off the diamond ring with your bathrobe. Yeah, it's another one of the jewel-heist rings. It would be a lot easier if he could keep his toys in the toy box. The ring's sparkle dims for a moment as a shadow passes by from above. You put it in your pocket to put it away later.
 
 looked at toy
 found toy & ~looked at toy
