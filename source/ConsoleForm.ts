@@ -227,11 +227,11 @@ export class ConsoleForm {
         return m("div.ConsoleForm.flex.flex-column", { style: "height: calc(100% - 5rem)" },
             m("div.ml2.mb2.flex-none",
                 // m("button", { title: "Open a world file", onclick: () => loadWorldFromLocalFile(domain) }, "Load"),
-                m("button.ml2.mr4", {
+                m("button.ml2.mt1.mr4", {
                     title: "Reset current world",
                     onclick: () => resetConsole(domain)
                 }, "Restart session"),
-                m("button.ml3.w4", {
+                m("button.ml3.mt1.w4", {
                     disabled: !domain.sessionCommandList.isUndoEnabled() || domain.sessionChangeCount <= 1,
                     onclick: () => {
                         domain.sessionCommandList.undoLast()
@@ -240,7 +240,7 @@ export class ConsoleForm {
                     },
                     title: "Undo " + domain.sessionCommandList.undoDescription()
                 }, "Undo"),
-                m("button.ml1.w4", { 
+                m("button.ml1.mt1.w4", { 
                     disabled: !domain.sessionCommandList.isRedoEnabled(),
                     onclick: () => {
                         domain.sessionCommandList.redoLast()
@@ -248,7 +248,7 @@ export class ConsoleForm {
                     },
                     title: "Redo " + domain.sessionCommandList.redoDescription()
                 }, "Redo"),
-                m("input[type=checkbox].ml2", {
+                m("input[type=checkbox].ml2.mt1", {
                     checked: domain.speechSystem.optionSound || undefined,
                     onchange: (event: { target: HTMLInputElement }) => { 
                         domain.speechSystem.optionSound = event.target.checked
@@ -257,7 +257,7 @@ export class ConsoleForm {
                         }
                     }
                 }), "sound",
-                m("input[type=checkbox].ml2", {
+                m("input[type=checkbox].ml2.mt1", {
                     checked: domain.speechSystem.optionSpeech || undefined,
                     onchange: (event: { target: HTMLInputElement }) => { 
                         domain.speechSystem.optionSpeech = event.target.checked
@@ -266,7 +266,7 @@ export class ConsoleForm {
                         }
                     }
                 }), "speech",
-                m("input[type=checkbox].ml2", {
+                m("input[type=checkbox].ml2.mt1", {
                     checked: domain.speechSystem.optionPicture || undefined,
                     onchange: (event: { target: HTMLInputElement }) => { 
                         domain.speechSystem.optionPicture = event.target.checked
