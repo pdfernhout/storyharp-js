@@ -234,6 +234,7 @@ export class ConsoleForm {
                     onclick: () => {
                         domain.sessionCommandList.undoLast()
                         this.scrollEndOfTranscriptIntoView()
+                        domain.speechSystem.haltSpeechAndSoundAndMusic()
                     },
                     title: "Undo " + domain.sessionCommandList.undoDescription()
                 }, "Undo"),
