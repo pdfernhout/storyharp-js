@@ -20,6 +20,12 @@ import { TSVariable } from "./TSVariable"
 // Most of them live in billions of space habitats called 'gardens'.
 // These are their stories...
 
+// TODO: support playerOnly mode
+// TODO: Support specifying a world file (or maybe session) at startup (loadFileAtStartup)
+// TODO: Track usage time: startTimeThisSession
+// TODO: Load mostRecentWorld on startup and maybe mostRecentSession: sessionOrWorldStartupFileName
+// TODO: Keep track of options: DomainOptionsStructure
+
 // const
 const kUnsavedWorldFileName = "untitled"
 const kUnsavedSessionFileName = "untitled"
@@ -411,76 +417,6 @@ export class TSApplication implements TSDomain {
         //  result.y := result.y + random(200) - 100;   
         return result
     }
-
-    /* TODO: Use or remove
-
-    options: DomainOptionsStructure = new DomainOptionsStructure()
-    iniFileName: string = ""
-    sessionOrWorldStartupFileName: string = ""
-    playerOnly: boolean = false
-    useIniFile: boolean = false
-
-    startTimeThisSession: TDateTime = new TDateTime()
-    
-    create(): void {
-
-        this.sessionOrWorldStartupFileName = ""
-        this.playerOnly = false
-        this.useIniFile = true
-        this.iniFileName = kDefaultIniFileName
-        this.readCommandLine()
-        this.readIniFile()
-        this.startTimeThisSession = UNRESOLVED.Now
-    }
-    
-    readCommandLine(): void {
-        let i: int
-        
-        if (UNRESOLVED.ParamCount > 0) {
-            for (i = 1; i <= UNRESOLVED.ParamCount; i++) {
-                if (uppercase(UNRESOLVED.ParamStr(i)) === "/I=") {
-                    this.useIniFile = false
-                } else if (uppercase(UNRESOLVED.ParamStr(i)) === "/I") {
-                    this.useIniFile = false
-                } else if (UNRESOLVED.pos("/I=", uppercase(UNRESOLVED.ParamStr(i))) === 1) {
-                    this.iniFileName = UNRESOLVED.copy(UNRESOLVED.ParamStr(i), 4, len(UNRESOLVED.ParamStr(i)))
-                } else if (UNRESOLVED.pos("/I", uppercase(UNRESOLVED.ParamStr(i))) === 1) {
-                    this.iniFileName = UNRESOLVED.copy(UNRESOLVED.ParamStr(i), 3, len(UNRESOLVED.ParamStr(i)))
-                } else if (UNRESOLVED.pos("/P", uppercase(UNRESOLVED.ParamStr(i))) === 1) {
-                    this.playerOnly = true
-                } else if ((this.sessionOrWorldStartupFileName === "") && (UNRESOLVED.pos("/", uppercase(UNRESOLVED.ParamStr(i))) !== 1)) {
-                    this.sessionOrWorldStartupFileName = UNRESOLVED.ParamStr(i)
-                } else {
-                    ShowMessage("Improper parameter string " + UNRESOLVED.ParamStr(i))
-                }
-            }
-        }
-    }
-    
-    loadFileAtStartupAndInitializeForms(): void {
-        let Year: byte
-        let Month: byte
-        let Day: byte
-        
-        if (this.sessionOrWorldStartupFileName !== "") {
-            usconsoleform.ConsoleForm.openSessionOrWorldFile(UNRESOLVED.ParamStr(1))
-        } else {
-            if ((this.options.mostRecentSession !== "") && (FileExists(this.options.mostRecentSession))) {
-                usconsoleform.ConsoleForm.openSessionOrWorldFile(this.options.mostRecentSession)
-            } else if ((this.options.mostRecentWorld !== "") && (FileExists(this.options.mostRecentWorld))) {
-                usconsoleform.ConsoleForm.openSessionOrWorldFile(this.options.mostRecentWorld)
-            }
-        }
-        if (this.playerOnly) {
-            usconsoleform.ConsoleForm.playerOnly()
-        }
-        usconsoleform.ConsoleForm.updateForRegistrationChange()
-        usconsoleform.ConsoleForm.updateTitles()
-        usruleeditorform.RuleEditorForm.MapPaintBoxChanged()
-        usruleeditorform.RuleEditorForm.updateViews()
-        usruleeditorform.RuleEditorForm.editRule(null)
-    }
-*/
 
     updateForNewOrLoadedWorld(fileName: string, isWorldFileLoaded: boolean): void {
         this.addToLog("--- world change: " + fileName)
