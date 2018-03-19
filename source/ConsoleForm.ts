@@ -231,47 +231,60 @@ export class ConsoleForm {
                     title: "Reset current world",
                     onclick: () => resetConsole(domain)
                 }, "Restart session"),
-                m("button.ml3.mt1.w4", {
-                    disabled: !domain.sessionCommandList.isUndoEnabled() || domain.sessionChangeCount <= 1,
-                    onclick: () => {
-                        domain.sessionCommandList.undoLast()
-                        this.scrollEndOfTranscriptIntoView()
-                        domain.speechSystem.haltSpeechAndSoundAndMusic()
-                    },
-                    title: "Undo " + domain.sessionCommandList.undoDescription()
-                }, "Undo"),
-                m("button.ml1.mt1.w4", { 
-                    disabled: !domain.sessionCommandList.isRedoEnabled(),
-                    onclick: () => {
-                        domain.sessionCommandList.redoLast()
-                        this.scrollEndOfTranscriptIntoView()
-                    },
-                    title: "Redo " + domain.sessionCommandList.redoDescription()
-                }, "Redo"),
-                m("input[type=checkbox].ml2.mt1", {
-                    checked: domain.speechSystem.optionSound || undefined,
-                    onchange: (event: { target: HTMLInputElement }) => { 
-                        domain.speechSystem.optionSound = event.target.checked
-                        if (!domain.speechSystem.optionSound) {
+                m("div.dib.ml2",
+                    m("button.mt1.w4", {
+                        disabled: !domain.sessionCommandList.isUndoEnabled() || domain.sessionChangeCount <= 1,
+                        onclick: () => {
+                            domain.sessionCommandList.undoLast()
+                            this.scrollEndOfTranscriptIntoView()
                             domain.speechSystem.haltSpeechAndSoundAndMusic()
-                        }
-                    }
-                }), "sound",
-                m("input[type=checkbox].ml2.mt1", {
-                    checked: domain.speechSystem.optionSpeech || undefined,
-                    onchange: (event: { target: HTMLInputElement }) => { 
-                        domain.speechSystem.optionSpeech = event.target.checked
-                        if (!domain.speechSystem.optionSpeech) {
-                            domain.speechSystem.haltSpeechAndSoundAndMusic()
-                        }
-                    }
-                }), "speech",
-                m("input[type=checkbox].ml2.mt1", {
-                    checked: domain.speechSystem.optionPicture || undefined,
-                    onchange: (event: { target: HTMLInputElement }) => { 
-                        domain.speechSystem.optionPicture = event.target.checked
-                    }
-                }), "pictures",
+                        },
+                        title: "Undo " + domain.sessionCommandList.undoDescription()
+                    }, "Undo"),
+                    m("button.ml1.mt1.w4", { 
+                        disabled: !domain.sessionCommandList.isRedoEnabled(),
+                        onclick: () => {
+                            domain.sessionCommandList.redoLast()
+                            this.scrollEndOfTranscriptIntoView()
+                        },
+                        title: "Redo " + domain.sessionCommandList.redoDescription()
+                    }, "Redo"),
+                ),
+                m("div.dib.ml2",
+                    m("label.dib.mt1",
+                        m("input[type=checkbox]", {
+                            checked: domain.speechSystem.optionSound || undefined,
+                            onchange: (event: { target: HTMLInputElement }) => { 
+                                domain.speechSystem.optionSound = event.target.checked
+                                if (!domain.speechSystem.optionSound) {
+                                    domain.speechSystem.haltSpeechAndSoundAndMusic()
+                                }
+                            }
+                        }),
+                        "sound",
+                    ),
+                    m("label.dib.ml2.mt1",
+                        m("input[type=checkbox]", {
+                            checked: domain.speechSystem.optionSpeech || undefined,
+                            onchange: (event: { target: HTMLInputElement }) => { 
+                                domain.speechSystem.optionSpeech = event.target.checked
+                                if (!domain.speechSystem.optionSpeech) {
+                                    domain.speechSystem.haltSpeechAndSoundAndMusic()
+                                }
+                            }
+                        }),
+                        "speech",
+                    ),
+                    m("label.dib.ml2.mt1",
+                        m("input[type=checkbox]", {
+                            checked: domain.speechSystem.optionPicture || undefined,
+                            onchange: (event: { target: HTMLInputElement }) => { 
+                                domain.speechSystem.optionPicture = event.target.checked
+                            }
+                        }),
+                        "pictures",
+                    ),
+                ),
             ),
             (!domain.sessionChangeCount && domain.transcript.length <= 1)
                 ? m("div.flex-none",

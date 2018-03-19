@@ -289,14 +289,16 @@ export class CommandWizardView {
                 m("div", "Do you want to link your new commands in sequence, so that each becomes available only after the previous one is said?"),
 
                 m("div.ma2",
-                    m("input[type=checkbox].ml1", {
-                        checked: doSequence || undefined,
-                        onchange: (event: { target: HTMLInputElement }) => { 
-                            this.commandWizardData.doSequence = event.target.checked 
-                            if (this.wasGenerateRulesPressed) this.checkInputForErrors()
-                        }
-                    }),
-                    m("span.ml1", "Yes, link the commands in a sequence."),
+                    m("label.dib.ml1",
+                        m("input[type=checkbox]", {
+                            checked: doSequence || undefined,
+                            onchange: (event: { target: HTMLInputElement }) => { 
+                                this.commandWizardData.doSequence = event.target.checked 
+                                if (this.wasGenerateRulesPressed) this.checkInputForErrors()
+                            }
+                        }),
+                        m("span.ml1", "Yes, link the commands in a sequence."),
+                    ),
                 ),
 
                 m("div.ml2" + (doSequence ? "" : ".gray"),
