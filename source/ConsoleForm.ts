@@ -232,7 +232,7 @@ export class ConsoleForm {
                     onclick: () => resetConsole(domain)
                 }, "Restart session"),
                 m("button.ml3.w4", {
-                    disabled: !domain.sessionCommandList.isUndoEnabled(),
+                    disabled: !domain.sessionCommandList.isUndoEnabled() || domain.sessionChangeCount <= 1,
                     onclick: () => {
                         domain.sessionCommandList.undoLast()
                         this.scrollEndOfTranscriptIntoView()
@@ -273,23 +273,25 @@ export class ConsoleForm {
                     }
                 }), "pictures",
             ),
-            domain.sessionChangeCount ? [] : m("div.flex-none",
-                m("button.ml5.mt5.w5.blue", {
-                    onclick: () => startSession(domain)
-                }, m("span.f2", "Start ▶"))
-            ),
-            m("div.flex-auto.overflow-auto.flex.flex-column-reverse",
-                {
-                    oncreate: (vnode: any) => {
-                    this.transcriptDiv = <HTMLDivElement>(vnode.dom)
-                    },
-                },
-                // TODO: Improve this inefficient full copy and reverse
-                domain.transcript.slice(0).reverse().map(viewTranscriptItem.bind(domain)),
-            ),
-            m("div.flex-none",
-                viewChoices(domain, this.scrollEndOfTranscriptIntoView.bind(this)),
-            ),
+            (!domain.sessionChangeCount && domain.transcript.length <= 1)
+                ? m("div.flex-none",
+                    m("button.ml5.mt5.w5.blue", {
+                        onclick: () => startSession(domain)
+                    }, m("span.f2", "Start ▶")))
+                : [
+                    m("div.flex-auto.overflow-auto.flex.flex-column-reverse",
+                        {
+                            oncreate: (vnode: any) => {
+                            this.transcriptDiv = <HTMLDivElement>(vnode.dom)
+                            },
+                        },
+                        // TODO: Improve this inefficient full copy and reverse
+                        domain.transcript.slice(0).reverse().map(viewTranscriptItem.bind(domain)),
+                    ),
+                    (!domain.sessionChangeCount && domain.transcript.length <= 1) ? [] : m("div.flex-none",
+                        viewChoices(domain, this.scrollEndOfTranscriptIntoView.bind(this)),
+                    ),
+                ],
             m(VariablesView, <any>{domain}),
         )
     }
