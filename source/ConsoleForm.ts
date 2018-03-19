@@ -194,6 +194,14 @@ function resetConsole(domain: TSDomain) {
     if (!confirm("Are you sure you want to restart playing the world?")) return
     domain.speechSystem.haltSpeechAndSoundAndMusic()
     domain.newSession()
+    startSession(domain)
+}
+
+function startSession(domain: TSDomain) {
+    if (domain.world.rules.length > 0) {
+        // TODO: This used to call doCommand in the speechSystem -- but made change -- consider other ramifications?
+        domain.consoleForm.doCommand(domain, domain.world.rules[0].command.phrase)
+    }
 }
 
 export class ConsoleForm {
@@ -267,12 +275,7 @@ export class ConsoleForm {
             ),
             domain.sessionChangeCount ? [] : m("div.flex-none",
                 m("button.ml5.mt5.w5.blue", {
-                    onclick: () => {
-                        if (domain.world.rules.length > 0) {
-                            // TODO: This used to call doCommand in the speechSystem -- but made change -- consider other ramifications?
-                            domain.consoleForm.doCommand(domain, domain.world.rules[0].command.phrase)
-                        }
-                    }
+                    onclick: () => startSession(domain)
                 }, m("span.f2", "Start ▶"))
             ),
             m("div.flex-auto.overflow-auto.flex.flex-column-reverse",
