@@ -10,7 +10,7 @@ map positions
 ====================
 introduction
 tell me a story about the future
-{music  passport.mid} It is the dawn of the third millennium. The laws of space and time keep most humans within a light year of the sun. Most people live in the billions of space habitats they call 'gardens'. Our story begins as you enter the lobby of a posh hotel on Earth.{sound Conversa.wav} You are there to meet your uncle.{sound Giggle.wav}
+{music passport.mid} It is the dawn of the third millennium. The laws of space and time keep most humans within a light year of the sun. Most people live in the billions of space habitats they call "gardens". Our story begins as you enter the lobby of a posh hotel on Earth.{sound Conversa.wav} You are there to meet your uncle.{sound Giggle.wav}
 lobby2
 inventory
 
@@ -746,7 +746,7 @@ You are further in the hotel lobby near a fireplace. A burly porter is standing 
 ====================
 lobby
 examine the fireplace
-{sound tada} It has the phrase 'the plains' carved on the mantelpiece.
+{sound tada} It has the phrase "the plains" carved on the mantelpiece.
 
 examined the fireplace
 
@@ -761,8 +761,8 @@ talked to the old man
 1331,-143|1519,-228|0,0
 ====================
 lobby
-ask the young man to translate 'the plains' into French
-He says, Oh, that's easy. 'Des Moines'.
+ask the young man to translate "the plains" into French
+He says, Oh, that's easy. "Des Moines".
 
 
 examined the fireplace & talked to the old man
@@ -778,7 +778,7 @@ He says you need to answer the capital of Iowa to win the game.
 ====================
 lobby
 give me a hint
-{sound raspberry}Oh, come on. You have to figure this out on your own. Try a road atlas if all else fails. But if you're still having trouble, you need to say 'answer' and the name of the place, like 'answer New York City'. That is wrong by the way!
+{sound raspberry}Oh, come on. You have to figure this out on your own. Try a road atlas if all else fails. But if you're still having trouble, you need to say "answer" and the name of the place, like "answer New York City". That is wrong by the way!
 
 
 
@@ -802,7 +802,7 @@ $answer Ames
 ====================
 lobby
 $answer Des Moines
-Des Moines means 'the plains'. {sound clangy bells}You win! Just kidding. You didn't think it was that easy to win did you? To really win, you have to answer the Sphinx's question while in the space habitat.
+Des Moines means "the plains". {sound clangy bells}You win! Just kidding. You didn't think it was that easy to win did you? To really win, you have to answer the Sphinx's question while in the space habitat.
 
 
 
@@ -898,7 +898,7 @@ sequestered
 ====================
 inventory
 inventory
-a paper book entitled: 'the space habitat menace and how to expunge it',
+a paper book entitled: "The Space Habitat Menace And How To Expunge It",
 
 
 sequestered
@@ -1242,7 +1242,7 @@ battle armor worn
 ====================
 reception lounge
 go down the stairs
-A voice inside your head says: 'No, first  you must activate the striker virus here so that we may expunge the menace. Then you must make your way to the main computer core."
+A voice inside your head says: "No, first  you must activate the striker virus here so that we may expunge the menace. Then you must make your way to the main computer core."
 
 
 ~virus active
