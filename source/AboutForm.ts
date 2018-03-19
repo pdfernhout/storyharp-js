@@ -9,7 +9,7 @@ let showAuthoringHelp = false
 export class AboutForm {
 
     view() {
-        return m("div.overflow-auto", { style: "height: calc(100% - 7rem)" },
+        return m("div.h-100.w-100.overflow-auto",
             m("img", { style: "float: left", src: "resources/harp.png", alt: "Picture of a harp" }),
             m("h3", "StoryHarp v" + storyHarpVersion),
             m("p", `

@@ -141,7 +141,7 @@ export class LogView {
                 }, "Clear log"),
             ),
             dbFailed ? m("div.red.flex-none", "Something went wrong with the log") : [],
-            m("div.overflow-auto.flex-auto",
+            m("div.h-100.w-100.overflow-auto.flex-auto",
                 log.map(text => m("pre.pre-wrap", text))
             )
         )

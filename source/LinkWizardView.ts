@@ -228,7 +228,7 @@ export class LinkWizardView {
             return showHelp ? m("p", ...args) : []
         }
         
-        return m(".LinkWizardForm.h-100.overflow-auto",
+        return m(".LinkWizardView.h-100.w-100.overflow-auto",
             {
             },
             m("div",

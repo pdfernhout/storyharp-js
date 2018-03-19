@@ -11,7 +11,7 @@ export class DemoFilesForm {
     
     view() {
         const domain = this.domain
-        return m("div.overflow-auto", { style: "height: calc(100% - 7rem)" },
+        return m("div.h-100.w-100.overflow-auto",
             m("div", "Choose a demo world file to load:"),
             m("br"),
             m("table.ml2", { style: "border-spacing: 0.5rem" },

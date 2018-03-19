@@ -40,7 +40,7 @@ export class RuleEditorForm {
                 m(notebookTabButton(currentWizard === "command"),  { onclick: (event: Event) => this.setCurrentWizard(event, "command") }, "Command"),
                 m(notebookTabButton(currentWizard === "link"),  { onclick: (event: Event) => this.setCurrentWizard(event, "link") }, "Link"),
             ),
-            m("div.WizardHolder.w-100.h-100.flex-auto",
+            m("div.WizardHolder.w-100.h-100.flex-auto.overflow-hidden",
                 currentWizard === "context" ? m(ContextWizardView, <any>{domain: domain}) : [],
                 currentWizard === "command" ? m(CommandWizardView, <any>{domain: domain}) : [],
                 currentWizard === "link" ? m(LinkWizardView, <any>{domain: domain}) : [],
@@ -113,8 +113,7 @@ export class RuleEditorForm {
         const currentView = this.domain.currentEditorView
         const domain = this.domain
 
-        return m(".RuleEditorForm.ml3.flex.flex-column.flex-nowrap.overflow-hidden",
-            { style: "height: calc(100% - 5rem)" },
+        return m(".RuleEditorForm.h-100.w-100.flex.flex-column.flex-nowrap.overflow-hidden",
             m("div.flex-none.mb2",
                 m("span", "Rule Editor:"),
                 m(notebookTabButton(currentView === "table"), { onclick: (event: Event) => this.setCurrentView(event, "table") }, "Table"),
@@ -122,12 +121,12 @@ export class RuleEditorForm {
                 m(notebookTabButton(currentView === "browser"),  { onclick: (event: Event) => this.setCurrentView(event, "browser") }, "Browser"),
                 m(notebookTabButton(currentView === "wizards"),  { onclick: (event: Event) => this.setCurrentView(event, "wizards") }, "Wizards"),
                 m(notebookTabButton(currentView === "log"),  { onclick: (event: Event) => this.setCurrentView(event, "log") }, "Log"),
-                m("button.ml4.w3", {
+                m("button.ml4.w3.mt1", {
                     disabled: !domain.worldCommandList.isUndoEnabled(),
                     onclick: () => domain.worldCommandList.undoLast(),
                     title: "Undo " + domain.worldCommandList.undoDescription()
                 }, "Undo"),
-                m("button.ml1.w3", { 
+                m("button.ml1.w3.mt1", { 
                     disabled: !domain.worldCommandList.isRedoEnabled(),
                     onclick: () => domain.worldCommandList.redoLast(),
                     title: "Redo " + domain.worldCommandList.redoDescription()

@@ -142,7 +142,7 @@ export class ContextWizardView {
             return showHelp ? m("p", ...args) : []
         }
         
-        return m(".ContextWizardView.h-100.overflow-auto",
+        return m(".ContextWizardView.h-100.w-100.overflow-auto",
             {
             },
             m("div",

@@ -205,7 +205,7 @@ export class CommandWizardView {
         }
         const doSequence = this.commandWizardData.doSequence
 
-        return m(".CommandWizardView.h-100.overflow-auto",
+        return m(".CommandWizardView.h-100.w-100.overflow-auto",
             {
             },
             m("div",

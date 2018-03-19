@@ -224,7 +224,7 @@ export class ConsoleForm {
     view() {
         const domain = this.domain
 
-        return m("div.ConsoleForm.flex.flex-column", { style: "height: calc(100% - 5rem)" },
+        return m("div.ConsoleForm.h-100.w-100.flex.flex-column",
             m("div.ml2.mb2.flex-none",
                 // m("button", { title: "Open a world file", onclick: () => loadWorldFromLocalFile(domain) }, "Load"),
                 m("button.ml2.mt1.mr4", {

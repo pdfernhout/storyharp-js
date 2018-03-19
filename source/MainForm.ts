@@ -26,25 +26,28 @@ export class MainForm {
             }
         }
     
-        return m(".MainForm.ml3.h-100.overflow-hidden",
-            m("div.mt1.mb1",
+        // For layout checking: return m("div.ba.ma3.pa3.overflow-hidden", { style: "width:600px; height: 600px" }, 
+        return m(".MainForm.pa2.h-100.w-100.overflow-hidden.flex.flex-column",
+            m("div.mt1.mb1.flex-none",
                 m("span.f5.b", "StoryHarp:"),
                 // m("span.ml1", "World:"),
                 m("span.i.ml1", "" + makeFileNameWithoutWldExtension(domain.worldFileName)),
                 m("span.ml1.i", { title: "world change count" }, domain.isWorldFileChanged() ? `<${domain.worldChangeCount}>` : "")
             ),
-            m("div.mb2",
+            m("div.mb2.flex-none",
                 m(notebookTabButton(domain.activeForm === "file"), { onclick: (event: any) => setActiveForm(event, "file") }, "File"),
                 m(notebookTabButton(domain.activeForm === "console"), { onclick: (event: any) => setActiveForm(event, "console") }, "Player"),
                 m(notebookTabButton(domain.activeForm === "ruleEditor"), { onclick: (event: any) => setActiveForm(event, "ruleEditor") }, "Editor"),
                 m(notebookTabButton(domain.activeForm === "demos"), { onclick: (event: any) => setActiveForm(event, "demos") }, "Demos"),
                 m(notebookTabButton(domain.activeForm === "about"), { onclick: (event: any) => setActiveForm(event, "about") }, "About"),
             ),
-            domain.activeForm === "about" ? m(AboutForm) : [],
-            domain.activeForm === "demos" ? m(DemoFilesForm, <any>{domain: domain}) : [],
-            domain.activeForm === "console" ? m(ConsoleForm, <any>{domain: domain}) : [],
-            domain.activeForm === "ruleEditor" ? m(RuleEditorForm, <any>{domain: domain}) : [],
-            domain.activeForm === "file" ? m(FileForm, <any>{domain: domain}) : [],
+            m("div.h-100.w-100.flex-auto.overflow-hidden",
+                domain.activeForm === "about" ? m(AboutForm) : [],
+                domain.activeForm === "demos" ? m(DemoFilesForm, <any>{domain: domain}) : [],
+                domain.activeForm === "console" ? m(ConsoleForm, <any>{domain: domain}) : [],
+                domain.activeForm === "ruleEditor" ? m(RuleEditorForm, <any>{domain: domain}) : [],
+                domain.activeForm === "file" ? m(FileForm, <any>{domain: domain}) : [],
+            )
         )
     }
 }
