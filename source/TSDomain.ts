@@ -524,11 +524,6 @@ export class TSApplication implements TSDomain {
 
         this.sessionFileName = kUnsavedSessionFileName + "." + kSessionExtension
         this.sessionChangeCount = 0
-
-        if (this.world.rules.length > 0) {
-            // TODO: This used to call doCommand in the speechSystem -- but made change -- consider other ramifications?
-            this.consoleForm.doCommand(this, this.world.rules[0].command.phrase)
-        }
     }
 
     /* TODO: Use or remove
