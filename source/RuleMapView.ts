@@ -206,7 +206,7 @@ export class RuleMapView {
             numNewContextsMadeByPopupMenuThisSession += 1
         }
 
-        const newContextName = prompt("New context name?", "new context " + numNewContextsMadeByPopupMenuThisSession)
+        const newContextName = prompt("New context name?", "new context " + (numNewContextsMadeByPopupMenuThisSession + 1))
         if (!newContextName) return
 
         const newRulesCommand: TSNewRulesCommand = new TSNewRulesCommand(this.domain)
@@ -235,7 +235,7 @@ export class RuleMapView {
             numNewCommandsMadeByPopupMenuThisSession += 1
         }
 
-        const newCommandName = prompt("New command phrase?", "new command " + numNewCommandsMadeByPopupMenuThisSession)
+        const newCommandName = prompt("New command phrase?", "new command " + (numNewCommandsMadeByPopupMenuThisSession + 1))
         if (!newCommandName) return
 
         let newRuleCount = 0
