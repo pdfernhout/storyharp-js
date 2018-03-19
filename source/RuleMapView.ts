@@ -678,7 +678,7 @@ export class RuleMapView {
         }
 
         return m(".RuleMapView.h-100.w-100.overflow-hidden.flex.flex-column",
-            m("div.h2.flex-none", 
+            m("div.flex-none", 
                 m("button.ml1.h-75.br-pill.w-6rem.mt1", { onclick: () => this.mapMode = "select" }, indicator("select")),
                 m("button.ml1.h-75.br-pill.w-6rem.mt1", { onclick: () => this.mapMode = "drag" }, indicator("drag")),
                 m("button.ml1.h-75.br-pill.w-6rem.mt1", { onclick: () => this.mapMode = "zoom" }, indicator("zoom")),
@@ -689,7 +689,7 @@ export class RuleMapView {
                 m("button.ml1.h-75.mt1", { title: "Make a new command", onclick: () => this.PopupNewCommandClick() }, "+command"),
                 m("button.ml1.h-75.mt1", { title: "Make a new link", onclick: () => this.PopupNewLinkClick() }, "+link"),
             ),
-            m("div.flex-auto.ba",
+            m("div.flex-auto.ba.h-100.w-100",
                 m("canvas", {
                     // set tabindex to make canvas focusable
                     tabindex: 0,
