@@ -202,7 +202,7 @@ function startSession(domain: TSDomain) {
         // TODO: This used to call doCommand in the speechSystem -- but made change -- consider other ramifications?
         domain.consoleForm.doCommand(domain, domain.world.rules[0].command.phrase)
     } else {
-        alert("This world has no rules yet and so can't be started."
+        alert("This world has no rules yet and so can't be started.")
     }
 }
 
