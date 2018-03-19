@@ -121,16 +121,18 @@ export class RuleEditorForm {
                 m(notebookTabButton(currentView === "browser"),  { onclick: (event: Event) => this.setCurrentView(event, "browser") }, "Browser"),
                 m(notebookTabButton(currentView === "wizards"),  { onclick: (event: Event) => this.setCurrentView(event, "wizards") }, "Wizards"),
                 m(notebookTabButton(currentView === "log"),  { onclick: (event: Event) => this.setCurrentView(event, "log") }, "Log"),
-                m("button.ml4.w3.mt1", {
-                    disabled: !domain.worldCommandList.isUndoEnabled(),
-                    onclick: () => domain.worldCommandList.undoLast(),
-                    title: "Undo " + domain.worldCommandList.undoDescription()
-                }, "Undo"),
-                m("button.ml1.w3.mt1", { 
-                    disabled: !domain.worldCommandList.isRedoEnabled(),
-                    onclick: () => domain.worldCommandList.redoLast(),
-                    title: "Redo " + domain.worldCommandList.redoDescription()
-                }, "Redo"),
+                m("div.dib.ml4",
+                    m("button.w3.mt1", {
+                        disabled: !domain.worldCommandList.isUndoEnabled(),
+                        onclick: () => domain.worldCommandList.undoLast(),
+                        title: "Undo " + domain.worldCommandList.undoDescription()
+                    }, "Undo"),
+                    m("button.ml1.w3.mt1", { 
+                        disabled: !domain.worldCommandList.isRedoEnabled(),
+                        onclick: () => domain.worldCommandList.redoLast(),
+                        title: "Redo " + domain.worldCommandList.redoDescription()
+                    }, "Redo"),
+                ),
             ),
             currentView === "wizards"
                 ? this.viewWizards() 
