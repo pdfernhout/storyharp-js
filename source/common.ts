@@ -57,5 +57,5 @@ export function makeFileNameWithoutWldExtension(fileName: string) {
 }
 
 export function notebookTabButton(selected: boolean) {
-    return "button.ml2.w-6rem.bb-0.br3.br--top.b--gray" + (selected ? ".bg-white" : "")
+    return "button.ml2.mt1.w-6rem.bb-0.br3.br--top.b--gray" + (selected ? ".bg-white" : "")
 }
