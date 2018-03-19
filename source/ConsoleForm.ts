@@ -33,7 +33,6 @@ function availableCommands(world: TWorld, showRiddleAnswers=false): string[] {
 
 export function doCommand(domain: TSDomain, commandPhrase: string) {
     if (window.speechSynthesis && window.speechSynthesis.speaking) window.speechSynthesis.cancel()
-    // console.log("doCommand", commandPhrase)
     if (commandPhrase === firstRiddleAnswer) {
         // for riddles - need to be reassembled into command string first
         const answer = prompt("Please enter the answer to a riddle. [case-sensitive]", "")
@@ -46,7 +45,6 @@ export function doCommand(domain: TSDomain, commandPhrase: string) {
     } else {
         commandPhraseModified = commandPhrase
     }
-    // console.log("test", commandPhraseModified, availableCommands(domain.world, true))
     if ((availableCommands(domain.world, true).indexOf(commandPhraseModified) === -1)) {
         if (commandPhrase.startsWith("$")) {
             // eliminate leading $
@@ -70,7 +68,6 @@ export function doCommand(domain: TSDomain, commandPhrase: string) {
 
 function viewChoices(domain: TSDomain, scrollCallback: () => void) {
     const commands = availableCommands(domain.world)
-    // Promise.resolve().then(scrollIntoView)
     return m("div", 
         m("hr"),
         [ // Put this in an array to keep keys separate from non-keyed items
@@ -154,8 +151,6 @@ export function parseTextWithMacros(aString: string): Segment[] {
 }
 
 function viewTranscriptItem(item: TranscriptLine) {
-    // {picture http://www.kurtz-fernhout.com/StoryHarp2.gif}
-    // {picture https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/Kitten_in_Rizal_Park%2C_Manila.jpg/345px-Kitten_in_Rizal_Park%2C_Manila.jpg}
     const domain: TSDomain = this
     const segments = parseTextWithMacros(item.text)
     return m("div.mw6" + color(item.color),
@@ -185,10 +180,8 @@ function viewTranscriptItem(item: TranscriptLine) {
                         return []
                     }
                 case SegmentType.speakSound:
-                    // console.log("Unfinished sound handling", segment)
                     return []
                 case SegmentType.speakMusic:
-                    // console.log("Unfinished music handling", segment)
                     return []
                 default:
                     throw new Error("unexpected segment type: " + JSON.stringify(segment))
@@ -288,7 +281,7 @@ export class ConsoleForm {
                     this.transcriptDiv = <HTMLDivElement>(vnode.dom)
                     },
                 },
-                // TODO: Improve this inefficinct full copy and reverse
+                // TODO: Improve this inefficient full copy and reverse
                 domain.transcript.slice(0).reverse().map(viewTranscriptItem.bind(domain)),
             ),
             m("div.flex-none",
