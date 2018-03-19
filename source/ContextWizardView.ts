@@ -173,7 +173,7 @@ export class ContextWizardView {
                 help("You can also use the same context more than once and later add special requirements (", Glyph.requirements, ") to some of the extra rules"),
 
                 help("Here is an example showing a mix of different entries which generated nine rules:"),
-                showHelp ? m("pre.ba.bw2.pa1.ml2.mr2", exampleWithNineRules) : [],
+                showHelp ? m("pre.dib.ba.bw2.pa1.ml2.mr2", exampleWithNineRules) : [],
 
                 m("div.ma2", "Context (", Glyph.context, ")", m("span.ml2.mr2.f4.b", "|"), "Descriptive Reply (", Glyph.reply, ")"),
 

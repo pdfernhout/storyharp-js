@@ -18,7 +18,7 @@ tell Shawn you are happy| Shawn rolls up his cocoon.
    tell Shawn he is wrong |You are sent to the bad place.
     
 spit at Shawn
-throw a cactus at Shawn | The cactus bounces off Shawn's quickly-rolled-up cocoon.
+throw a cactus at Shawn | It bounces off Shawn's quickly-rolled-up cocoon.
 `.trim()
 
 // the grue place
@@ -262,7 +262,7 @@ export class CommandWizardView {
                 help("You can also use the same context more than once and later add special requirements (", Glyph.requirements, ") to some of the extra rules"),
 
                 help("Here is an example of a sequence (intentionally showing inconsistent input styles) which generates five rules:"),
-                showHelp ? m("pre.ba.bw2.pa1.ml2.mr2", exampleWithFiveRules) : [],
+                showHelp ? m("pre.dib.ba.bw2.pa1.ml2.mr2", exampleWithFiveRules) : [],
 
                 m("div.ma2", "Command (", Glyph.command, ")", m("span.ml2.mr2.f4.b", "|"), "Reply (", Glyph.reply, ")"),
 
@@ -302,7 +302,7 @@ export class CommandWizardView {
                 m("div.ml2" + (doSequence ? "" : ".gray"),
 
                     help("Here is an example of a sequence (see below) which could generate four rules for a \"grue pit\" context each using the same command:"),
-                    showHelp ? m("pre.ba.bw2.pa1.ml2.mr2", exampleSequenceWithFourRules) : [],
+                    showHelp ? m("pre.dib.ba.bw2.pa1.ml2.mr2", exampleSequenceWithFourRules) : [],
 
                     // help("Creating sequences is an advanced topic; see the help system for details."),
 
