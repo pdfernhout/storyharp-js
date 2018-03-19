@@ -156,6 +156,7 @@ export function parseTextWithMacros(aString: string): Segment[] {
 function viewTranscriptItem(item: TranscriptLine) {
     // {picture http://www.kurtz-fernhout.com/StoryHarp2.gif}
     // {picture https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/Kitten_in_Rizal_Park%2C_Manila.jpg/345px-Kitten_in_Rizal_Park%2C_Manila.jpg}
+    const domain: TSDomain = this
     const segments = parseTextWithMacros(item.text)
     return m("div.mw6" + color(item.color),
         {
@@ -169,9 +170,9 @@ function viewTranscriptItem(item: TranscriptLine) {
                 case SegmentType.sayOptionsMacroInForce:
                     return []
                 case SegmentType.showPicture:
-                    if (isMediaOK(segment.text)) {
+                    if (domain.speechSystem.optionPicture && isMediaOK(segment.text)) {
                         return m("div", m("img.ml3", {
-                            src: fixupPath(this, segment.text),
+                            src: fixupPath(domain, segment.text),
                             /* to center the image
                             style: {
                                 display: "block",
@@ -243,7 +244,31 @@ export class ConsoleForm {
                         this.scrollEndOfTranscriptIntoView()
                     },
                     title: "Redo " + domain.sessionCommandList.redoDescription()
-                }, "Redo"), 
+                }, "Redo"),
+                m("input[type=checkbox].ml2", {
+                    checked: domain.speechSystem.optionSound || undefined,
+                    onchange: (event: { target: HTMLInputElement }) => { 
+                        domain.speechSystem.optionSound = event.target.checked
+                        if (!domain.speechSystem.optionSound) {
+                            domain.speechSystem.haltSpeechAndSoundAndMusic()
+                        }
+                    }
+                }), "sound",
+                m("input[type=checkbox].ml2", {
+                    checked: domain.speechSystem.optionSpeech || undefined,
+                    onchange: (event: { target: HTMLInputElement }) => { 
+                        domain.speechSystem.optionSpeech = event.target.checked
+                        if (!domain.speechSystem.optionSpeech) {
+                            domain.speechSystem.haltSpeechAndSoundAndMusic()
+                        }
+                    }
+                }), "speech",
+                m("input[type=checkbox].ml2", {
+                    checked: domain.speechSystem.optionPicture || undefined,
+                    onchange: (event: { target: HTMLInputElement }) => { 
+                        domain.speechSystem.optionPicture = event.target.checked
+                    }
+                }), "pictures",
             ),
             m("div.flex-auto.overflow-auto.flex.flex-column-reverse",
                 {

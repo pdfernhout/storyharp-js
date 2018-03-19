@@ -57,6 +57,10 @@ export interface RuleEditorAPI {
 }
 
 export interface SpeechSystemAPI {
+    optionSpeech: boolean
+    optionSound: boolean
+    optionPicture: boolean
+
     lastSaidTextWithMacros: string
     speakText: (text: string) => void
     sayTextWithMacros: (text: string) => void
@@ -268,6 +272,9 @@ export class TSApplication implements TSDomain {
         }
 
         this.speechSystem = {
+            optionSpeech: true,
+            optionSound: true,
+            optionPicture: true,
             lastSaidTextWithMacros: "TEST",
             stripMacros: (text: string) => text,
             sayTextWithMacros: (text: string) => {
@@ -280,7 +287,7 @@ export class TSApplication implements TSDomain {
                             soundPlayed.pause()
                             soundPlayed = null
                         }
-                        if (segment.text && isMediaOK(segment.text)) {
+                        if (this.speechSystem.optionSound && segment.text && isMediaOK(segment.text)) {
                             soundPlayed = new Audio(fixupPath(this, segment.text))
                             soundPlayed.play()
                         }
@@ -290,19 +297,21 @@ export class TSApplication implements TSDomain {
                             musicPlayed.pause()
                             musicPlayed = null
                         }
-                        if (segment.text && isMediaOK(segment.text)) {
+                        if (this.speechSystem.optionSound && segment.text && isMediaOK(segment.text)) {
                             musicPlayed = new Audio(fixupPath(this, segment.text))
                             musicPlayed.play()
                         }
                     } else if (segment.type === SegmentType.speakText) {
                         // TODO: need scheduling to interweave sound and TTS
-                        const synth = window.speechSynthesis
-                        if (synth) {
-                            const sentences = segment.text.match( /[^\.!\?]+[\.!\?]+/g)
-                            if (sentences) {
-                                for (let sentence of sentences) { 
-                                    const utterance = new SpeechSynthesisUtterance(sentence)
-                                    synth.speak(utterance)
+                        if (this.speechSystem.optionSpeech) {
+                            const synth = window.speechSynthesis
+                            if (synth) {
+                                const sentences = segment.text.match( /[^\.!\?]+[\.!\?]+/g)
+                                if (sentences) {
+                                    for (let sentence of sentences) { 
+                                        const utterance = new SpeechSynthesisUtterance(sentence)
+                                        synth.speak(utterance)
+                                    }
                                 }
                             }
                         }
