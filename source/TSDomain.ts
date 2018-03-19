@@ -134,6 +134,22 @@ export interface TSDomain {
     speechSystem: SpeechSystemAPI
 }
 
+export function isMediaOK (text: string) {
+    // Filter out old files from demos
+    const result = text.startsWith("http") 
+        || text.startsWith("/")
+        || text.startsWith("media/")
+    if (!result) console.log("Not loading media for:", text)
+    return result
+}
+
+export function fixupPath(domain: TSDomain, text: string) {
+    if (text.startsWith("media/")) {
+        return domain.dataPath + text
+    }
+    return text
+}
+
 // Transcript lines are given UUIDs to pss as keys to Mithril -- they are only unique per application run
 let nextTranscriptLineUUID = 1
 
@@ -264,9 +280,8 @@ export class TSApplication implements TSDomain {
                             soundPlayed.pause()
                             soundPlayed = null
                         }
-                        // Filter out old files from demos
-                        if (segment.text && (segment.text.startsWith("http") || segment.text.startsWith("/"))) {
-                            soundPlayed = new Audio(segment.text)
+                        if (segment.text && isMediaOK(segment.text)) {
+                            soundPlayed = new Audio(fixupPath(this, segment.text))
                             soundPlayed.play()
                         }
                     } else if (segment.type === SegmentType.speakMusic) {
@@ -275,9 +290,8 @@ export class TSApplication implements TSDomain {
                             musicPlayed.pause()
                             musicPlayed = null
                         }
-                        // Filter out old files from demos
-                        if (segment.text && (segment.text.startsWith("http") || segment.text.startsWith("/"))) {
-                            musicPlayed = new Audio(segment.text)
+                        if (segment.text && isMediaOK(segment.text)) {
+                            musicPlayed = new Audio(fixupPath(this, segment.text))
                             musicPlayed.play()
                         }
                     } else if (segment.type === SegmentType.speakText) {

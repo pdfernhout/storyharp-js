@@ -26,7 +26,7 @@ The plants look a little abandoned over there by the window.
 ====================
 house
 water the plants
-Let's see. Three plants are still hanging on to life. One has been half-eaten by Harold, and another one dried up. But the two plants you repotted a few months ago look fine. Those spider plants never stop making babies. You fill the water pitcher three times and water the plants, then sit down in the chair. You love the percolating sound and the satisfied smell. {picture http://www.kurtz-fernhout.com/poppies.gif}
+Let's see. Three plants are still hanging on to life. One has been half-eaten by Harold, and another one dried up. But the two plants you repotted a few months ago look fine. Those spider plants never stop making babies. You fill the water pitcher three times and water the plants, then sit down in the chair. You love the percolating sound and the satisfied smell. {picture media/poppies.gif}
 
 plants watered
 ~plants watered
@@ -58,7 +58,7 @@ tidied up
 ====================
 house
 go out to the yard
-You open the screen door and walk outside, humming a silly tune.{music}
+You open the screen door and walk outside, humming a silly tune.{music media/Sunflower.ogg}
 yard
 
 found red piece
@@ -74,7 +74,7 @@ worked on puzzle
 ====================
 house
 work on the puzzle some more
-Aha! There's the red piece you thought Harold ate! The stinker, he just hid it over by the windowsill. You put it on the pile of red and off-red pieces on the table. But the puzzle seems a little boring right now so you don't work on it any more. Your thoughts turn towards fresh air and sunshine. {music https://ia902505.us.archive.org/21/items/ChickenDance_201405/Chicken%20Dance.ogg}
+Aha! There's the red piece you thought Harold ate! The stinker, he just hid it over by the windowsill. You put it on the pile of red and off-red pieces on the table. But the puzzle seems a little boring right now so you don't work on it any more. Your thoughts turn towards fresh air and sunshine. {music media/short.ogg}
 
 found red piece
 worked on puzzle & ~found red piece
@@ -106,7 +106,7 @@ Pacing is terribly underrated. Walking in a prescribed circle always feels good.
 ====================
 yard
 go inside
-{sound https://upload.wikimedia.org/wikipedia/commons/7/74/Door_handle_creaking.ogg} I really have to fix that hinge, you think as you hear the shreiking door close after you.
+{sound media/Door_handle_creaking.ogg} I really have to fix that hinge, you think as you hear the shreiking door close after you.
 house
 
 
@@ -146,7 +146,7 @@ looked at sky
 ====================
 yard
 look at the sky some more
-The sky is still the same. Except for the pterodactyl circling, nothing much is happening.  {picture https://upload.wikimedia.org/wikipedia/commons/a/a0/Pterodactylus_BMMS7_life.png} You're glad Harold is getting some exercise in the good weather. Maybe he'll stop chewing on the bedpost. {sound https://ia800201.us.archive.org/10/items/Sound_Effects/%40HI%20Guitar.ogg}
+The sky is still the same. Except for the pterodactyl circling, nothing much is happening.  {picture media/Pterodactylus_BMMS7_life.png} You're glad Harold is getting some exercise in the good weather. Maybe he'll stop chewing on the bedpost. {sound media/Flute2.wav}
 
 saw harold
 looked at sky & ~saw harold & found toy

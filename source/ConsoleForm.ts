@@ -3,7 +3,7 @@ import * as m from "mithril"
 import { Color } from "./common"
 import { TWorld } from "./TWorld"
 import { VariablesView } from "./VariablesView"
-import { TSDomain, TranscriptLine } from "./TSDomain"
+import { TSDomain, TranscriptLine, fixupPath, isMediaOK } from "./TSDomain"
 import { loadWorldFromLocalFile } from "./FileForm";
 
 // TODO: Shutdown sound when press escape key
@@ -169,16 +169,20 @@ function viewTranscriptItem(item: TranscriptLine) {
                 case SegmentType.sayOptionsMacroInForce:
                     return []
                 case SegmentType.showPicture:
-                    return m("div", m("img.ml3", {
-                        src: segment.text,
-                        /* to center the image
-                        style: {
-                            display: "block",
-                            "margin-left": "auto",
-                            "margin-right": "auto",
-                        }
-                        */
-                    }))
+                    if (isMediaOK(segment.text)) {
+                        return m("div", m("img.ml3", {
+                            src: fixupPath(this, segment.text),
+                            /* to center the image
+                            style: {
+                                display: "block",
+                                "margin-left": "auto",
+                                "margin-right": "auto",
+                            }
+                            */
+                        }))
+                    } else {
+                        return []
+                    }
                 case SegmentType.speakSound:
                     // console.log("Unfinished sound handling", segment)
                     return []
@@ -248,7 +252,7 @@ export class ConsoleForm {
                     },
                 },
                 // TODO: Improve this inefficinct full copy and reverse
-                domain.transcript.slice(0).reverse().map(viewTranscriptItem),
+                domain.transcript.slice(0).reverse().map(viewTranscriptItem.bind(domain)),
             ),
             m("div.flex-none",
                 viewChoices(domain, this.scrollEndOfTranscriptIntoView.bind(this)),
