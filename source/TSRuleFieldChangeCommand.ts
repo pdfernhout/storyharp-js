@@ -28,6 +28,7 @@ export class TSRuleFieldChangeCommand extends KfCommand {
         this.domain.world.lastVariableCreated = ""
         this.rule.setTextForField(this.field, this.newValue)
 
+        // TODO: Debounce logging too frequencly with oninput
         // log changes
         this.domain.addToLog("--- edit rule #" + (this.domain.world.rules.indexOf(this.rule) + 1) + " " + TSRuleField[this.field].substring(5))
         this.domain.addToLog(this.rule.getTextForField(this.field))
