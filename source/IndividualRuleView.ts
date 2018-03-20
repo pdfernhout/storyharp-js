@@ -508,7 +508,7 @@ export class IndividualRuleView {
                                     this.replyTextArea = <HTMLTextAreaElement>(vnode.dom)
                                 },
                                 value: rule.reply,
-                                onchange: replyChange
+                                oninput: replyChange
                             },
                         ),
                     ),

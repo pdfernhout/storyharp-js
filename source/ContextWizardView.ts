@@ -183,7 +183,7 @@ export class ContextWizardView {
                         rows: 10,
                         cols: 60,
                         value: this.contextWizardData.newContextsTextToParse,
-                        onchange: (event: { target: HTMLInputElement }) => {
+                        oninput: (event: { target: HTMLInputElement }) => {
                             this.contextWizardData.newContextsTextToParse = event.target.value
                             if (this.wasGenerateRulesPressed) this.checkInputForErrors()
                         }

@@ -317,7 +317,7 @@ export class LinkWizardView {
                             rows: 10,
                             cols: 60,
                             value: this.linkWizardData.firstReply,
-                            onchange: (event: { target: HTMLInputElement }) => {
+                            oninput: (event: { target: HTMLInputElement }) => {
                                 this.linkWizardData.firstReply = event.target.value
                                 if (this.wasGenerateRulesPressed) this.checkInputForErrors()
                             },
@@ -360,7 +360,7 @@ export class LinkWizardView {
                             rows: 10,
                             cols: 60,
                             value: this.linkWizardData.secondReply,
-                            onchange: (event: { target: HTMLInputElement }) => {
+                            oninput: (event: { target: HTMLInputElement }) => {
                                 this.linkWizardData.secondReply = event.target.value
                                 if (this.wasGenerateRulesPressed) this.checkInputForErrors()
                             },

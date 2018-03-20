@@ -273,7 +273,7 @@ export class CommandWizardView {
                         rows: 10,
                         cols: 60,
                         value: this.commandWizardData.newCommandsTextToParse,
-                        onchange: (event: { target: HTMLInputElement }) => {
+                        oninput: (event: { target: HTMLInputElement }) => {
                             this.commandWizardData.newCommandsTextToParse = event.target.value
                             if (this.wasGenerateRulesPressed) this.checkInputForErrors()
                         }
@@ -313,7 +313,7 @@ export class CommandWizardView {
 
                     m("input", {
                         value: this.commandWizardData.prefix,
-                        onchange: (event: { target: HTMLInputElement }) => {
+                        oninput: (event: { target: HTMLInputElement }) => {
                             this.commandWizardData.prefix = event.target.value
                             if (this.wasGenerateRulesPressed) this.checkInputForErrors()
                         },
