@@ -6,6 +6,7 @@ import { VariablesView } from "./VariablesView"
 import { TSDomain, TranscriptLine, fixupPath, isMediaOK } from "./TSDomain"
 import { loadWorldFromLocalFile } from "./FileForm"
 import { toast } from "./ToastView"
+import { modalConfirm } from "./ModalInputView";
 
 // TODO: Shutdown sound when press escape key
 
@@ -188,10 +189,12 @@ function viewTranscriptItem(item: TranscriptLine) {
 }
 
 function resetConsole(domain: TSDomain) {
-    if (!confirm("Are you sure you want to restart playing the world?")) return
-    domain.speechSystem.haltSpeechAndSoundAndMusic()
-    domain.newSession()
-    startSession(domain)
+    modalConfirm("Are you sure you want to restart playing the world?").then(value => {
+        if (!value) return
+        domain.speechSystem.haltSpeechAndSoundAndMusic()
+        domain.newSession()
+        startSession(domain)
+    })
 }
 
 function startSession(domain: TSDomain) {

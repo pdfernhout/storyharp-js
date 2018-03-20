@@ -7,6 +7,7 @@ import { Glyph } from "./VariablesView"
 import { TSDomain } from "./TSDomain"
 import { TQuickFillComboBox } from "./TQuickFillComboBox"
 import { toast } from "./ToastView"
+import { modalConfirm } from "./ModalInputView";
 
 // Previous help: "Making_new_rules_using_the_new_contexts_wizard"
 
@@ -229,12 +230,14 @@ export class ContextWizardView {
                 m("div.ml2.mt2.mb3", 
                     m("button", {
                         onclick: () => {
-                            if (!confirm("Are you sure you want to clear the Context Wizard form?")) return
-                            this.domain.contextWizardData = newContextWizardData()
-                            this.contextWizardData = this.domain.contextWizardData
-                            this.newContextsTextToParseError = ""
-                            this.commandPhraseError = ""
-                            this.wasGenerateRulesPressed = false
+                            modalConfirm("Are you sure you want to clear the Context Wizard form?").then(value => {
+                                if (!value) return
+                                this.domain.contextWizardData = newContextWizardData()
+                                this.contextWizardData = this.domain.contextWizardData
+                                this.newContextsTextToParseError = ""
+                                this.commandPhraseError = ""
+                                this.wasGenerateRulesPressed = false
+                            })
                         }
                     }, "Clear Context Wizard form"),
                 ),

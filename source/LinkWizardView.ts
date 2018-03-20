@@ -9,6 +9,7 @@ import { TSRule } from "./TSRule";
 import { TSVariable } from "./TSVariable"
 import { TQuickFillComboBox } from "./TQuickFillComboBox"
 import { toast } from "./ToastView"
+import { modalConfirm } from "./ModalInputView"
 
 // Previous help: "Making_new_rules_using_the_new_moves_wizard"
 
@@ -409,16 +410,18 @@ export class LinkWizardView {
                 m("div.ml2.mt2.mb3", 
                     m("button", {
                         onclick: () => {
-                            if (!confirm("Are you sure you want to clear the Link Wizard form?")) return
-                            this.domain.linkWizardData = newLinkWizardData()
-                            this.linkWizardData = this.domain.linkWizardData
-                            this.firstContextError = ""
-                            this.firstCommandError = ""
-                            this.firstReplyError = ""
-                            this.secondContextError = ""
-                            this.secondCommandError = ""
-                            this.secondReplyError = ""
-                            this.wasGenerateRulesPressed = false
+                            modalConfirm("Are you sure you want to clear the Link Wizard form?").then(value => {
+                                if (!value) return
+                                this.domain.linkWizardData = newLinkWizardData()
+                                this.linkWizardData = this.domain.linkWizardData
+                                this.firstContextError = ""
+                                this.firstCommandError = ""
+                                this.firstReplyError = ""
+                                this.secondContextError = ""
+                                this.secondCommandError = ""
+                                this.secondReplyError = ""
+                                this.wasGenerateRulesPressed = false
+                            })
                         }
                     }, "Clear Link Wizard form"),
                 ),

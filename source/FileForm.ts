@@ -9,6 +9,7 @@ import { TSNewRulesCommand } from "./TSNewRulesCommand"
 import { TSRule } from "./TSRule"
 import { TSVariable } from "./TSVariable"
 import { toast } from "./ToastView"
+import { modalConfirm } from "./ModalInputView"
 
 function saveWorldToLocalFile(domain: TSDomain) {
     const world: TWorld = domain.world
@@ -32,49 +33,49 @@ function exportSelectedRulesToLocalFile(domain: TSDomain) {
 
 // TODO: Save As... But maybe can't do with browser file model?
 
-export function confirmUnsavedChangesLoss(domain: TSDomain) {
+export function confirmUnsavedChangesLoss(domain: TSDomain): Promise<string | null> {
     if (domain.isWorldFileChanged()) {
-        if (!confirm("You have unsaved changes to the current world which will be lost; proceed anyway?")) {
-            return false
-        }
+        return modalConfirm("You have unsaved changes to the current world which will be lost; proceed anyway?")
     }
 
-    /* TODO: Maybe check for session changes if can save session
+    /* TODO: Maybe check for session changes if can save session -- would need to chain confirm promises
     if (domain.isSessionFileChanged()) {
-        if (!confirm("You have unsaved changes to the current session which will be lost; proceed anyway?")) {
-            return false
-        }
+        return modalConfirm("You have unsaved changes to the current session which will be lost; proceed anyway?")
+    } else {
+        return Promise.resolve("OK")
     }
     */
 
-    return true
+    return Promise.resolve("OK")
 }
 
 export function loadWorldFromLocalFile(domain: TSDomain) {
-    if (!confirmUnsavedChangesLoss(domain)) return
+    confirmUnsavedChangesLoss(domain).then(value => {
+        if (!value) return
+        const world: TWorld = domain.world
+        FileUtils.loadFromFile(false, (fileName: string, contents: string) => {
+            world.resetVariablesAndRules()
 
-    const world: TWorld = domain.world
-    FileUtils.loadFromFile(false, (fileName: string, contents: string) => {
-        world.resetVariablesAndRules()
+            const loaded = world.loadWorldFromFileContents(contents)
+            domain.addToLog("--- Read: " + fileName + (loaded ? " OK" : " Failed"))
+            if (!loaded) toast("Something went wrong loading file: " + fileName)
 
-        const loaded = world.loadWorldFromFileContents(contents)
-        domain.addToLog("--- Read: " + fileName + (loaded ? " OK" : " Failed"))
-        if (!loaded) toast("Something went wrong loading file: " + fileName)
+            domain.updateForNewOrLoadedWorld(fileName, true)
 
-        domain.updateForNewOrLoadedWorld(fileName, true)
-
-        m.redraw()
+            m.redraw()
+        })
     })
 }
 
 function newWorld(domain: TSDomain) {
-    if (!confirmUnsavedChangesLoss(domain)) return
+    confirmUnsavedChangesLoss(domain).then(value => {
+        if (!value) return
+        const fileName = prompt("What would you like to call your new world?")
+        if (!fileName) return
 
-    const fileName = prompt("What would you like to call your new world?")
-    if (!fileName) return
-
-    domain.world.resetVariablesAndRules()
-    domain.updateForNewOrLoadedWorld(makeFileNameWithWldExtension(fileName), false)
+        domain.world.resetVariablesAndRules()
+        domain.updateForNewOrLoadedWorld(makeFileNameWithWldExtension(fileName), false)
+    })
 }
 
 function mergeWorldFromLocalFile(domain: TSDomain): void {    

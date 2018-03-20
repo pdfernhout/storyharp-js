@@ -1,5 +1,6 @@
 import * as m from "mithril"
 import { toast } from "./ToastView"
+import { modalConfirm } from "./ModalInputView"
 
 // Open (or create) the database
 var open = indexedDB.open("MyDatabase", 1);
@@ -120,15 +121,17 @@ function clearLog() {
 
 function confirmClearLog() {
     if (dbFailed || !db) return toast("The log is not opened")
-    if (!confirm("This will remove everything stored in the log. Proceed?")) return
-    clearLog().then(() => {
-        log.splice(0, log.length)
-        toast("Log cleared")
-        m.redraw()
-    }).catch((error) => {
-        console.log("Error clearing log", error)
-        toast("Something went wrong clearing the log")
-        m.redraw()
+    modalConfirm("This will remove everything stored in the log. Proceed?").then(value => {
+        if (!value) return
+        clearLog().then(() => {
+            log.splice(0, log.length)
+            toast("Log cleared")
+            m.redraw()
+        }).catch((error) => {
+            console.log("Error clearing log", error)
+            toast("Something went wrong clearing the log")
+            m.redraw()
+        })
     })
 }
 

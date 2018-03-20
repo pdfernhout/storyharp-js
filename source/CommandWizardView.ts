@@ -8,6 +8,7 @@ import { TSRule } from "./TSRule"
 import { TSDomain } from "./TSDomain"
 import { TQuickFillComboBox } from "./TQuickFillComboBox"
 import { toast } from "./ToastView"
+import { modalConfirm } from "./ModalInputView"
 
 // Previous help: "Making_new_rules_using_the_new_commands_wizard"
 
@@ -389,14 +390,16 @@ export class CommandWizardView {
                 m("div.ml2.mt2.mb3", 
                     m("button", {
                         onclick: () => {
-                            if (!confirm("Are you sure you want to clear the Command Wizard form?")) return
-                            this.domain.commandWizardData = newCommandWizardData()
-                            this.commandWizardData = this.domain.commandWizardData
-                            this.newCommandsTextToParseError = ""
-                            this.contextNameError = ""
-                            this.prefixError = ""
-                            this.endSequenceError = ""
-                            this.wasGenerateRulesPressed = false
+                            modalConfirm("Are you sure you want to clear the Command Wizard form?").then(value => {
+                                if (!value) return
+                                this.domain.commandWizardData = newCommandWizardData()
+                                this.commandWizardData = this.domain.commandWizardData
+                                this.newCommandsTextToParseError = ""
+                                this.contextNameError = ""
+                                this.prefixError = ""
+                                this.endSequenceError = ""
+                                this.wasGenerateRulesPressed = false
+                            })
                         }
                     }, "Clear Command Wizard form"),
                 ),
