@@ -14,6 +14,7 @@ import { PendingTableScroll } from "./RuleTableView"
 import { TPoint } from "./TPoint"
 import { addToLog } from "./LogView"
 import { TSVariable } from "./TSVariable"
+import { toast } from "./ToastView"
 
 // At the dawn of the third millenium,
 // the laws of space and time keep humans close to Sol.
@@ -369,7 +370,8 @@ export class TSApplication implements TSDomain {
             this.demoConfig = <DemoConfig>await m.request(this.dataPath + "demoConfig.json")
                 .catch(error => {
                     console.log("error loading demoConfig.json", error)
-                    alert("Something went wrong loading demoConfig.json from the server")
+                    toast("Something went wrong loading demoConfig.json from the server")
+                    m.redraw()
                     const result: DemoConfig = { demoWorldFiles: [] }
                     return result
                 })
@@ -378,7 +380,8 @@ export class TSApplication implements TSDomain {
         const worldContent = await m.request(this.dataPath + fileName + ".wld", {deserialize: (text) => text})
             .catch(error => {
                 console.log("error loading a world file", fileName, error)
-                alert("Something went wrong loading the world file \"" + fileName + "\" from the server")
+                toast("Something went wrong loading the world file \"" + fileName + "\" from the server")
+                m.redraw()
                 return ""
             })
 

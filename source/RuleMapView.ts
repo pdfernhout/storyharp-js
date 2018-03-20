@@ -11,6 +11,7 @@ import { KfCommand, KfCommandChangeType } from "./KfCommand"
 import { TSVariableDisplayOptions, TSVariable } from "./TSVariable"
 import { TSDomain } from "./TSDomain"
 import { TSNewRulesCommand } from "./TSNewRulesCommand";
+import { toast } from "./ToastView"
 
 type MapMode = "select" | "drag" | "zoom" | "gesture"
 
@@ -265,7 +266,7 @@ export class RuleMapView {
             }
         }
         if (!newRuleCount) {
-            alert("To make a new command,\nselect at least one context or command\nand then click where you want to place the new command.")
+            toast("To make a new command,\nselect at least one context or command\nand then click where you want to place the new command.")
             return
         }
         this.domain.world.deselectAllExcept(null)
@@ -302,13 +303,13 @@ export class RuleMapView {
        
         const fromNode = this.previousChoice
         if ((fromNode === null) || !(fromNode instanceof TSVariable)) {
-             alert("To build a link,\nselect two contexts.")
+            toast("To build a link,\nselect two contexts.")
             return
         }
 
         const toNode = this.lastChoice
         if ((toNode === null) || !(toNode instanceof TSVariable) || (fromNode === toNode)) {
-             alert("To build a link,\nselect two contexts.")
+            toast("To build a link,\nselect two contexts.")
             return
         }
 
@@ -329,7 +330,7 @@ export class RuleMapView {
         /* TODO
         const draggableNode = this.previousChoice
         if ((draggableNode === null) || !(draggableNode instanceof TSVariable)) {
-            alert("To build a link,\nselect at least one context or command\nand then select others to connect to it.")
+            toast("To build a link,\nselect at least one context or command\nand then select others to connect to it.")
             return
         }
         const contextToMoveTo: TSVariable = draggableNode
@@ -376,8 +377,8 @@ export class RuleMapView {
             */
         }
         if (!newRulesCommand.rules.length && !atLeastOneRuleChanged) {
-            // alert("To build a link,\nselect at least one context or command\nand then select others to connect to it.")
-            alert("To build a link,\nselect two contexts.")
+            // toast("To build a link,\nselect at least one context or command\nand then select others to connect to it.")
+            toast("To build a link, select two contexts.")
         } else {
             this.MapPaintBoxChanged()
         }

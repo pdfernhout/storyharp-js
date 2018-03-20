@@ -22,6 +22,8 @@ function removeToast(record: ToastRecord) {
     if (index >= 0) toasts.splice(index, 1)
 }
 
+// If you call toast from inside a timeout or other handler without a mithril redraw, you need to call m.redraw()
+
 export function toast(text: string, timeout_ms=5000) {
     const record = {id: ++toastCount, text, timeout_ms}
     toasts.push(record)

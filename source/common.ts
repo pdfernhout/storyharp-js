@@ -32,12 +32,6 @@ export function expander(expanded: boolean, closedLabel: string = "", openLabel:
         : "▼" + closedLabel
 }
 
-/*
-export function ShowMessage(message: string) {
-    alert(message)
-}
-*/
-
 export enum ScrollIntoViewDirection { kFromBottom, kFromTop }
 
 export function makeFileNameWithWldExtension(fileName: string) {

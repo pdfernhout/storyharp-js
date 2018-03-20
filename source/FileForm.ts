@@ -6,8 +6,9 @@ import { TWorld, ExportRulesOption } from "./TWorld"
 import { FileUtils } from "./FileUtils"
 import { TSJavaScriptWriter } from "./TSJavaScriptWriter"
 import { TSNewRulesCommand } from "./TSNewRulesCommand"
-import { TSRule } from "./TSRule";
-import { TSVariable } from "./TSVariable";
+import { TSRule } from "./TSRule"
+import { TSVariable } from "./TSVariable"
+import { toast } from "./ToastView"
 
 function saveWorldToLocalFile(domain: TSDomain) {
     const world: TWorld = domain.world
@@ -58,7 +59,7 @@ export function loadWorldFromLocalFile(domain: TSDomain) {
 
         const loaded = world.loadWorldFromFileContents(contents)
         domain.addToLog("--- Read: " + fileName + (loaded ? " OK" : " Failed"))
-        if (!loaded) alert("Something went wrong loading file: " + fileName)
+        if (!loaded) toast("Something went wrong loading file: " + fileName)
 
         domain.updateForNewOrLoadedWorld(fileName, true)
 
@@ -87,7 +88,7 @@ function mergeWorldFromLocalFile(domain: TSDomain): void {
         domain.addToLog("--- Load for merge: " + fileName + (loaded ? " OK" : " Failed"))
 
         if (!loaded) {
-            alert("Something went wrong merging file: " + fileName)
+            toast("Something went wrong merging file: " + fileName)
             world.rules.length = oldRuleCount
             world.variables.length = oldVariablesCount
             m.redraw()
@@ -127,7 +128,7 @@ async function generateHTML(domain: TSDomain) {
     const writer = new TSJavaScriptWriter()
     const programText = writer.writeJavaScriptProgram(domain.world)
     if (!programText) {
-        alert("Some rules and contexts must be defined first")
+        toast("Some rules and contexts must be defined first")
         return
     }
     const template = await m.request("resources/template.html", {deserialize: (text) => text})

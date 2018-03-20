@@ -1,4 +1,5 @@
 import * as m from "mithril"
+import { toast } from "./ToastView"
 
 // Open (or create) the database
 var open = indexedDB.open("MyDatabase", 1);
@@ -82,7 +83,7 @@ function write(text: string): Promise<void> {
 // Assuming these log writing promises will resolve sequenctially -- but it is not a big deal if they don't
 export function addToLog(text: string): Promise<void> {
     if (!dbFailed && !indexedDB) {
-        alert("the log can't be stored on this platform")
+        toast("the log can't be stored on this platform")
         dbFailed = true
     }
     if (dbFailed) return Promise.resolve()
@@ -118,16 +119,16 @@ function clearLog() {
 }
 
 function confirmClearLog() {
-    if (dbFailed || !db) return alert("The log is not opened")
+    if (dbFailed || !db) return toast("The log is not opened")
     if (!confirm("This will remove everything stored in the log. Proceed?")) return
     clearLog().then(() => {
         log.splice(0, log.length)
+        toast("Log cleared")
         m.redraw()
-        setTimeout(() => alert("Log cleared"), 50)
     }).catch((error) => {
         console.log("Error clearing log", error)
+        toast("Something went wrong clearing the log")
         m.redraw()
-        setTimeout(() => alert("Something went wrong clearing the log"), 50)
     })
 }
 

@@ -4,7 +4,8 @@ import { Color, ScrollIntoViewDirection } from "./common"
 import { TWorld } from "./TWorld"
 import { VariablesView } from "./VariablesView"
 import { TSDomain, TranscriptLine, fixupPath, isMediaOK } from "./TSDomain"
-import { loadWorldFromLocalFile } from "./FileForm";
+import { loadWorldFromLocalFile } from "./FileForm"
+import { toast } from "./ToastView"
 
 // TODO: Shutdown sound when press escape key
 
@@ -198,7 +199,7 @@ function startSession(domain: TSDomain) {
         // TODO: This used to call doCommand in the speechSystem -- but made change -- consider other ramifications?
         domain.consoleForm.doCommand(domain, domain.world.rules[0].command.phrase)
     } else {
-        alert("This world has no rules yet and so can't be started.")
+        toast("This world has no rules yet and so can't be started.")
     }
 }
 

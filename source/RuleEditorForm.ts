@@ -12,6 +12,7 @@ import { TSDomain, WizardName, EditorName } from "./TSDomain"
 import { notebookTabButton, ScrollIntoViewDirection } from "./common"
 import { LogView } from "./LogView"
 import { TSRule } from "./TSRule"
+import { toast } from "./ToastView"
 
 // TODO: POSSIBLE BUG: What happens to undo/redo for console when delete rules? Or change rule? Maybe just ignore?
 // TODO: Should variables be deleted when they are no longer used by a rule?
@@ -106,7 +107,7 @@ export class RuleEditorForm {
             }
             count += 1
         }
-        alert("Search string \"" + aText + "\" not found.")
+        toast("Search string \"" + aText + "\" not found.")
     }
 
     view() {

@@ -7,6 +7,7 @@ import { Glyph } from "./VariablesView"
 import { TSRule } from "./TSRule"
 import { TSDomain } from "./TSDomain"
 import { TQuickFillComboBox } from "./TQuickFillComboBox"
+import { toast } from "./ToastView"
 
 // Previous help: "Making_new_rules_using_the_new_commands_wizard"
 
@@ -104,7 +105,7 @@ export class CommandWizardView {
     generateRules(): void {
         this.wasGenerateRulesPressed = true
         if (this.checkInputForErrors()) {
-            setTimeout(() => alert("Please fix the highlighted issues and try again."), 50)
+            toast("Please fix the highlighted issues and try again.")
             return
         }
 
@@ -188,9 +189,9 @@ export class CommandWizardView {
         if (newRulesCommand.rules.length > 0) {
             this.domain.worldCommandList.doCommand(newRulesCommand)
             const plural = newRulesCommand.rules.length === 1 ? "" : "s"
-            alert("A total of " + newRulesCommand.rules.length + " new rule" + plural + " were generated")
+            toast("A total of " + newRulesCommand.rules.length + " new rule" + plural + " were generated")
         } else {
-            alert("No rules were generated")
+            toast("No rules were generated")
             return
         }
 

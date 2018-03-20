@@ -12,6 +12,7 @@ import { TSVariableState, TSVariable } from "./TSVariable";
 import { TSLogicListBox } from "./TSLogicListBox";
 import { RuleEditorForm } from "./RuleEditorForm";
 import { parseTextWithMacros, SegmentType } from "./ConsoleForm";
+import { toast } from "./ToastView"
 
 // const
 const kPlaySoundMacroStart = "sound "
@@ -322,7 +323,7 @@ export class IndividualRuleView {
                 if (window.speechSynthesis) {
                     this.domain.speechSystem.sayTextWithMacros(textWithMacros)
                 } else {
-                    alert("Text-to-Speech system unavailable to say:\n" + textWithMacros)
+                    toast("Text-to-Speech system unavailable to say:\n" + textWithMacros)
                 }
                 const segments = parseTextWithMacros(textWithMacros)
                 for (let segment of segments) {
