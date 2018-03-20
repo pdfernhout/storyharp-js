@@ -173,9 +173,15 @@ export function fixupPath(domain: TSDomain, text: string) {
 export function speakText(text: String): boolean {
     const synth = window.speechSynthesis
     if (synth) {
-        const sentences = text.match(/[^\.!\?]+[\.!\?]+/g)
-        if (sentences) {
+        // TODO: Ideally should have a cleaner way to split into sentences plus any remainder.
+        // Add extra period at end to get last part if partial
+        const sentences = (text + ".").match(/[^\.!\?]+[\.!\?]+/g)
+        if (sentences && sentences.length) {
+            const lastItem = sentences[sentences.length - 1]
+            // remove the extra last period
+            sentences[sentences.length - 1] = lastItem.substring(0, lastItem.length - 1)
             for (let sentence of sentences) { 
+                if (!sentence.trim()) continue
                 const utterance = new SpeechSynthesisUtterance(sentence)
                 synth.speak(utterance)
             }
