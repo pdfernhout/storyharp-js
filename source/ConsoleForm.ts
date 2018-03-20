@@ -296,8 +296,8 @@ export class ConsoleForm {
                             this.transcriptDiv = <HTMLDivElement>(vnode.dom)
                             },
                         },
-                        // TODO: Improve this inefficient full copy and reverse
-                        domain.transcript.slice(0).reverse().map(viewTranscriptItem.bind(domain)),
+                        // transcript is kept in reverse order to make this iteration more computationally efficient
+                        domain.transcript.map(viewTranscriptItem.bind(domain)),
                     ),
                     (!domain.sessionChangeCount && domain.transcript.length <= 1) ? [] : m("div.flex-none",
                         viewChoices(domain, this.scrollEndOfTranscriptIntoView.bind(this)),
