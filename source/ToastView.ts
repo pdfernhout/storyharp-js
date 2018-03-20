@@ -1,7 +1,8 @@
 import * as m from "mithril"
 
-/* Test:
-    m("div.flex-none", 
+/* Test in your main form (use only one ToastView per application):
+    m(ToastView),
+    m("div", 
         m("button", {onclick: () => toast("hello there " + new Date()) }, "Toast short"),
         m("button", {onclick: () => toast("hello there and then some more it goes long and long " + new Date()) }, "Toast long"),
         m("button", {onclick: () => toast("hello there\nand then some more it goes another line\nand another " + new Date()) }, "Toast lines"),
@@ -35,7 +36,7 @@ export function toast(text: string, timeout_ms=5000) {
 
 export class ToastView {
     view() {
-        return m("div.Toast.fixed.ml5.mt3",
+        return m("div.Toast.fixed.ml5.mt3.z-2",
             toasts.map(record => m("div.bg-light-blue.pa2.ba", {
                 key: record.id,
                 style: {
