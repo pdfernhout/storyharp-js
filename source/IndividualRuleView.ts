@@ -4,13 +4,14 @@ import { TWorld } from "./TWorld"
 import { TSRule, TSRuleField } from "./TSRule"
 import { TSCommandList } from "./TSCommandList"
 import { TSNewRulesCommand } from "./TSNewRulesCommand"
-import { TSDomain } from "./TSDomain"
+import { TSDomain, fixupPath } from "./TSDomain"
 import { TQuickFillComboBox } from "./TQuickFillComboBox"
 import { TSDesiredStateVariableWrapper } from "./TSDesiredStateVariableWrapper";
 import { Glyph } from "./VariablesView"
 import { TSVariableState, TSVariable } from "./TSVariable";
 import { TSLogicListBox } from "./TSLogicListBox";
 import { RuleEditorForm } from "./RuleEditorForm";
+import { parseTextWithMacros, SegmentType } from "./ConsoleForm";
 
 // const
 const kPlaySoundMacroStart = "sound "
@@ -38,6 +39,7 @@ export class IndividualRuleView {
     domain: TSDomain
     ruleEditorForm: RuleEditorForm
     expanded = true
+    testPictures: string[] = []
 
     replyTextArea: HTMLTextAreaElement
 
@@ -306,25 +308,47 @@ export class IndividualRuleView {
             const value = rule.decompile(newChanges)
             worldCommandList.ruleFieldChange(rule, TSRuleField.kRuleChanges, value)
         }
-
+        
         // Test playing speech, sounds, and music
         // TODO: support testing displaying images
         const testReply = () => {
             if (!rule) throw new Error("Rule must be defined first")
-            const text = rule.reply
+            const textWithMacros = rule.reply
             // Use the speech system if one is available
             const isSpeaking = window.speechSynthesis && window.speechSynthesis.speaking
             this.domain.speechSystem.haltSpeechAndSoundAndMusic()
+            this.testPictures = []
             if (!isSpeaking) {
                 if (window.speechSynthesis) {
-                    this.domain.speechSystem.sayTextWithMacros(text)
+                    this.domain.speechSystem.sayTextWithMacros(textWithMacros)
                 } else {
-                    alert("Text-to-Speech system unavailable to say:\n" + text)
+                    alert("Text-to-Speech system unavailable to say:\n" + textWithMacros)
+                }
+                const segments = parseTextWithMacros(textWithMacros)
+                for (let segment of segments) {
+                    if (segment.type === SegmentType.showPicture) {
+                        const url = segment.text
+                        this.testPictures.push(url)
+                    }
                 }
             }
         }
 
         return m(".IndividualRuleView.ba.bg-light-gray.w-100.pa1",
+            this.testPictures.map(url => {
+                return m("div.nowrap.mw6",
+                    {
+                        onclick: () => {
+                            const index = this.testPictures.indexOf(url)
+                            if (index >= 0) this.testPictures.splice(index, 1)
+                        }
+                    },
+                    m("img.ml3", {
+                        src: fixupPath(this.domain, url),
+                    }),
+                    m("span.v-top", "X"),
+                )
+            }),
             m("div.PanelButtonBar.TPanel.ma1",
                 {
                 },
