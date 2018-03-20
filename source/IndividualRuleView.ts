@@ -4,7 +4,7 @@ import { TWorld } from "./TWorld"
 import { TSRule, TSRuleField } from "./TSRule"
 import { TSCommandList } from "./TSCommandList"
 import { TSNewRulesCommand } from "./TSNewRulesCommand"
-import { TSDomain } from "./TSDomain"
+import { TSDomain, speakText } from "./TSDomain"
 import { TQuickFillComboBox } from "./TQuickFillComboBox"
 import { TSDesiredStateVariableWrapper } from "./TSDesiredStateVariableWrapper";
 import { Glyph } from "./VariablesView"
@@ -307,11 +307,16 @@ export class IndividualRuleView {
             worldCommandList.ruleFieldChange(rule, TSRuleField.kRuleChanges, value)
         }
 
-        function testReply() {
+        // TODO: Test playing sounds and music too and also displaying images
+        const testReply = () => {
             if (!rule) throw new Error("Rule must be defined first")
             const text = rule.reply
-            // TODO: Make this use the speech system if one is available
-            alert(text)
+            // Use the speech system if one is available
+            const isSpeaking = window.speechSynthesis && window.speechSynthesis.speaking
+            this.domain.speechSystem.haltSpeechAndSoundAndMusic()
+            if (!isSpeaking) {
+                if (!speakText(text)) alert("Text-to-Speech system unavailable to say:\n" + text)
+            }
         }
 
         return m(".IndividualRuleView.ba.bg-light-gray.w-100.pa1",
@@ -459,7 +464,7 @@ export class IndividualRuleView {
                         m("button.ReplySpeedButton.pt1.w-10rem.mr1",
                             {   
                                 onclick: testReply,
-                                title: "Test saying the reply",
+                                title: "Test saying the reply.\nClick when speaking to stop.",
                             },
                             Glyph.reply + " Reply",
                         ),

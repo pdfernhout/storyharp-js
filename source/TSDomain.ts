@@ -170,6 +170,20 @@ export function fixupPath(domain: TSDomain, text: string) {
     return text
 }
 
+export function speakText(text: String): boolean {
+    const synth = window.speechSynthesis
+    if (synth) {
+        const sentences = text.match(/[^\.!\?]+[\.!\?]+/g)
+        if (sentences) {
+            for (let sentence of sentences) { 
+                const utterance = new SpeechSynthesisUtterance(sentence)
+                synth.speak(utterance)
+            }
+        }
+    }
+    return Boolean(synth)
+}
+
 // Transcript lines are given UUIDs to pss as keys to Mithril -- they are only unique per application run
 let nextTranscriptLineUUID = 1
 
@@ -326,16 +340,7 @@ export class TSApplication implements TSDomain {
                     } else if (segment.type === SegmentType.speakText) {
                         // TODO: need scheduling to interweave sound and TTS
                         if (this.speechSystem.optionSpeech) {
-                            const synth = window.speechSynthesis
-                            if (synth) {
-                                const sentences = segment.text.match( /[^\.!\?]+[\.!\?]+/g)
-                                if (sentences) {
-                                    for (let sentence of sentences) { 
-                                        const utterance = new SpeechSynthesisUtterance(sentence)
-                                        synth.speak(utterance)
-                                    }
-                                }
-                            }
+                            speakText(segment.text)
                         }
                     } else {
                         // image
