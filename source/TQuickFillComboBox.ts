@@ -6,7 +6,7 @@ const log = (...args: any[]) => {}
 // const log = console.log
 
 // Key idea here is that the "combobox" has focus when any of the input, button, or menu items have focus.
-// So, an onchange is only sent when focus is lost from all of those
+// So, an onchange is only sent when focus is lost from all of those as a commited change
 export class TQuickFillComboBox {
     lastSuppliedText = ""
     textValue: string = ""
@@ -133,8 +133,8 @@ export class TQuickFillComboBox {
                 oncreate: (vnode: any) => {
                     this.inputElement = <HTMLInputElement>(vnode.dom)
                 },
-                onchange: (event: { target: HTMLInputElement }) => {
-                    log("input onchange", event.target.value, this.isMenuOpen)
+                oninput: (event: { target: HTMLInputElement }) => {
+                    log("input oninput", event.target.value, this.isMenuOpen)
                     if (this.textValue !== event.target.value) {
                         this.textValue = event.target.value
                     } else {
