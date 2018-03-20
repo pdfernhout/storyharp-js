@@ -4,7 +4,7 @@ import { TWorld } from "./TWorld"
 import { TSRule, TSRuleField } from "./TSRule"
 import { TSCommandList } from "./TSCommandList"
 import { TSNewRulesCommand } from "./TSNewRulesCommand"
-import { TSDomain, speakText } from "./TSDomain"
+import { TSDomain } from "./TSDomain"
 import { TQuickFillComboBox } from "./TQuickFillComboBox"
 import { TSDesiredStateVariableWrapper } from "./TSDesiredStateVariableWrapper";
 import { Glyph } from "./VariablesView"
@@ -307,7 +307,8 @@ export class IndividualRuleView {
             worldCommandList.ruleFieldChange(rule, TSRuleField.kRuleChanges, value)
         }
 
-        // TODO: Test playing sounds and music too and also displaying images
+        // Test playing speech, sounds, and music
+        // TODO: support testing displaying images
         const testReply = () => {
             if (!rule) throw new Error("Rule must be defined first")
             const text = rule.reply
@@ -315,7 +316,11 @@ export class IndividualRuleView {
             const isSpeaking = window.speechSynthesis && window.speechSynthesis.speaking
             this.domain.speechSystem.haltSpeechAndSoundAndMusic()
             if (!isSpeaking) {
-                if (!speakText(text)) alert("Text-to-Speech system unavailable to say:\n" + text)
+                if (window.speechSynthesis) {
+                    this.domain.speechSystem.sayTextWithMacros(text)
+                } else {
+                    alert("Text-to-Speech system unavailable to say:\n" + text)
+                }
             }
         }
 
