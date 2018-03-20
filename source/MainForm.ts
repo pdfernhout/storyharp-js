@@ -7,6 +7,7 @@ import { DemoFilesForm } from "./DemoFilesForm"
 import { RuleEditorForm } from "./RuleEditorForm"
 import { ConsoleForm } from "./ConsoleForm"
 import { FileForm } from "./FileForm"
+import { ToastView } from "./ToastView";
 
 export class MainForm {
     domain: TSDomain
@@ -28,6 +29,7 @@ export class MainForm {
     
         // For layout checking: return m("div.ba.ma3.pa3.overflow-hidden", { style: "width:600px; height: 600px" }, 
         return m(".MainForm.pa2.h-100.w-100.overflow-hidden.flex.flex-column",
+            m(ToastView),
             m("div.mt1.mb1.flex-none",
                 m("span.f5.b", "StoryHarp:"),
                 // m("span.ml1", "World:"),
