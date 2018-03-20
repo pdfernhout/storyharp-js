@@ -2,6 +2,7 @@ import * as m from "mithril"
 
 import { KfCommand } from "../source/KfCommand"
 import { KfCommandList } from "../source/KfCommandList"
+import { modalPrompt } from "../source/ModalInputView"
 
 const commandList = new KfCommandList()
 commandList.undoLimit = 10
@@ -37,10 +38,11 @@ function viewMain() {
         m("div.mb2", "KfCommandList test"),
         m("div.mb2", 
             m("button", { onclick: () => {
-                const newValueString = prompt("New undo limit?", "" + commandList.undoLimit)
-                if (!newValueString) return
-                const newValue = parseInt(newValueString)
-                commandList.setNewUndoLimit(newValue)
+                modalPrompt("New undo limit?", "" + commandList.undoLimit).then(newValueString => { 
+                    if (!newValueString) return
+                    const newValue = parseInt(newValueString)
+                    commandList.setNewUndoLimit(newValue)
+                })
             }}, "Undo limit: " + commandList.undoLimit), 
             m("button.ml2", {
                 onclick: () => commandList.clear()

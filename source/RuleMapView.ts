@@ -12,6 +12,7 @@ import { TSVariableDisplayOptions, TSVariable } from "./TSVariable"
 import { TSDomain } from "./TSDomain"
 import { TSNewRulesCommand } from "./TSNewRulesCommand";
 import { toast } from "./ToastView"
+import { modalPrompt } from "./ModalInputView"
 
 type MapMode = "select" | "drag" | "zoom" | "gesture"
 
@@ -207,28 +208,29 @@ export class RuleMapView {
             numNewContextsMadeByPopupMenuThisSession += 1
         }
 
-        const newContextName = prompt("New context name?", "new context " + (numNewContextsMadeByPopupMenuThisSession + 1))
-        if (!newContextName) return
+        modalPrompt("New context name?", "new context " + (numNewContextsMadeByPopupMenuThisSession + 1)).then(newContextName => {
+            if (!newContextName) return
 
-        const newRulesCommand: TSNewRulesCommand = new TSNewRulesCommand(this.domain)
-        const newRule: TSRule = this.domain.world.newRule()
-        newRulesCommand.addRule(newRule)
+            const newRulesCommand: TSNewRulesCommand = new TSNewRulesCommand(this.domain)
+            const newRule: TSRule = this.domain.world.newRule()
+            newRulesCommand.addRule(newRule)
 
-        newRule.setContext(newContextName)
-        newRule.setCommand("look")
-        newRule.setReply("There is nothing of interest here.")
-        newRule.position = new TPoint(this.lastMapMouseDownPosition.X + 30, this.lastMapMouseDownPosition.Y + 30)
-        newRule.context.position = this.lastMapMouseDownPosition
-        this.domain.world.deselectAllExcept(newRule)
-        newRule.selected = true
-        this.domain.worldCommandList.doCommand(newRulesCommand)
-        this.domain.editRule(newRule)
-        /* TODO: select context edit
-        this.ActiveControl = this.ContextEdit
-        this.ContextEdit.SelStart = 0
-        this.ContextEdit.SelLength = len(this.ContextEdit.Text)
-        */
-        this.MapPaintBoxChanged()
+            newRule.setContext(newContextName)
+            newRule.setCommand("look")
+            newRule.setReply("There is nothing of interest here.")
+            newRule.position = new TPoint(this.lastMapMouseDownPosition.X + 30, this.lastMapMouseDownPosition.Y + 30)
+            newRule.context.position = this.lastMapMouseDownPosition
+            this.domain.world.deselectAllExcept(newRule)
+            newRule.selected = true
+            this.domain.worldCommandList.doCommand(newRulesCommand)
+            this.domain.editRule(newRule)
+            /* TODO: select context edit
+            this.ActiveControl = this.ContextEdit
+            this.ContextEdit.SelStart = 0
+            this.ContextEdit.SelLength = len(this.ContextEdit.Text)
+            */
+            this.MapPaintBoxChanged()
+        })
     }
 
     PopupNewCommandClick(): void {
@@ -236,52 +238,53 @@ export class RuleMapView {
             numNewCommandsMadeByPopupMenuThisSession += 1
         }
 
-        const newCommandName = prompt("New command phrase?", "new command " + (numNewCommandsMadeByPopupMenuThisSession + 1))
-        if (!newCommandName) return
+        modalPrompt("New command phrase?", "new command " + (numNewCommandsMadeByPopupMenuThisSession + 1)).then(newCommandName => {
+            if (!newCommandName) return
 
-        let newRuleCount = 0
-        const newRulesCommand = new TSNewRulesCommand(this.domain)
-        for (let i = 0; i < this.domain.world.variables.length; i++) {
-            const variable: TSVariable = this.domain.world.variables[i]
-            if (variable.selected) {
-                const newRule = this.domain.world.newRule()
-                newRulesCommand.addRule(newRule)
-                newRule.setContext(variable.phrase)
-                newRule.setCommand(newCommandName)
-                newRule.setReply("Nothing happens.")
-                newRule.position = new TPoint(this.lastMapMouseDownPosition.X, this.lastMapMouseDownPosition.Y + 30 * newRuleCount)
-                newRuleCount += 1
+            let newRuleCount = 0
+            const newRulesCommand = new TSNewRulesCommand(this.domain)
+            for (let i = 0; i < this.domain.world.variables.length; i++) {
+                const variable: TSVariable = this.domain.world.variables[i]
+                if (variable.selected) {
+                    const newRule = this.domain.world.newRule()
+                    newRulesCommand.addRule(newRule)
+                    newRule.setContext(variable.phrase)
+                    newRule.setCommand(newCommandName)
+                    newRule.setReply("Nothing happens.")
+                    newRule.position = new TPoint(this.lastMapMouseDownPosition.X, this.lastMapMouseDownPosition.Y + 30 * newRuleCount)
+                    newRuleCount += 1
+                }
             }
-        }
-        for (let i = 0; i < this.domain.world.rules.length; i++) {
-            const rule: TSRule = this.domain.world.rules[i]
-            if (rule.selected) {
-                const newRule = this.domain.world.newRule()
-                newRulesCommand.addRule(newRule)
-                newRule.setContext(rule.context.phrase)
-                newRule.setCommand(newCommandName)
-                newRule.setReply("Nothing happens.")
-                newRule.position = new TPoint(this.lastMapMouseDownPosition.X, this.lastMapMouseDownPosition.Y + 30 * newRuleCount)
-                newRuleCount += 1
+            for (let i = 0; i < this.domain.world.rules.length; i++) {
+                const rule: TSRule = this.domain.world.rules[i]
+                if (rule.selected) {
+                    const newRule = this.domain.world.newRule()
+                    newRulesCommand.addRule(newRule)
+                    newRule.setContext(rule.context.phrase)
+                    newRule.setCommand(newCommandName)
+                    newRule.setReply("Nothing happens.")
+                    newRule.position = new TPoint(this.lastMapMouseDownPosition.X, this.lastMapMouseDownPosition.Y + 30 * newRuleCount)
+                    newRuleCount += 1
+                }
             }
-        }
-        if (!newRuleCount) {
-            toast("To make a new command,\nselect at least one context or command\nand then click where you want to place the new command.")
-            return
-        }
-        this.domain.world.deselectAllExcept(null)
-        this.domain.worldCommandList.doCommand(newRulesCommand)
-        for (let newRule of newRulesCommand.rules) {
-            newRule.selected = true
-        }
-        this.domain.editRule(newRulesCommand.rules[newRulesCommand.rules.length - 1])
+            if (!newRuleCount) {
+                toast("To make a new command,\nselect at least one context or command\nand then click where you want to place the new command.")
+                return
+            }
+            this.domain.world.deselectAllExcept(null)
+            this.domain.worldCommandList.doCommand(newRulesCommand)
+            for (let newRule of newRulesCommand.rules) {
+                newRule.selected = true
+            }
+            this.domain.editRule(newRulesCommand.rules[newRulesCommand.rules.length - 1])
 
-        /* TODO: select command edit
-        this.ActiveControl = this.CommandEdit
-        this.CommandEdit.SelStart = 0
-        this.CommandEdit.SelLength = len(this.CommandEdit.Text)
-        */
-        this.MapPaintBoxChanged()
+            /* TODO: select command edit
+            this.ActiveControl = this.CommandEdit
+            this.CommandEdit.SelStart = 0
+            this.CommandEdit.SelLength = len(this.CommandEdit.Text)
+            */
+            this.MapPaintBoxChanged()
+        })
     }
 
     PopupNewLinkClick(): void {
@@ -313,75 +316,76 @@ export class RuleMapView {
             return
         }
 
-        const commandPhrase = prompt("command to move?", "go to " + toNode.phrase)
-        if (!commandPhrase) return
+        modalPrompt("command to move?", "go to " + toNode.phrase).then(commandPhrase => {
+            if (!commandPhrase) return
 
-        // Remove this if implement other approach
-        const newRulesCommand: TSNewRulesCommand = new TSNewRulesCommand(this.domain)
-        const newRule = this.domain.world.newRule()
-        newRulesCommand.addRule(newRule)
-        newRule.setContext(fromNode.phrase)
-        newRule.setCommand(commandPhrase)
-        newRule.setReply("You " + commandPhrase + ".")
-        newRule.setMove(toNode.phrase)
-        newRule.position.X = (fromNode.position.X + toNode.position.X) / 2
-        newRule.position.Y = (fromNode.position.Y + toNode.position.Y) / 2
+            // Remove this if implement other approach
+            const newRulesCommand: TSNewRulesCommand = new TSNewRulesCommand(this.domain)
+            const newRule = this.domain.world.newRule()
+            newRulesCommand.addRule(newRule)
+            newRule.setContext(fromNode.phrase)
+            newRule.setCommand(commandPhrase)
+            newRule.setReply("You " + commandPhrase + ".")
+            newRule.setMove(toNode.phrase)
+            newRule.position.X = (fromNode.position.X + toNode.position.X) / 2
+            newRule.position.Y = (fromNode.position.Y + toNode.position.Y) / 2
 
-        /* TODO
-        const draggableNode = this.previousChoice
-        if ((draggableNode === null) || !(draggableNode instanceof TSVariable)) {
-            toast("To build a link,\nselect at least one context or command\nand then select others to connect to it.")
-            return
-        }
-        const contextToMoveTo: TSVariable = draggableNode
-        const newRulesCommand: TSNewRulesCommand = new TSNewRulesCommand(this.domain)
-        for (let i = 0; i < this.domain.world.variables.length; i++) {
-            const variable: TSVariable = this.domain.world.variables[i]
-            if (variable.selected) {
-                const newRule = this.domain.world.newRule()
-                newRulesCommand.addRule(newRule)
-                newRule.setContext(variable.phrase)
-                newRule.setCommand("go to " + contextToMoveTo.phrase)
-                newRule.setReply("You go to " + contextToMoveTo.phrase + ".")
-                newRule.setMove(contextToMoveTo.phrase)
-                newRule.position.X = (variable.position.X + contextToMoveTo.position.X) / 2
-                newRule.position.Y = (variable.position.Y + contextToMoveTo.position.Y) / 2
+            /* TODO
+            const draggableNode = this.previousChoice
+            if ((draggableNode === null) || !(draggableNode instanceof TSVariable)) {
+                toast("To build a link,\nselect at least one context or command\nand then select others to connect to it.")
+                return
             }
-        }
-        */
-
-        let atLeastOneRuleChanged = false
-        /* TODO -- if coudl get right click to work
-        for (let i = 0; i < this.domain.world.rules.length; i++) {
-            const rule: TSRule = this.domain.world.rules[i]
-            if (rule.selected) {
-                if (contextToMoveTo.phrase !== rule.move.phrase) {
-                    this.domain.worldCommandList.ruleFieldChange(rule, TSRuleField.kRuleMove, contextToMoveTo.phrase)
+            const contextToMoveTo: TSVariable = draggableNode
+            const newRulesCommand: TSNewRulesCommand = new TSNewRulesCommand(this.domain)
+            for (let i = 0; i < this.domain.world.variables.length; i++) {
+                const variable: TSVariable = this.domain.world.variables[i]
+                if (variable.selected) {
+                    const newRule = this.domain.world.newRule()
+                    newRulesCommand.addRule(newRule)
+                    newRule.setContext(variable.phrase)
+                    newRule.setCommand("go to " + contextToMoveTo.phrase)
+                    newRule.setReply("You go to " + contextToMoveTo.phrase + ".")
+                    newRule.setMove(contextToMoveTo.phrase)
+                    newRule.position.X = (variable.position.X + contextToMoveTo.position.X) / 2
+                    newRule.position.Y = (variable.position.Y + contextToMoveTo.position.Y) / 2
                 }
-                atLeastOneRuleChanged = true
             }
-        }
-        */
-
-        if (newRulesCommand.rules.length) {
-            this.domain.worldCommandList.doCommand(newRulesCommand)
-            this.domain.world.deselectAllExcept(null)
-            for (let newRule of newRulesCommand.rules) {
-                newRule.selected = true
-            }
-            this.domain.editRule(newRulesCommand.rules[newRulesCommand.rules.length - 1])
-            /* TODO: select command edit
-            this.ActiveControl = this.CommandEdit
-            this.CommandEdit.SelStart = 0
-            this.CommandEdit.SelLength = len(this.CommandEdit.Text)
             */
-        }
-        if (!newRulesCommand.rules.length && !atLeastOneRuleChanged) {
-            // toast("To build a link,\nselect at least one context or command\nand then select others to connect to it.")
-            toast("To build a link, select two contexts.")
-        } else {
-            this.MapPaintBoxChanged()
-        }
+
+            let atLeastOneRuleChanged = false
+            /* TODO -- if coudl get right click to work
+            for (let i = 0; i < this.domain.world.rules.length; i++) {
+                const rule: TSRule = this.domain.world.rules[i]
+                if (rule.selected) {
+                    if (contextToMoveTo.phrase !== rule.move.phrase) {
+                        this.domain.worldCommandList.ruleFieldChange(rule, TSRuleField.kRuleMove, contextToMoveTo.phrase)
+                    }
+                    atLeastOneRuleChanged = true
+                }
+            }
+            */
+
+            if (newRulesCommand.rules.length) {
+                this.domain.worldCommandList.doCommand(newRulesCommand)
+                this.domain.world.deselectAllExcept(null)
+                for (let newRule of newRulesCommand.rules) {
+                    newRule.selected = true
+                }
+                this.domain.editRule(newRulesCommand.rules[newRulesCommand.rules.length - 1])
+                /* TODO: select command edit
+                this.ActiveControl = this.CommandEdit
+                this.CommandEdit.SelStart = 0
+                this.CommandEdit.SelLength = len(this.CommandEdit.Text)
+                */
+            }
+            if (!newRulesCommand.rules.length && !atLeastOneRuleChanged) {
+                // toast("To build a link,\nselect at least one context or command\nand then select others to connect to it.")
+                toast("To build a link, select two contexts.")
+            } else {
+                this.MapPaintBoxChanged()
+            }
+        })
     }
     
     MapImageMouseDown(offsetX: number, offsetY: number, ctrlKey: boolean, shiftKey: boolean): void {

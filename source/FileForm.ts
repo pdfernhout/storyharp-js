@@ -9,7 +9,7 @@ import { TSNewRulesCommand } from "./TSNewRulesCommand"
 import { TSRule } from "./TSRule"
 import { TSVariable } from "./TSVariable"
 import { toast } from "./ToastView"
-import { modalConfirm } from "./ModalInputView"
+import { modalConfirm, modalPrompt } from "./ModalInputView"
 
 function saveWorldToLocalFile(domain: TSDomain) {
     const world: TWorld = domain.world
@@ -70,11 +70,12 @@ export function loadWorldFromLocalFile(domain: TSDomain) {
 function newWorld(domain: TSDomain) {
     confirmUnsavedChangesLoss(domain).then(value => {
         if (!value) return
-        const fileName = prompt("What would you like to call your new world?")
-        if (!fileName) return
+        modalPrompt("What would you like to call your new world?").then(fileName => { 
+            if (!fileName) return
 
-        domain.world.resetVariablesAndRules()
-        domain.updateForNewOrLoadedWorld(makeFileNameWithWldExtension(fileName), false)
+            domain.world.resetVariablesAndRules()
+            domain.updateForNewOrLoadedWorld(makeFileNameWithWldExtension(fileName), false)
+        })
     })
 }
 

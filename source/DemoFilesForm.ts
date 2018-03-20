@@ -1,6 +1,6 @@
 import * as m from "mithril"
 import { TSDomain, DemoEntry } from "./TSDomain"
-import { confirmUnsavedChangesLoss } from "./FileForm";
+import { confirmUnsavedChangesLoss } from "./FileForm"
 
 export class DemoFilesForm {
     domain: TSDomain
@@ -22,9 +22,11 @@ export class DemoFilesForm {
                 domain.demoConfig.demoWorldFiles.map((entry: DemoEntry) => 
                     m("tr.mt1", 
                         { onclick: () => {
-                            if (!confirmUnsavedChangesLoss(domain)) return
-                            domain.loadWorldFromServerData(entry.name).then((loaded) => {
-                                if (loaded) domain.activeForm = "console"
+                            confirmUnsavedChangesLoss(domain).then(value => {
+                                if (!value) return
+                                domain.loadWorldFromServerData(entry.name).then((loaded) => {
+                                    if (loaded) domain.activeForm = "console"
+                                })
                             })
                         }
                     },

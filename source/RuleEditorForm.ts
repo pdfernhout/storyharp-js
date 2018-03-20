@@ -13,6 +13,7 @@ import { notebookTabButton, ScrollIntoViewDirection } from "./common"
 import { LogView } from "./LogView"
 import { TSRule } from "./TSRule"
 import { toast } from "./ToastView"
+import { modalPrompt } from "./ModalInputView"
 
 // TODO: POSSIBLE BUG: What happens to undo/redo for console when delete rules? Or change rule? Maybe just ignore?
 // TODO: Should variables be deleted when they are no longer used by a rule?
@@ -55,14 +56,15 @@ export class RuleEditorForm {
     }
 
     search() {
-        const newSearchString = prompt("Search string? [case insensitive]", this.lastSearchString)
-        if (!newSearchString) return
-        this.lastSearchString = newSearchString
-        // TODO: Support searching backwards
-        // TODO: Pick fields to search on
-        // TODO: Support mixed-case searches
-        // TODO: Support regex searches
-        this.searchForAndSelectRule(newSearchString, true, true)
+        modalPrompt("Search string? [case insensitive]", this.lastSearchString).then(newSearchString => { 
+            if (!newSearchString) return
+            this.lastSearchString = newSearchString
+            // TODO: Support searching backwards
+            // TODO: Pick fields to search on
+            // TODO: Support mixed-case searches
+            // TODO: Support regex searches
+            this.searchForAndSelectRule(newSearchString, true, true)
+        })
     }
 
     searchForAndSelectRule(aText: string, ignoreCase: boolean, goDown: boolean): void {

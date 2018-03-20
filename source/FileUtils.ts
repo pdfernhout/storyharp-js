@@ -1,3 +1,5 @@
+import { modalPrompt } from "./ModalInputView"
+
 // Conversion function from: http://stackoverflow.com/questions/9267899/arraybuffer-to-base64-encoded-string
 function _arrayBufferToBase64(buffer: Buffer) {
     let binary = ""
@@ -64,26 +66,27 @@ export class FileUtils {
     }
 
     static saveToFile(provisionalFileName: string, fileContents: string, hiddenExtension: string, callback: any) {
-        let fileName = prompt("Please enter a file name for saving", provisionalFileName)
-        if (!fileName) return
+        modalPrompt("Please enter a file name for saving", provisionalFileName).then(fileName => {
+            if (!fileName) return
 
-        let addedExtension = false
-        if (hiddenExtension && !fileName.endsWith(hiddenExtension)) {
-            fileName = fileName + hiddenExtension
-            addedExtension = true
-        }
-        
-        const downloadLink = document.createElement("a")
-        downloadLink.setAttribute("href", "data:text/plain;charset=utf-8," + encodeURIComponent(fileContents))
-        downloadLink.setAttribute("download", fileName)
-        downloadLink.style.display = "none"
-        document.body.appendChild(downloadLink)
-        downloadLink.click()
-        document.body.removeChild(downloadLink)
-        if (addedExtension) {
-            // remove the extension we added
-            fileName = fileName.substring(0, fileName.length - hiddenExtension.length)
-        }
-        if (callback) callback(fileName)
+            let addedExtension = false
+            if (hiddenExtension && !fileName.endsWith(hiddenExtension)) {
+                fileName = fileName + hiddenExtension
+                addedExtension = true
+            }
+            
+            const downloadLink = document.createElement("a")
+            downloadLink.setAttribute("href", "data:text/plain;charset=utf-8," + encodeURIComponent(fileContents))
+            downloadLink.setAttribute("download", fileName)
+            downloadLink.style.display = "none"
+            document.body.appendChild(downloadLink)
+            downloadLink.click()
+            document.body.removeChild(downloadLink)
+            if (addedExtension) {
+                // remove the extension we added
+                fileName = fileName.substring(0, fileName.length - hiddenExtension.length)
+            }
+            if (callback) callback(fileName)
+        })
     }
 }

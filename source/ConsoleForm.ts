@@ -6,7 +6,7 @@ import { VariablesView } from "./VariablesView"
 import { TSDomain, TranscriptLine, fixupPath, isMediaOK } from "./TSDomain"
 import { loadWorldFromLocalFile } from "./FileForm"
 import { toast } from "./ToastView"
-import { modalConfirm } from "./ModalInputView";
+import { modalConfirm, modalPrompt } from "./ModalInputView"
 
 // TODO: Shutdown sound when press escape key
 
@@ -37,10 +37,17 @@ export function doCommand(domain: TSDomain, commandPhrase: string) {
     if (window.speechSynthesis && window.speechSynthesis.speaking) window.speechSynthesis.cancel()
     if (commandPhrase === firstRiddleAnswer) {
         // for riddles - need to be reassembled into command string first
-        const answer = prompt("Please enter the answer to a riddle. [case-sensitive]", "")
-        if (!answer) return
-        commandPhrase = "answer " + answer
+        modalPrompt("Please enter the answer to a riddle. [case-sensitive]", "").then(answer => { 
+            if (!answer) return
+            commandPhrase = "answer " + answer
+            doCommandContinued(domain, commandPhrase)
+        })
+    } else {
+        doCommandContinued(domain, commandPhrase)
     }
+}
+
+function doCommandContinued(domain: TSDomain, commandPhrase: string) {
     let commandPhraseModified
     if ((availableCommands(domain.world, true).indexOf(commandPhrase) === -1)) {
         commandPhraseModified = "$" + commandPhrase

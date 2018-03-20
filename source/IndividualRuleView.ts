@@ -13,6 +13,7 @@ import { TSLogicListBox } from "./TSLogicListBox";
 import { RuleEditorForm } from "./RuleEditorForm";
 import { parseTextWithMacros, SegmentType } from "./ConsoleForm";
 import { toast } from "./ToastView"
+import { modalPrompt } from "./ModalInputView"
 
 // const
 const kPlaySoundMacroStart = "sound "
@@ -189,42 +190,45 @@ export class IndividualRuleView {
     }
 
     insertSoundClick(): void {
-        const url = prompt("Sound file URL?")
-        if (!url) return
+        modalPrompt("Sound file URL?").then(url => {
+            if (!url) return
 
-        const textToInsert = " {" + kPlaySoundMacroStart + url + "} "
+            const textToInsert = " {" + kPlaySoundMacroStart + url + "} "
 
-        const rule: TSRule | null = this.domain.editedRule
-        if (rule) {
-            const newText = insertTextAtCursor(this.replyTextArea, textToInsert)
-            rule.setReply(newText)
-        }
+            const rule: TSRule | null = this.domain.editedRule
+            if (rule) {
+                const newText = insertTextAtCursor(this.replyTextArea, textToInsert)
+                rule.setReply(newText)
+            }
+        })
     }
 
     insertMusicClick(): void {
-        const url = prompt("Music file URL?")
-        if (!url) return
+        modalPrompt("Music file URL?").then(url => {
+            if (!url) return
 
-        const textToInsert = " {" + kPlayMusicMacroStart + url + "} "
+            const textToInsert = " {" + kPlayMusicMacroStart + url + "} "
 
-        const rule: TSRule | null = this.domain.editedRule
-        if (rule) {
-            const newText = insertTextAtCursor(this.replyTextArea, textToInsert)
-            rule.setReply(newText)
-        }
+            const rule: TSRule | null = this.domain.editedRule
+            if (rule) {
+                const newText = insertTextAtCursor(this.replyTextArea, textToInsert)
+                rule.setReply(newText)
+            }
+        })
     }
 
     insertImageClick(): void {
-        const url = prompt("Image file URL?")
-        if (!url) return
+        modalPrompt("Image file URL?").then(url => {
+            if (!url) return
 
-        const textToInsert = " {" + kShowPictureMacroStart + url + "} "
+            const textToInsert = " {" + kShowPictureMacroStart + url + "} "
 
-        const rule: TSRule | null = this.domain.editedRule
-        if (rule) {
-            const newText = insertTextAtCursor(this.replyTextArea, textToInsert)
-            rule.setReply(newText)
-        }
+            const rule: TSRule | null = this.domain.editedRule
+            if (rule) {
+                const newText = insertTextAtCursor(this.replyTextArea, textToInsert)
+                rule.setReply(newText)
+            }
+        })
     }
     
     /* TODO: use or remove -- testing reply with sound

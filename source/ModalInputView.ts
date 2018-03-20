@@ -21,6 +21,7 @@ export function setModalCallback(callback: ModalCallback) {
         throw new Error("Only supports one modal at a time")
     }
     modalCallback = callback
+    m.redraw()
 }
 
 type ModalType = "alert" | "confirm" | "prompt"
@@ -56,7 +57,22 @@ function standardModal(promptText: string, modalType: ModalType, defaultText: st
                             input.focus()
                             input.selectionStart = 0
                             input.selectionEnd = value.length
-                        }
+                        },
+                        // TODO: Handle escape or enter even if no input
+                        onkeydown: (event: KeyboardEvent) => {
+                            if (event.keyCode === 13) {
+                                // enter
+                                setModalCallback(null)
+                                resolve(value)
+                                return false
+                            } else if (event.keyCode === 27) {
+                                // escape
+                                setModalCallback(null)
+                                resolve(null)
+                                return false
+                            }
+                            return true
+                        },
                     }),
                 ),
                 m("div.ma2.flex.justify-end", 
