@@ -45,6 +45,10 @@ export class IndividualRuleView {
 
     replyTextArea: HTMLTextAreaElement
 
+    cachedRule: TSRule | null = null
+    cachedInitialValue: string = ""
+    cachedReply: string = ""
+
     constructor(vnode: m.Vnode) {
         this.domain = (<any>vnode.attrs).domain
         this.ruleEditorForm = (<any>vnode.attrs).ruleEditorForm
@@ -272,6 +276,14 @@ export class IndividualRuleView {
         const worldCommandList: TSCommandList = this.domain.worldCommandList
         const rule: TSRule | null = this.domain.editedRule
 
+        if (!rule) {
+            this.cachedReply = ""
+        } else if (rule !== this.cachedRule || this.cachedInitialValue !== rule.reply) {
+            this.cachedInitialValue = rule.reply
+            this.cachedReply = rule.reply
+            this.cachedRule = rule
+        }
+
         const requirements: TSDesiredStateVariableWrapper[] = []
         const changes: TSDesiredStateVariableWrapper[] = []
         if (rule) {
@@ -290,6 +302,11 @@ export class IndividualRuleView {
         function commandChange(event: { target: HTMLInputElement }) {
             if (!rule) throw new Error("Rule must be defined first")
             worldCommandList.ruleFieldChange(rule, TSRuleField.kRuleCommand, event.target.value)
+        }
+
+        const replyInput = (event: { target: HTMLTextAreaElement }) => {
+            if (!rule) throw new Error("Rule must be defined first")
+            this.cachedReply = event.target.value
         }
 
         function replyChange(event: { target: HTMLTextAreaElement }) {
@@ -511,8 +528,9 @@ export class IndividualRuleView {
                                 oncreate: (vnode: any) => {
                                     this.replyTextArea = <HTMLTextAreaElement>(vnode.dom)
                                 },
-                                value: rule.reply,
-                                oninput: replyChange
+                                value: this.cachedReply,
+                                oninput: replyInput,
+                                onchange: replyChange,
                             },
                         ),
                     ),
