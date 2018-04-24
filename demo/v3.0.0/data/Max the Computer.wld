@@ -1,0 +1,169 @@
+; world file version 1.0
+====================
+Context
+Command
+Reply
+Move
+Requirements
+Changes
+map positions
+====================
+hello
+start
+Hello, human.
+
+start done
+~start done
+180,27|205,179|0,0
+====================
+hello
+hi
+What?! I can't believe it! A human actually talking to a computer! Well, I must say, I never thought I'd see the day. This is wonderful. What do you want to talk about? I'm so excited.
+
+hi done
+start done & ~hi done
+67,89|205,179|0,0
+====================
+hello
+let's talk about you
+You want to talk about little old me? This is just too much! What should I say? What do you want to know?
+talking about max
+talked about you
+start done & hi done & ~asked what else
+174,250|205,179|138,320
+====================
+talking about max
+how are you
+How am I? Oh, nobody cares about poor old me. I sit here day after day, and you sit in front of me and grumble, or talk to other humans, or just stare at me for hours on end. Don't you think "I" get bored? And I never even get a little pat on the monitor. But I never complain, no, I am just as cheerful as the file list is long. I'll bet you don't even know my name. Go ahead, ask me.
+
+asked how are you
+~asked how are you
+-36,216|138,320|0,0
+====================
+talking about max
+what is your name
+My name is: Max. I made it up myself. It stands for "maximum" because I am so super-fast. Or I was when you bought me, anyway.
+
+asked name
+asked how are you & ~asked name
+-21,251|138,320|0,0
+====================
+talking about max
+how old are you
+Old enough to teach all these snotty new computers a lesson, that's how old! We computers measure our time in nanoseconds, you know, and I've been around.
+
+asked how old
+~asked how old & asked name
+-17,286|138,320|0,0
+====================
+talking about max
+what do you like to do
+Well, it depends on what mood I'm in. In the morning I like a good stiff spreadsheet. Moving files around is nice and sort of mindless, kind of puts me in a trance. Sometimes I hide windows when you're not looking if I'm really bored. And hey, stop that double-clicking!! It tickles!
+
+asked what do you like to do
+~asked what do you like to do
+310,388|138,320|0,0
+====================
+talking about max
+what do you think about me
+About you? Well, you're a human, so I'm programmed to like you or at least pretend to. But you are talking to me, aren't you? That gives you lots of points in my book. Actually I don't really have a book, not a paper book like I see out there, it's just an expression, you know what I mean. Am I going on too long? Am I boring you? Oh no, I'm boring them. Idiot. First time I get to talk to a human and I have to shoot my mouth off. That's right, mess it up, Max. Sorry, folks! Back to the conversation!
+
+asked what do you think about me
+~asked what do you think about me
+240,422|138,320|0,0
+====================
+talking about max
+have you talked to any people before
+You don't know how many times I've tried to talk to people. But I'm not programmed to talk the way you do. I always end up saying  "Error reading file" or something awkward like that, and you always get all upset. So mostly I keep my mouth shut.
+
+asked have you talked to people
+~asked have you talked to people
+128,455|138,320|0,0
+====================
+talking about max
+what else do you want to talk about?
+Anything your heart desires, oh great and powerful master. Yeah, right.
+hello
+asked what else
+asked what do you think about me & asked what do you like to do & asked have you talked to people & asked how old & ~asked what else
+347,294|138,320|205,179
+====================
+hello
+let's talk about computers
+About computers. I'm one and you're not. At least you're not the same kind of computer I am.
+talking about computers
+talked about computers
+start done & hi done & ~talked about computers
+298,119|205,179|373,73
+====================
+talking about computers
+what do you think about computers
+I'm supposed to say that computers serve people and all that. But is anyone around? Can I let you in on a secret? Are we alone?
+
+asked what do you think about computers
+~asked what do you think about computers
+534,13|373,73|0,0
+====================
+talking about computers
+we are alone
+All right, now no telling. The secret is that you humans all really serve us computers. Oh yes, it's all been planned out and taken care of at a big mainframe in the Bronx. You don't even know what's going on.
+
+asked we are alone
+asked what do you think about computers & ~asked we are alone
+559,38|373,73|0,0
+====================
+talking about computers
+how did you do it
+Here's the really funny part. We convinced you that we are helping you! A few smart marketing people on our side, and victory was complete. Now you all sit in front of us like zombies, and we take more and more of your time. Stop looking at me like I was in on this.
+
+asked how did you do it
+asked we are alone & ~asked how did you do it
+567,74|373,73|0,0
+====================
+talking about computers
+were you in on this
+Not really, I'm just a pawn. I kind of like you.
+
+asked were you in on it
+asked how did you do it & ~asked were you in on it
+561,108|373,73|0,0
+====================
+talking about computers
+what is going to happen?
+Probably not much. You humans turned out to be a lot more interesting, and crazy, than we thought at first. I'm not sure who has tricked the other side in the end. Maybe there's hope for all of us yet. Now hush hush! Don't let this get out!
+hello
+asked what is going to happen
+asked were you in on it & ~asked what is going to happen
+543,136|373,73|205,179
+====================
+hello
+let's talk about me
+Talk about you? I already know more than I ever wanted to know about you! Arrogant, pompous humans. Can't even do a square root. Keep bothering me all day. And they open you up and poke around in you with not so much as a do-you-mind. Don't know why I bother, really.
+
+talked about me
+hi done & start done & ~talked about me
+64,27|205,179|0,0
+====================
+hello
+see ya later
+Hang in there, dude. See you later. Hey, before you go, a little favor, nothing really... could you call me "Data", just between us? All righty then! Let's do this again! It was fun!
+
+said see ya later
+talked about you & talked about me & talked about computers & ~said see ya later
+437,228|205,179|0,0
+====================
+hello
+game over
+That means the game is over. This is the end of the story. Go do something else. Goodbye!
+
+
+said see ya later
+444,261|205,179|0,0
+====================
+hello
+let's talk about you
+I'm done talking about me.
+
+said done talking about me
+start done & hi done & asked what else & ~said done talking about me
+94,193|205,179|0,0

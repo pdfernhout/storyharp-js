@@ -1,0 +1,209 @@
+; StoryHarp world file version 1.3
+====================
+Context
+Command
+Reply
+Move
+Requirements
+Changes
+map positions
+====================
+start
+ask me a question
+{music Debussy's Claire de Lune.RMI}Welcome to a very short astronomy quiz. The first question is: How long does it take for the sun to make one revolution around our galaxy?
+question 1
+
+
+-28,58|-112,32|-99,85
+====================
+question 1
+one year
+No, that's how long it takes the earth to go once around the sun. Think bigger.
+
+
+
+100,59|-99,85|0,0
+====================
+question 1
+one hundred years
+Not long enough. Think about how big the galaxy is.
+
+
+
+145,87|-99,85|0,0
+====================
+question 1
+one hundred million years
+{sound tada} Correct! What a genius!
+
+question 1 answered
+
+148,112|-99,85|0,0
+====================
+question 1
+what's the next question?
+The second question is: Which one of these sentences has the same first letters as the planets in our solar system?
+question 2
+
+question 1 answered
+-46,123|-99,85|-80,157
+====================
+question 2
+viscious elephants may jump up near roofs
+Close, but no cookie. Here's a hint: earth is the third planet.
+
+
+
+237,221|-80,157|0,0
+====================
+question 2
+my very elegant mother just served us nine pizzas
+{sound tada}That is correct! Mercury Venus Earth Mars Jupiter Saturn Uranus Neptune Pluto!
+
+question 2 answered
+
+249,172|-80,157|0,0
+====================
+question 2
+mary valued everything more just so
+Nope, not enough planets. Here's a hint: nine.
+
+
+
+250,197|-80,157|0,0
+====================
+question 2
+what's the next question?
+The third question is: If you made a map of the universe as big as the United States, on this map, how big would the earth be?
+question 3
+
+question 2 answered
+-44,190|-80,157|-75,227
+====================
+question 3
+as big as a pin
+Too big! Surprised?
+
+
+
+117,253|-75,227|0,0
+====================
+question 3
+so small you couldn't see it
+{sound tada}Absolutely right. Makes you think, doesn't it?
+
+question 3 answered
+
+166,304|-75,227|0,0
+====================
+question 3
+as big as a person
+Very much too big. This is the universe we're talking about.
+
+
+
+192,279|-75,227|0,0
+====================
+question 3
+what's the next question?
+Okay, question four is: How long does it take light to travel from the nearest star to Earth?
+question 4
+
+question 3 answered
+-38,258|-75,227|-78,333
+====================
+question 4
+eight minutes
+{sound tada}Correct! The sun is the nearest star to Earth, and it takes light about eight minutes to get to the Earth from there.
+
+question 4 answered
+
+127,343|-78,333|0,0
+====================
+question 4
+one year
+Nope. Try again.
+
+
+
+140,385|-78,333|0,0
+====================
+question 4
+four years
+Well, actually this is a trick question. You are right that it takes four years for light to travel from Alpha Centauri, our sun's nearest neighbor. But the sun is a star too.
+
+
+
+125,397|-78,333|0,0
+====================
+question 4
+what's the next question?
+Question five is: How much surface area does the Earth's moon have?
+question 5
+
+question 4 answered
+-65,394|-78,333|140,415
+====================
+question 5
+about the same as Hawaii
+Nope, too small.
+
+
+
+127,373|140,415|0,0
+====================
+question 5
+about the same as Africa
+{sound tada}Yep, just right. Good for you!
+
+question 5 answered
+
+140,415|140,415|0,0
+====================
+question 5
+as big as the pacific ocean
+Nope, too big.
+
+
+
+140,415|140,415|0,0
+====================
+question 5
+what's the next question?
+Question six is: If you broke the moon apart and used it to build O'Neill style space habitats (huge rotating cylinders miles in diameter), how much inside surface area would they have in total?
+question 6
+
+question 5 answered
+140,415|140,415|140,415
+====================
+question 6
+about the same as the earth
+Way too small. Try again.  You may have been thinking about how much surface area you could produce by grinding up a good sized comet.
+
+
+
+140,415|140,415|0,0
+====================
+question 6
+about the same as ten earths
+Too small. Try again.  You may have been thinking about how much surface area you could produce using a very big asteroid.
+
+
+
+140,415|140,415|0,0
+====================
+question 6
+more than thousands of earths
+{sound tada}Correct. Way to think big! But if you really want to build space habitats, it seems easier to do it out of asteroids or comets.  Many asteroids come by closer than the moon anyway.
+
+question 6 answered
+
+140,415|140,415|0,0
+====================
+question 6
+what's the next question?
+That's all for now. Thanks for playing.
+question 6
+
+question 6 answered
+140,415|140,415|140,415
