@@ -7,10 +7,12 @@ StoryHarp 2.0 was in Java but was not completed -- developed around 2011.
 StoryHarp 3.0 is web-based using JavaScript/TypeScript, Mithril, and Tachyons -- released in April 2018 (as a twenty year anniversay edition).
 
 You can try the web version here:
-http://www.kurtz-fernhout.com/StoryHarp/v3.0/
+https://storyharp.com/v3.0/
 
-For more background see: http://storyharp.com
+For more background see: https://storyharp.com
 
 StoryHarp 3.0 Copyright 1998-2018 Paul D. Fernhout and Cynthia F. Kurtz
 
 StoryHarp is a trademark of Paul D. Fernhout and Cynthia F. Kurtz
+
+![StoryHarp editor screenshot](screenshots/StoryHarp-Editor-Screenshot-2018-05-03.png "StoryHarp Editor Screenshot showing table view")
