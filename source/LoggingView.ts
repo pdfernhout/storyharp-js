@@ -135,9 +135,9 @@ function confirmClearLog() {
     })
 }
 
-export class LogView {
+export class LoggingView {
     view() {
-        return m("div.LogView.h-100.w-100.overflow-hidden.flex.flex-column",
+        return m("div.LoggingView.h-100.w-100.overflow-hidden.flex.flex-column",
             m("div.mb2.flex-none",
                 m("button", {
                     onclick: confirmClearLog,

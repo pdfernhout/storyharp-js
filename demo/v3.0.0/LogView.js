@@ -118,13 +118,13 @@ define(["require", "exports", "mithril", "./ToastView", "./ModalInputView"], fun
             });
         });
     }
-    class LogView {
+    class LoggingView {
         view() {
-            return m("div.LogView.h-100.w-100.overflow-hidden.flex.flex-column", m("div.mb2.flex-none", m("button", {
+            return m("div.LoggingView.h-100.w-100.overflow-hidden.flex.flex-column", m("div.mb2.flex-none", m("button", {
                 onclick: confirmClearLog,
                 disabled: dbFailed || !db,
             }, "Clear log")), dbFailed ? m("div.red.flex-none", "Something went wrong with the log") : [], m("div.h-100.w-100.overflow-auto.flex-auto", log.map(text => m("pre.pre-wrap", text))));
         }
     }
-    exports.LogView = LogView;
+    exports.LoggingView = LoggingView;
 });

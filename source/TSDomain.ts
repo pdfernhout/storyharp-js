@@ -12,7 +12,7 @@ import { MapViewState, newMapViewState } from "./TSMapView"
 import { doCommand, parseTextWithMacros, SegmentType } from "./ConsoleForm";
 import { PendingTableScroll } from "./RuleTableView"
 import { TPoint } from "./TPoint"
-import { addToLog } from "./LogView"
+import { addToLog } from "./LoggingView"
 import { TSVariable } from "./TSVariable"
 import { toast } from "./ToastView"
 

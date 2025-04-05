@@ -6,7 +6,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-define(["require", "exports", "mithril", "./TWorld", "./TSCommandList", "./TSRule", "./common", "./KfCommand", "./LinkWizardView", "./ContextWizardView", "./CommandWizardView", "./TSMapView", "./ConsoleForm", "./TPoint", "./LogView", "./ToastView"], function (require, exports, m, TWorld_1, TSCommandList_1, TSRule_1, common_1, KfCommand_1, LinkWizardView_1, ContextWizardView_1, CommandWizardView_1, TSMapView_1, ConsoleForm_1, TPoint_1, LogView_1, ToastView_1) {
+define(["require", "exports", "mithril", "./TWorld", "./TSCommandList", "./TSRule", "./common", "./KfCommand", "./LinkWizardView", "./ContextWizardView", "./CommandWizardView", "./TSMapView", "./ConsoleForm", "./TPoint", "./LoggingView", "./ToastView"], function (require, exports, m, TWorld_1, TSCommandList_1, TSRule_1, common_1, KfCommand_1, LinkWizardView_1, ContextWizardView_1, CommandWizardView_1, TSMapView_1, ConsoleForm_1, TPoint_1, LoggingView_1, ToastView_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     const kUnsavedWorldFileName = "untitled";
@@ -72,7 +72,7 @@ define(["require", "exports", "mithril", "./TWorld", "./TSCommandList", "./TSRul
             this.pendingMapScroll = false;
             this.pendingBrowserScroll = false;
             this.dataPath = "./data/";
-            this.addToLog = LogView_1.addToLog;
+            this.addToLog = LoggingView_1.addToLog;
             this.world = new TWorld_1.TWorld(this.goodPosition.bind(this));
             this.sessionCommandList = new TSCommandList_1.TSCommandList(this);
             this.sessionCommandList.setNewUndoLimit(1000);

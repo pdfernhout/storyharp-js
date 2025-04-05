@@ -6,7 +6,7 @@ RuleEditorMenuCommands is commented converted code not yet used or deleted.
 
 2018-03-16 Update: Since this was written, the ConsoleForm was split
 into MainForm, AboutForm, DemoFilesForm, and ConsoleForm.
-Some other code has also been added and removed like creating a LogView.
+Some other code has also been added and removed like creating a LoggingView.
 
 ~/workspace/storyharp-js/source$ date
 

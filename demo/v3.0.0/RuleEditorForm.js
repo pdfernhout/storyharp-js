@@ -1,4 +1,4 @@
-define(["require", "exports", "mithril", "./IndividualRuleView", "./RuleTableView", "./RuleMapView", "./RuleBrowserView", "./ContextWizardView", "./CommandWizardView", "./LinkWizardView", "./common", "./LogView", "./ToastView", "./ModalInputView"], function (require, exports, m, IndividualRuleView_1, RuleTableView_1, RuleMapView_1, RuleBrowserView_1, ContextWizardView_1, CommandWizardView_1, LinkWizardView_1, common_1, LogView_1, ToastView_1, ModalInputView_1) {
+define(["require", "exports", "mithril", "./IndividualRuleView", "./RuleTableView", "./RuleMapView", "./RuleBrowserView", "./ContextWizardView", "./CommandWizardView", "./LinkWizardView", "./common", "./LoggingView", "./ToastView", "./ModalInputView"], function (require, exports, m, IndividualRuleView_1, RuleTableView_1, RuleMapView_1, RuleBrowserView_1, ContextWizardView_1, CommandWizardView_1, LinkWizardView_1, common_1, LoggingView_1, ToastView_1, ModalInputView_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class RuleEditorForm {
@@ -80,7 +80,7 @@ define(["require", "exports", "mithril", "./IndividualRuleView", "./RuleTableVie
             }, "Redo"))), currentView === "wizards"
                 ? this.viewWizards()
                 : [
-                    m("div.flex-auto.h-100.w-100.overflow-hidden", currentView === "table" ? m(RuleTableView_1.RuleTableView, { domain: domain }) : [], currentView === "map" ? m(RuleMapView_1.RuleMapView, { domain: domain }) : [], currentView === "browser" ? m(RuleBrowserView_1.RuleBrowserView, { domain: domain }) : [], currentView === "log" ? m(LogView_1.LogView, { domain: domain }) : []),
+                    m("div.flex-auto.h-100.w-100.overflow-hidden", currentView === "table" ? m(RuleTableView_1.RuleTableView, { domain: domain }) : [], currentView === "map" ? m(RuleMapView_1.RuleMapView, { domain: domain }) : [], currentView === "browser" ? m(RuleBrowserView_1.RuleBrowserView, { domain: domain }) : [], currentView === "log" ? m(LoggingView_1.LoggingView, { domain: domain }) : []),
                     currentView !== "log"
                         ? m("div.flex-none", m(IndividualRuleView_1.IndividualRuleView, { domain: domain, ruleEditorForm: this }))
                         : []

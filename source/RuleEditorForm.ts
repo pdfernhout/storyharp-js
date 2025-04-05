@@ -10,7 +10,7 @@ import { CommandWizardView } from "./CommandWizardView"
 import { LinkWizardView } from "./LinkWizardView"
 import { TSDomain, WizardName, EditorName } from "./TSDomain"
 import { notebookTabButton, ScrollIntoViewDirection } from "./common"
-import { LogView } from "./LogView"
+import { LoggingView } from "./LoggingView"
 import { TSRule } from "./TSRule"
 import { toast } from "./ToastView"
 import { modalPrompt } from "./ModalInputView"
@@ -145,7 +145,7 @@ export class RuleEditorForm {
                         currentView === "table" ? m(RuleTableView, <any>{domain: domain}) : [],
                         currentView === "map" ? m(RuleMapView, <any>{domain: domain}) : [],
                         currentView === "browser" ? m(RuleBrowserView, <any>{domain: domain}) : [],
-                        currentView === "log" ? m(LogView, <any>{domain: domain}) : [],
+                        currentView === "log" ? m(LoggingView, <any>{domain: domain}) : [],
                     ),
                     currentView !== "log" 
                         ? m("div.flex-none",
