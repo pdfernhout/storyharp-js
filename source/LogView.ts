@@ -109,7 +109,7 @@ function clearLog() {
             .clear()
                                 
         request.onsuccess = function() {
-            resolve()
+            resolve(undefined)
         };
         
         request.onerror = function(error) {

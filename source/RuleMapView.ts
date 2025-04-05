@@ -838,7 +838,7 @@ export class RuleMapView {
                         }
                     },
 
-                    onmousewheel: (event: MouseWheelEvent) => {
+                    onmousewheel: (event: WheelEvent) => {
                         this.mapDrawer.scroll.X -= (event.deltaX / this.mapDrawer.scale)
                         this.mapDrawer.scroll.Y -= (event.deltaY / this.mapDrawer.scale)
                     },

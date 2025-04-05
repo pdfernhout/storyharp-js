@@ -11,7 +11,7 @@ https://storyharp.com/v3.0/
 
 For more background see: https://storyharp.com
 
-StoryHarp 3.0 Copyright 1998-2018 Paul D. Fernhout and Cynthia F. Kurtz
+StoryHarp 3.0 Copyright 1998-2025 Paul D. Fernhout and Cynthia F. Kurtz
 
 StoryHarp is a trademark of Paul D. Fernhout and Cynthia F. Kurtz
 

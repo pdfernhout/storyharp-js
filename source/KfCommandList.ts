@@ -197,7 +197,7 @@ export class KfCommandList {
     }
 
     clearRedoableCommands(): void {
-        if (this.isRedoEnabled)
+        if (this.isRedoEnabled())
             for (let i: longint = this.commandList.length - 1; i > this.lastDoneCommandIndex; i--) {
                 this.commandList.pop()
             }

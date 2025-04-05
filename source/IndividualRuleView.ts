@@ -25,6 +25,9 @@ function insertTextAtCursor(element: HTMLTextAreaElement | HTMLInputElement, tex
     if (element.selectionStart || element.selectionStart === 0) {
         var startPos = element.selectionStart
         var endPos = element.selectionEnd
+        if (startPos === null || endPos === null) {
+            throw new Error("startPos or endPos is null")
+        }
         newText = element.value.substring(0, startPos) + textToInsert + element.value.substring(endPos, element.value.length)
         element.value = newText
         element.selectionStart = startPos + textToInsert.length

@@ -1,7 +1,9 @@
 import { modalPrompt } from "./ModalInputView"
 
 // Conversion function from: http://stackoverflow.com/questions/9267899/arraybuffer-to-base64-encoded-string
-function _arrayBufferToBase64(buffer: Buffer) {
+function _arrayBufferToBase64(buffer: ArrayBuffer | string | null) {
+    if (!buffer) return ""
+    if (typeof buffer === "string") return buffer
     let binary = ""
     const bytes = new Uint8Array(buffer)
     const len = bytes.byteLength
