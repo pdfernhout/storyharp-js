@@ -7,7 +7,6 @@ export class TSMapDragCommand extends KfCommand {
     domain: TSDomain
     scale: number
     dragRecords: TSDragRecord[] = []
-    notifyProcedure: TCommandEvent
     
     constructor(domain: TSDomain, scale: number) {
         super()
