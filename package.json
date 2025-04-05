@@ -9,8 +9,8 @@
     "build": "npm run copy-lib && npm run copy-data && npm run copy-index && npm run copy-resources && tsc",
     "copy-lib": "mkdir -p dist/source/lib && cp node_modules/systemjs/dist/system.src.js node_modules/tachyons/css/tachyons.css node_modules/mithril/mithril.js dist/source/lib/",
     "copy-data": "mkdir -p dist/source/data/media && cp data/*.wld data/*.json dist/source/data/ && cp data/media/* dist/source/data/media/",
-    "copy-index": "cp source/index.html dist/source/",
-    "copy-resources": "mkdir -p dist/source/resources && cp source/resources/*.png source/resources/template.html dist/source/resources/"
+    "copy-index": "mkdir -p dist/source && cp source/index.html dist/source/",
+    "copy-resources": "mkdir -p dist/source/resources && cp source/resources/*.png source/resources/*.ico source/resources/template.html dist/source/resources/"
   },
   "author": "Paul D. Fernhout <pdfernhout@kurtz-fernhout.com>",
   "license": "AGPL-3.0-or-later",
