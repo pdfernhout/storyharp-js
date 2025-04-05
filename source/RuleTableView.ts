@@ -129,7 +129,6 @@ export class RuleTableView {
                 // Ensure room for borders to avoid scroller
                 { style: "width: calc(100% - 2px)" },
                 m("tr",
-                    { key: "header" },
                     m("th.w-3.tc", "#"),
                     m("th.w-15.pl1.bl.b--moon-gray", "Context", m("span.normal.ml1", Glyph.context)),
                     m("th.w-15.pl1.bl.b--moon-gray", "Requirements", m("span.normal.ml1", Glyph.requirements)),

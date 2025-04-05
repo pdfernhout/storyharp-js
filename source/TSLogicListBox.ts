@@ -80,7 +80,6 @@ export class TSLogicListBox {
                     )
                 }),
                 m("li.ml1.mt1.mb1",
-                    { key: -1 },
                     m(TQuickFillComboBox, <any>{
                         style: {
                             "margin-left": "0.25rem",
