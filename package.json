@@ -1,6 +1,6 @@
 {
   "name": "storyharp-js",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "StoryHarp Interactive Fiction Editor and Player",
   "main": "index.js",
   "scripts": {
