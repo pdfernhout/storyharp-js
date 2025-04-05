@@ -377,7 +377,7 @@ export class TSApplication implements TSDomain {
                 })
         }
     
-        const worldContent = await m.request(this.dataPath + fileName + ".wld", {deserialize: (text) => text})
+        const worldContent = await m.request(this.dataPath + fileName + ".wld", {responseType: "text", deserialize: (text) => text})
             .catch(error => {
                 console.log("error loading a world file", fileName, error)
                 toast("Something went wrong loading the world file \"" + fileName + "\" from the server")

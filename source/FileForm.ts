@@ -133,7 +133,7 @@ async function generateHTML(domain: TSDomain) {
         toast("Some rules and contexts must be defined first")
         return
     }
-    const template = await m.request("resources/template.html", {deserialize: (text) => text})
+    const template = await m.request("resources/template.html", {responseType: "text", deserialize: (text) => text})
     const htmlFile = template
         .replace(/\/\/ START REPLACE[\s\S]*\/\/ END REPLACE/gm, programText)
         .replace("StoryHarp 3.0 Player", makeFileNameWithoutWldExtension(domain.worldFileName))
