@@ -1,7 +1,6 @@
 import * as m from "mithril"
 import { expander } from "./common"
 import { TSNewRulesCommand } from "./TSNewRulesCommand"
-import { TPoint } from "./TPoint"
 import { TWorld } from "./TWorld"
 import { Glyph } from "./VariablesView"
 import { TSRule } from "./TSRule"

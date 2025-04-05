@@ -1,7 +1,6 @@
 import { TSAbstractMoveFocusCommand } from "./TSAbstractMoveFocusCommand"
 import { TSChangedVariableWrapper } from "./TSChangedVariableWrapper"
 import { int, compareTextIgnoreCase, Color } from "./common"
-import { TWorld } from "./TWorld"
 import { TSRule } from "./TSRule"
 import { TSVariableState } from "./TSVariable"
 import { TSDomain } from "./TSDomain"

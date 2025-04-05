@@ -1,5 +1,4 @@
 import { KfCommand, TCommandEvent, KfCommandChangeType, TrackPhase } from "./KfCommand"
-import { TWorld } from "./TWorld"
 import { TSDragRecord } from "./TSDragRecord"
 import { TPoint } from "./TPoint"
 import { TSDomain } from "./TSDomain"

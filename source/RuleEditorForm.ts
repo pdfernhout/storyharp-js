@@ -1,6 +1,4 @@
 import * as m from "mithril"
-import { FileUtils } from "./FileUtils"
-import { TWorld } from "./TWorld"
 import { IndividualRuleView } from "./IndividualRuleView"
 import { RuleTableView } from "./RuleTableView"
 import { RuleMapView } from "./RuleMapView"

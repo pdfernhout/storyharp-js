@@ -1,5 +1,3 @@
-import { int } from "./common"
-import { TWorld } from "./TWorld"
 import { KfCommandList } from "./KfCommandList"
 import { TSVariable } from "./TSVariable"
 import { TSToggleVariableCommand } from "./TSToggleVariableCommand"

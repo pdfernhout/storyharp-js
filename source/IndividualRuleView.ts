@@ -8,7 +8,7 @@ import { TSDomain, fixupPath } from "./TSDomain"
 import { TQuickFillComboBox } from "./TQuickFillComboBox"
 import { TSDesiredStateVariableWrapper } from "./TSDesiredStateVariableWrapper";
 import { Glyph } from "./VariablesView"
-import { TSVariableState, TSVariable } from "./TSVariable";
+import { TSVariable } from "./TSVariable";
 import { TSLogicListBox } from "./TSLogicListBox";
 import { RuleEditorForm } from "./RuleEditorForm";
 import { parseTextWithMacros, SegmentType } from "./ConsoleForm";

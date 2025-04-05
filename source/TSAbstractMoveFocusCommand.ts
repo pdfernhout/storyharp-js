@@ -1,4 +1,3 @@
-import { TWorld } from "./TWorld"
 import { TSVariable, TSVariableState } from "./TSVariable"
 import { KfCommand } from "./KfCommand"
 import { TSDomain } from "./TSDomain"

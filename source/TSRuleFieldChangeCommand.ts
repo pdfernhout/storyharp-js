@@ -1,6 +1,5 @@
-import { int, ScrollIntoViewDirection } from "./common"
+import { ScrollIntoViewDirection } from "./common"
 import { KfCommand } from "./KfCommand"
-import { TWorld } from "./TWorld"
 import { TSRule, TSRuleField } from "./TSRule"
 import { TSDomain } from "./TSDomain"
 

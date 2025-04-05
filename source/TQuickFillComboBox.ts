@@ -1,5 +1,5 @@
 import * as m from "mithril"
-import { int, expander } from "./common"
+import { expander } from "./common"
 
 // Uncomment console.log version for debugging events
 const log = (...args: any[]) => {}

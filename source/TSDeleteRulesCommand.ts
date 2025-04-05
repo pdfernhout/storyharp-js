@@ -1,6 +1,5 @@
 import { int, ScrollIntoViewDirection } from "./common"
 import { KfCommand } from "./KfCommand"
-import { TWorld } from "./TWorld"
 import { TSIndexChangeRuleWrapper } from "./TSIndexChangeRuleWrapper"
 import { TSRule } from "./TSRule"
 import { TSDomain } from "./TSDomain"

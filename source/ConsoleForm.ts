@@ -4,7 +4,7 @@ import { Color, ScrollIntoViewDirection } from "./common"
 import { TWorld } from "./TWorld"
 import { VariablesView } from "./VariablesView"
 import { TSDomain, TranscriptLine, fixupPath, isMediaOK } from "./TSDomain"
-import { loadWorldFromLocalFile } from "./FileForm"
+// import { loadWorldFromLocalFile } from "./FileForm"
 import { toast } from "./ToastView"
 import { modalConfirm, modalPrompt } from "./ModalInputView"
 

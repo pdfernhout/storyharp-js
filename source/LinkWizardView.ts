@@ -1,12 +1,10 @@
 import * as m from "mithril"
 import { expander } from "./common"
 import { TSNewRulesCommand } from "./TSNewRulesCommand"
-import { TPoint } from "./TPoint"
 import { TWorld } from "./TWorld"
 import { Glyph } from "./VariablesView"
 import { TSDomain } from "./TSDomain"
-import { TSRule } from "./TSRule";
-import { TSVariable } from "./TSVariable"
+import { TSRule } from "./TSRule"
 import { TQuickFillComboBox } from "./TQuickFillComboBox"
 import { toast } from "./ToastView"
 import { modalConfirm } from "./ModalInputView"

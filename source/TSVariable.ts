@@ -1,6 +1,5 @@
 import { int } from "./common"
 import { TSDraggableObject } from "./TSDraggableObject"
-import { TWorld } from "./TWorld"
 import { TSRuleField } from "./TSRule"
 
 export enum TSVariableState { kAbsent, kPresent }
