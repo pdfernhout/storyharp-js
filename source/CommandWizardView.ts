@@ -212,7 +212,7 @@ export class CommandWizardView {
             m("div",
                 m("h2", "New Commands Wizard"),
 
-                m("div", {onclick: () => this.domain.showWizardHelp = !this.domain.showWizardHelp }, "Show wizard help", expander(showHelp, "", "(Click to close help)")),
+                m("div", {onclick: () => this.domain.showWizardHelp = !this.domain.showWizardHelp }, expander(showHelp, " (Click for:)") + " Wizard Help"),
 
                 help("This wizard will create a set of new rules based on one context and a list of commands you enter."),
                 help("You can enter a reply for each command."),

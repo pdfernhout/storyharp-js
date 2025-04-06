@@ -379,7 +379,7 @@ export class IndividualRuleView {
                 },
                 m("span", {
                     onclick: () => this.expanded = !this.expanded
-                    }, "Rule Viewer " + expander(this.expanded)
+                    }, expander(this.expanded) + " Rule Viewer "
                 ),
                 m("span.dib.w2.RuleNumberLabel.TLabel",
                     {

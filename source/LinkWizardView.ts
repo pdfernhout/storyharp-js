@@ -234,7 +234,7 @@ export class LinkWizardView {
             m("div",
                 m("h2", "New Links Wizard"),
 
-                m("div", {onclick: () => this.domain.showWizardHelp = !this.domain.showWizardHelp }, "Show wizard help", expander(showHelp, "", "(Click to close help)")),
+                m("div", {onclick: () => this.domain.showWizardHelp = !this.domain.showWizardHelp }, expander(showHelp, " (Click for:)") + " Wizard Help"),
 
                 help("This wizard will link up two contexts by creating rules with commands to move between them."),
 
