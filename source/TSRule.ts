@@ -33,6 +33,14 @@ export class TSRule extends TSDraggableObject {
     changesString: string = ""
     // TODO: useagesRemoved may be no longer needed
     useagesRemoved: boolean = false
+
+    constructor(world: TWorld) {
+        super()
+        this.world = world
+        this.context = world.emptyEntry
+        this.command = world.emptyEntry
+        this.move = world.emptyEntry
+    }
  
     displayName(): string {
         return this.command.phrase || textToDisplayForEmptyCommandPhrase

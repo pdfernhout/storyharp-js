@@ -79,7 +79,6 @@ export class TSDoCommandPhraseCommand extends TSAbstractMoveFocusCommand {
     }
     
     undoCommand(): void {
-        let i: int
         let undoPhrase: string
         
         this.domain.consoleForm.addLineToTranscript("> undo", Color.clBlue)

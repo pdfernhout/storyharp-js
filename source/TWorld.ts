@@ -67,8 +67,7 @@ export class TWorld {
     
     newRule(): TSRule {
         // TODO: Maybe make a constructor for TSRule?
-        const result: TSRule = new TSRule()
-        result.world = this
+        const result: TSRule = new TSRule(this)
         result.context = this.emptyEntry
         result.command = this.emptyEntry
         result.move = this.emptyEntry
@@ -94,7 +93,7 @@ export class TWorld {
         return null
     }
     
-    findOrCreateVariable(aString: string, madeByMacro: boolean): TSVariable {
+    findOrCreateVariable(aString: string, _madeByMacro: boolean): TSVariable {
         const match = this.findVariable(aString.trim())
         if (match !== null) {
             return match
@@ -375,8 +374,6 @@ export class TWorld {
     }
     
     firstAvailable(): TSRule | null {
-        let result = new TSRule()
-        
         for (let i = 0; i < this.rules.length; i++) {
             const rule: TSRule = this.rules[i]
             if (rule.available) {
@@ -387,11 +384,7 @@ export class TWorld {
         return null
     }
     
-    selectInRectangle(rect: TRect): void {
-        let intersection: TRect
-        let rule: TSRule
-        let variable: TSVariable
-        
+    selectInRectangle(rect: TRect): void {        
         // Make a copy of rect in case swap values
         rect = rect.copy()
         if (rect.Right < rect.Left) {

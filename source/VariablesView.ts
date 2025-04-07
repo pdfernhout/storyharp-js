@@ -141,7 +141,7 @@ export class VariablesView {
         )
     }
 
-    view(vnode: m.Vnode) {
+    view(_vnode: m.Vnode) {
         return m(".VariablesView.fixed.ba.right-0.top-0.bg-washed-blue.pl1.br3.br--left.pr1", 
             m("div", { onclick: () => this.expanded = !this.expanded }, m("span", expander(this.expanded) + " Variables")),
             !this.expanded

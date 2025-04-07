@@ -389,12 +389,12 @@ export class TSMapView {
         return result
     }
 
-    // TODO lastChoice and previousChoice are not used
+    // TODO _lastChoice and _previousChoice are not currently used
     displayOn(
         context: CanvasRenderingContext2D, 
         displayOptions: TSVariableDisplayOptions, 
-        lastChoice: TSDraggableObject | null, 
-        previousChoice: TSDraggableObject | null,
+        _lastChoice: TSDraggableObject | null, 
+        _previousChoice: TSDraggableObject | null,
         world: TWorld,
         editedRule: TSRule | null,
         showCommandPrefix: boolean

@@ -43,7 +43,7 @@ export function modalPrompt(promptText: string, defaultText: string = ""): Promi
 
 function standardModal(promptText: string, modalType: ModalType, defaultText: string = ""): Promise<string | null> {
     let value = defaultText
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _reject) => {
         setModalCallback(() => {
             return m("div.mt5.ml-auto.mr-auto.bg-near-white.pa3",
                 { style: "width: 24rem" },

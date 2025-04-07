@@ -46,7 +46,7 @@ export class IndividualRuleView {
     expanded = true
     testPictures: string[] = []
 
-    replyTextArea: HTMLTextAreaElement
+    replyTextArea!: HTMLTextAreaElement
 
     cachedRule: TSRule | null = null
     cachedInitialValue: string = ""
@@ -294,8 +294,6 @@ export class IndividualRuleView {
             rule.compile(rule.decompile(rule.requirements), requirements)
             rule.compile(rule.decompile(rule.changes), changes)
         }
-
-        function InsertMusicButtonClick() { console.log("InsertMusicButtonClick") }
 
         function contextChange(event: { target: HTMLInputElement }) {
             if (!rule) throw new Error("Rule must be defined first")

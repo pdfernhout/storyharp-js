@@ -113,7 +113,6 @@ interface Segment {
 export function parseTextWithMacros(aString: string): Segment[] { 
     const result: Segment[] = []   
     let remaining = aString
-    const wholeLength = aString.length
     while (remaining.length > 0) {
         const startPosition = remaining.indexOf("{")
         if (startPosition !== -1) {
@@ -155,8 +154,7 @@ export function parseTextWithMacros(aString: string): Segment[] {
     return result
 }
 
-function viewTranscriptItem(item: TranscriptLine) {
-    const domain: TSDomain = this
+function viewTranscriptItem(domain: TSDomain, item: TranscriptLine) {
     const segments = parseTextWithMacros(item.text)
     return m("div.mw6" + color(item.color),
         {
@@ -215,7 +213,7 @@ function startSession(domain: TSDomain) {
 
 export class ConsoleForm {
     domain: TSDomain
-    transcriptDiv: HTMLDivElement
+    transcriptDiv!: HTMLDivElement
 
     constructor(vnode: m.Vnode) {
         this.domain = (<any>vnode.attrs).domain
@@ -304,11 +302,11 @@ export class ConsoleForm {
                     m("div.flex-auto.overflow-auto.flex.flex-column-reverse",
                         {
                             oncreate: (vnode: any) => {
-                            this.transcriptDiv = <HTMLDivElement>(vnode.dom)
+                                this.transcriptDiv = <HTMLDivElement>(vnode.dom)
                             },
                         },
                         // transcript is kept in reverse order to make this iteration more computationally efficient
-                        domain.transcript.map(viewTranscriptItem.bind(domain)),
+                        domain.transcript.map(each => viewTranscriptItem(domain, each)),
                     ),
                     (!domain.sessionChangeCount && domain.transcript.length <= 1) ? [] : m("div.flex-none",
                         viewChoices(domain, this.scrollEndOfTranscriptIntoView.bind(this)),

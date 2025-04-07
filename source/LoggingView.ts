@@ -2,12 +2,8 @@ import * as m from "mithril"
 import { toast } from "./ToastView"
 import { modalConfirm } from "./ModalInputView"
 
-// Open (or create) the database
-var open = indexedDB.open("MyDatabase", 1);
-
 let dbFailed = false
 let db: IDBDatabase
-let logStore: IDBObjectStore
 
 const log: string[] = []
 
@@ -22,10 +18,10 @@ function openLogDBIfNeeded(): Promise<void> {
 
         openDBRequest.onupgradeneeded = function() {
             const db = openDBRequest.result
-            const store = db.createObjectStore("log", { keyPath: "id", autoIncrement: true })
+            db.createObjectStore("log", { keyPath: "id", autoIncrement: true })
         }
 
-        openDBRequest.onerror = function(event) {
+        openDBRequest.onerror = function() {
             console.log("db error for log", openDBRequest.error)
             dbFailed = true
             reject()

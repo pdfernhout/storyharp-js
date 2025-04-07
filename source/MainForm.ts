@@ -8,7 +8,7 @@ import { RuleEditorForm } from "./RuleEditorForm"
 import { ConsoleForm } from "./ConsoleForm"
 import { FileForm } from "./FileForm"
 import { ToastView } from "./ToastView";
-import { ModalInputView, modalPrompt } from "./ModalInputView";
+import { ModalInputView } from "./ModalInputView";
 
 export class MainForm {
     domain: TSDomain

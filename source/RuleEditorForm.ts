@@ -67,7 +67,6 @@ export class RuleEditorForm {
 
     searchForAndSelectRule(aText: string, ignoreCase: boolean, goDown: boolean): void {
         const domain = this.domain
-        let match: boolean
         
         let ruleIndex = 0
         if (domain.editedRule) {

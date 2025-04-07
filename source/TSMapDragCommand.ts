@@ -1,4 +1,4 @@
-import { KfCommand, TCommandEvent, KfCommandChangeType, TrackPhase } from "./KfCommand"
+import { KfCommand, KfCommandChangeType, TrackPhase } from "./KfCommand"
 import { TSDragRecord } from "./TSDragRecord"
 import { TPoint } from "./TPoint"
 import { TSDomain } from "./TSDomain"
@@ -52,7 +52,7 @@ export class TSMapDragCommand extends KfCommand {
         return result
     }
     
-    trackMouse(aTrackPhase: TrackPhase, anchorPoint: TPoint, previousPoint: TPoint, nextPoint: TPoint, mouseDidMove: boolean, rightButtonDown: boolean): KfCommand | null {
+    trackMouse(aTrackPhase: TrackPhase, _anchorPoint: TPoint, previousPoint: TPoint, nextPoint: TPoint, mouseDidMove: boolean, _rightButtonDown: boolean): KfCommand | null {
         let result: KfCommand | null
 
         result = this

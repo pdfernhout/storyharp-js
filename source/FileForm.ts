@@ -26,7 +26,7 @@ function saveWorldToLocalFile(domain: TSDomain) {
 function exportSelectedRulesToLocalFile(domain: TSDomain) {
     const world: TWorld = domain.world
     const fileName = makeFileNameWithoutWldExtension(domain.worldFileName)
-    FileUtils.saveToFile(fileName, world.saveWorldToFileContents(ExportRulesOption.kSaveOnlySelectedRules), ".wld", (fileName: string) => {
+    FileUtils.saveToFile(fileName, world.saveWorldToFileContents(ExportRulesOption.kSaveOnlySelectedRules), ".wld", (_fileName: string) => {
         m.redraw()
     })
 }

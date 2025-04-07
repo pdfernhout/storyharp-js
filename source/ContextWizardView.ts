@@ -10,10 +10,10 @@ import { modalConfirm } from "./ModalInputView";
 
 // Previous help: "Making_new_rules_using_the_new_contexts_wizard"
 
-const exampleOne =`
-cave|You are in a big cave.
-forest|You are in a lively forest.
-spring|You are standing near a burbling spring.`.trim()
+// const exampleOne =`
+// cave|You are in a big cave.
+// forest|You are in a lively forest.
+// spring|You are standing near a burbling spring.`.trim()
 
 const exampleWithNineRules = `    
 well house | You are in a well house for a small spring.
@@ -137,7 +137,6 @@ export class ContextWizardView {
     }
     
     view() {
-        function caption(text: string) { return text }
         const showHelp = this.domain.showWizardHelp
         function help(...args: string[]) {
             return showHelp ? m("p", ...args) : []

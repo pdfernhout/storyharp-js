@@ -222,7 +222,6 @@ export class LinkWizardView {
     }
     
     view() {
-        function caption(text: string) { return text }
         const showHelp = this.domain.showWizardHelp
         function help(...args: string[]) {
             return showHelp ? m("p", ...args) : []

@@ -16,7 +16,7 @@ o.spec("KfCommandList", () => {
 
         let commandChangeType = null
         
-        command.notifyProcedure = (command, state) => {
+        command.notifyProcedure = (_command, state) => {
             commandChangeType = state
         }
         

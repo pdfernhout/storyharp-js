@@ -25,7 +25,7 @@ export class RuleMapView {
     world: TWorld
     worldCommandList: TSCommandList
     
-    canvas: HTMLCanvasElement
+    canvas!: HTMLCanvasElement
     mapDrawer: TSMapView
 
     isDragging = false
@@ -87,7 +87,7 @@ export class RuleMapView {
 
     */
 
-    mapChangedNotification(command: KfCommand, state: KfCommandChangeType): void {
+    mapChangedNotification(_command: KfCommand, _state: KfCommandChangeType): void {
         this.MapPaintBoxChanged()
     }
 
@@ -288,9 +288,9 @@ export class RuleMapView {
     }
 
     PopupNewLinkClick(): void {
-        let variable: TSVariable
-        let rule: TSRule
-        let mapView: TSMapView
+        // let variable: TSVariable
+        // let rule: TSRule
+        // let mapView: TSMapView
 
         /* TODO -- decide if can support old linking system with right click and multiple selections
         const displayOptions: TSVariableDisplayOptions = []
@@ -726,7 +726,7 @@ export class RuleMapView {
                         drawWorld()
                     },
 
-                    onupdate: (vnode: m.VnodeDOM) => {
+                    onupdate: (_vnode: m.VnodeDOM) => {
                         drawWorld()
                     },
 

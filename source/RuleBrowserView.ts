@@ -78,6 +78,7 @@ export class RuleBrowserView {
 
     viewSecondListBox() {
         let displayFieldType: int
+        // @ts-ignore
         let glyph: string
         
         if (this.browseBy === TSRuleField.kRuleCommand) {

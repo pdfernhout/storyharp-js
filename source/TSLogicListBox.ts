@@ -5,7 +5,7 @@ import { Glyph } from "./VariablesView"
 import { TQuickFillComboBox } from "./TQuickFillComboBox";
 
 export class TSLogicListBox {
-    comboBox: TQuickFillComboBox
+    comboBox!: TQuickFillComboBox
 
     view(vnode: any) {
         const { selections, items, world, onchange: onchangeCallback, onselect: onselectCallback, ...attrs } = vnode.attrs
@@ -20,7 +20,7 @@ export class TSLogicListBox {
                         "-webkit-margin-after": "0em",
                         "-webkit-padding-start": "0px",
                     },
-                    onclick: (event: any) => {
+                    onclick: (_event: any) => {
                         this.comboBox.inputElement.focus()
                     },
                 },
@@ -38,7 +38,7 @@ export class TSLogicListBox {
                             tabindex: 0,
                             key: 1,
                             // not onclick because of issue with losing focus from combobox eating click
-                            onmousedown: (event: any) => {
+                            onmousedown: (_event: any) => {
                                 wrapper.invertDesiredState()
                                 if (onchangeCallback) onchangeCallback(selections)
                             },

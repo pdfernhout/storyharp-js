@@ -2,7 +2,7 @@ import * as m from "mithril"
 import { expander } from "./common"
 
 // Uncomment console.log version for debugging events
-const log = (...args: any[]) => {}
+const log = (..._args: any[]) => {}
 // const log = console.log
 
 // Key idea here is that the "combobox" has focus when any of the input, button, or menu items have focus.
@@ -13,9 +13,9 @@ export class TQuickFillComboBox {
     isMenuOpen = false
     menuOpenedByButton = false
     clientWidth = 0
-    inputElement: HTMLInputElement
-    buttonElement: HTMLButtonElement
-    ulElement: HTMLUListElement
+    inputElement!: HTMLInputElement
+    buttonElement!: HTMLButtonElement
+    ulElement!: HTMLUListElement
 
     focus() {
         this.inputElement.focus()
@@ -260,7 +260,7 @@ export class TQuickFillComboBox {
                             }
                         },
                     }, "No matches..."),
-                    matchingItems.map((item, index) => m("li.focus-bg-light-blue", {
+                    matchingItems.map((item, _index) => m("li.focus-bg-light-blue", {
                         tabindex: 0,
                         onclick: (event: Event) => {
                             log("on click in item", item)

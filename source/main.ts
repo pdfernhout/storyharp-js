@@ -25,5 +25,7 @@ window.onbeforeunload = function() {
     if (application.isWorldFileChanged()) {
         // Browsers may not use this exact string, but something has to be returned
         return "You have made changes to the world file that are not yet saved. If you navigate away from this page you will lose your unsaved changes."
+    } else {
+        return undefined
     }
 }

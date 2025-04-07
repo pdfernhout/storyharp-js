@@ -116,8 +116,8 @@ export class CommandWizardView {
         const ruleEditorForm = this.domain.ruleEditorForm
 
         this.domain.addToLog("--- command wizard")
-        this.domain.addToLog(this.commandWizardData.contextName)
-        this.domain.addToLog(this.commandWizardData.prefix)
+        this.domain.addToLog(contextName)
+        this.domain.addToLog(prefix)
         this.domain.addToLog(this.commandWizardData.newCommandsTextToParse)
 
         const newRulesCommand = new TSNewRulesCommand(this.domain)
@@ -144,7 +144,7 @@ export class CommandWizardView {
             }
 
             newRule = world.newRule()
-            newRule.setContext(this.commandWizardData.contextName)
+            newRule.setContext(contextName)
             newRule.setCommand(command)
             newRule.setReply(reply)
             newRule.selected = true
@@ -199,7 +199,6 @@ export class CommandWizardView {
     }
 
     view() {
-        function caption(text: string) { return text }
         const showHelp = this.domain.showWizardHelp
         function help(...args: string[]) {
             return showHelp ? m("p", ...args) : []
@@ -238,7 +237,7 @@ export class CommandWizardView {
                         extraStyling: (this.contextNameError ? ".ml2.bg-yellow" : ".ml2"),
                         value: this.commandWizardData.contextName,
                         onchange: (event: { target: HTMLInputElement }) => {
-                            this.commandWizardData.contextName = event.target.value
+                            this.commandWizardData.contextName = event.target.value.trim()
                             if (this.wasGenerateRulesPressed) this.checkInputForErrors()
                         },
                         items: this.domain.world.getContextNames(),
@@ -267,7 +266,7 @@ export class CommandWizardView {
 
                 m("div.ma2", "Command (", Glyph.command, ")", m("span.ml2.mr2.f4.b", "|"), "Reply (", Glyph.reply, ")"),
 
-                m("div.b", "New commands ", this.commandWizardData.contextName ? "for: " + this.commandWizardData.contextName : ""),
+                m("div.b", "New commands ", this.commandWizardData.contextName.trim() ? "for: " + this.commandWizardData.contextName.trim() : ""),
                 m("textarea.ml2" + (this.newCommandsTextToParseError ? ".bg-yellow" : ""),
                     {
                         rows: 10,

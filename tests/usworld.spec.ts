@@ -22,7 +22,7 @@ o.spec("usworld", () => {
             try {
                 const loaded = world.loadWorldFromFileContents("")
                 o(loaded).equals(true)
-            } catch (e) {
+            } catch (e: any) {
                 o(e.message).equals("Unexpected EOF loading file")
             }
         })
@@ -32,7 +32,7 @@ o.spec("usworld", () => {
             try {
                 const loaded = world.loadWorldFromFileContents("Not a robot")
                 o(loaded).equals(true)
-            } catch (e) {
+            } catch (e: any) {
                 o(e.message).equals("File header for world file is not correct")
             }
         })

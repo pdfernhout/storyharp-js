@@ -4,19 +4,19 @@ import { arrayRemove } from "./common"
 import { TPoint } from "./TPoint"
 
 type longint = number
-type integer = number
 
 const kMinMouseMoveDistance = 2
 
 export class KfCommandList {
-    notifyProcedure: TCommandEvent
+    notifyProcedure?: TCommandEvent
 	commandList: KfCommand[]
 	lastDoneCommandIndex: longint
     undoLimit: longint
     mouseCommand: KfCommand | null = null
-    anchorPoint: TPoint
-    previousPoint: TPoint
-    rightButtonDown: boolean
+    anchorPoint: TPoint = new TPoint(0, 0)
+    previousPoint: TPoint = new TPoint(0, 0)
+    // rightButtonDown does not seem to be set anywhere
+    rightButtonDown: boolean = false
 
     constructor () {
         this.commandList = []
@@ -117,6 +117,7 @@ export class KfCommandList {
     mouseUp(point: TPoint): void {
         let mouseDidMove: boolean
         let nextMouseCommand: KfCommand | null
+        // @ts-ignore
         let pointMovedTo: TPoint
 
         nextMouseCommand = this.mouseCommand

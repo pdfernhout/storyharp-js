@@ -24,7 +24,7 @@ o.spec("TSCommandList", () => {
 
         let commandChangeType = null
         
-        command.notifyProcedure = (command, state) => {
+        command.notifyProcedure = (_command, state) => {
             commandChangeType = state
         }
         

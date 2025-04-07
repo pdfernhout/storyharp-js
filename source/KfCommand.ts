@@ -9,7 +9,7 @@ export enum KfCommandChangeType { commandDone, commandUndone }
 export type TCommandEvent = (command: KfCommand, state: KfCommandChangeType) => void
 
 export class KfCommand {
-    notifyProcedure: TCommandEvent
+    notifyProcedure?: TCommandEvent
     canUndo: boolean
     done: boolean
     commandChangesFile: boolean
@@ -44,12 +44,12 @@ export class KfCommand {
     }
 
     trackMouse(
-        aTrackPhase: TrackPhase,
-        anchorPoint: TPoint, 
-        previousPoint: TPoint, 
-        nextPoint: TPoint,
-        mouseDidMove: boolean,
-        rightButtonDown: boolean
+        _aTrackPhase: TrackPhase,
+        _anchorPoint: TPoint, 
+        _previousPoint: TPoint, 
+        _nextPoint: TPoint,
+        _mouseDidMove: boolean,
+        _rightButtonDown: boolean
     ): KfCommand | null {
         // subclasses should override if needed
         return this

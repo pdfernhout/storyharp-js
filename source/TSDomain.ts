@@ -244,7 +244,7 @@ export class TSApplication implements TSDomain {
     worldFileName = kUnsavedWorldFileName + "." + kWorldExtension
     sessionFileName = kUnsavedSessionFileName + "." + kSessionExtension
 
-    demoConfig: DemoConfig
+    demoConfig!: DemoConfig
 
     showCommandPrefixInMap = false
     showCommandsInMap = true
@@ -263,7 +263,7 @@ export class TSApplication implements TSDomain {
     pendingTableScroll: PendingTableScroll | null = null
     pendingMapScroll: boolean = false
     pendingBrowserScroll: boolean = false
-    pendingBrowserScrollSelectedVariable: TSVariable | null
+    pendingBrowserScrollSelectedVariable: TSVariable | null = null
 
     dataPath = "./data/"
 
@@ -302,7 +302,7 @@ export class TSApplication implements TSDomain {
         }
 
         this.ruleEditorForm = {
-            selectEditorField: (fieldIndex: number) => null,
+            selectEditorField: (_fieldIndex: number) => null,
             scrollGridSelectionsIntoView: (direction: ScrollIntoViewDirection) => {
                 this.pendingTableScroll = {
                     rule: null,
@@ -356,7 +356,7 @@ export class TSApplication implements TSDomain {
             },
             listenForAvailableCommands: () => null,
             checkForSayOptionsMacro: () => null,
-            speakText: (text: string) => null,
+            speakText: (_text: string) => null,
             haltSpeechAndSoundAndMusic: () => {
                 if (window.speechSynthesis && window.speechSynthesis.speaking) window.speechSynthesis.cancel()
                 if (musicPlayed) musicPlayed.pause()
@@ -515,7 +515,7 @@ export class TSApplication implements TSDomain {
         return this.sessionChangeCount !== 0
     }
 
-    sessionCommandChangedNotification(command: KfCommand, state: KfCommandChangeType): void {
+    sessionCommandChangedNotification(_command: KfCommand, state: KfCommandChangeType): void {
         switch (state) {
             case KfCommandChangeType.commandDone:
                 this.sessionChangeCount += 1
@@ -528,7 +528,7 @@ export class TSApplication implements TSDomain {
         }
     }
 
-   worldCommandChangedNotification(command: KfCommand, state: KfCommandChangeType): void {
+   worldCommandChangedNotification(_command: KfCommand, state: KfCommandChangeType): void {
     switch (state) {
         case KfCommandChangeType.commandDone:
             this.worldChangeDone()
