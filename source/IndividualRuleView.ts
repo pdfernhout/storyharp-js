@@ -377,9 +377,9 @@ export class IndividualRuleView {
                 },
                 m("span", {
                     onclick: () => this.expanded = !this.expanded
-                    }, expander(this.expanded) + " Rule Viewer "
+                    }, expander(this.expanded) + " Rule Editor "
                 ),
-                m("span.dib.w2.RuleNumberLabel.TLabel",
+                m("span.dib.w.RuleNumberLabel.TLabel",
                     {
                         title: "The index of the edited rule in the table",
                     },
@@ -450,7 +450,7 @@ export class IndividualRuleView {
                         "+Picture",
                     ),
                 ] : [],
-                m("button.ml4.w3", {
+                m("button.ml4", {
                     onclick: () => this.ruleEditorForm.search(),
                     title: "Search for a rule containing some text"
                 }, "Search"),

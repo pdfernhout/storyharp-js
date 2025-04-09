@@ -122,12 +122,12 @@ export class RuleEditorForm {
                 m(notebookTabButton(currentView === "wizards"),  { onclick: (event: Event) => this.setCurrentView(event, "wizards") }, "Wizards"),
                 m(notebookTabButton(currentView === "log"),  { onclick: (event: Event) => this.setCurrentView(event, "log") }, "Log"),
                 m("div.dib.ml4",
-                    m("button.w3.mt1", {
+                    m("button.mt1", {
                         disabled: !domain.worldCommandList.isUndoEnabled(),
                         onclick: () => domain.worldCommandList.undoLast(),
                         title: "Undo " + domain.worldCommandList.undoDescription()
                     }, "Undo"),
-                    m("button.ml1.w3.mt1", { 
+                    m("button.ml1.mt1", { 
                         disabled: !domain.worldCommandList.isRedoEnabled(),
                         onclick: () => domain.worldCommandList.redoLast(),
                         title: "Redo " + domain.worldCommandList.redoDescription()

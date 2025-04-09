@@ -239,7 +239,7 @@ export class ConsoleForm {
                     onclick: () => resetConsole(domain)
                 }, "Restart session"),
                 m("div.dib.ml3",
-                    m("button.mt1.w3", {
+                    m("button.mt1", {
                         disabled: !domain.sessionCommandList.isUndoEnabled() || domain.sessionChangeCount <= 1,
                         onclick: () => {
                             domain.sessionCommandList.undoLast()
@@ -248,7 +248,7 @@ export class ConsoleForm {
                         },
                         title: "Undo " + domain.sessionCommandList.undoDescription()
                     }, "Undo"),
-                    m("button.ml1.mt1.w3", { 
+                    m("button.ml1.mt1", { 
                         disabled: !domain.sessionCommandList.isRedoEnabled(),
                         onclick: () => {
                             domain.sessionCommandList.redoLast()
@@ -270,7 +270,7 @@ export class ConsoleForm {
                         }),
                         "sound",
                     ),
-                    m("label.dib.ml2.mt1",
+                    m("label.dib.ml3.mt1",
                         m("input[type=checkbox]", {
                             checked: domain.speechSystem.optionSpeech || undefined,
                             onchange: (event: { target: HTMLInputElement }) => { 
@@ -282,7 +282,7 @@ export class ConsoleForm {
                         }),
                         "speech",
                     ),
-                    m("label.dib.ml2.mt1",
+                    m("label.dib.ml3.mt1",
                         m("input[type=checkbox]", {
                             checked: domain.speechSystem.optionPicture || undefined,
                             onchange: (event: { target: HTMLInputElement }) => { 

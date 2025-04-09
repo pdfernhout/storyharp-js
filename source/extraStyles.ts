@@ -6,6 +6,8 @@ const css = `
 .w-10rem { width: 10rem }
 .us-none { user-select: none }
 .pre-wrap { white-space: pre-wrap }
+.f-smaller { font-size: smaller }
+input[type="checkbox"] { width: 1rem; height: 1rem; }
 .overlay {
     position: fixed;
     top: 0;
