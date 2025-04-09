@@ -43,7 +43,7 @@ function insertTextAtCursor(element: HTMLTextAreaElement | HTMLInputElement, tex
 export class IndividualRuleView {
     domain: TSDomain
     ruleEditorForm: RuleEditorForm
-    expanded = true
+    expanded = false
     testPictures: string[] = []
 
     replyTextArea!: HTMLTextAreaElement
@@ -382,6 +382,7 @@ export class IndividualRuleView {
                 m("span.dib.w.RuleNumberLabel.TLabel",
                     {
                         title: "The index of the edited rule in the table",
+                        onclick: () => this.expanded = !this.expanded
                     },
                     rule ? "#" + (world.rules.indexOf(rule) + 1) : "",
                 ),
