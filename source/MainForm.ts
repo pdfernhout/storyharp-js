@@ -27,9 +27,8 @@ export class MainForm {
                 domain.world.updateAvailable()
             }
         }
-    
-        // For layout checking: return m("div.ba.ma3.pa3.overflow-hidden", { style: "width:600px; height: 600px" }, 
-        return m(".MainForm.pa2.h-100.w-100.overflow-hidden.flex.flex-column.f4",
+     
+        return m(".MainForm.pa2.h-100.w-100.flex.flex-column.f5",
             m(ModalInputView),
             m(ToastView),
             m("div.mt1.mb1.flex-none",
@@ -44,7 +43,7 @@ export class MainForm {
                 m(notebookTabButton(domain.activeForm === "demos"), { onclick: (event: any) => setActiveForm(event, "demos") }, "Demos"),
                 m(notebookTabButton(domain.activeForm === "about"), { onclick: (event: any) => setActiveForm(event, "about") }, "About"),
             ),
-            m("div.h-100.w-100.flex-auto.overflow-hidden",
+            m("div.flex-auto",
                 domain.activeForm === "about" ? m(AboutForm) : [],
                 domain.activeForm === "demos" ? m(DemoFilesForm, <any>{domain: domain}) : [],
                 domain.activeForm === "console" ? m(ConsoleForm, <any>{domain: domain}) : [],

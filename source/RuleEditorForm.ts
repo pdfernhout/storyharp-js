@@ -33,14 +33,14 @@ export class RuleEditorForm {
         const currentWizard = this.domain.currentEditorWizard
         const domain = this.domain
 
-        return m("div.flex-auto.h-100.w-100.flex.flex-column.overflow-hidden",
+        return m("div.flex-auto.flex.flex-column",
             m("div.mb2.flex-none",
                 "Wizard:",
                 m(notebookTabButton(currentWizard === "context"), { onclick: (event: Event) => this.setCurrentWizard(event, "context") }, "Context"),
                 m(notebookTabButton(currentWizard === "command"),  { onclick: (event: Event) => this.setCurrentWizard(event, "command") }, "Command"),
                 m(notebookTabButton(currentWizard === "link"),  { onclick: (event: Event) => this.setCurrentWizard(event, "link") }, "Link"),
             ),
-            m("div.WizardHolder.w-100.h-100.flex-auto.overflow-hidden",
+            m("div.WizardHolder.flex-auto",
                 currentWizard === "context" ? m(ContextWizardView, <any>{domain: domain}) : [],
                 currentWizard === "command" ? m(CommandWizardView, <any>{domain: domain}) : [],
                 currentWizard === "link" ? m(LinkWizardView, <any>{domain: domain}) : [],
@@ -113,7 +113,7 @@ export class RuleEditorForm {
         const currentView = this.domain.currentEditorView
         const domain = this.domain
 
-        return m(".RuleEditorForm.h-100.w-100.flex.flex-column.flex-nowrap.overflow-hidden",
+        return m(".RuleEditorForm.h-100.w-100.flex.flex-column",
             m("div.flex-none.mb2",
                 m("span", "Rule Editor:"),
                 m(notebookTabButton(currentView === "table"), { onclick: (event: Event) => this.setCurrentView(event, "table") }, "Table"),
@@ -137,8 +137,7 @@ export class RuleEditorForm {
             currentView === "wizards"
                 ? this.viewWizards() 
                 : [
-                    // Seems to need the h-100 w-100 despite the flex auto -- maybe using that as desired size?
-                    m("div.flex-auto.h-100.w-100.overflow-hidden",
+                    m("div.flex-auto",
                         currentView === "table" ? m(RuleTableView, <any>{domain: domain}) : [],
                         currentView === "map" ? m(RuleMapView, <any>{domain: domain}) : [],
                         currentView === "browser" ? m(RuleBrowserView, <any>{domain: domain}) : [],

@@ -133,7 +133,7 @@ function confirmClearLog() {
 
 export class LoggingView {
     view() {
-        return m("div.LoggingView.h-100.w-100.overflow-hidden.flex.flex-column",
+        return m("div.LoggingView.h-100.w-100.flex.flex-column",
             m("div.mb2.flex-none",
                 m("button", {
                     onclick: confirmClearLog,
@@ -141,7 +141,7 @@ export class LoggingView {
                 }, "Clear log"),
             ),
             dbFailed ? m("div.red.flex-none", "Something went wrong with the log") : [],
-            m("div.h-100.w-100.overflow-auto.flex-auto",
+            m("div.overflow-auto.flex-auto.overflow-auto",
                 log.map(text => m("pre.pre-wrap", text))
             )
         )

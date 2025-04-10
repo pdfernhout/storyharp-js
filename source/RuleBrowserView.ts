@@ -36,7 +36,7 @@ export class RuleBrowserView {
         }
 
         // TODO: These two lists should be made navigable by keyboard
-        return m("div.h-100.overflow-hidden.flex.flex-column",
+        return m("div.h-100.flex.flex-column",
             m("div.flex-none",
                 {
                     onclick: () => this.firstListBoxImageClick(),
@@ -119,9 +119,9 @@ export class RuleBrowserView {
             }
         }
 
-        return m("div.h-100.w-100.overflow-hidden.flex.flex-column",
+        return m("div.h-100.w-100.flex.flex-column",
             m("div.flex-none", caption),
-            m("div.ba.pa1.h-100.w-100.flex-auto.overflow-auto",
+            m("div.ba.pa1.flex-auto.overflow-auto",
                 rules.map((rule, index) => m("div.us-none" + this.styleForSelected(rule),
                     {
                         key: rule.uuid,
@@ -254,11 +254,11 @@ export class RuleBrowserView {
         if (this.domain.pendingBrowserScroll) {
             this.setOrganizeByField(this.domain.browseBy)
         }
-        return m(".RuleBrowserView.div.flex.flex-row.h-100.w-100.overflow-hidden",
-            m("div.w-30.h-100.overflow-hidden",
+        return m(".RuleBrowserView.div.h-100.w-100.flex.flex-row",
+            m("div.w-30.h-100.overflow-auto",
                 this.viewFirstListBox(),
             ),
-            m("div.w-70.h-100.overflow-hidden",
+            m("div.w-70.h-100.overflow-auto",
                 this.viewSecondListBox(),
             ),
         )

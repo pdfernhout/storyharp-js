@@ -682,8 +682,8 @@ export class RuleMapView {
             this.mapDrawer.reset()
         }
 
-        return m(".RuleMapView.h-100.w-100.overflow-hidden.flex.flex-column",
-            m("div.flex-none.mb1", 
+        return m(".RuleMapView.h-100.w-100.flex.flex-column",
+            m("div.flex-none.mb1.ba", 
                 m("button.ml1.h-75.br-pill.mt1", { onclick: () => this.mapMode = "select" }, indicator("select")),
                 m("button.ml1.h-75.br-pill.mt1", { onclick: () => this.mapMode = "drag" }, indicator("drag")),
                 m("button.ml1.h-75.br-pill.mt1", { onclick: () => this.mapMode = "zoom" }, indicator("zoom")),
@@ -707,8 +707,8 @@ export class RuleMapView {
                     "commands"
                 ),
             ),
-            m("div.flex-auto.ba.h-100.w-100",
-                m("canvas", {
+            m("div.flex-auto.ba",
+                m("canvas.h-100.w-100", {
                     // set tabindex to make canvas focusable
                     tabindex: 0,
 

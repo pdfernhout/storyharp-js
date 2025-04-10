@@ -356,7 +356,7 @@ export class IndividualRuleView {
             }
         }
 
-        return m(".IndividualRuleView.ba.bg-light-gray.w-100.pa1",
+        return m(".IndividualRuleView.h-100.w-100.ba.bg-light-gray.pa1",
             this.testPictures.map(url => {
                 return m("div.nowrap.mw6",
                     {
