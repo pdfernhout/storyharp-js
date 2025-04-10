@@ -1,6 +1,6 @@
 import * as m from "mithril"
 import { TSRule, TSRuleField } from "./TSRule"
-import { TSMapView, defaultScale } from "./TSMapView"
+import { TSMapView } from "./TSMapView"
 import { TRect } from "./TRect"
 import { TPoint } from "./TPoint"
 import { TWorld } from "./TWorld"
@@ -641,12 +641,12 @@ export class RuleMapView {
                 // TODO: Was XOR rectangle
                 this.mapDrawer.drawRect(context, this.mapSelectionRect.scale(1 / this.mapDrawer.scale))
             }
-            if (this.canvas === document.activeElement) {
-                context.scale(defaultScale / this.mapDrawer.scale, defaultScale / this.mapDrawer.scale)
-                context.textBaseline = "top"
-                context.fillStyle = "gray"
-                context.fillText("map controls: wasd arrows +- c r", 2, 2)
-            }
+            // if (this.canvas === document.activeElement) {
+            //     context.scale(defaultScale / this.mapDrawer.scale, defaultScale / this.mapDrawer.scale)
+            //     context.textBaseline = "top"
+            //     context.fillStyle = "gray"
+            //     context.fillText("map controls: wasd arrows +- c r", 2, 2)
+            // }
         }
 
         // Function inspired by: https://stackoverflow.com/questions/1517924/javascript-mapping-touch-events-to-mouse-events

@@ -70,4 +70,6 @@ The commands are the fingers you use to pluck the strings,
 and the replies are the sounds the strings make.
 The other fields of the rules set up the musical style that determines what sequences of notes make sense.
 The transcript is like the song the player creates with the harp in the style of the story.
+
+For keyboard operation of the map, use the keys: "wasd arrows +- c r".
 `
