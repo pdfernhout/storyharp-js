@@ -40,6 +40,7 @@ export class RuleBrowserView {
             m("div.flex-none",
                 {
                     onclick: () => this.firstListBoxImageClick(),
+                    title: "Click to what is being browsed",
                 },
                 this.glyphForBrowseBy(),
                 " All ",
