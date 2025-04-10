@@ -175,7 +175,7 @@ export class ContextWizardView {
                 help("Here is an example showing a mix of different entries which generated nine rules:"),
                 showHelp ? m("pre.dib.ba.bw2.pa1.ml2.mr2", exampleWithNineRules) : [],
 
-                m("div.ma2", "Context (", Glyph.context, ")", m("span.ml2.mr2.f4.b", "|"), "Descriptive Reply (", Glyph.reply, ")"),
+                m("div.ma2", "Context (", Glyph.context, ")", m("span.ml2.mr2.b", "|"), "Descriptive Reply (", Glyph.reply, ")"),
 
                 m("textarea.ml2" + (this.newContextsTextToParseError ? ".bg-yellow" : ""),
                     {

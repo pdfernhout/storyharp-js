@@ -297,7 +297,7 @@ export class ConsoleForm {
                 ? m("div.flex-none",
                     m("button.ml5.mt5.w5.blue", {
                         onclick: () => startSession(domain)
-                    }, m("span.f2", "Start ▶")))
+                    }, m("span.f-larger", "Start ▶")))
                 : [
                     m("div.flex-auto.overflow-auto.flex.flex-column-reverse",
                         {

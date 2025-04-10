@@ -264,7 +264,7 @@ export class CommandWizardView {
                 help("Here is an example of a sequence (intentionally showing inconsistent input styles) which generates five rules:"),
                 showHelp ? m("pre.dib.ba.bw2.pa1.ml2.mr2", exampleWithFiveRules) : [],
 
-                m("div.ma2", "Command (", Glyph.command, ")", m("span.ml2.mr2.f4.b", "|"), "Reply (", Glyph.reply, ")"),
+                m("div.ma2", "Command (", Glyph.command, ")", m("span.ml2.mr2.b", "|"), "Reply (", Glyph.reply, ")"),
 
                 m("div.b", "New commands ", this.commandWizardData.contextName.trim() ? "for: " + this.commandWizardData.contextName.trim() : ""),
                 m("textarea.ml2" + (this.newCommandsTextToParseError ? ".bg-yellow" : ""),
