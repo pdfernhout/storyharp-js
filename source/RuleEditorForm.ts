@@ -113,7 +113,7 @@ export class RuleEditorForm {
         const currentView = this.domain.currentEditorView
         const domain = this.domain
 
-        return m(".RuleEditorForm.h-100.w-100.flex.flex-column",
+        return m(".RuleEditorForm.h-100.w-100.flex.flex-column.overflow-auto",
             m("div.flex-none.mb2",
                 m("span", "Rule Editor:"),
                 m(notebookTabButton(currentView === "table"), { onclick: (event: Event) => this.setCurrentView(event, "table") }, "Table"),
