@@ -9,6 +9,7 @@ import { ConsoleForm } from "./ConsoleForm"
 import { FileForm } from "./FileForm"
 import { ToastView } from "./ToastView";
 import { ModalInputView } from "./ModalInputView";
+import { ConfigForm } from "./ConfigForm"
 
 export class MainForm {
     domain: TSDomain
@@ -28,12 +29,12 @@ export class MainForm {
             }
         }
      
-        return m(".MainForm.pa2.h-100.w-100.flex.flex-column.f6",
+        return m(".MainForm.pa2.h-100.w-100.flex.flex-column" + "." + domain.baseFontClass,
             m(ModalInputView),
             m(ToastView),
             m("div.mt1.mb1.flex-none",
                 m("span.b", "StoryHarp:"),
-                m("span.i.ml1", "" + makeFileNameWithoutWldExtension(domain.worldFileName)),
+                m("span.ml1.i", "" + makeFileNameWithoutWldExtension(domain.worldFileName)),
                 m("span.ml1.i", { title: "world change count" }, domain.isWorldFileChanged() ? `<${domain.worldChangeCount}>` : "")
             ),
             m("div.mb2.flex-none",
@@ -42,6 +43,7 @@ export class MainForm {
                 m(notebookTabButton(domain.activeForm === "ruleEditor"), { onclick: (event: any) => setActiveForm(event, "ruleEditor") }, "Editor"),
                 m(notebookTabButton(domain.activeForm === "demos"), { onclick: (event: any) => setActiveForm(event, "demos") }, "Demos"),
                 m(notebookTabButton(domain.activeForm === "about"), { onclick: (event: any) => setActiveForm(event, "about") }, "About"),
+                m(notebookTabButton(domain.activeForm === "config"), { onclick: (event: any) => setActiveForm(event, "config") }, "Config"),
             ),
             m("div.flex-auto",
                 domain.activeForm === "about" ? m(AboutForm) : [],
@@ -49,6 +51,7 @@ export class MainForm {
                 domain.activeForm === "console" ? m(ConsoleForm, <any>{domain: domain}) : [],
                 domain.activeForm === "ruleEditor" ? m(RuleEditorForm, <any>{domain: domain}) : [],
                 domain.activeForm === "file" ? m(FileForm, <any>{domain: domain}) : [],
+                domain.activeForm === "config" ? m(ConfigForm, <any>{domain: domain}) : [],
             )
         )
     }

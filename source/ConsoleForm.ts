@@ -257,44 +257,6 @@ export class ConsoleForm {
                         title: "Redo " + domain.sessionCommandList.redoDescription()
                     }, "Redo"),
                 ),
-                m("div.dib.ml3",
-                    m("label.dib.mt1",
-                        m("input[type=checkbox].mr1", {
-                            name: "checkbox-sound",
-                            checked: domain.speechSystem.optionSound || undefined,
-                            onchange: (event: { target: HTMLInputElement }) => { 
-                                domain.speechSystem.optionSound = event.target.checked
-                                if (!domain.speechSystem.optionSound) {
-                                    domain.speechSystem.haltSpeechAndSoundAndMusic()
-                                }
-                            }
-                        }),
-                        "sound",
-                    ),
-                    m("label.dib.ml3.mt1",
-                        m("input[type=checkbox].mr1", {
-                            name: "checkbox-speech",
-                            checked: domain.speechSystem.optionSpeech || undefined,
-                            onchange: (event: { target: HTMLInputElement }) => { 
-                                domain.speechSystem.optionSpeech = event.target.checked
-                                if (!domain.speechSystem.optionSpeech) {
-                                    domain.speechSystem.haltSpeechAndSoundAndMusic()
-                                }
-                            }
-                        }),
-                        "speech",
-                    ),
-                    m("label.dib.ml3.mt1",
-                        m("input[type=checkbox].mr1", {
-                            name: "checkbox-pictures",
-                            checked: domain.speechSystem.optionPicture || undefined,
-                            onchange: (event: { target: HTMLInputElement }) => { 
-                                domain.speechSystem.optionPicture = event.target.checked
-                            }
-                        }),
-                        "pictures",
-                    ),
-                ),
             ),
             (!domain.sessionChangeCount && domain.transcript.length <= 1)
                 ? m("div.flex-none",

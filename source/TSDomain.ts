@@ -84,7 +84,7 @@ export interface SpeechSystemAPI {
     haltSpeechAndSoundAndMusic: () => void
 }
 
-export type FormName = "about" | "console" | "demos" | "ruleEditor" | "file"
+export type FormName = "about" | "console" | "demos" | "ruleEditor" | "file" | "config"
 export type EditorName = "table" | "map" | "browser" | "wizards" | "log"
 export type WizardName = "context" | "command" | "link"
 
@@ -155,6 +155,7 @@ export interface TSDomain {
     speechSystem: SpeechSystemAPI
 
     individualRuleViewExpanded: boolean
+    baseFontClass: string
 }
 
 export function isMediaOK (text: string) {
@@ -196,6 +197,16 @@ export function speakText(text: String): boolean {
 // Transcript lines are given UUIDs to pss as keys to Mithril -- they are only unique per application run
 let nextTranscriptLineUUID = 1
 
+const allowedFontClasses: { [key: string]: string; } = {
+    f1: "f1",
+    f2: "f2",
+    f3: "f3",
+    f4: "f4",
+    f5: "f5",
+    f6: "f6",
+    f7: "f7"
+}
+
 export class TSApplication implements TSDomain {
     world: TWorld
     sessionCommandList: TSCommandList
@@ -213,6 +224,7 @@ export class TSApplication implements TSDomain {
     currentEditorWizard: WizardName = "context"
 
     individualRuleViewExpanded = false
+    baseFontClass: string = allowedFontClasses[localStorage.getItem("storyharp-base-font") || "f6"] || "f6"
 
     editRule(rule: TSRule | null, scrollDirection: ScrollIntoViewDirection = ScrollIntoViewDirection.kFromTop, force = false) {
         this.editedRule = rule
@@ -319,9 +331,9 @@ export class TSApplication implements TSDomain {
         }
 
         this.speechSystem = {
-            optionSpeech: true,
-            optionSound: true,
-            optionPicture: true,
+            optionSpeech: localStorage.getItem("storyharp-option-speech") !== "false",
+            optionSound: localStorage.getItem("storyharp-option-sound") !== "false",
+            optionPicture: localStorage.getItem("storyharp-option-picture") !== "false",
             lastSaidTextWithMacros: "TEST",
             stripMacros: (text: string) => text,
             sayTextWithMacros: (text: string) => {
