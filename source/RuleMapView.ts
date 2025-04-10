@@ -32,7 +32,7 @@ export class RuleMapView {
     isZooming = false
     lastMouseLocation = new TPoint(0, 0)
 
-    mapMode: MapMode = "select"
+    mapMode: MapMode = "drag"
 
     get previousChoice(): TSDraggableObject | null {
         return this.domain.ruleEditorForm.previousChoice
