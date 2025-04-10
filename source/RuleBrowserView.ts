@@ -37,7 +37,7 @@ export class RuleBrowserView {
 
         // TODO: These two lists should be made navigable by keyboard
         return m("div.h-100.flex.flex-column",
-            m("div.flex-none",
+            m("button.flex-none",
                 {
                     onclick: () => this.firstListBoxImageClick(),
                     title: "Click to what is being browsed",
