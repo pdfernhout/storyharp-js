@@ -207,6 +207,8 @@ const allowedFontClasses: { [key: string]: string; } = {
     f7: "f7"
 }
 
+const defaultBaseFontClass = "f5"
+
 export class TSApplication implements TSDomain {
     world: TWorld
     sessionCommandList: TSCommandList
@@ -224,7 +226,7 @@ export class TSApplication implements TSDomain {
     currentEditorWizard: WizardName = "context"
 
     individualRuleViewExpanded = false
-    baseFontClass: string = allowedFontClasses[localStorage.getItem("storyharp-base-font") || "f6"] || "f6"
+    baseFontClass: string = allowedFontClasses[localStorage.getItem("storyharp-base-font") || defaultBaseFontClass] || defaultBaseFontClass
 
     editRule(rule: TSRule | null, scrollDirection: ScrollIntoViewDirection = ScrollIntoViewDirection.kFromTop, force = false) {
         this.editedRule = rule
