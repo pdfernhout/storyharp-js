@@ -295,7 +295,7 @@ export class ConsoleForm {
             ),
             (!domain.sessionChangeCount && domain.transcript.length <= 1)
                 ? m("div.flex-none",
-                    m("button.ml5.mt5.w5.blue", {
+                    m("button.ml4.mt5.w4.blue", {
                         onclick: () => startSession(domain)
                     }, m("span.f-larger", "Start ▶")))
                 : [
