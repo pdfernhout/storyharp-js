@@ -74,6 +74,7 @@ export class TQuickFillComboBox {
                 this.inputElement.value = newText
                 this.inputElement.selectionStart = newText.length
                 this.inputElement.selectionEnd = newText.length
+                doOnchangeCallback()
             }
             if (focusOnInput) {
                 this.inputElement.focus()
