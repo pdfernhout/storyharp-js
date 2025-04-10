@@ -153,6 +153,8 @@ export interface TSDomain {
     consoleForm: ConsoleFormAPI
     ruleEditorForm: RuleEditorAPI
     speechSystem: SpeechSystemAPI
+
+    individualRuleViewExpanded: boolean
 }
 
 export function isMediaOK (text: string) {
@@ -209,6 +211,8 @@ export class TSApplication implements TSDomain {
     activeForm: FormName = "console"
     currentEditorView: EditorName = "table"
     currentEditorWizard: WizardName = "context"
+
+    individualRuleViewExpanded = false
 
     editRule(rule: TSRule | null, scrollDirection: ScrollIntoViewDirection = ScrollIntoViewDirection.kFromTop, force = false) {
         this.editedRule = rule

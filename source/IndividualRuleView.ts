@@ -43,7 +43,6 @@ function insertTextAtCursor(element: HTMLTextAreaElement | HTMLInputElement, tex
 export class IndividualRuleView {
     domain: TSDomain
     ruleEditorForm: RuleEditorForm
-    expanded = false
     testPictures: string[] = []
 
     replyTextArea!: HTMLTextAreaElement
@@ -141,7 +140,7 @@ export class IndividualRuleView {
             this.ActiveControl = this.ContextEdit
         }
         */
-        this.expanded = true
+        this.domain.individualRuleViewExpanded = true
     }
 
     RuleDuplicateClick(): void {
@@ -376,13 +375,13 @@ export class IndividualRuleView {
                 {
                 },
                 m("span", {
-                    onclick: () => this.expanded = !this.expanded
-                    }, expander(this.expanded) + " Rule Editor "
+                    onclick: () => this.domain.individualRuleViewExpanded = !this.domain.individualRuleViewExpanded
+                    }, expander(this.domain.individualRuleViewExpanded) + " Rule Editor "
                 ),
                 m("span.dib.w.RuleNumberLabel.TLabel",
                     {
                         title: "The index of the edited rule in the table",
-                        onclick: () => this.expanded = !this.expanded
+                        onclick: () => this.domain.individualRuleViewExpanded = !this.domain.individualRuleViewExpanded
                     },
                     rule ? "#" + (world.rules.indexOf(rule) + 1) : "",
                 ),
@@ -425,7 +424,7 @@ export class IndividualRuleView {
                     },
                     "Lower",
                 ),
-                (this.expanded && this.domain.editedRule) ? [
+                (this.domain.individualRuleViewExpanded && this.domain.editedRule) ? [
                     m("button.insertSound.TSpeedButton.ml1",
                         {
                             onclick: () => this.insertSoundClick(),
@@ -456,7 +455,7 @@ export class IndividualRuleView {
                     title: "Search for a rule containing some text"
                 }, "Search"),
             ),
-            !this.expanded ? [] : !rule ? ["Please select a rule to edit it"] : [
+            !this.domain.individualRuleViewExpanded ? [] : !rule ? ["Please select a rule to edit it"] : [
                 m("div.Rule",
                     m(".Context.mt1",
                         m("button.ContextSpeedButton.pt1.w-10rem.w4.mr1",
