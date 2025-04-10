@@ -306,7 +306,7 @@ export class LinkWizardView {
 
                 help("Leave this blank if you don't want to move this way. Examples are \"move forward\", \"go east\", \"leap up\", \"enter the building\", and \"activate the transporter\"."),
 
-                m("div.ml2" + (this.linkWizardData.firstCommand ? "" : ".gray"),
+                m("div.ml2",
 
                     m("p", "What should the computer reply (", Glyph.reply, ") after the user says the move command from ", m("i", (this.linkWizardData.firstContext || "the first context")), "?"),
 
@@ -319,7 +319,6 @@ export class LinkWizardView {
                                 this.linkWizardData.firstReply = event.target.value
                                 if (this.wasGenerateRulesPressed) this.checkInputForErrors()
                             },
-                            disabled: !this.linkWizardData.firstCommand || null,
                         },
                     ),
 
@@ -349,7 +348,7 @@ export class LinkWizardView {
 
                 help("Leave this blank if you don't want to move this way. Examples are \"move forward\", \"go east\", \"leap up\", \"enter the building\", and \"activate the transporter\"."),
 
-                m("div.ml2" + (this.linkWizardData.secondCommand ? "" : ".gray"),
+                m("div.ml2",
 
                 m("p", "What should the computer reply (", Glyph.reply, ") after the user says the move command from ", m("i", (this.linkWizardData.secondContext || "the second context")), "?"),
 
@@ -362,7 +361,6 @@ export class LinkWizardView {
                                 this.linkWizardData.secondReply = event.target.value
                                 if (this.wasGenerateRulesPressed) this.checkInputForErrors()
                             },
-                            disabled: !this.linkWizardData.secondCommand || null,
                         },
                     ),
 
