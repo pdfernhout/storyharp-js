@@ -259,7 +259,7 @@ export class ConsoleForm {
                 ),
                 m("div.dib.ml3",
                     m("label.dib.mt1",
-                        m("input[type=checkbox]", {
+                        m("input[type=checkbox].mr1", {
                             checked: domain.speechSystem.optionSound || undefined,
                             onchange: (event: { target: HTMLInputElement }) => { 
                                 domain.speechSystem.optionSound = event.target.checked
@@ -271,7 +271,7 @@ export class ConsoleForm {
                         "sound",
                     ),
                     m("label.dib.ml3.mt1",
-                        m("input[type=checkbox]", {
+                        m("input[type=checkbox].mr1", {
                             checked: domain.speechSystem.optionSpeech || undefined,
                             onchange: (event: { target: HTMLInputElement }) => { 
                                 domain.speechSystem.optionSpeech = event.target.checked
@@ -283,7 +283,7 @@ export class ConsoleForm {
                         "speech",
                     ),
                     m("label.dib.ml3.mt1",
-                        m("input[type=checkbox]", {
+                        m("input[type=checkbox].mr1", {
                             checked: domain.speechSystem.optionPicture || undefined,
                             onchange: (event: { target: HTMLInputElement }) => { 
                                 domain.speechSystem.optionPicture = event.target.checked

@@ -8,7 +8,7 @@ const css = `
 .pre-wrap { white-space: pre-wrap }
 .f-smaller { font-size: smaller }
 .f-larger { font-size: larger }
-input[type="checkbox"] { width: 1rem; height: 1rem; }
+input[type="checkbox"] { width: 1rem; height: 1rem; vertical-align: middle; }
 .overlay {
     position: fixed;
     top: 0;

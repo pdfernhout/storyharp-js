@@ -324,7 +324,7 @@ export class CommandWizardView {
 
                     m("p", "When the last command has been said,"),
 
-                    m("input[type=radio]",
+                    m("input[type=radio].mr1",
                         {
                             name: "endSequence",
                             value: EndSequence.loopToFirst,
@@ -338,7 +338,7 @@ export class CommandWizardView {
                     ),
                     "loop to the first command in the sequence",
                     m("br"),
-                    m("input[type=radio]",
+                    m("input[type=radio].mr1",
                         {
                             name: "endSequence",
                             value: EndSequence.leaveLastCommand,
@@ -353,7 +353,7 @@ export class CommandWizardView {
                     ),
                     "leave the last command available",
                     m("br"),
-                    m("input[type=radio]",
+                    m("input[type=radio].mr1",
                         {
                             name: "endSequence",
                             value: EndSequence.removeLastCommand,

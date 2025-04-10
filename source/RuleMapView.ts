@@ -698,7 +698,7 @@ export class RuleMapView {
                     m("button.ml1.h-75.mt1", { title: "Make a new link", onclick: () => this.PopupNewLinkClick() }, "+link"),
                 ),
                 m("label.dib.ml2", 
-                    m("input[type=checkbox]", {
+                    m("input[type=checkbox].mr1", {
                         checked: this.domain.showCommandsInMap || undefined,
                         onchange: (event: { target: HTMLInputElement }) => { 
                             this.domain.showCommandsInMap = event.target.checked
