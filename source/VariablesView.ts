@@ -76,32 +76,34 @@ export class VariablesView {
                 (!this.buttonState.command || variable.commandUseages > 0)
         )
 
-        return m("div.ml1.h-100.w5",
-            "Context:",
-            m("select.ml1.ma2",
-                {
-                    onchange: (event: any) => {
-                        const newFocusPhrase = event.target.value
-                        const newFocus = world.findVariable(newFocusPhrase)
-                        if (!newFocus) return
+        return m("div.ml1.h-100.w-100.flex.flex-column",
+            m("div.flex-fixed",
+                "Context:",
+                m("select.ml1.ma2",
+                    {
+                        onchange: (event: any) => {
+                            const newFocusPhrase = event.target.value
+                            const newFocus = world.findVariable(newFocusPhrase)
+                            if (!newFocus) return
 
-                        if ((newFocus === world.focus) && (newFocus.getState() === TSVariableState.kPresent)) {
-                            return
+                            if ((newFocus === world.focus) && (newFocus.getState() === TSVariableState.kPresent)) {
+                                return
+                            }
+                            sessionCommandList.moveFocus(newFocus)
+
                         }
-                        sessionCommandList.moveFocus(newFocus)
-
-                    }
-                },
-                contextVariables
-                    .map(variable => variable.phrase)
-                    .map(phrase =>
-                        m("option", {
-                            value: phrase,
-                            selected: (phrase === selectedPhrase ? "selected" : undefined),
-                        }, phrase)
-                    )
+                    },
+                    contextVariables
+                        .map(variable => variable.phrase)
+                        .map(phrase =>
+                            m("option", {
+                                value: phrase,
+                                selected: (phrase === selectedPhrase ? "selected" : undefined),
+                            }, phrase)
+                        )
+                ),
             ),
-            m("div",
+            m("div.flex-fixed",
                 m("span.ml1", "Filter:"),
                 this.makeToggleButton("present", "Display only true variables"),
                 this.makeToggleButton("context", "Display only variables used as contexts"),
@@ -110,15 +112,9 @@ export class VariablesView {
                 this.makeToggleButton("changes", "Display only variables used as changes"),
                 this.makeToggleButton("command", "Display only variables used as commands"),
             ),
-            m("div.overflow-auto.ma2",
-                {
-                    style: {
-                        height: (window.innerHeight - 90) + "px",
-                        // "max-width": "12rem",
-                    },
-                },
+            m("div.flex-auto.overflow-auto.ma2",
                 shownVariables.map(variable => 
-                    m("div.nowrap",
+                    m("div.nowrap.relative",
                         {
                             style: {
                                 "background-color": variable.getState() ? "lightgreen" : "linen",
@@ -128,7 +124,7 @@ export class VariablesView {
                             onclick: () => sessionCommandList.toggleVariable(variable)
                         }, variable.getState() === TSVariableState.kPresent ? m("span.b.pl1.mr2", Glyph.present) : m("span.i.pl1.mr2", Glyph.absent)),
                         m("span.ml1.mw4.truncate.dib", { title: variable.phrase }, variable.phrase),
-                        m("div.nowrap.ml1.fr",
+                        m("div.dib.nowrap.ml1.absolute.right-0",
                             m("span.blue.w1", variable.contextUseages > 0 ? Glyph.context : Glyph.spacer),
                             m("span.blue.w1", variable.moveUseages > 0 ? Glyph.move : Glyph.spacer),
                             m("span.blue.w1", variable.requirementsUseages > 0 ? Glyph.requirements : Glyph.spacer),
@@ -142,11 +138,11 @@ export class VariablesView {
     }
 
     view(_vnode: m.Vnode) {
-        return m(".VariablesView.fixed.ba.right-0.top-0.bg-washed-blue.pl1.br3.br--left.pr1", 
-            m("div", { onclick: () => this.expanded = !this.expanded }, m("span", expander(this.expanded) + " Variables")),
+        return m(".VariablesView.fixed.ba.right-0.top-0.bg-washed-blue.pl1.br3.br--left.pr1.flex.flex-column" + (this.expanded ? ".h-100.w5" : ""), 
+            m("div.flex-none", { onclick: () => this.expanded = !this.expanded }, m("span", expander(this.expanded) + " Variables")),
             !this.expanded
                 ? []
-                : this.viewInterior()
+                : m("div.flex-auto", this.viewInterior())
         )
     }
 }

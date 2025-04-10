@@ -458,7 +458,7 @@ export class IndividualRuleView {
             !this.domain.individualRuleViewExpanded ? [] : !rule ? ["Please select a rule to edit it"] : [
                 m("div.Rule",
                     m(".Context.mt1",
-                        m("button.ContextSpeedButton.pt1.w-10rem.w4.mr1",
+                        m("button.ContextSpeedButton.pt1.w-10rem.mr1",
                             {
                                 onclick: () => this.SpeedButtonClick(TSRuleField.kRuleContext),
                                 title: "Browse all rules with this context",
