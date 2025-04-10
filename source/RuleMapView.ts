@@ -683,7 +683,7 @@ export class RuleMapView {
         }
 
         return m(".RuleMapView.h-100.w-100.flex.flex-column",
-            m("div.flex-none.mb1.ba", 
+            m("div.flex-none.mb1", 
                 m("button.ml1.h-75.br-pill.mt1", { onclick: () => this.mapMode = "select" }, indicator("select")),
                 m("button.ml1.h-75.br-pill.mt1", { onclick: () => this.mapMode = "drag" }, indicator("drag")),
                 m("button.ml1.h-75.br-pill.mt1", { onclick: () => this.mapMode = "zoom" }, indicator("zoom")),
@@ -691,20 +691,6 @@ export class RuleMapView {
                 m("div.dib.ml3",
                     m("button.h-75.mt1", { title: "Center the map", onclick: () => centerMap() }, "center"),
                     m("button.ml1.h-75.mt1", { title: "Change scale and scrolling to default value", onclick: () => resetMap() }, "reset"),
-                ),
-                m("div.dib.ml3",
-                    m("button.h-75.mt1", { title: "Make a new context", onclick: () => this.PopupNewContextClick() }, "+context"),
-                    m("button.ml1.h-75.mt1", { title: "Make a new command", onclick: () => this.PopupNewCommandClick() }, "+command"),
-                    m("button.ml1.h-75.mt1", { title: "Make a new link", onclick: () => this.PopupNewLinkClick() }, "+link"),
-                ),
-                m("label.dib.ml2", 
-                    m("input[type=checkbox].mr1", {
-                        checked: this.domain.showCommandsInMap || undefined,
-                        onchange: (event: { target: HTMLInputElement }) => { 
-                            this.domain.showCommandsInMap = event.target.checked
-                        }
-                    }),
-                    "commands"
                 ),
             ),
             m("div.flex-auto.ba",
@@ -843,6 +829,20 @@ export class RuleMapView {
                         this.mapDrawer.scroll.Y -= (event.deltaY / this.mapDrawer.scale)
                     },
                 }),
+            ),
+            m("div.flex-none", 
+                m("button.h-75.mt1", { title: "Make a new context", onclick: () => this.PopupNewContextClick() }, "+context"),
+                m("button.ml1.h-75.mt1", { title: "Make a new command", onclick: () => this.PopupNewCommandClick() }, "+command"),
+                m("button.ml1.h-75.mt1", { title: "Make a new link", onclick: () => this.PopupNewLinkClick() }, "+link"),
+                m("label.dib.ml2", 
+                    m("input[type=checkbox].mr1", {
+                        checked: this.domain.showCommandsInMap || undefined,
+                        onchange: (event: { target: HTMLInputElement }) => { 
+                            this.domain.showCommandsInMap = event.target.checked
+                        }
+                    }),
+                    "commands"
+                ),
             )
         )
     }
