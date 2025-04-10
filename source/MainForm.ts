@@ -28,7 +28,7 @@ export class MainForm {
             }
         }
      
-        return m(".MainForm.pa2.h-100.w-100.flex.flex-column.f5",
+        return m(".MainForm.pa2.h-100.w-100.flex.flex-column.f6",
             m(ModalInputView),
             m(ToastView),
             m("div.mt1.mb1.flex-none",

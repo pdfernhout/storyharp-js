@@ -76,7 +76,7 @@ export class VariablesView {
                 (!this.buttonState.command || variable.commandUseages > 0)
         )
 
-        return m("div.ml1.h-100", { style: { "min-width": "25rem" } },
+        return m("div.ml1.h-100.w5",
             "Context:",
             m("select.ml1.ma2",
                 {
@@ -127,7 +127,7 @@ export class VariablesView {
                         m("span.blue.w1", {
                             onclick: () => sessionCommandList.toggleVariable(variable)
                         }, variable.getState() === TSVariableState.kPresent ? m("span.b.pl1.mr2", Glyph.present) : m("span.i.pl1.mr2", Glyph.absent)),
-                        m("span.ml1.mw5.truncate.dib", { title: variable.phrase }, variable.phrase),
+                        m("span.ml1.mw4.truncate.dib", { title: variable.phrase }, variable.phrase),
                         m("div.nowrap.ml1.fr",
                             m("span.blue.w1", variable.contextUseages > 0 ? Glyph.context : Glyph.spacer),
                             m("span.blue.w1", variable.moveUseages > 0 ? Glyph.move : Glyph.spacer),
