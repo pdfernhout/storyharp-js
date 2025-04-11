@@ -231,8 +231,13 @@ export class ConsoleForm {
     view() {
         const domain = this.domain
 
-        return m("div.ConsoleForm.h-100.w-100.flex.flex-column",
-            m("div.ml2.mb2.flex-none",
+        return m("div.ConsoleForm.h-100.w-100.overflow-auto",
+            {
+                oncreate: (vnode: any) => {
+                    this.transcriptDiv = <HTMLDivElement>(vnode.dom)
+                },
+            },
+            m("div.ml2.mb2",
                 // m("button", { title: "Open a world file", onclick: () => loadWorldFromLocalFile(domain) }, "Load"),
                 m("button.ml1.mt1", {
                     title: "Reset current world",
@@ -259,21 +264,15 @@ export class ConsoleForm {
                 ),
             ),
             (!domain.sessionChangeCount && domain.transcript.length <= 1)
-                ? m("div.flex-none",
+                ? m("div",
                     m("button.ml4.mt5.w4.blue", {
                         onclick: () => startSession(domain)
                     }, m("span.f-larger", "Start ▶")))
                 : [
-                    m("div.flex-auto.overflow-auto.flex.flex-column-reverse",
-                        {
-                            oncreate: (vnode: any) => {
-                                this.transcriptDiv = <HTMLDivElement>(vnode.dom)
-                            },
-                        },
-                        // transcript is kept in reverse order to make this iteration more computationally efficient
+                    m("div",
                         domain.transcript.map(each => viewTranscriptItem(domain, each)),
                     ),
-                    (!domain.sessionChangeCount && domain.transcript.length <= 1) ? [] : m("div.flex-none",
+                    (!domain.sessionChangeCount && domain.transcript.length <= 1) ? [] : m("div",
                         viewChoices(domain, this.scrollEndOfTranscriptIntoView.bind(this)),
                     ),
                 ],

@@ -312,8 +312,7 @@ export class TSApplication implements TSDomain {
         // TODO: Rearchitect these so not called "Form"; rethink how domain is used to transfer this state
         this.consoleForm = {
             addLineToTranscript: (text: string, color: number) => {
-                // Put at the top of transcript because it is used by UI in reverse order with flexbox for layout reasons
-                this.transcript.unshift({uuid: nextTranscriptLineUUID++, text, color})
+                this.transcript.push({uuid: nextTranscriptLineUUID++, text, color})
             },
             scrollTranscriptEndIntoView: () => null,
             doCommand: doCommand
