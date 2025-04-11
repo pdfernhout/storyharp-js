@@ -45,8 +45,7 @@ function standardModal(promptText: string, modalType: ModalType, defaultText: st
     let value = defaultText
     return new Promise((resolve, _reject) => {
         setModalCallback(() => {
-            return m("div.mt5.ml-auto.mr-auto.bg-near-white.pa3",
-                { style: "width: 24rem" },
+            return m("div.mt5.ml-auto.mr-auto.bg-near-white.pa3.mw6",
                 m("div.ma2", promptText),
                 modalType === "prompt" && m("div.ma2",
                     m("input.w-100", {
