@@ -36,15 +36,9 @@ export function toast(text: string, timeout_ms=5000) {
 
 export class ToastView {
     view() {
-        return m("div.Toast.fixed.ml5.mt3.z-2",
-            toasts.map(record => m("div.bg-light-blue.pa2.ba", {
+        return m("div.Toast.fixed.mt3.z-2.center-horizontal-transform",
+            toasts.map(record => m("div.bg-light-blue.pa2.ba.tc.mw5.min-h-4rem", {
                 key: record.id,
-                style: {
-                    "min-width": "25rem",
-                    "min-height": "3rem",
-                    "max-width": "25rem",
-                    "text-align": "center",
-                },
                 onclick: () => removeToast(record),
             }, record.text.split("\n").map(line => m("div", line)))
         ))

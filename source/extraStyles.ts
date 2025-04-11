@@ -17,6 +17,13 @@ input[type="checkbox"] { width: 1rem; height: 1rem; vertical-align: middle; }
     background-color: rgba(0,0,0,0.3);
     z-index: 10000;
   }
+.center-horizontal-transform {
+    left: 50%;
+    transform: translateX(-50%);
+}
+.min-h-4rem {
+    min-height: 4rem;
+}
 `
 
 export function addExtraStylesBeyondTachyons() {
