@@ -11,7 +11,7 @@ export class ConfigForm {
     view() {
         const domain = this.domain
         
-        return m("div.ConfigForm",
+        return m("div.ConfigForm.h-100.w-100.overflow-auto",
             m("div", "Font Size"),
             m("select.dib.ml3.mt1.mr1",
                 {

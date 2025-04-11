@@ -164,7 +164,7 @@ export class FileForm {
     view() {
         const domain = this.domain
         
-        return m("div.FileForm",
+        return m("div.FileForm.h-100.w-100.overflow-auto",
             m("p"),
             m("button.ml3", { title: "Make a new world", onclick: () => newWorld(domain) }, "Make a new world"),
             m("p"),
