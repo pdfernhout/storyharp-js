@@ -1,1 +1,1 @@
-export const storyHarpVersion = "3.0.2"
+export const storyHarpVersion = "3.0.3"
