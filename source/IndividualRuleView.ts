@@ -457,8 +457,8 @@ export class IndividualRuleView {
             ),
             !this.domain.individualRuleViewExpanded ? [] : !rule ? ["Please select a rule to edit it"] : [
                 m("div.Rule",
-                    m(".Context.mt1",
-                        m("button.ContextSpeedButton.pt1.w-10rem.mr1",
+                    m(".Context.mt1.flex",
+                        m("button.ContextSpeedButton.pt1.mr1",
                             {
                                 onclick: () => this.SpeedButtonClick(TSRuleField.kRuleContext),
                                 title: "Browse all rules with this context",
@@ -468,15 +468,14 @@ export class IndividualRuleView {
                         m(TQuickFillComboBox,
                             <any>{
                                 extraStyling: ".ContextEdit",
-                                style: { width: "35rem", },
                                 value: rule.context.phrase,
                                 onchange: contextChange,
                                 items: this.domain.world.getContextNames(),
                             },
                         ),
                     ),
-                    m(".Requirements.mt1",
-                        m("button.RequirementsSpeedButton.pt1.w-10rem.mr1.v-top",
+                    m(".Requirements.mt1.flex",
+                        m("button.RequirementsSpeedButton.pt1.mr1",
                             {
                                 onclick: () => this.SpeedButtonClick(TSRuleField.kRuleRequirements),
                                 title: "Browse all rules with the selected requirement",
@@ -484,7 +483,6 @@ export class IndividualRuleView {
                             Glyph.requirements + " Requirements",
                         ),
                         m(TSLogicListBox, {
-                            style: { width: "35rem", },
                             selections: requirements,
                             items: world.getVariableNames(),
                             world: world,
@@ -494,8 +492,8 @@ export class IndividualRuleView {
                             }
                         })
                     ),
-                    m(".Command.mt1",
-                        m("button.CommandSpeedButton.pt1.w-10rem.mr1",
+                    m(".Command.mt1.flex",
+                        m("button.CommandSpeedButton.pt1.mr1",
                             {
                                 onclick: () => this.SpeedButtonClick(TSRuleField.kRuleCommand),
                                 title: "Browse all rules with this command",
@@ -505,38 +503,34 @@ export class IndividualRuleView {
                         m(TQuickFillComboBox,
                             <any>{
                                 extraStyling: ".CommandEdit",
-                                style: { width: "35rem", },
                                 value: rule.command.phrase,
                                 onchange: commandChange,
                                 items: this.domain.world.getCommandNames(),
                             },
                         ),
                     ),
-                    m(".Reply.flex.items-center.mt1",
-                        m("button.ReplySpeedButton.pt1.w-10rem.mr1",
+                    m(".Reply.flex.mt1",
+                        m("button.ReplySpeedButton.pt1.mr1",
                             {   
                                 onclick: testReply,
                                 title: "Test saying the reply.\nClick when speaking to stop.",
                             },
                             Glyph.reply + " Reply",
                         ),
-                        m("textarea.ReplyMemo.TMemo",
+                        m("textarea.ReplyMemo.TMemo.w-100",
                             {
-                                style: {
-                                    width: "35rem",
-                                    height: "5em",
-                                },
                                 oncreate: (vnode: any) => {
                                     this.replyTextArea = <HTMLTextAreaElement>(vnode.dom)
                                 },
                                 value: this.cachedReply,
                                 oninput: replyInput,
                                 onchange: replyChange,
+                                rows: 7,
                             },
                         ),
                     ),
-                    m(".Move.mt1",
-                        m("button.MoveSpeedButton.pt1.w-10rem.mr1",
+                    m(".Move.mt1.flex",
+                        m("button.MoveSpeedButton.pt1.mr1",
                             {
                                 onclick: () => this.SpeedButtonClick(TSRuleField.kRuleMove),
                                 title: "Browse all rules with this move",
@@ -546,7 +540,6 @@ export class IndividualRuleView {
                         m(TQuickFillComboBox,
                             <any>{
                                 extraStyling: ".MoveEdit",
-                                style: { width: "35rem", },
                                 value: rule.move.phrase,
                                 onchange: moveChange,
                                 items: this.domain.world.getContextNames(),
@@ -554,8 +547,8 @@ export class IndividualRuleView {
                         ),
                     ),
                 ),
-                m(".Changes.mt1",
-                    m("button.ChangesSpeedButton.pt1.w-10rem.mr1.v-top",
+                m(".Changes.mt1.flex",
+                    m("button.ChangesSpeedButton.pt1.mr1",
                         {
                             onclick: () => this.SpeedButtonClick(TSRuleField.kRuleChanges),
                             title: "Browse all rules with the selected change",
@@ -563,7 +556,6 @@ export class IndividualRuleView {
                         Glyph.changes + " Changes",
                     ),
                     m(TSLogicListBox, {
-                        style: { width: "35rem", },
                         selections: changes,
                         items: world.getVariableNames(),
                         world: world,

@@ -130,6 +130,7 @@ export class TQuickFillComboBox {
                 value: this.textValue,
                 style: {
                     width: "calc(100% - 4rem)",
+                    maxWidth: "12rem",
                 },
                 oncreate: (vnode: any) => {
                     this.inputElement = <HTMLInputElement>(vnode.dom)
