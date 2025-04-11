@@ -144,7 +144,7 @@ export class TQuickFillComboBox {
                 },
                 onblur: (event: FocusEvent) => {
                     log("input onblur")
-                    if (!this.isMenuOpen && event.relatedTarget !== this.buttonElement) {
+                    if (!this.isMenuOpen) {
                         log("input onblur processed", this.inputElement.value, this.isMenuOpen)
                         this.textValue = this.inputElement.value
                         if (this.lastSuppliedText !== this.textValue) doOnchangeCallback() 
