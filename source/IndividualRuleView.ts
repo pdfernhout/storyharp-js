@@ -204,7 +204,8 @@ export class IndividualRuleView {
             const rule: TSRule | null = this.domain.editedRule
             if (rule) {
                 const newText = insertTextAtCursor(this.replyTextArea, textToInsert)
-                rule.setReply(newText)
+                const worldCommandList: TSCommandList = this.domain.worldCommandList
+                worldCommandList.ruleFieldChange(rule, TSRuleField.kRuleReply, newText)
             }
         })
     }
@@ -218,7 +219,8 @@ export class IndividualRuleView {
             const rule: TSRule | null = this.domain.editedRule
             if (rule) {
                 const newText = insertTextAtCursor(this.replyTextArea, textToInsert)
-                rule.setReply(newText)
+                const worldCommandList: TSCommandList = this.domain.worldCommandList
+                worldCommandList.ruleFieldChange(rule, TSRuleField.kRuleReply, newText)
             }
         })
     }
@@ -232,7 +234,8 @@ export class IndividualRuleView {
             const rule: TSRule | null = this.domain.editedRule
             if (rule) {
                 const newText = insertTextAtCursor(this.replyTextArea, textToInsert)
-                rule.setReply(newText)
+                const worldCommandList: TSCommandList = this.domain.worldCommandList
+                worldCommandList.ruleFieldChange(rule, TSRuleField.kRuleReply, newText)
             }
         })
     }
