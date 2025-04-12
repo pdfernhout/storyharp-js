@@ -34,7 +34,7 @@ export class RuleEditorForm {
         const domain = this.domain
 
         return m("div.flex-auto.flex.flex-column",
-            m("div.mb2.flex-none",
+            domain.menuOpen && m("div.mb2.flex-none",
                 "Wizard:",
                 m(notebookTabButton(currentWizard === "context"), { onclick: (event: Event) => this.setCurrentWizard(event, "context") }, "Context"),
                 m(notebookTabButton(currentWizard === "command"),  { onclick: (event: Event) => this.setCurrentWizard(event, "command") }, "Command"),
@@ -114,14 +114,14 @@ export class RuleEditorForm {
         const domain = this.domain
 
         return m(".RuleEditorForm.h-100.w-100.flex.flex-column.overflow-auto",
-            m("div.flex-none.mb2",
-                domain.menuOpen && m("span", "Rule Editor:"),
-                domain.menuOpen && m(notebookTabButton(currentView === "table"), { onclick: (event: Event) => this.setCurrentView(event, "table") }, "Table"),
-                domain.menuOpen && m(notebookTabButton(currentView === "map"),  { onclick: (event: Event) => this.setCurrentView(event, "map") }, "Map"),
-                domain.menuOpen && m(notebookTabButton(currentView === "browser"),  { onclick: (event: Event) => this.setCurrentView(event, "browser") }, "Browser"),
-                domain.menuOpen && m(notebookTabButton(currentView === "wizards"),  { onclick: (event: Event) => this.setCurrentView(event, "wizards") }, "Wizards"),
-                domain.menuOpen && m(notebookTabButton(currentView === "log"),  { onclick: (event: Event) => this.setCurrentView(event, "log") }, "Log"),
-                domain.menuOpen && m("div.dib.ml4",
+            domain.menuOpen && m("div.flex-none.mb2",
+                m("span", "Rule Editor:"),
+                m(notebookTabButton(currentView === "table"), { onclick: (event: Event) => this.setCurrentView(event, "table") }, "Table"),
+                m(notebookTabButton(currentView === "map"),  { onclick: (event: Event) => this.setCurrentView(event, "map") }, "Map"),
+                m(notebookTabButton(currentView === "browser"),  { onclick: (event: Event) => this.setCurrentView(event, "browser") }, "Browser"),
+                m(notebookTabButton(currentView === "wizards"),  { onclick: (event: Event) => this.setCurrentView(event, "wizards") }, "Wizards"),
+                m(notebookTabButton(currentView === "log"),  { onclick: (event: Event) => this.setCurrentView(event, "log") }, "Log"),
+                m("div.dib.ml4",
                     m("button.mt1", {
                         disabled: !domain.worldCommandList.isUndoEnabled(),
                         onclick: () => domain.worldCommandList.undoLast(),
