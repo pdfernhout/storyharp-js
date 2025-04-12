@@ -1,5 +1,5 @@
 import * as m from "mithril"
-import { TWorld } from "./TWorld"
+import { ExportRulesOption, TWorld } from "./TWorld"
 import { TSCommandList } from "./TSCommandList"
 import { TSRule, TSRuleField } from "./TSRule"
 import { Color, ScrollIntoViewDirection, int, makeFileNameWithoutWldExtension } from "./common"
@@ -15,6 +15,7 @@ import { TPoint } from "./TPoint"
 import { addToLog } from "./LoggingView"
 import { TSVariable } from "./TSVariable"
 import { toast } from "./ToastView"
+import * as lz from "lz-string"
 
 // At the dawn of the third millenium,
 // the laws of space and time keep humans close to Sol.
@@ -157,6 +158,8 @@ export interface TSDomain {
     individualRuleViewExpanded: boolean
     baseFontClass: string
     menuOpen: boolean
+
+    urlDataForWorld(): string
 }
 
 export function isMediaOK (text: string) {
@@ -384,7 +387,7 @@ export class TSApplication implements TSDomain {
         }
     }
 
-    async loadWorldFromServerData(fileName: string) {
+    async loadDemoConfig() {
         if (!this.demoConfig) {
             this.demoConfig = <DemoConfig>await m.request(this.dataPath + "demoConfig.json")
                 .catch(error => {
@@ -395,6 +398,9 @@ export class TSApplication implements TSDomain {
                     return result
                 })
         }
+    }
+
+    async loadWorldFromServerData(fileName: string) {
     
         const worldContent = await m.request(this.dataPath + fileName + ".wld", {responseType: "text", deserialize: (text) => text})
             .catch(error => {
@@ -574,5 +580,16 @@ export class TSApplication implements TSDomain {
     
     worldChangeUndone(): void {
         this.worldChangeCount -= 1
+    }
+
+    urlDataForWorld(): string {
+        return lz.compressToEncodedURIComponent(JSON.stringify({
+            worldFileName: this.worldFileName,
+            worldContent: this.world.saveWorldToFileContents(ExportRulesOption.kSaveAllRules),
+        }))
+    }
+
+    decompresURLDataForWorld(worldCompressed: string) {
+        return lz.decompressFromEncodedURIComponent(worldCompressed)
     }
 }

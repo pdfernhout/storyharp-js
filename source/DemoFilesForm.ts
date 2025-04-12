@@ -11,6 +11,13 @@ export class DemoFilesForm {
     
     view() {
         const domain = this.domain
+
+        if (!domain.demoConfig) {
+            return m("div.h-100.w-100.overflow-y-scroll.overflow-x-auto",
+                m("div.pa2", "Something went wrong. No demo world files available.")
+            )
+        }
+
         return m("div.h-100.w-100.overflow-y-scroll.overflow-x-auto",
             m("div", "Choose a demo world file to load:"),
             m("br"),
@@ -36,7 +43,7 @@ export class DemoFilesForm {
                         m("td.tr", entry.name),
                         m("td.pl3.i.pt3.f-smaller", entry.description)
                     )
-                )
+                ),
             )
         )
     }

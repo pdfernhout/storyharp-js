@@ -160,11 +160,23 @@ export class FileForm {
     constructor(vnode: m.Vnode) {
         this.domain = (<any>vnode.attrs).domain
     }
+
+    copyURL() {
+        const location = window.location
+        // Calculate URL without the hash
+        const port = location.port && location.port !== "80" ? ":" + location.port : ""
+        const url = location.protocol + '//' + location.hostname + port + location.pathname
+        const urlWithData = url + "#world=" + this.domain.urlDataForWorld()
+        navigator.clipboard.writeText(urlWithData)
+    }
+
     
     view() {
         const domain = this.domain
         
         return m("div.FileForm.h-100.w-100.overflow-auto",
+            m("p"),
+            m("button.ml3.mr3", { title: "Copy URL for current world data to clipboard to share or save as a bookmark", onclick: () => this.copyURL() }, "Copy URL for current world to clipboard"),
             m("p"),
             m("button.ml3.mr3", { title: "Make a new world", onclick: () => newWorld(domain) }, "Make a new world"),
             m("p"),
