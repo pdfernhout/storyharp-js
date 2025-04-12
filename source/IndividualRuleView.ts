@@ -381,21 +381,21 @@ export class IndividualRuleView {
                     onclick: () => this.domain.individualRuleViewExpanded = !this.domain.individualRuleViewExpanded
                     }, expander(this.domain.individualRuleViewExpanded) + " Rule Editor "
                 ),
-                m("span.dib.w.RuleNumberLabel.TLabel",
+                m("span.dib.RuleNumberLabel.TLabel",
                     {
                         title: "The index of the edited rule in the table",
                         onclick: () => this.domain.individualRuleViewExpanded = !this.domain.individualRuleViewExpanded
                     },
                     rule ? "#" + (world.rules.indexOf(rule) + 1) : "",
                 ),
-                m("button.NewRuleButton.TSpeedButton.ml1",
+                m("button.NewRuleButton.TSpeedButton.ml1.mt1.f-smaller",
                     {
                         onclick: () => this.RuleNewClick(),
                         title: "Make a new rule",
                     },
                     "New",
                 ),
-                m("button.DuplicateRuleButton.TSpeedButton.ml1",
+                m("button.DuplicateRuleButton.TSpeedButton.ml1.mt1.f-smaller",
                     {
                         onclick: () => this.RuleDuplicateClick(),
                         disabled: !rule,
@@ -403,7 +403,7 @@ export class IndividualRuleView {
                     },
                     "Duplicate",
                 ),
-                m("button.DeleteRuleButton.TSpeedButton.ml1",
+                m("button.DeleteRuleButton.TSpeedButton.ml1.mt1.f-smaller",
                     {
                         onclick: () => this.RuleDeleteClick(),
                         disabled: !rule,
@@ -411,7 +411,7 @@ export class IndividualRuleView {
                     },
                     "Delete",
                 ),
-                m("button.MoveUpButton.TSpeedButton.ml1",
+                m("button.MoveUpButton.TSpeedButton.ml1.mt1.f-smaller",
                     {
                         onclick: () => this.MoveUpClick(),
                         disabled: !rule,
@@ -419,7 +419,7 @@ export class IndividualRuleView {
                     },
                     "Raise",
                 ),
-                m("button.MoveDownButton.TSpeedButton.ml1",
+                m("button.MoveDownButton.TSpeedButton.ml1.mt1.f-smaller",
                     {
                         onclick: () => this.MoveDownClick(),
                         disabled: !rule,
@@ -427,7 +427,7 @@ export class IndividualRuleView {
                     },
                     "Lower",
                 ),
-                m("button.ml4", {
+                m("button.ml1.mt1.f-smaller", {
                     onclick: () => this.ruleEditorForm.search(),
                     title: "Search for a rule containing some text"
                 }, "Search"),
