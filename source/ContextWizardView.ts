@@ -146,7 +146,7 @@ export class ContextWizardView {
             {
             },
             m("div",
-                m("h2", "New Contexts Wizard"),
+                m("h2.ma1", "New Contexts Wizard"),
 
                 m("div", {onclick: () => this.domain.showWizardHelp = !this.domain.showWizardHelp  }, expander(showHelp, " (Click for:)") +  " Wizard Help"),
 

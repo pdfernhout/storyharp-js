@@ -231,7 +231,7 @@ export class LinkWizardView {
             {
             },
             m("div",
-                m("h2", "New Links Wizard"),
+                m("h2.ma1", "New Links Wizard"),
 
                 m("div", {onclick: () => this.domain.showWizardHelp = !this.domain.showWizardHelp }, expander(showHelp, " (Click for:)") + " Wizard Help"),
 
