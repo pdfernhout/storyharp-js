@@ -36,6 +36,7 @@ export class DemoFilesForm {
                                 if (!value) return
                                 domain.loadWorldFromServerData(entry.name).then((loaded) => {
                                     if (loaded) domain.activeForm = "console"
+                                    location.hash = ""
                                 })
                             })
                         }

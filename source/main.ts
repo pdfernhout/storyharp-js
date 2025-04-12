@@ -53,6 +53,7 @@ async function loadWorld() {
         // Load the world from the server
         const worldName = "House and Yard with media"
         await application.loadWorldFromServerData(worldName)
+        location.hash = ""
         m.mount(document.body, BodyComponent)
     }
 }
