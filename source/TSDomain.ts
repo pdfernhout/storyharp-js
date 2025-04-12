@@ -228,7 +228,7 @@ export class TSApplication implements TSDomain {
 
     individualRuleViewExpanded = false
     baseFontClass: string = allowedFontClasses[localStorage.getItem("storyharp-base-font") || defaultBaseFontClass] || defaultBaseFontClass
-    menuOpen = true
+    menuOpen = false
 
     editRule(rule: TSRule | null, scrollDirection: ScrollIntoViewDirection = ScrollIntoViewDirection.kFromTop, force = false) {
         this.editedRule = rule
