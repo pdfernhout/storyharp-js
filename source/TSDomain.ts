@@ -156,6 +156,7 @@ export interface TSDomain {
 
     individualRuleViewExpanded: boolean
     baseFontClass: string
+    menuOpen: boolean
 }
 
 export function isMediaOK (text: string) {
@@ -227,6 +228,7 @@ export class TSApplication implements TSDomain {
 
     individualRuleViewExpanded = false
     baseFontClass: string = allowedFontClasses[localStorage.getItem("storyharp-base-font") || defaultBaseFontClass] || defaultBaseFontClass
+    menuOpen = true
 
     editRule(rule: TSRule | null, scrollDirection: ScrollIntoViewDirection = ScrollIntoViewDirection.kFromTop, force = false) {
         this.editedRule = rule

@@ -237,7 +237,7 @@ export class ConsoleForm {
                     this.transcriptDiv = <HTMLDivElement>(vnode.dom)
                 },
             },
-            m("div.ml2.mb2",
+            domain.menuOpen && m("div.ml2.mb2",
                 // m("button", { title: "Open a world file", onclick: () => loadWorldFromLocalFile(domain) }, "Load"),
                 m("button.ml1.mt1", {
                     title: "Reset current world",

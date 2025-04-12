@@ -29,15 +29,20 @@ export class MainForm {
             }
         }
      
-        return m(".MainForm.pa2.h-100.w-100.flex.flex-column" + "." + domain.baseFontClass,
+        return m(".MainForm.pa2-ns.h-100.w-100.flex.flex-column" + "." + domain.baseFontClass,
             m(ModalInputView),
             m(ToastView),
-            m("div.mt1.mb1.flex-none",
-                m("span.b", "StoryHarp:"),
-                m("span.ml1.i", "" + makeFileNameWithoutWldExtension(domain.worldFileName)),
+            m("div.mt1.mb1.flex-none.w-100.flex",
+                m("span.b", {
+                    onclick: () => {
+                        domain.menuOpen = !domain.menuOpen
+                    },
+                    title: "Click to toggle menu"
+                }, "☰StoryHarp:"),
+                m("span.ml1.i.truncate.flex-auto", "" + makeFileNameWithoutWldExtension(domain.worldFileName)),
                 m("span.ml1.i", { title: "world change count" }, domain.isWorldFileChanged() ? `<${domain.worldChangeCount}>` : "")
             ),
-            m("div.mb2.flex-none",
+            domain.menuOpen && m("div.mb2.flex-none",
                 m(notebookTabButton(domain.activeForm === "file"), { onclick: (event: any) => setActiveForm(event, "file") }, "File"),
                 m(notebookTabButton(domain.activeForm === "console"), { onclick: (event: any) => setActiveForm(event, "console") }, "Player"),
                 m(notebookTabButton(domain.activeForm === "ruleEditor"), { onclick: (event: any) => setActiveForm(event, "ruleEditor") }, "Editor"),
